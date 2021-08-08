@@ -26,5 +26,24 @@ Route::resource('wareHouses', App\Http\Controllers\WareHouseController::class);
 
 Route::resource('shops', App\Http\Controllers\ShopController::class);
 
+Route::resource('categories', App\Http\Controllers\CategoryController::class);
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Route::resource('products', App\Http\Controllers\ProductController::class);

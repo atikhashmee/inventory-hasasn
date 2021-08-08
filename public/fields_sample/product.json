@@ -1,0 +1,82 @@
+[
+    {
+        "name": "id",
+        "dbType": "increments",
+        "htmlType": "",
+        "validations": "",
+        "searchable": false,
+        "fillable": false,
+        "primary": true,
+        "inForm": false,
+        "inIndex": false,
+        "inView": false
+    },
+    {
+        "name": "name",
+        "dbType": "string",
+        "htmlType": "text",
+        "validations": "required",
+        "searchable": true
+    },
+    {
+        "name": "description",
+        "dbType": "text",
+        "htmlType": "textarea",
+        "searchable": true
+    },
+    {
+        "name": "slug",
+        "dbType": "string:unique",
+        "htmlType": "text",
+        "validations": "required|unique:products,slug",
+        "searchable": true
+    },
+    {
+        "name": "sku",
+        "dbType": "string:unique",
+        "htmlType": "text",
+        "validations": "required|unique:products,sku",
+        "searchable": true
+    },
+    {
+        "name": "category_id",
+        "dbType": "integer:unsigned:foreign,categories,id",
+        "htmlType": "selectTable:categories:name,id",
+        "searchable": true,
+        "relation": "mt1,Category,category_id,id"
+    },
+    {
+        "name": "warehouse_id",
+        "dbType": "integer:unsigned:foreign,ware_houses,id",
+        "htmlType": "selectTable:ware_houses:ware_house_name,id",
+        "searchable": true,
+        "relation": "mt1,WareHouse,warehouse_id,id"
+    },
+    {
+        "name": "feature_image",
+        "dbType": "string",
+        "htmlType": "file"
+    },
+    {
+        "name": "created_at",
+        "dbType": "timestamp",
+        "htmlType": "",
+        "validations": "",
+        "searchable": false,
+        "fillable": false,
+        "primary": false,
+        "inForm": false,
+        "inIndex": false
+    },
+    {
+        "name": "updated_at",
+        "dbType": "timestamp",
+        "htmlType": "",
+        "validations": "",
+        "searchable": false,
+        "fillable": false,
+        "primary": false,
+        "inForm": false,
+        "inIndex": false
+    }
+]
