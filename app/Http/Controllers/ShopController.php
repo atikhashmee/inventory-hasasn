@@ -4,22 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateShopRequest;
 use App\Http\Requests\UpdateShopRequest;
-use App\Repositories\ShopRepository;
 use App\Http\Controllers\AppBaseController;
+use App\Models\Shop;
 use Illuminate\Http\Request;
 use Flash;
 use Response;
 
 class ShopController extends AppBaseController
 {
-    /** @var  ShopRepository */
-    private $shopRepository;
-
-    public function __construct(ShopRepository $shopRepo)
-    {
-        $this->shopRepository = $shopRepo;
-    }
-
     /**
      * Display a listing of the Shop.
      *
@@ -29,9 +21,10 @@ class ShopController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $shops = $this->shopRepository->all();
+        /** @var Shop $shops */
+        $shops = Shop::all();
 
-        return view('shops.index')
+        return view('admin.shops.index')
             ->with('shops', $shops);
     }
 
@@ -42,7 +35,7 @@ class ShopController extends AppBaseController
      */
     public function create()
     {
-        return view('shops.create');
+        return view('admin.shops.create');
     }
 
     /**
@@ -56,11 +49,12 @@ class ShopController extends AppBaseController
     {
         $input = $request->all();
 
-        $shop = $this->shopRepository->create($input);
+        /** @var Shop $shop */
+        $shop = Shop::create($input);
 
         Flash::success('Shop saved successfully.');
 
-        return redirect(route('shops.index'));
+        return redirect(route('admin.shops.index'));
     }
 
     /**
@@ -72,15 +66,16 @@ class ShopController extends AppBaseController
      */
     public function show($id)
     {
-        $shop = $this->shopRepository->find($id);
+        /** @var Shop $shop */
+        $shop = Shop::find($id);
 
         if (empty($shop)) {
             Flash::error('Shop not found');
 
-            return redirect(route('shops.index'));
+            return redirect(route('admin.shops.index'));
         }
 
-        return view('shops.show')->with('shop', $shop);
+        return view('admin.shops.show')->with('shop', $shop);
     }
 
     /**
@@ -92,15 +87,16 @@ class ShopController extends AppBaseController
      */
     public function edit($id)
     {
-        $shop = $this->shopRepository->find($id);
+        /** @var Shop $shop */
+        $shop = Shop::find($id);
 
         if (empty($shop)) {
             Flash::error('Shop not found');
 
-            return redirect(route('shops.index'));
+            return redirect(route('admin.shops.index'));
         }
 
-        return view('shops.edit')->with('shop', $shop);
+        return view('admin.shops.edit')->with('shop', $shop);
     }
 
     /**
@@ -113,19 +109,21 @@ class ShopController extends AppBaseController
      */
     public function update($id, UpdateShopRequest $request)
     {
-        $shop = $this->shopRepository->find($id);
+        /** @var Shop $shop */
+        $shop = Shop::find($id);
 
         if (empty($shop)) {
             Flash::error('Shop not found');
 
-            return redirect(route('shops.index'));
+            return redirect(route('admin.shops.index'));
         }
 
-        $shop = $this->shopRepository->update($request->all(), $id);
+        $shop->fill($request->all());
+        $shop->save();
 
         Flash::success('Shop updated successfully.');
 
-        return redirect(route('shops.index'));
+        return redirect(route('admin.shops.index'));
     }
 
     /**
@@ -139,18 +137,19 @@ class ShopController extends AppBaseController
      */
     public function destroy($id)
     {
-        $shop = $this->shopRepository->find($id);
+        /** @var Shop $shop */
+        $shop = Shop::find($id);
 
         if (empty($shop)) {
             Flash::error('Shop not found');
 
-            return redirect(route('shops.index'));
+            return redirect(route('admin.shops.index'));
         }
 
-        $this->shopRepository->delete($id);
+        $shop->delete();
 
         Flash::success('Shop deleted successfully.');
 
-        return redirect(route('shops.index'));
+        return redirect(route('admin.shops.index'));
     }
 }

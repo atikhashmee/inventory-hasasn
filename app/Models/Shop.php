@@ -9,11 +9,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 /**
  * Class Shop
  * @package App\Models
- * @version July 28, 2021, 6:23 am UTC
+ * @version August 8, 2021, 4:26 pm UTC
  *
  * @property string $name
  * @property string $address
- * @property enum(['active' $status
+ * @property string $status
  */
 class Shop extends Model
 {
@@ -40,8 +40,10 @@ class Shop extends Model
      * @var array
      */
     protected $casts = [
+        'id' => 'integer',
         'name' => 'string',
-        'address' => 'string'
+        'address' => 'string',
+        'status' => 'string'
     ];
 
     /**

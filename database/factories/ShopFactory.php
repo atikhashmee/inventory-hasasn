@@ -23,8 +23,8 @@ class ShopFactory extends Factory
     {
         return [
             'name' => $this->faker->word,
-        'address' => $this->faker->word,
-        'status' => $this->faker->word,
+        'address' => $this->faker->text,
+        'status' => $this->faker->randomElement(['active', 'inactive']),
         'created_at' => $this->faker->date('Y-m-d H:i:s'),
         'updated_at' => $this->faker->date('Y-m-d H:i:s')
         ];
