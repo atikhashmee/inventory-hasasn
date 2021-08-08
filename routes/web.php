@@ -23,16 +23,65 @@ Route::get('/', function () {
 Auth::routes();
 Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-    
-    Route::resource('shops', App\Http\Controllers\ShopController::class);
-    
-    
-    
-    
-    
-    
 });
 
 Route::group(['prefix' => 'user', 'as' => 'user.'], function () {
     Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'userDashboard'])->name('home');
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Route::group(['prefix' => 'admin'], function () {
+    Route::resource('wareHouses', App\Http\Controllers\WareHouseController::class, ["as" => 'admin']);
+});
+
+
+Route::group(['prefix' => 'admin'], function () {
+    Route::resource('shops', App\Http\Controllers\ShopController::class, ["as" => 'admin']);
+});
+
+
+Route::group(['prefix' => 'admin'], function () {
+    Route::resource('categories', App\Http\Controllers\CategoryController::class, ["as" => 'admin']);
+});
+
+
+Route::group(['prefix' => 'admin'], function () {
+    Route::resource('menufactures', App\Http\Controllers\MenufactureController::class, ["as" => 'admin']);
+});
+
+
+Route::group(['prefix' => 'admin'], function () {
+    Route::resource('suppliers', App\Http\Controllers\SupplierController::class, ["as" => 'admin']);
+});
+
+
+Route::group(['prefix' => 'admin'], function () {
+    Route::resource('brands', App\Http\Controllers\BrandController::class, ["as" => 'admin']);
+});
+
+
+Route::group(['prefix' => 'admin'], function () {
+    Route::resource('products', App\Http\Controllers\ProductController::class, ["as" => 'admin']);
+});
+
+
+Route::group(['prefix' => 'admin'], function () {
+    Route::resource('stocks', App\Http\Controllers\StockController::class, ["as" => 'admin']);
 });

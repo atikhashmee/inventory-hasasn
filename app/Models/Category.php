@@ -7,21 +7,19 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- * Class Shop
+ * Class Category
  * @package App\Models
  * @version August 8, 2021, 4:57 pm UTC
  *
  * @property string $name
- * @property string $address
- * @property string $status
  */
-class Shop extends Model
+class Category extends Model
 {
     use SoftDeletes;
 
     use HasFactory;
 
-    public $table = 'shops';
+    public $table = 'categories';
     
 
     protected $dates = ['deleted_at'];
@@ -29,9 +27,7 @@ class Shop extends Model
 
 
     public $fillable = [
-        'name',
-        'address',
-        'status'
+        'name'
     ];
 
     /**
@@ -41,9 +37,7 @@ class Shop extends Model
      */
     protected $casts = [
         'id' => 'integer',
-        'name' => 'string',
-        'address' => 'string',
-        'status' => 'string'
+        'name' => 'string'
     ];
 
     /**
