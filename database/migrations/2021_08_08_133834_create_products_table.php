@@ -21,11 +21,17 @@ class CreateProductsTable extends Migration
             $table->string('slug')->unique();
             $table->string('sku')->unique();
             $table->integer('category_id')->unsigned();
+            $table->integer('brand_id')->unsigned()->nullable();
+            $table->integer('supplier_id')->unsigned()->nullable();
+            $table->integer('menufacture_id')->unsigned()->nullable();
             $table->integer('warehouse_id')->unsigned();
             $table->string('feature_image');
             $table->timestamps();
             $table->softDeletes();
             // $table->foreign('category_id')->references('id')->on('categories');
+            // $table->foreign('brand_id')->references('id')->on('brands');
+            // $table->foreign('supplier_id')->references('id')->on('suppliers');
+            // $table->foreign('menufacture_id')->references('id')->on('menufactures');
             // $table->foreign('warehouse_id')->references('id')->on('ware_houses');
         });
     }

@@ -7,6 +7,9 @@
         <th>Slug</th>
         <th>Sku</th>
         <th>Category Id</th>
+        <th>Brand Id</th>
+        <th>Supplier Id</th>
+        <th>Menufacture Id</th>
         <th>Warehouse Id</th>
         <th>Feature Image</th>
             <th colspan="3">Action</th>
@@ -20,6 +23,9 @@
             <td>{{ $product->slug }}</td>
             <td>{{ $product->sku }}</td>
             <td>{{ $product->category_id }}</td>
+            <td>{{ $product->brand_id }}</td>
+            <td>{{ $product->supplier_id }}</td>
+            <td>{{ $product->menufacture_id }}</td>
             <td>{{ $product->warehouse_id }}</td>
             <td>{{ $product->feature_image }}</td>
                 <td width="120">

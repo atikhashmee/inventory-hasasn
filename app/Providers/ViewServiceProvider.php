@@ -2,6 +2,11 @@
 
 namespace App\Providers;
 
+
+use App\Models\Menufacture;
+use App\Models\Supplier;
+use App\Models\Brand;
+
 use App\Models\WareHouse;
 use App\Models\Category;
 
@@ -32,20 +37,16 @@ class ViewServiceProvider extends ServiceProvider
             $view->with('ware_houseItems', $ware_houseItems);
         });
         View::composer(['products.fields'], function ($view) {
-            $categoryItems = Category::pluck('name','id')->toArray();
-            $view->with('categoryItems', $categoryItems);
+            $menufactureItems = Menufacture::pluck('name','id')->toArray();
+            $view->with('menufactureItems', $menufactureItems);
         });
         View::composer(['products.fields'], function ($view) {
-            $ware_houseItems = WareHouse::pluck('ware_house_name','id')->toArray();
-            $view->with('ware_houseItems', $ware_houseItems);
+            $supplierItems = Supplier::pluck('name','id')->toArray();
+            $view->with('supplierItems', $supplierItems);
         });
         View::composer(['products.fields'], function ($view) {
-            $categoryItems = Category::pluck('name','id')->toArray();
-            $view->with('categoryItems', $categoryItems);
-        });
-        View::composer(['products.fields'], function ($view) {
-            $ware_houseItems = WareHouse::pluck('ware_house_name','id')->toArray();
-            $view->with('ware_houseItems', $ware_houseItems);
+            $brandItems = Brand::pluck('name','id')->toArray();
+            $view->with('brandItems', $brandItems);
         });
         View::composer(['products.fields'], function ($view) {
             $categoryItems = Category::pluck('name','id')->toArray();

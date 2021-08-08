@@ -9,15 +9,21 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 /**
  * Class Product
  * @package App\Models
- * @version August 8, 2021, 1:10 pm UTC
+ * @version August 8, 2021, 1:38 pm UTC
  *
  * @property \App\Models\Category $category
+ * @property \App\Models\Brand $brand
+ * @property \App\Models\Supplier $supplier
+ * @property \App\Models\Menufacture $menufacture
  * @property \App\Models\WareHouse $warehouse
  * @property string $name
  * @property string $description
  * @property string $slug
  * @property string $sku
  * @property integer $category_id
+ * @property integer $brand_id
+ * @property integer $supplier_id
+ * @property integer $menufacture_id
  * @property integer $warehouse_id
  * @property string $feature_image
  */
@@ -40,6 +46,9 @@ class Product extends Model
         'slug',
         'sku',
         'category_id',
+        'brand_id',
+        'supplier_id',
+        'menufacture_id',
         'warehouse_id',
         'feature_image'
     ];
@@ -56,6 +65,9 @@ class Product extends Model
         'slug' => 'string',
         'sku' => 'string',
         'category_id' => 'integer',
+        'brand_id' => 'integer',
+        'supplier_id' => 'integer',
+        'menufacture_id' => 'integer',
         'warehouse_id' => 'integer',
         'feature_image' => 'string'
     ];
@@ -77,6 +89,30 @@ class Product extends Model
     public function category()
     {
         return $this->belongsTo(\App\Models\Category::class, 'category_id', 'id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     **/
+    public function brand()
+    {
+        return $this->belongsTo(\App\Models\Brand::class, 'brand_id', 'id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     **/
+    public function supplier()
+    {
+        return $this->belongsTo(\App\Models\Supplier::class, 'supplier_id', 'id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     **/
+    public function menufacture()
+    {
+        return $this->belongsTo(\App\Models\Menufacture::class, 'menufacture_id', 'id');
     }
 
     /**

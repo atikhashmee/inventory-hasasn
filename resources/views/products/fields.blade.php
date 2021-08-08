@@ -29,6 +29,27 @@
 </div>
 
 
+<!-- Brand Id Field -->
+<div class="form-group col-sm-6">
+    {!! Form::label('brand_id', 'Brand Id:') !!}
+    {!! Form::select('brand_id', $brandItems, null, ['class' => 'form-control custom-select']) !!}
+</div>
+
+
+<!-- Supplier Id Field -->
+<div class="form-group col-sm-6">
+    {!! Form::label('supplier_id', 'Supplier Id:') !!}
+    {!! Form::select('supplier_id', $supplierItems, null, ['class' => 'form-control custom-select']) !!}
+</div>
+
+
+<!-- Menufacture Id Field -->
+<div class="form-group col-sm-6">
+    {!! Form::label('menufacture_id', 'Menufacture Id:') !!}
+    {!! Form::select('menufacture_id', $menufactureItems, null, ['class' => 'form-control custom-select']) !!}
+</div>
+
+
 <!-- Warehouse Id Field -->
 <div class="form-group col-sm-6">
     {!! Form::label('warehouse_id', 'Warehouse Id:') !!}

@@ -46,4 +46,24 @@ Route::resource('categories', App\Http\Controllers\CategoryController::class);
 
 
 
+
+
+
+
+
+
+
+
+
+
+Route::resource('brands', App\Http\Controllers\BrandController::class);
+
+Route::resource('suppliers', App\Http\Controllers\SupplierController::class);
+
+Route::resource('menufactures', App\Http\Controllers\MenufactureController::class);
+
+
+
+
+
 Route::resource('products', App\Http\Controllers\ProductController::class);

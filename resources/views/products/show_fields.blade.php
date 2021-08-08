@@ -28,6 +28,24 @@
     <p>{{ $product->category_id }}</p>
 </div>
 
+<!-- Brand Id Field -->
+<div class="col-sm-12">
+    {!! Form::label('brand_id', 'Brand Id:') !!}
+    <p>{{ $product->brand_id }}</p>
+</div>
+
+<!-- Supplier Id Field -->
+<div class="col-sm-12">
+    {!! Form::label('supplier_id', 'Supplier Id:') !!}
+    <p>{{ $product->supplier_id }}</p>
+</div>
+
+<!-- Menufacture Id Field -->
+<div class="col-sm-12">
+    {!! Form::label('menufacture_id', 'Menufacture Id:') !!}
+    <p>{{ $product->menufacture_id }}</p>
+</div>
+
 <!-- Warehouse Id Field -->
 <div class="col-sm-12">
     {!! Form::label('warehouse_id', 'Warehouse Id:') !!}
