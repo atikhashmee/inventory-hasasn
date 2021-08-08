@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 /**
  * Class Product
  * @package App\Models
- * @version August 8, 2021, 1:38 pm UTC
+ * @version August 8, 2021, 2:23 pm UTC
  *
  * @property \App\Models\Category $category
  * @property \App\Models\Brand $brand
@@ -18,6 +18,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @property \App\Models\WareHouse $warehouse
  * @property string $name
  * @property string $description
+ * @property number $old_price
+ * @property number $price
+ * @property number $selling_price
+ * @property integer $quantity
  * @property string $slug
  * @property string $sku
  * @property integer $category_id
@@ -43,6 +47,10 @@ class Product extends Model
     public $fillable = [
         'name',
         'description',
+        'old_price',
+        'price',
+        'selling_price',
+        'quantity',
         'slug',
         'sku',
         'category_id',
@@ -62,6 +70,10 @@ class Product extends Model
         'id' => 'integer',
         'name' => 'string',
         'description' => 'string',
+        'old_price' => 'decimal:2',
+        'price' => 'decimal:2',
+        'selling_price' => 'decimal:2',
+        'quantity' => 'integer',
         'slug' => 'string',
         'sku' => 'string',
         'category_id' => 'integer',
@@ -79,6 +91,9 @@ class Product extends Model
      */
     public static $rules = [
         'name' => 'required',
+        'price' => 'required',
+        'selling_price' => 'required',
+        'quantity' => 'required',
         'slug' => 'required|unique:products,slug',
         'sku' => 'required|unique:products,sku'
     ];

@@ -4,6 +4,10 @@
         <tr>
             <th>Name</th>
         <th>Description</th>
+        <th>Old Price</th>
+        <th>Price</th>
+        <th>Selling Price</th>
+        <th>Quantity</th>
         <th>Slug</th>
         <th>Sku</th>
         <th>Category Id</th>
@@ -20,6 +24,10 @@
             <tr>
                 <td>{{ $product->name }}</td>
             <td>{{ $product->description }}</td>
+            <td>{{ $product->old_price }}</td>
+            <td>{{ $product->price }}</td>
+            <td>{{ $product->selling_price }}</td>
+            <td>{{ $product->quantity }}</td>
             <td>{{ $product->slug }}</td>
             <td>{{ $product->sku }}</td>
             <td>{{ $product->category_id }}</td>

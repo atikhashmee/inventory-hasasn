@@ -10,6 +10,30 @@
     {!! Form::textarea('description', null, ['class' => 'form-control']) !!}
 </div>
 
+<!-- Old Price Field -->
+<div class="form-group col-sm-6">
+    {!! Form::label('old_price', 'Old Price:') !!}
+    {!! Form::text('old_price', null, ['class' => 'form-control']) !!}
+</div>
+
+<!-- Price Field -->
+<div class="form-group col-sm-6">
+    {!! Form::label('price', 'Price:') !!}
+    {!! Form::text('price', null, ['class' => 'form-control']) !!}
+</div>
+
+<!-- Selling Price Field -->
+<div class="form-group col-sm-6">
+    {!! Form::label('selling_price', 'Selling Price:') !!}
+    {!! Form::text('selling_price', null, ['class' => 'form-control']) !!}
+</div>
+
+<!-- Quantity Field -->
+<div class="form-group col-sm-6">
+    {!! Form::label('quantity', 'Quantity:') !!}
+    {!! Form::number('quantity', null, ['class' => 'form-control']) !!}
+</div>
+
 <!-- Slug Field -->
 <div class="form-group col-sm-6">
     {!! Form::label('slug', 'Slug:') !!}

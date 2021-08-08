@@ -10,6 +10,30 @@
     <p>{{ $product->description }}</p>
 </div>
 
+<!-- Old Price Field -->
+<div class="col-sm-12">
+    {!! Form::label('old_price', 'Old Price:') !!}
+    <p>{{ $product->old_price }}</p>
+</div>
+
+<!-- Price Field -->
+<div class="col-sm-12">
+    {!! Form::label('price', 'Price:') !!}
+    <p>{{ $product->price }}</p>
+</div>
+
+<!-- Selling Price Field -->
+<div class="col-sm-12">
+    {!! Form::label('selling_price', 'Selling Price:') !!}
+    <p>{{ $product->selling_price }}</p>
+</div>
+
+<!-- Quantity Field -->
+<div class="col-sm-12">
+    {!! Form::label('quantity', 'Quantity:') !!}
+    <p>{{ $product->quantity }}</p>
+</div>
+
 <!-- Slug Field -->
 <div class="col-sm-12">
     {!! Form::label('slug', 'Slug:') !!}

@@ -18,6 +18,10 @@ class CreateProductsTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->text('description');
+            $table->decimal('old_price', 10, 2)->nullable();
+            $table->decimal('price', 10, 2);
+            $table->decimal('selling_price', 10, 2)->nullable();
+            $table->integer('quantity');
             $table->string('slug')->unique();
             $table->string('sku')->unique();
             $table->integer('category_id')->unsigned();

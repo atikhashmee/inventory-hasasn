@@ -66,4 +66,26 @@ Route::resource('menufactures', App\Http\Controllers\MenufactureController::clas
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Route::resource('products', App\Http\Controllers\ProductController::class);
+
+Route::resource('stocks', App\Http\Controllers\StockController::class);

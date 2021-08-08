@@ -36,6 +36,54 @@
         "inView": true
     },
     {
+        "name": "old_price",
+        "dbType": "decimal,10,2:nullable",
+        "htmlType": "text",
+        "validations": "",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "price",
+        "dbType": "decimal,10,2",
+        "htmlType": "text",
+        "validations": "required",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "selling_price",
+        "dbType": "decimal,10,2:nullable",
+        "htmlType": "text",
+        "validations": "required",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "quantity",
+        "dbType": "integer",
+        "htmlType": "number",
+        "validations": "required",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
         "name": "slug",
         "dbType": "string:unique",
         "htmlType": "text",

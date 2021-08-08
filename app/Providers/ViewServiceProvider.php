@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Providers;
+use App\Models\Product;
 
 
 use App\Models\Menufacture;
@@ -32,6 +33,14 @@ class ViewServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        View::composer(['stocks.fields'], function ($view) {
+            $ware_houseItems = WareHouse::pluck('ware_house_name','id')->toArray();
+            $view->with('ware_houseItems', $ware_houseItems);
+        });
+        View::composer(['stocks.fields'], function ($view) {
+            $productItems = Product::pluck('name','id')->toArray();
+            $view->with('productItems', $productItems);
+        });
         View::composer(['products.fields'], function ($view) {
             $ware_houseItems = WareHouse::pluck('ware_house_name','id')->toArray();
             $view->with('ware_houseItems', $ware_houseItems);
@@ -52,6 +61,7 @@ class ViewServiceProvider extends ServiceProvider
             $categoryItems = Category::pluck('name','id')->toArray();
             $view->with('categoryItems', $categoryItems);
         });
-       
+        
+    
     }
 }
