@@ -25,3 +25,6 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::resource('wareHouses', App\Http\Controllers\WareHouseController::class);
 
 Route::resource('shops', App\Http\Controllers\ShopController::class);
+
+
+

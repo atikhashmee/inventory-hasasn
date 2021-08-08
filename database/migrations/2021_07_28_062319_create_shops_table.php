@@ -17,7 +17,7 @@ class CreateShopsTable extends Migration
         Schema::create('shops', function (Blueprint $table) {
             $table->id('id');
             $table->string('name');
-            $table->string('address');
+            $table->string('address')->nullable();
             $table->enum('status', ['active','inactive']);
             $table->timestamps();
             $table->softDeletes();
