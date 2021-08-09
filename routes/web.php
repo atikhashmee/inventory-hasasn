@@ -24,52 +24,21 @@ Auth::routes();
 Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::resource('users', App\Http\Controllers\UserController::class)->middleware('auth');
+    Route::resource('wareHouses', App\Http\Controllers\WareHouseController::class);
+    Route::resource('shops', App\Http\Controllers\ShopController::class);
+    Route::resource('categories', App\Http\Controllers\CategoryController::class);
+    Route::resource('menufactures', App\Http\Controllers\MenufactureController::class);
+    Route::resource('suppliers', App\Http\Controllers\SupplierController::class);
+    Route::resource('brands', App\Http\Controllers\BrandController::class);
+    Route::resource('products', App\Http\Controllers\ProductController::class);
+    Route::resource('stocks', App\Http\Controllers\StockController::class);
 });
 
 Route::group(['prefix' => 'user', 'as' => 'user.'], function () {
     Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'userDashboard'])->name('home');
+    Route::get('/new_order', [App\Http\Controllers\OrderController::class, 'index'])->name('new_order');
 });
 
-
-
-Route::group(['prefix' => 'admin'], function () {
-    Route::resource('wareHouses', App\Http\Controllers\WareHouseController::class, ["as" => 'admin']);
-});
-
-
-Route::group(['prefix' => 'admin'], function () {
-    Route::resource('shops', App\Http\Controllers\ShopController::class, ["as" => 'admin']);
-});
-
-
-Route::group(['prefix' => 'admin'], function () {
-    Route::resource('categories', App\Http\Controllers\CategoryController::class, ["as" => 'admin']);
-});
-
-
-Route::group(['prefix' => 'admin'], function () {
-    Route::resource('menufactures', App\Http\Controllers\MenufactureController::class, ["as" => 'admin']);
-});
-
-
-Route::group(['prefix' => 'admin'], function () {
-    Route::resource('suppliers', App\Http\Controllers\SupplierController::class, ["as" => 'admin']);
-});
-
-
-Route::group(['prefix' => 'admin'], function () {
-    Route::resource('brands', App\Http\Controllers\BrandController::class, ["as" => 'admin']);
-});
-
-
-Route::group(['prefix' => 'admin'], function () {
-    Route::resource('products', App\Http\Controllers\ProductController::class, ["as" => 'admin']);
-});
-
-
-Route::group(['prefix' => 'admin'], function () {
-    Route::resource('stocks', App\Http\Controllers\StockController::class, ["as" => 'admin']);
-});
 
 
 

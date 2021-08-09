@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Controllers\AppBaseController;
+use App\Models\Shop;
 use Illuminate\Http\Request;
 use Flash;
 use Response;
@@ -34,7 +35,8 @@ class UserController extends AppBaseController
      */
     public function create()
     {
-        return view('users.create');
+        $shopItems = Shop::where('status', 'active')->pluck('name', 'id');
+        return view('users.create', compact('shopItems'));
     }
 
     /**
@@ -95,7 +97,8 @@ class UserController extends AppBaseController
             return redirect(route('admin.users.index'));
         }
 
-        return view('users.edit')->with('user', $user);
+        $shopItems = Shop::where('status', 'active')->pluck('name', 'id');
+        return view('users.edit', compact('shopItems'))->with('user', $user);
     }
 
     /**

@@ -10,6 +10,12 @@
     {!! Form::email('email', null, ['class' => 'form-control']) !!}
 </div>
 
+<!-- Brand Id Field -->
+<div class="form-group col-sm-6">
+    {!! Form::label('shop_id', 'Shop:') !!}
+    {!! Form::select('shop_id', $shopItems, null, ['class' => 'form-control custom-select']) !!}
+</div>
+
 <!-- Password Field -->
 <div class="form-group col-sm-6">
     {!! Form::label('password', 'Password') !!}

@@ -4,6 +4,8 @@
         <tr>
             <th>Name</th>
             <th>Email</th>
+            <th>Role</th>
+            <th>Shop</th>
             <th colspan="3">Action</th>
         </tr>
         </thead>
@@ -12,6 +14,8 @@
             <tr>
                 <td>{!! $user->name !!}</td>
                 <td>{!! $user->email !!}</td>
+                <td>{{ $user->role }}</td>
+                <td>{{ $user->shop->name }}</td>
                 <td>
                     {!! Form::open(['route' => ['admin.users.destroy', $user->id], 'method' => 'delete']) !!}
                     <div class='btn-group'>

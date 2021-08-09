@@ -20,6 +20,8 @@ class CreateUsersTable extends Migration
             $table->enum('role', ['admin', 'staff'])->default('staff');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->bigInteger('shop_id')->nullable();
+            $table->foreign('shop_id')->references('id')->on('shops')->onDelete('cascade');
             $table->rememberToken();
             $table->timestamps();
         });
