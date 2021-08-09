@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 /**
  * Class Product
  * @package App\Models
- * @version August 8, 2021, 4:57 pm UTC
+ * @version August 8, 2021, 5:04 pm UTC
  *
  * @property \App\Models\Category $category
  * @property \App\Models\Brand $brand

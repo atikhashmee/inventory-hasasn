@@ -47,6 +47,38 @@ Route::group(['prefix' => 'user', 'as' => 'user.'], function () {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Route::group(['prefix' => 'admin'], function () {
     Route::resource('wareHouses', App\Http\Controllers\WareHouseController::class, ["as" => 'admin']);
 });
