@@ -22,7 +22,7 @@ class UserController extends AppBaseController
     public function index(Request $request)
     {
         /** @var User $users */
-        $users = User::all();
+        $users = User::where('role', '!=', 'admin')->get();
         return view('users.index')
             ->with('users', $users);
     }
