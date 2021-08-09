@@ -78,3 +78,7 @@
 </li>
 
 
+
+<li class="{{ Request::is('admin.users*') ? 'active' : '' }}">
+    <a href="{!! route('admin.users.index') !!}"><i class="fa fa-user"></i><span>Users</span></a>
+</li>

@@ -27,6 +27,6 @@ class HomeController extends Controller
     }
 
     public function userDashboard() {
-        dd(1);
+        return view('user.home');
     }
 }

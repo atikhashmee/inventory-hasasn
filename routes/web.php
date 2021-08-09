@@ -23,59 +23,12 @@ Route::get('/', function () {
 Auth::routes();
 Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    Route::resource('users', App\Http\Controllers\UserController::class)->middleware('auth');
 });
 
 Route::group(['prefix' => 'user', 'as' => 'user.'], function () {
     Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'userDashboard'])->name('home');
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -117,3 +70,6 @@ Route::group(['prefix' => 'admin'], function () {
 Route::group(['prefix' => 'admin'], function () {
     Route::resource('stocks', App\Http\Controllers\StockController::class, ["as" => 'admin']);
 });
+
+
+
