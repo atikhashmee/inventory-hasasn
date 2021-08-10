@@ -15,7 +15,7 @@ class CreateProductsTable extends Migration
     public function up()
     {
         Schema::create('products', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->string('name');
             $table->text('description');
             $table->decimal('old_price', 10, 2)->nullable();
@@ -24,19 +24,19 @@ class CreateProductsTable extends Migration
             $table->integer('quantity');
             $table->string('slug')->unique();
             $table->string('sku')->unique();
-            $table->integer('category_id')->unsigned();
-            $table->integer('brand_id')->unsigned()->nullable();
-            $table->integer('supplier_id')->unsigned()->nullable();
-            $table->integer('menufacture_id')->unsigned()->nullable();
-            $table->integer('warehouse_id')->unsigned();
+            $table->unsignedBigInteger('category_id');
+            $table->unsignedBigInteger('brand_id')->nullable();
+            $table->unsignedBigInteger('supplier_id')->nullable();
+            $table->unsignedBigInteger('menufacture_id')->nullable();
+            $table->unsignedBigInteger('warehouse_id');
             $table->string('feature_image');
             $table->timestamps();
             $table->softDeletes();
-            $table->foreign('category_id')->references('id')->on('categories');
-            $table->foreign('brand_id')->references('id')->on('brands');
-            $table->foreign('supplier_id')->references('id')->on('suppliers');
-            $table->foreign('menufacture_id')->references('id')->on('menufactures');
-            $table->foreign('warehouse_id')->references('id')->on('ware_houses');
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
+            $table->foreign('brand_id')->references('id')->on('brands')->onDelete('cascade');
+            $table->foreign('supplier_id')->references('id')->on('suppliers')->onDelete('cascade');
+            $table->foreign('menufacture_id')->references('id')->on('menufactures')->onDelete('cascade');
+            $table->foreign('warehouse_id')->references('id')->on('ware_houses')->onDelete('cascade');
         });
     }
 

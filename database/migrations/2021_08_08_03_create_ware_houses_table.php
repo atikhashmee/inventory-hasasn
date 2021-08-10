@@ -15,7 +15,7 @@ class CreateWareHousesTable extends Migration
     public function up()
     {
         Schema::create('ware_houses', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->string('ware_house_name');
             $table->timestamps();
             $table->softDeletes();

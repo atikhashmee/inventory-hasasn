@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMenufacturesTable extends Migration
+class CreateCategoriesTable extends Migration
 {
 
     /**
@@ -14,10 +14,9 @@ class CreateMenufacturesTable extends Migration
      */
     public function up()
     {
-        Schema::create('menufactures', function (Blueprint $table) {
-            $table->increments('id');
+        Schema::create('categories', function (Blueprint $table) {
+            $table->id();
             $table->string('name');
-            $table->text('description')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -30,6 +29,6 @@ class CreateMenufacturesTable extends Migration
      */
     public function down()
     {
-        Schema::drop('menufactures');
+        Schema::drop('categories');
     }
 }
