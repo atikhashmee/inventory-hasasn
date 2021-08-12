@@ -3,6 +3,7 @@
         <thead>
         <tr>
             <th>Name</th>
+            <th>Total Products</th>
             <th colspan="3">Action</th>
         </tr>
         </thead>
@@ -10,6 +11,7 @@
         @foreach($categories as $category)
             <tr>
                 <td>{{ $category->name }}</td>
+                <td>{{ $category->totalProduct??0 }}</td>
                 <td width="120">
                     {!! Form::open(['route' => ['admin.categories.destroy', $category->id], 'method' => 'delete']) !!}
                     <div class='btn-group'>

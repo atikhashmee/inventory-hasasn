@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreateProductRequest;
-use App\Http\Requests\UpdateProductRequest;
-use App\Http\Controllers\AppBaseController;
-use App\Models\Product;
-use Illuminate\Http\Request;
 use Flash;
 use Response;
+use App\Models\Product;
+use Illuminate\Http\Request;
+use Intervention\Image\Facades\Image;
+use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\AppBaseController;
+use App\Http\Requests\CreateProductRequest;
+use App\Http\Requests\UpdateProductRequest;
 
 class ProductController extends AppBaseController
 {
@@ -50,10 +52,22 @@ class ProductController extends AppBaseController
         $input = $request->all();
 
         /** @var Product $product */
+        if ($request->hasFile('feature_image')) {
+            $image      = $request->file('feature_image');
+            $fileName   = time() . '.' . $image->getClientOriginalExtension();
+
+            $img = Image::make($image->getRealPath());
+            $img->resize(120, 120, function ($constraint) {
+                $constraint->aspectRatio();                 
+            });
+
+            $img->stream(); // <-- Key point
+            $input['feature_image'] = $fileName;
+            Storage::disk('local')->put('products'.'/'.$fileName, $img, 'public');
+        }
+
         $product = Product::create($input);
-
         Flash::success('Product saved successfully.');
-
         return redirect(route('admin.products.index'));
     }
 
@@ -118,7 +132,21 @@ class ProductController extends AppBaseController
             return redirect(route('admin.products.index'));
         }
 
-        $product->fill($request->all());
+        $data = $request->all();
+        if ($request->hasFile('feature_image')) {
+            $image      = $request->file('feature_image');
+            $fileName   = time() . '.' . $image->getClientOriginalExtension();
+
+            $img = Image::make($image->getRealPath());
+            $img->resize(120, 120, function ($constraint) {
+                $constraint->aspectRatio();                 
+            });
+
+            $img->stream(); // <-- Key point
+            $data['feature_image'] = $fileName;
+            Storage::disk('local')->put('products'.'/'.$fileName, $img, 'public');
+        }
+        $product->fill($data);
         $product->save();
 
         Flash::success('Product updated successfully.');

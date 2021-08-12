@@ -22,7 +22,9 @@ class CategoryController extends AppBaseController
     public function index(Request $request)
     {
         /** @var Category $categories */
-        $categories = Category::all();
+        $categories = Category::select('categories.*', 'P.totalProduct')
+        ->leftJoin(\DB::raw('(SELECT COUNT(*) as totalProduct, category_id FROM products GROUP BY category_id) AS P'), 'P.category_id', '=', 'categories.id')
+        ->get();
 
         return view('admin.categories.index')
             ->with('categories', $categories);
