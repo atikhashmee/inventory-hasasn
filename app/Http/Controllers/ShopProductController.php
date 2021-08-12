@@ -80,14 +80,14 @@ class ShopProductController extends Controller
                             'shop_id' => $data['shop_id'],
                             'product_id' => $product['id'],
                             'quantity' => $product['new_quantity']??0,
-                            'price' => $product['new_price']??0,
+                            'price' => $product['new_price']??$product['price'],
                         ]);
                     } else {
                         ShopProduct::create([
                             'shop_id' => $data['shop_id'],
                             'product_id' => $product['id'],
                             'quantity' => $product['new_quantity']??0,
-                            'price' => $product['new_price']??0,
+                            'price' => $product['new_price']??$product['price'],
                         ]);
                     }
                 }

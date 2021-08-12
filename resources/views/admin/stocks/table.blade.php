@@ -15,8 +15,8 @@
         <tbody>
         @foreach($stocks as $stock)
             <tr>
-                <td>{{ $stock->product_id }}</td>
-            <td>{{ $stock->warehouse_id }}</td>
+                <td>{{ $stock->product->name }}</td>
+            <td>{{ $stock->warehouse->ware_house_name }}</td>
             <td>{{ $stock->sku }}</td>
             <td>{{ $stock->old_price }}</td>
             <td>{{ $stock->price }}</td>

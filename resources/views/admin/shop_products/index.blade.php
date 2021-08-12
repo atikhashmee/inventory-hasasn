@@ -46,6 +46,7 @@
                                 <th>@{{selectedShop!==null?selectedShop.name: '-'}} current quantity</th>
                                 <th>@{{selectedShop!==null?selectedShop.name: '-'}} Add quantity</th>
                                 <th>@{{selectedShop!==null?selectedShop.name: '-'}} total quantity</th>
+                                <th>@{{selectedShop!==null?selectedShop.name: '-'}} Price</th>
                             </tr>
                         </thead>
                         <tbody v-if="products.length > 0">
@@ -61,6 +62,9 @@
                                     :max="product.warehouse_quantity">
                                 </td>
                                 <td>@{{product.total_quantity??0}}</td>
+                                <td>
+                                    <input type="number" class="form-control" @keyup="updatePrice($event, product)">
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -152,6 +156,17 @@
                         });
                     }
                 },
+                updatePrice(evt, product) {
+                    inputPrice = evt.currentTarget.value;
+                    if (this.products.length > 0) {
+                        this.products = this.products.map(item => {
+                            if (product.id === item.id) {
+                                item.new_price = Number(inputPrice)
+                            }
+                            return item;
+                        });
+                    }
+                },
                 saveUpdates() {
                     if (this.product_ids.length === 0) {
                         alert('You have no item selected')
@@ -169,7 +184,9 @@
                         })
                         .then(res=>res.json())
                         .then(res=>{
-                            console.log(res, 'asdf');
+                            if (res.status) {
+                                window.location.reload()
+                            }
                         })
                     }
                 }
