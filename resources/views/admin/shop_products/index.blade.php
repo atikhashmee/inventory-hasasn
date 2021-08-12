@@ -10,7 +10,7 @@
                 </div>
                 <div class="col-sm-6">
                     <a class="btn btn-primary float-right"
-                       href="{{ route('admin.products.create') }}">
+                       href="javascript:void(0)" @click="saveUpdates()">
                         Update
                     </a>
                 </div>
@@ -39,7 +39,7 @@
                         <thead>
                             <tr>
                                 <th>
-                                    <input type="checkbox">
+                                    <input type="checkbox" v-model="selectAll" value="true">
                                 </th>
                                 <th>Product</th>
                                 <th>Warehouse Quantity</th>
@@ -50,10 +50,10 @@
                         </thead>
                         <tbody v-if="products.length > 0">
                             <tr v-for="(product, index) in products" :key="index">
-                                <td> <input type="checkbox" name="item_id"></td>
+                                <td> <input type="checkbox" v-model="product_ids" name="item_id" :value="product.id"></td>
                                 <td>@{{product.name}}</td>
-                                <td>@{{product.warehouse_quantity}}</td>
-                                <td>@{{product.shop_quantity??'-'}}</td>
+                                <td>@{{product.final_warehouse_quantity ?? product.warehouse_quantity}}</td>
+                                <td>@{{product.shop_quantity??0}}</td>
                                 <td>
                                     <input type="number" 
                                     class="form-control" 
@@ -84,12 +84,25 @@
                 products: [],
                 shops: [],
                 selectedShop: null,
+                product_ids: [],
+                selectAll: null,
             },
             mounted(){
                 this.getResource()
             },
+            watch: {
+                selectAll(oldval, newval) {
+                    if (oldval) {
+                        this.product_ids = this.products.map(item=>item.id)
+                    } else {
+                        this.product_ids = [] 
+                    }
+                }
+            },
             methods: {
                 getResource() {
+                    this.products = []
+                    this.product_ids = []
                     let url = `{{url('admin/shop_products/get-resource')}}`
                     if (this.selectedShop !== null) {
                         url =  `{{url('admin/shop_products/get-resource')}}?shop_id=${this.selectedShop.id}`
@@ -100,6 +113,13 @@
                         if (res.status) {
                             this.shops = [...res.data.shops]
                             this.products = [...res.data.products]
+                            if (this.products.length > 0) {
+                                this.products.forEach(itemD => {
+                                   if (('isAdded' in itemD) && itemD.isAdded !== null) {
+                                       this.product_ids.push(itemD.id)
+                                   }
+                                });
+                            }
                         }
                     })
                 }, 
@@ -125,10 +145,32 @@
                     if (this.products.length > 0) {
                         this.products = this.products.map(item => {
                             if (product.id === item.id) {
+                                item.new_quantity = Number(inputQuantity)
                                 item.total_quantity = Number(item.shop_quantity) + Number(inputQuantity)
                             }
                             return item;
                         });
+                    }
+                },
+                saveUpdates() {
+                    if (this.product_ids.length === 0) {
+                        alert('You have no item selected')
+                    } else {
+                        let url = `{{route('admin.shop_products.store')}}`
+                        let formD = new FormData()
+                        formD.append('shop_id', this.selectedShop.id)
+                        formD.append('products', JSON.stringify(this.products))
+                        fetch(url, {
+                            method: 'POST',
+                            headers: {
+                                "X-CSRF-TOKEN": `{{csrf_token()}}`
+                            }, 
+                            body: formD
+                        })
+                        .then(res=>res.json())
+                        .then(res=>{
+                            console.log(res, 'asdf');
+                        })
                     }
                 }
             }
