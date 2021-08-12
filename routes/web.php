@@ -32,6 +32,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::resource('brands', App\Http\Controllers\BrandController::class);
     Route::resource('products', App\Http\Controllers\ProductController::class);
     Route::resource('stocks', App\Http\Controllers\StockController::class);
+    Route::get('shop_products/get-resource',[App\Http\Controllers\ShopProductController::class, 'getResource']);
+    Route::resource('shop_products', App\Http\Controllers\ShopProductController::class);
 });
 
 Route::group(['prefix' => 'user', 'as' => 'user.'], function () {
