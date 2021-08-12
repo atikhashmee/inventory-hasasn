@@ -11,7 +11,7 @@
                 <div class="col-sm-6">
                     <a class="btn btn-primary float-right"
                        href="{{ route('admin.products.create') }}">
-                        Add New
+                        Update
                     </a>
                 </div>
             </div>
@@ -29,8 +29,9 @@
             <div class="card-body">
                 <form action="">
                     <div class="form-group">
-                        <label for="">Select a Shop</label>
-                        <select name="shop_id" id="shop_id" class="form-control">
+                        <label for="">Shop</label>
+                        <select name="shop_id" id="shop_id" class="form-control" @change="selectShop($event)">
+                            <option value="">Select a shop</option>
                             <option v-for="shop in shops" :value="shop.id">@{{shop.name}}</option>
                         </select>
                     </div>
@@ -42,17 +43,24 @@
                                 </th>
                                 <th>Product</th>
                                 <th>Warehouse Quantity</th>
-                                <th>Shop-name current quantity</th>
-                                <th>Shop-name total quantity</th>
+                                <th>@{{selectedShop!==null?selectedShop.name: '-'}} current quantity</th>
+                                <th>@{{selectedShop!==null?selectedShop.name: '-'}} Add quantity</th>
+                                <th>@{{selectedShop!==null?selectedShop.name: '-'}} total quantity</th>
                             </tr>
                         </thead>
                         <tbody v-if="products.length > 0">
                             <tr v-for="(product, index) in products" :key="index">
                                 <td> <input type="checkbox" name="item_id"></td>
                                 <td>@{{product.name}}</td>
-                                <td>@{{product.name}}</td>
-                                <td>@{{product.name}}</td>
-                                <td>@{{product.name}}</td>
+                                <td>@{{product.warehouse_quantity}}</td>
+                                <td>@{{product.shop_quantity??'-'}}</td>
+                                <td>
+                                    <input type="number" 
+                                    class="form-control" 
+                                    @keyup="updateQuantity($event, product)"
+                                    :max="product.warehouse_quantity">
+                                </td>
+                                <td>@{{product.total_quantity??0}}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -75,13 +83,18 @@
             data: {
                 products: [],
                 shops: [],
+                selectedShop: null,
             },
             mounted(){
                 this.getResource()
             },
             methods: {
                 getResource() {
-                    fetch(`{{url('admin/shop_products/get-resource')}}`)
+                    let url = `{{url('admin/shop_products/get-resource')}}`
+                    if (this.selectedShop !== null) {
+                        url =  `{{url('admin/shop_products/get-resource')}}?shop_id=${this.selectedShop.id}`
+                    }
+                    fetch(url)
                     .then(res=>res.json())
                     .then(res=>{
                         if (res.status) {
@@ -89,6 +102,34 @@
                             this.products = [...res.data.products]
                         }
                     })
+                }, 
+                selectShop(evt) {
+                    let shop_id = evt.currentTarget.value
+                    let selectedshop =this.shops.find(it=>it.id==shop_id)
+                    if (selectedshop) {
+                        this.selectedShop = selectedshop
+                        this.getResource()
+                    }
+                },
+                updateQuantity(evt, product) {
+                    let inputQuantity = evt.currentTarget.value;
+                    if(isNaN(inputQuantity)){
+                        evt.preventDefault();
+                        evt.currentTarget.value = 1;
+                    }
+                    if (Number(inputQuantity) > Number(product.warehouse_quantity)) {
+                        evt.preventDefault();
+                        evt.currentTarget.value = product.warehouse_quantity;
+                    }
+                    inputQuantity = evt.currentTarget.value;
+                    if (this.products.length > 0) {
+                        this.products = this.products.map(item => {
+                            if (product.id === item.id) {
+                                item.total_quantity = Number(item.shop_quantity) + Number(inputQuantity)
+                            }
+                            return item;
+                        });
+                    }
                 }
             }
         })

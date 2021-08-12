@@ -19,10 +19,19 @@ class ShopProductController extends Controller
         return view('admin.shop_products.index');
     }
 
-    public function getResource() {
+    public function getResource(Request $request) {
         try {
+            $warehouse_id = 1;
             $data['shops'] =  Shop::where('status', 'active')->get();
-            $data['products'] =  Product::get();
+            $product_sql =  Product::select('products.*', \DB::raw('((IFNULL(S.stock_quantity, 0) + IFNULL(products.quantity, 0)) - IFNULL(SW.shops_stock_quantity,0)) as warehouse_quantity'))
+            ->leftJoin(\DB::raw('(SELECT SUM(quantity) as stock_quantity, product_id FROM `stocks` WHERE warehouse_id ='.$warehouse_id.' GROUP BY product_id) as S'), 'S.product_id', '=', 'products.id')
+            ->leftJoin(\DB::raw('(SELECT SUM(quantity) as shops_stock_quantity, product_id FROM `shop_product_stocks` WHERE warehouse_id ='.$warehouse_id.' GROUP BY product_id) as SW'), 'SW.product_id', '=', 'products.id');
+            if ($request->shop_id) {
+                $product_sql->addSelect('SSW.shop_stock_quantity as shop_quantity');
+                $product_sql->leftJoin(\DB::raw('(SELECT SUM(quantity) as shop_stock_quantity, product_id, shop_id FROM `shop_product_stocks` WHERE warehouse_id ='.$warehouse_id.' GROUP BY product_id, shop_id) as SSW'), 'SSW.product_id', '=', 'products.id');
+                $product_sql->where('SSW.shop_id', $request->shop_id);
+            }
+            $data['products'] = $product_sql->get();
             return response()->json(['status'=>true, 'data'=>$data]);
         } catch (\Exception $e) {
             return response()->json(['status'=>false, 'data'=>$e->getMessage()]);
