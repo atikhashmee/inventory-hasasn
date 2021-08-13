@@ -1,7 +1,7 @@
 [
     {
         "name": "id",
-        "dbType": "increments",
+        "dbType": "id",
         "htmlType": "",
         "validations": "",
         "searchable": false,
@@ -16,6 +16,12 @@
         "dbType": "string",
         "htmlType": "text",
         "validations": "required",
+        "searchable": true
+    },
+    {
+        "name": "parent_id",
+        "dbType": "biginteger:unsigned:default,0",
+        "htmlType": "selectTable:categories:name,id",
         "searchable": true
     },
     {

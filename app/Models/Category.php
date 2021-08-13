@@ -9,9 +9,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 /**
  * Class Category
  * @package App\Models
- * @version August 8, 2021, 5:04 pm UTC
+ * @version August 13, 2021, 3:36 am UTC
  *
  * @property string $name
+ * @property integer $parent_id
  */
 class Category extends Model
 {
@@ -27,7 +28,8 @@ class Category extends Model
 
 
     public $fillable = [
-        'name'
+        'name',
+        'parent_id'
     ];
 
     /**
@@ -36,8 +38,8 @@ class Category extends Model
      * @var array
      */
     protected $casts = [
-        'id' => 'integer',
-        'name' => 'string'
+        'name' => 'string',
+        'parent_id' => 'integer'
     ];
 
     /**
@@ -49,5 +51,22 @@ class Category extends Model
         'name' => 'required'
     ];
 
+    public function nested()
+    {
+        return $this->hasMany('App\Models\Category', 'parent_id', 'id');
+    }
+
+    public function items()
+    {
+        return $this->nested()->select('id', 'parent_id', 'name');
+    }
+
+    /**
+     * Get the parent of the category.
+     */
+    public function parent(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo('App\Models\Category', 'parent_id');
+    }
     
 }

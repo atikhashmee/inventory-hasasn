@@ -11,7 +11,7 @@
         @foreach($categories as $category)
             <tr>
                 <td>{{ $category->name }}</td>
-                <td>{{ $category->totalProduct??0 }}</td>
+                <td>{{ $category->total_product??0 }}</td>
                 <td width="120">
                     {!! Form::open(['route' => ['admin.categories.destroy', $category->id], 'method' => 'delete']) !!}
                     <div class='btn-group'>
@@ -28,6 +28,30 @@
                     {!! Form::close() !!}
                 </td>
             </tr>
+            @if ($category->nested()->count() > 0)
+                @foreach ($category->nested()->get() as $item)
+                    <tr>
+                        <td>&nbsp;&nbsp;&nbsp;-{{ $item->name }}</td>
+                        <td>{{ $item->total_product??0 }}</td>
+                        <td width="120">
+                            {!! Form::open(['route' => ['admin.categories.destroy', $item->id], 'method' => 'delete']) !!}
+                            <div class='btn-group'>
+                                <a href="{{ route('admin.categories.show', [$item->id]) }}"
+                                class='btn btn-default btn-xs'>
+                                    <i class="far fa-eye"></i>
+                                </a>
+                                <a href="{{ route('admin.categories.edit', [$item->id]) }}"
+                                class='btn btn-default btn-xs'>
+                                    <i class="far fa-edit"></i>
+                                </a>
+                                {!! Form::button('<i class="far fa-trash-alt"></i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs', 'onclick' => "return confirm('Are you sure?')"]) !!}
+                            </div>
+                            {!! Form::close() !!}
+                        </td>
+                    </tr>
+                @endforeach
+                
+            @endif
         @endforeach
         </tbody>
     </table>

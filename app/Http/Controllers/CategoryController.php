@@ -22,10 +22,10 @@ class CategoryController extends AppBaseController
     public function index(Request $request)
     {
         /** @var Category $categories */
-        $categories = Category::select('categories.*', 'P.totalProduct')
-        ->leftJoin(\DB::raw('(SELECT COUNT(*) as totalProduct, category_id FROM products GROUP BY category_id) AS P'), 'P.category_id', '=', 'categories.id')
+        $categories = Category::with('nested')->select('categories.*', 'P.total_product')
+        ->leftJoin(\DB::raw('(SELECT COUNT(*) as total_product, category_id FROM products GROUP BY category_id) AS P'), 'p.category_id', '=', 'categories.id')
+        ->where('categories.parent_id', 0)
         ->get();
-
         return view('admin.categories.index')
             ->with('categories', $categories);
     }
@@ -50,7 +50,9 @@ class CategoryController extends AppBaseController
     public function store(CreateCategoryRequest $request)
     {
         $input = $request->all();
-
+        if ($request->parent_id == -1) {
+            $input['parent_id'] = 0;
+        }
         /** @var Category $category */
         $category = Category::create($input);
 

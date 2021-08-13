@@ -33,6 +33,10 @@ class ViewServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        View::composer(['admin.categories.fields'], function ($view) {
+            $categoryItems = Category::with('parent')->get()->toArray();
+            $view->with('categoryItems', $categoryItems);
+        });
         View::composer(['admin.stocks.fields'], function ($view) {
             $ware_houseItems = WareHouse::pluck('ware_house_name','id')->toArray();
             $view->with('ware_houseItems', $ware_houseItems);
@@ -58,7 +62,7 @@ class ViewServiceProvider extends ServiceProvider
             $view->with('brandItems', $brandItems);
         });
         View::composer(['admin.products.fields'], function ($view) {
-            $categoryItems = Category::pluck('name','id')->toArray();
+            $categoryItems = Category::with('nested')->where('parent_id', 0)->get()->toArray();
             $view->with('categoryItems', $categoryItems);
         });
         

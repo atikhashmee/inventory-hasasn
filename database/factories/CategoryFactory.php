@@ -23,6 +23,7 @@ class CategoryFactory extends Factory
     {
         return [
             'name' => $this->faker->word,
+        'parent_id' => $this->faker->word,
         'created_at' => $this->faker->date('Y-m-d H:i:s'),
         'updated_at' => $this->faker->date('Y-m-d H:i:s')
         ];

@@ -49,7 +49,19 @@
 <!-- Category Id Field -->
 <div class="form-group col-sm-6">
     {!! Form::label('category_id', 'Category Id:') !!}
-    {!! Form::select('category_id', $categoryItems, null, ['class' => 'form-control custom-select']) !!}
+    <select name="category_id" id="category_id" class="form-control custom-select">
+        <option value="">Select a category</option>
+        @if (count($categoryItems) > 0)
+            @foreach ($categoryItems as $item)
+                <option @if(isset($product) && $product->category_id == $item['id']) selected @endif value="{{$item['id']}}">{{$item['name']}}</option>
+                @if (count($item['nested']) > 0)
+                    @foreach ($item['nested'] as $child)
+                        <option @if(isset($product) && $product->category_id == $child['id']) selected @endif value="{{$child['id']}}">&nbsp;&nbsp;&nbsp;&nbsp;{{$child['name']}}</option>
+                    @endforeach
+                @endif
+            @endforeach
+        @endif
+    </select>
 </div>
 
 
