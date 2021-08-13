@@ -23,7 +23,7 @@ class CategoryController extends AppBaseController
     {
         /** @var Category $categories */
         $categories = Category::with('nested')->select('categories.*', 'P.total_product')
-        ->leftJoin(\DB::raw('(SELECT COUNT(*) as total_product, category_id FROM products GROUP BY category_id) AS P'), 'p.category_id', '=', 'categories.id')
+        ->leftJoin(\DB::raw('(SELECT COUNT(*) as total_product, category_id FROM products GROUP BY category_id) AS P'), 'P.category_id', '=', 'categories.id')
         ->where('categories.parent_id', 0)
         ->get();
         return view('admin.categories.index')
