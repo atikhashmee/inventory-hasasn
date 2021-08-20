@@ -69,7 +69,7 @@
                                                     </a>
                                                 </td>
                                                 <td>
-                                                    <select name="product_id" class="form-control select2">
+                                                    <select name="product_id" class="form-control select2" v-select2>
                                                         <option v-for="prod in products" :value="prod.id">@{{prod.name}}</option>
                                                     </select>
                                                 </td>
@@ -120,6 +120,28 @@
 @endsection
 @push('third_party_scripts')
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <script>
+          Vue.directive('select2', {
+            inserted(el) {
+                $(el).on('select2:select', () => {
+                    const event = new Event('change', {bubbles: true, cancelable: true});
+                    el.dispatchEvent(event);
+                });
+                $(el).on('select2:unselect', () => {
+                    const event = new Event('change', {bubbles: true, cancelable: true})
+                    el.dispatchEvent(event)
+                })
+            },
+        });
+        function initLibs() {
+            setTimeout(function () {
+                $('.select2').select2({
+                    width: '100%',
+                    placeholder: 'Select',
+                });
+            }, 10);
+        }
+    </script>
 @endpush
 @push('page_scripts')
 <script>
@@ -132,6 +154,7 @@
         },
         mounted() {
             this.getResource()
+            initLibs()
         },
         methods: {
             getResource() {
