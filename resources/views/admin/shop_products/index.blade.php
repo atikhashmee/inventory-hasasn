@@ -191,7 +191,7 @@
                         let url = `{{route('admin.shop_products.store')}}`
                         let formD = new FormData()
                         formD.append('shop_id', this.selectedShop.id)
-                        formD.append('products', JSON.stringify(this.products))
+                        formD.append('products', JSON.stringify(this.products.filter(item=>this.product_ids.includes(item.id))))
                         fetch(url, {
                             method: 'POST',
                             headers: {

@@ -36,7 +36,22 @@
         <p>Brands</p>
     </a>
 </li>
+<li class="nav-item">
+    <a href="{{ route('admin.suppliers.index') }}"
+       class="nav-link {{ Request::is('admin/suppliers*') ? 'active' : '' }}">
+        <p>Suppliers</p>
+    </a>
+</li>
 
+
+
+
+<li class="nav-item">
+    <a href="{{ route('admin.stocks.index') }}"
+       class="nav-link {{ Request::is('admin/stocks*') ? 'active' : '' }}">
+        <p>Purchase</p>
+    </a>
+</li>
 
 <li class="nav-item">
     <a href="{{ route('admin.products.index') }}"
@@ -60,21 +75,6 @@
     </a>
 </li>
 
-<li class="nav-item">
-    <a href="{{ route('admin.suppliers.index') }}"
-       class="nav-link {{ Request::is('admin/suppliers*') ? 'active' : '' }}">
-        <p>Suppliers</p>
-    </a>
-</li>
 
-
-
-
-<li class="nav-item">
-    <a href="{{ route('admin.stocks.index') }}"
-       class="nav-link {{ Request::is('admin/stocks*') ? 'active' : '' }}">
-        <p>Purchase</p>
-    </a>
-</li>
 
 
