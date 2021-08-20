@@ -32,6 +32,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::resource('brands', App\Http\Controllers\BrandController::class);
     Route::resource('products', App\Http\Controllers\ProductController::class);
     Route::resource('stocks', App\Http\Controllers\StockController::class);
+    Route::resource('orders', App\Http\Controllers\OrderController::class);
 
 
     Route::post('shop_products/update-shop-to-shop',[App\Http\Controllers\ShopProductController::class, 'updateShopToShopProduct'])->name('shop_products.updateshoptoshop');
