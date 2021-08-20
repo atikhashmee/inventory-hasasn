@@ -1,5 +1,5 @@
-<div class="table-responsive">
-    <table class="table" id="suppliers-table">
+<div class="table-responsive ">
+    <table class="table data-table-lib" id="suppliers-table">
         <thead>
         <tr>
             <th>Name</th>
@@ -9,7 +9,7 @@
         <th>Contact Phone</th>
         <th>Country</th>
         <th>Address</th>
-            <th colspan="3">Action</th>
+        <th >Action</th>
         </tr>
         </thead>
         <tbody>

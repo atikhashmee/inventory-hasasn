@@ -1,10 +1,10 @@
 <div class="table-responsive">
-    <table class="table" id="categories-table">
+    <table class="table data-table-lib" id="categories-table">
         <thead>
         <tr>
             <th>Name</th>
             <th>Total Products</th>
-            <th colspan="3">Action</th>
+            <th>Action</th>
         </tr>
         </thead>
         <tbody>

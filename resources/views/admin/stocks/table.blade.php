@@ -1,5 +1,5 @@
 <div class="table-responsive">
-    <table class="table" id="stocks-table">
+    <table class="table data-table-lib" id="stocks-table">
         <thead>
         <tr>
             <th>Product</th>
@@ -10,7 +10,7 @@
         <th>Price</th>
         <th>Selling Price</th>
         <th>Quantity</th>
-            <th colspan="3">Action</th>
+            <th >Action</th>
         </tr>
         </thead>
         <tbody>

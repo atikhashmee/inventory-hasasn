@@ -1,9 +1,9 @@
 <div class="table-responsive">
-    <table class="table" id="wareHouses-table">
+    <table class="table data-table-lib" id="wareHouses-table">
         <thead>
         <tr>
             <th>Ware House Name</th>
-            <th colspan="3">Action</th>
+            <th>Action</th>
         </tr>
         </thead>
         <tbody>

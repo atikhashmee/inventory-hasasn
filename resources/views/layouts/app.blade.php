@@ -33,6 +33,7 @@
           href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css"
           integrity="sha512-aEe/ZxePawj0+G2R+AaIxgrQuKT68I28qh+wgLrcAJOz3rxCP+TwrK5SPN+E5I+1IQjNtcfvb96HDagwrKRdBw=="
           crossorigin="anonymous"/>
+    <link rel="stylesheet" href="{{asset('assets/lib/datatable/css/datatable.min.css')}}">
 
     <style>
         .select2-container .select2-selection--single {
@@ -148,7 +149,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-switch/1.3/bootstrapSwitch.min.js"
         integrity="sha512-DAc/LqVY2liDbikmJwUS1MSE3pIH0DFprKHZKPcJC7e3TtAOzT55gEMTleegwyuIWgCfOPOM8eLbbvFaG9F/cA=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
+<script src="{{asset('assets/lib/datatable/js/jquery.dataTables.min.js')}}"></script>
 <script>
     $(function () {
         bsCustomFileInput.init();
@@ -159,6 +160,7 @@
     });
     $(document).ready(function() {
         $('.select2').select2();
+        $('.data-table-lib').DataTable();
     });
 </script>
 

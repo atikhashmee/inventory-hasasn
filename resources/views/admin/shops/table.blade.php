@@ -1,11 +1,11 @@
 <div class="table-responsive">
-    <table class="table" id="shops-table">
+    <table class="table data-table-lib" id="shops-table">
         <thead>
         <tr>
             <th>Name</th>
         <th>Address</th>
         <th>Status</th>
-            <th colspan="3">Action</th>
+        <th>Action</th>
         </tr>
         </thead>
         <tbody>

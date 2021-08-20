@@ -1,12 +1,12 @@
 <div class="table-responsive">
-    <table class="table" id="users-table">
+    <table class="table data-table-lib" id="users-table">
         <thead>
         <tr>
             <th>Name</th>
             <th>Email</th>
             <th>Role</th>
             <th>Shop</th>
-            <th colspan="3">Action</th>
+            <th>Action</th>
         </tr>
         </thead>
         <tbody>
