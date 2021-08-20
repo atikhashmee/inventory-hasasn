@@ -15,10 +15,7 @@
                     <h1>Product Distribution</h1>
                 </div>
                 <div class="col-sm-6">
-                    <a class="btn btn-primary float-right"
-                       href="javascript:void(0)" @click="saveUpdates()">
-                        Update
-                    </a>
+                    
                 </div>
             </div>
         </div>
@@ -39,12 +36,21 @@
                 <div class="tab-content">
                     <div class="tab-pane active" id="activity">
                         <form action="">
-                            <div class="form-group">
-                                <label for="">Shop</label>
-                                <select name="shop_id" id="shop_id" class="form-control" @change="selectShop($event)">
-                                    <option value="">Select a shop</option>
-                                    <option v-for="shop in shops" :value="shop.id">@{{shop.name}}</option>
-                                </select>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="">Shop</label>
+                                        <select name="shop_id" id="shop_id" class="form-control" @change="selectShop($event)">
+                                            <option value="">Select a shop</option>
+                                            <option v-for="shop in shops" :value="shop.id">@{{shop.name}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <a class="btn btn-primary float-right" href="javascript:void(0)" @click="saveUpdates()">
+                                        Update
+                                    </a>
+                                </div>
                             </div>
                             <table class="table table-bordered">
                                 <thead>
@@ -82,8 +88,41 @@
                         </form>
                     </div>
                     <div class="tab-pane" id="timeline">
-                        <h3>Shop to Shop</h3>
-                        <p>Some content in menu 1.</p>
+                        <div class="col-md-6">
+                            <form id="shoptoshopfrom">
+                                <div class="form-group">
+                                    <label for="shop_from">Shop From</label>
+                                    <select class="form-control" name="shop_from" id="shop_from" v-model="shopToShop.shop_from" required>
+                                        <option value="">Select a shop</option>
+                                        <option v-for="shop in shop_from" :value="shop.id">@{{shop.name}}</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="shop_to">Shop To</label>
+                                    <select class="form-control" name="shop_to" id="shop_to" v-model="shopToShop.shop_to" required>
+                                        <option value="">Select a shop</option>
+                                        <option v-for="shop in shop_to" :value="shop.id">@{{shop.name}}</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="product_id">Product</label>
+                                    <select class="form-control" name="product_id" id="product_id" v-model="shopToShop.product_id" required>
+                                        <option value="">Select a Product</option>
+                                        <option v-for="product in products" :value="product.id">@{{product.name}}</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" v-if="selectedProductInfo!==null">
+                                    <label for="">Available Quantity</label>
+                                    <input type="text" readonly class="form-control" :value="selectedProductInfo.shop_quantity" />
+                                    <input type="hidden" name="price" :value="selectedProductInfo.price">
+                                </div>
+                                <div class="form-group">
+                                    <label for="quantity">Quantity</label>
+                                    <input class="form-control" type="number" id="quantity" name="quantity"  v-model="shopToShop.quantity" required />
+                                </div>
+                                <button class="btn btn-primary" type="button" @click="updateShopToShop">Transfer</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -107,6 +146,15 @@
                 selectedShop: null,
                 product_ids: [],
                 selectAll: null,
+                shop_from: [],
+                shop_to: [],
+                shopToShop: {
+                    shop_from: "",
+                    shop_to: "",
+                    product_id: null,
+                    quantity: 0,
+                },
+                selectedProductInfo: null,
             },
             mounted(){
                 this.getResource()
@@ -118,6 +166,21 @@
                     } else {
                         this.product_ids = [] 
                     }
+                },
+                "shopToShop.shop_from": {
+                    handler(oldval, newval) {
+                        if (oldval.length !== undefined && oldval.length === 0) this.shop_to = [...this.shops]
+                        else this.shop_to = this.shops.filter(item=>item.id!==oldval)
+                    },
+                    deep: true,
+                },
+                "shopToShop.product_id":{
+                    handler(oldval, newval) {
+                        if (oldval && this.shopToShop.shop_from) {
+                            this.getProductQuantity(oldval, this.shopToShop.shop_from)
+                        }
+                    }, 
+                    deep: true
                 }
             },
             methods: {
@@ -133,6 +196,8 @@
                     .then(res=>{
                         if (res.status) {
                             this.shops = [...res.data.shops]
+                            this.shop_from = [...res.data.shops]
+                            this.shop_to = [...res.data.shops]
                             this.products = [...res.data.products]
                             if (this.products.length > 0) {
                                 this.products.forEach(itemD => {
@@ -206,6 +271,32 @@
                             }
                         })
                     }
+                },
+                getProductQuantity(product_id, shop_id) {
+                    let url =  `{{url('admin/shop_products/get-product-quantity')}}/${product_id}/${shop_id}`
+                    fetch(url)
+                    .then(res=>res.json())
+                    .then(res=>{
+                        if (res.status) {
+                            this.selectedProductInfo = res.data
+                        }
+                    })
+                },
+                updateShopToShop() {
+                    let url = `{{route('admin.shop_products.updateshoptoshop')}}`
+                    let formD = new FormData(document.getElementById('shoptoshopfrom'))
+                    fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            "X-CSRF-TOKEN": `{{csrf_token()}}`
+                        }, 
+                        body: formD
+                    })
+                    .then(res=>res.json())
+                    .then(res=>{
+                        if (res.status) {
+                        }
+                    })
                 }
             }
         })
