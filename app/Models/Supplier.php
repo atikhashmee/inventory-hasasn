@@ -9,10 +9,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 /**
  * Class Supplier
  * @package App\Models
- * @version August 8, 2021, 5:04 pm UTC
+ * @version August 20, 2021, 3:06 am UTC
  *
+ * @property \App\Models\Country $country
  * @property string $name
- * @property string $description
+ * @property string $website_url
+ * @property string $contact_person_name
+ * @property string $contact_email
+ * @property string $contact_phone
+ * @property integer $country_id
+ * @property string $address
  */
 class Supplier extends Model
 {
@@ -29,7 +35,12 @@ class Supplier extends Model
 
     public $fillable = [
         'name',
-        'description'
+        'website_url',
+        'contact_person_name',
+        'contact_email',
+        'contact_phone',
+        'country_id',
+        'address'
     ];
 
     /**
@@ -40,7 +51,12 @@ class Supplier extends Model
     protected $casts = [
         'id' => 'integer',
         'name' => 'string',
-        'description' => 'string'
+        'website_url' => 'string',
+        'contact_person_name' => 'string',
+        'contact_email' => 'string',
+        'contact_phone' => 'string',
+        'country_id' => 'integer',
+        'address' => 'string'
     ];
 
     /**
@@ -49,8 +65,18 @@ class Supplier extends Model
      * @var array
      */
     public static $rules = [
-        'name' => 'required'
+        'name' => 'required',
+        'contact_person_name' => 'required',
+        'contact_email' => 'required',
+        'contact_phone' => 'required',
+        'address' => 'required'
     ];
 
-    
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     **/
+    public function country()
+    {
+        return $this->belongsTo(\App\Models\Country::class, 'country_id', 'id');
+    }
 }

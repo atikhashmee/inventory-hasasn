@@ -9,12 +9,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 /**
  * Class Stock
  * @package App\Models
- * @version August 8, 2021, 5:04 pm UTC
+ * @version August 20, 2021, 3:17 am UTC
  *
  * @property \App\Models\Product $product
+ * @property \App\Models\Supplier $supplier
  * @property \App\Models\WareHouse $warehouse
- * @property integer $product_id
- * @property integer $warehouse_id
+ * @property unsignedBigInteger $product_id
+ * @property unsignedBigInteger $supplier_id
+ * @property unsignedBigInteger $warehouse_id
  * @property string $sku
  * @property number $old_price
  * @property number $price
@@ -36,6 +38,7 @@ class Stock extends Model
 
     public $fillable = [
         'product_id',
+        'supplier_id',
         'warehouse_id',
         'sku',
         'old_price',
@@ -51,8 +54,6 @@ class Stock extends Model
      */
     protected $casts = [
         'id' => 'integer',
-        'product_id' => 'integer',
-        'warehouse_id' => 'integer',
         'sku' => 'string',
         'old_price' => 'decimal:2',
         'price' => 'decimal:2',
@@ -78,6 +79,14 @@ class Stock extends Model
     public function product()
     {
         return $this->belongsTo(\App\Models\Product::class, 'product_id', 'id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     **/
+    public function supplier()
+    {
+        return $this->belongsTo(\App\Models\Supplier::class, 'supplier_id', 'id');
     }
 
     /**

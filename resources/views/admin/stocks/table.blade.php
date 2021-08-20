@@ -2,8 +2,9 @@
     <table class="table" id="stocks-table">
         <thead>
         <tr>
-            <th>Product Id</th>
-        <th>Warehouse Id</th>
+            <th>Product</th>
+        <th>Supplier</th>
+        <th>Warehouse</th>
         <th>Sku</th>
         <th>Old Price</th>
         <th>Price</th>
@@ -16,6 +17,7 @@
         @foreach($stocks as $stock)
             <tr>
                 <td>{{ $stock->product->name }}</td>
+            <td>{{ $stock->supplier->name }}</td>
             <td>{{ $stock->warehouse->ware_house_name }}</td>
             <td>{{ $stock->sku }}</td>
             <td>{{ $stock->old_price }}</td>

@@ -4,6 +4,12 @@
     <p>{{ $stock->product_id }}</p>
 </div>
 
+<!-- Supplier Id Field -->
+<div class="col-sm-12">
+    {!! Form::label('supplier_id', 'Supplier Id:') !!}
+    <p>{{ $stock->supplier_id }}</p>
+</div>
+
 <!-- Warehouse Id Field -->
 <div class="col-sm-12">
     {!! Form::label('warehouse_id', 'Warehouse Id:') !!}

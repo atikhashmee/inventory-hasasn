@@ -5,6 +5,13 @@
 </div>
 
 
+<!-- Supplier Id Field -->
+<div class="form-group col-sm-6">
+    {!! Form::label('supplier_id', 'Supplier Id:') !!}
+    {!! Form::select('supplier_id', $supplierItems, null, ['class' => 'form-control custom-select']) !!}
+</div>
+
+
 <!-- Warehouse Id Field -->
 <div class="form-group col-sm-6">
     {!! Form::label('warehouse_id', 'Warehouse Id:') !!}

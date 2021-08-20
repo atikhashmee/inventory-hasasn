@@ -29,13 +29,6 @@
 </li>
 
 
-<li class="nav-item">
-    <a href="{{ route('admin.suppliers.index') }}"
-       class="nav-link {{ Request::is('admin/suppliers*') ? 'active' : '' }}">
-        <p>Suppliers</p>
-    </a>
-</li>
-
 
 <li class="nav-item">
     <a href="{{ route('admin.brands.index') }}"
@@ -54,13 +47,6 @@
 
 
 <li class="nav-item">
-    <a href="{{ route('admin.stocks.index') }}"
-       class="nav-link {{ Request::is('admin/stocks*') ? 'active' : '' }}">
-        <p>Stocks</p>
-    </a>
-</li>
-
-<li class="nav-item">
     <a href="{{ route('admin.users.index') }}"
        class="nav-link {{ Request::is('admin/users*') ? 'active' : '' }}">
         <p>Users</p>
@@ -70,6 +56,25 @@
 <li class="nav-item">
     <a href="{{ route('admin.shop_products.index') }}"
        class="nav-link {{ Request::is('admin/shop_products*') ? 'active' : '' }}">
-        <p>Shop Products</p>
+        <p>Product Distribution</p>
     </a>
 </li>
+
+<li class="nav-item">
+    <a href="{{ route('admin.suppliers.index') }}"
+       class="nav-link {{ Request::is('admin/suppliers*') ? 'active' : '' }}">
+        <p>Suppliers</p>
+    </a>
+</li>
+
+
+
+
+<li class="nav-item">
+    <a href="{{ route('admin.stocks.index') }}"
+       class="nav-link {{ Request::is('admin/stocks*') ? 'active' : '' }}">
+        <p>Purchase</p>
+    </a>
+</li>
+
+

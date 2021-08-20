@@ -1,12 +1,18 @@
 @extends('layouts.app')
 
+@push('page_css')
+    <style>
+        
+    </style>
+@endpush
+
 @section('content')
 <div id="shop_products">
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Shop Products</h1>
+                    <h1>Product Distribution</h1>
                 </div>
                 <div class="col-sm-6">
                     <a class="btn btn-primary float-right"
@@ -18,57 +24,68 @@
         </div>
     </section>
 
-    <div class="content px-3" >
-
+    
+      <div class="content px-3">
         @include('flash::message')
 
         <div class="card">
             <div class="card-header">
-                Shop products
+                <ul class="nav nav-pills">
+                    <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Wareshouse to Shop</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#timeline" data-toggle="tab">Shop to Shop</a></li>
+                </ul>
             </div>
             <div class="card-body">
-                <form action="">
-                    <div class="form-group">
-                        <label for="">Shop</label>
-                        <select name="shop_id" id="shop_id" class="form-control" @change="selectShop($event)">
-                            <option value="">Select a shop</option>
-                            <option v-for="shop in shops" :value="shop.id">@{{shop.name}}</option>
-                        </select>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="activity">
+                        <form action="">
+                            <div class="form-group">
+                                <label for="">Shop</label>
+                                <select name="shop_id" id="shop_id" class="form-control" @change="selectShop($event)">
+                                    <option value="">Select a shop</option>
+                                    <option v-for="shop in shops" :value="shop.id">@{{shop.name}}</option>
+                                </select>
+                            </div>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <input type="checkbox" v-model="selectAll" value="true">
+                                        </th>
+                                        <th>Product</th>
+                                        <th>Warehouse Quantity</th>
+                                        <th>@{{selectedShop!==null?selectedShop.name: '-'}} current quantity</th>
+                                        <th>@{{selectedShop!==null?selectedShop.name: '-'}} Add quantity</th>
+                                        <th>@{{selectedShop!==null?selectedShop.name: '-'}} total quantity</th>
+                                        <th>@{{selectedShop!==null?selectedShop.name: '-'}} Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody v-if="products.length > 0">
+                                    <tr v-for="(product, index) in products" :key="index">
+                                        <td> <input type="checkbox" v-model="product_ids" name="item_id" :value="product.id"></td>
+                                        <td>@{{product.name}}</td>
+                                        <td>@{{product.final_warehouse_quantity ?? product.warehouse_quantity}}</td>
+                                        <td>@{{product.shop_quantity??0}}</td>
+                                        <td>
+                                            <input type="number" 
+                                            class="form-control" 
+                                            @keyup="updateQuantity($event, product)"
+                                            :max="product.warehouse_quantity">
+                                        </td>
+                                        <td>@{{product.total_quantity??0}}</td>
+                                        <td>
+                                            <input type="number" class="form-control" @keyup="updatePrice($event, product)">
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </form>
                     </div>
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>
-                                    <input type="checkbox" v-model="selectAll" value="true">
-                                </th>
-                                <th>Product</th>
-                                <th>Warehouse Quantity</th>
-                                <th>@{{selectedShop!==null?selectedShop.name: '-'}} current quantity</th>
-                                <th>@{{selectedShop!==null?selectedShop.name: '-'}} Add quantity</th>
-                                <th>@{{selectedShop!==null?selectedShop.name: '-'}} total quantity</th>
-                                <th>@{{selectedShop!==null?selectedShop.name: '-'}} Price</th>
-                            </tr>
-                        </thead>
-                        <tbody v-if="products.length > 0">
-                            <tr v-for="(product, index) in products" :key="index">
-                                <td> <input type="checkbox" v-model="product_ids" name="item_id" :value="product.id"></td>
-                                <td>@{{product.name}}</td>
-                                <td>@{{product.final_warehouse_quantity ?? product.warehouse_quantity}}</td>
-                                <td>@{{product.shop_quantity??0}}</td>
-                                <td>
-                                    <input type="number" 
-                                    class="form-control" 
-                                    @keyup="updateQuantity($event, product)"
-                                    :max="product.warehouse_quantity">
-                                </td>
-                                <td>@{{product.total_quantity??0}}</td>
-                                <td>
-                                    <input type="number" class="form-control" @keyup="updatePrice($event, product)">
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </form>
+                    <div class="tab-pane" id="timeline">
+                        <h3>Shop to Shop</h3>
+                        <p>Some content in menu 1.</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

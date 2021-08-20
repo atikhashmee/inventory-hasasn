@@ -17,9 +17,15 @@ class CreateSuppliersTable extends Migration
         Schema::create('suppliers', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->text('description')->nullable();
+            $table->string('website_url')->nullable();
+            $table->string('contact_person_name');
+            $table->string('contact_email');
+            $table->string('contact_phone');
+            $table->unsignedBigInteger('country_id')->nullable();
+            $table->text('address');
             $table->timestamps();
             $table->softDeletes();
+            $table->foreign('country_id')->references('id')->on('countries')->onDelete('cascade');
         });
     }
 

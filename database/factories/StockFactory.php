@@ -22,8 +22,9 @@ class StockFactory extends Factory
     public function definition()
     {
         return [
-            'product_id' => $this->faker->randomDigitNotNull,
-        'warehouse_id' => $this->faker->randomDigitNotNull,
+            'product_id' => $this->faker->word,
+        'supplier_id' => $this->faker->word,
+        'warehouse_id' => $this->faker->word,
         'sku' => $this->faker->word,
         'old_price' => $this->faker->word,
         'price' => $this->faker->word,

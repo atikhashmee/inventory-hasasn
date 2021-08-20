@@ -12,57 +12,50 @@
         "inView": false
     },
     {
-        "name": "product_id",
-        "dbType": "unsignedBigInteger:foreign,products,id,cascade",
-        "htmlType": "selectTable:products:name,id",
-        "searchable": true,
-        "relation": "mt1,Product,product_id,id"
-    },
-    {
-        "name": "supplier_id",
-        "dbType": "unsignedBigInteger:foreign,suppliers,id,cascade",
-        "htmlType": "selectTable:suppliers:name,id",
-        "searchable": true,
-        "relation": "mt1,Supplier,supplier_id,id"
-    },
-    {
-        "name": "warehouse_id",
-        "dbType": "unsignedBigInteger:foreign,ware_houses,id,cascade",
-        "htmlType": "selectTable:ware_houses:ware_house_name,id",
-        "searchable": true,
-        "relation": "mt1,WareHouse,warehouse_id,id"
-    },
-    {
-        "name": "sku",
-        "dbType": "string:unique",
-        "htmlType": "text",
-        "validations": "required|unique:products,sku",
-        "searchable": true
-    },
-    {
-        "name": "old_price",
-        "dbType": "decimal,10,2:nullable",
-        "htmlType": "text",
-        "searchable": true
-    },
-    {
-        "name": "price",
-        "dbType": "decimal,10,2",
+        "name": "name",
+        "dbType": "string",
         "htmlType": "text",
         "validations": "required",
         "searchable": true
     },
     {
-        "name": "selling_price",
-        "dbType": "decimal,10,2:nullable",
+        "name": "website_url",
+        "dbType": "string:nullable",
+        "htmlType": "text",
+        "searchable": true
+    },
+    {
+        "name": "contact_person_name",
+        "dbType": "string",
         "htmlType": "text",
         "validations": "required",
         "searchable": true
     },
     {
-        "name": "quantity",
-        "dbType": "integer",
-        "htmlType": "number",
+        "name": "contact_email",
+        "dbType": "string",
+        "htmlType": "text",
+        "validations": "required",
+        "searchable": true
+    },
+    {
+        "name": "contact_phone",
+        "dbType": "string",
+        "htmlType": "text",
+        "validations": "required",
+        "searchable": true
+    },
+    {
+        "name": "country_id",
+        "dbType": "integer:unsigned:nullable:foreign,countries,id",
+        "htmlType": "selectTable:countries:name,id",
+        "searchable": true,
+        "relation": "mt1,Country,country_id,id"
+    },
+    {
+        "name": "address",
+        "dbType": "text",
+        "htmlType": "textarea",
         "validations": "required",
         "searchable": true
     },

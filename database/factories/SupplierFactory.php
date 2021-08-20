@@ -23,7 +23,12 @@ class SupplierFactory extends Factory
     {
         return [
             'name' => $this->faker->word,
-        'description' => $this->faker->text,
+        'website_url' => $this->faker->word,
+        'contact_person_name' => $this->faker->word,
+        'contact_email' => $this->faker->word,
+        'contact_phone' => $this->faker->word,
+        'country_id' => $this->faker->randomDigitNotNull,
+        'address' => $this->faker->text,
         'created_at' => $this->faker->date('Y-m-d H:i:s'),
         'updated_at' => $this->faker->date('Y-m-d H:i:s')
         ];
