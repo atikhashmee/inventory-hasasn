@@ -34,6 +34,12 @@
           integrity="sha512-aEe/ZxePawj0+G2R+AaIxgrQuKT68I28qh+wgLrcAJOz3rxCP+TwrK5SPN+E5I+1IQjNtcfvb96HDagwrKRdBw=="
           crossorigin="anonymous"/>
 
+    <style>
+        .select2-container .select2-selection--single {
+            height: 40px !important;
+        }
+    </style>
+
     @stack('third_party_stylesheets')
 
     @stack('page_css')
@@ -150,6 +156,9 @@
 
     $("input[data-bootstrap-switch]").each(function () {
         $(this).bootstrapSwitch('state', $(this).prop('checked'));
+    });
+    $(document).ready(function() {
+        $('.select2').select2();
     });
 </script>
 

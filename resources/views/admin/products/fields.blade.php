@@ -49,7 +49,7 @@
 <!-- Category Id Field -->
 <div class="form-group col-sm-6">
     {!! Form::label('category_id', 'Category Id:') !!}
-    <select name="category_id" id="category_id" class="form-control custom-select">
+    <select name="category_id" id="category_id" class="form-control custom-select select2">
         <option value="">Select a category</option>
         @if (count($categoryItems) > 0)
             @foreach ($categoryItems as $item)
@@ -57,6 +57,11 @@
                 @if (count($item['nested']) > 0)
                     @foreach ($item['nested'] as $child)
                         <option @if(isset($product) && $product->category_id == $child['id']) selected @endif value="{{$child['id']}}">&nbsp;&nbsp;&nbsp;&nbsp;{{$child['name']}}</option>
+                        @if (count($child['nested']) > 0)
+                            @foreach ($child['nested'] as $childItem)
+                                <option @if(isset($product) && $product->category_id == $childItem['id']) selected @endif value="{{$childItem['id']}}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{$childItem['name']}}</option>
+                            @endforeach
+                        @endif
                     @endforeach
                 @endif
             @endforeach
@@ -67,29 +72,29 @@
 
 <!-- Brand Id Field -->
 <div class="form-group col-sm-6">
-    {!! Form::label('brand_id', 'Brand Id:') !!}
-    {!! Form::select('brand_id', $brandItems, null, ['class' => 'form-control custom-select']) !!}
+    {!! Form::label('brand_id', 'Brand:') !!}
+    {!! Form::select('brand_id', $brandItems, null, ['class' => 'form-control custom-select select2']) !!}
 </div>
 
 
 <!-- Supplier Id Field -->
 <div class="form-group col-sm-6">
-    {!! Form::label('supplier_id', 'Supplier Id:') !!}
-    {!! Form::select('supplier_id', $supplierItems, null, ['class' => 'form-control custom-select']) !!}
+    {!! Form::label('supplier_id', 'Supplier:') !!}
+    {!! Form::select('supplier_id', $supplierItems, null, ['class' => 'form-control custom-select select2']) !!}
 </div>
 
 
 <!-- Menufacture Id Field -->
 <div class="form-group col-sm-6">
-    {!! Form::label('menufacture_id', 'Menufacture Id:') !!}
-    {!! Form::select('menufacture_id', $menufactureItems, null, ['class' => 'form-control custom-select']) !!}
+    {!! Form::label('menufacture_id', 'Menufacture:') !!}
+    {!! Form::select('menufacture_id', $menufactureItems, null, ['class' => 'form-control custom-select select2']) !!}
 </div>
 
 
 <!-- Warehouse Id Field -->
 <div class="form-group col-sm-6">
-    {!! Form::label('warehouse_id', 'Warehouse Id:') !!}
-    {!! Form::select('warehouse_id', $ware_houseItems, null, ['class' => 'form-control custom-select']) !!}
+    {!! Form::label('warehouse_id', 'Warehouse:') !!}
+    {!! Form::select('warehouse_id', $ware_houseItems, null, ['class' => 'form-control custom-select select2']) !!}
 </div>
 
 

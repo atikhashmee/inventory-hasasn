@@ -79,7 +79,7 @@ class ViewServiceProvider extends ServiceProvider
             $view->with('countryItems', $countryItems);
         });
         View::composer(['admin.categories.fields'], function ($view) {
-            $categoryItems = Category::with('parent')->get()->toArray();
+            $categoryItems = Category::with('nested')->where('parent_id', 0)->get();
             $view->with('categoryItems', $categoryItems);
         });
         View::composer(['admin.stocks.fields'], function ($view) {
@@ -107,7 +107,7 @@ class ViewServiceProvider extends ServiceProvider
             $view->with('brandItems', $brandItems);
         });
         View::composer(['admin.products.fields'], function ($view) {
-            $categoryItems = Category::with('nested')->where('parent_id', 0)->get()->toArray();
+            $categoryItems = Category::with('nested', 'nested.nested')->where('parent_id', 0)->get()->toArray();
             $view->with('categoryItems', $categoryItems);
         });
         

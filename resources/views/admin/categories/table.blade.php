@@ -49,6 +49,29 @@
                             {!! Form::close() !!}
                         </td>
                     </tr>
+                    @if ($item->nested()->count() > 0)
+                        @foreach ($item->nested()->get() as $childItem)
+                            <tr>
+                                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--{{ $childItem->name }}</td>
+                                <td>{{ $childItem->total_product??0 }}</td>
+                                <td width="120">
+                                    {!! Form::open(['route' => ['admin.categories.destroy', $childItem->id], 'method' => 'delete']) !!}
+                                    <div class='btn-group'>
+                                        <a href="{{ route('admin.categories.show', [$childItem->id]) }}"
+                                        class='btn btn-default btn-xs'>
+                                            <i class="far fa-eye"></i>
+                                        </a>
+                                        <a href="{{ route('admin.categories.edit', [$childItem->id]) }}"
+                                        class='btn btn-default btn-xs'>
+                                            <i class="far fa-edit"></i>
+                                        </a>
+                                        {!! Form::button('<i class="far fa-trash-alt"></i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs', 'onclick' => "return confirm('Are you sure?')"]) !!}
+                                    </div>
+                                    {!! Form::close() !!}
+                                </td>
+                            </tr>
+                        @endforeach
+                    @endif
                 @endforeach
                 
             @endif

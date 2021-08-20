@@ -1,21 +1,21 @@
 <!-- Product Id Field -->
 <div class="form-group col-sm-6">
-    {!! Form::label('product_id', 'Product Id:') !!}
-    {!! Form::select('product_id', $productItems, null, ['class' => 'form-control custom-select']) !!}
+    {!! Form::label('product_id', 'Product:') !!}
+    {!! Form::select('product_id', $productItems, null, ['class' => 'form-control custom-select select2']) !!}
 </div>
 
 
 <!-- Supplier Id Field -->
 <div class="form-group col-sm-6">
-    {!! Form::label('supplier_id', 'Supplier Id:') !!}
-    {!! Form::select('supplier_id', $supplierItems, null, ['class' => 'form-control custom-select']) !!}
+    {!! Form::label('supplier_id', 'Supplier:') !!}
+    {!! Form::select('supplier_id', $supplierItems, null, ['class' => 'form-control custom-select select2']) !!}
 </div>
 
 
 <!-- Warehouse Id Field -->
 <div class="form-group col-sm-6">
-    {!! Form::label('warehouse_id', 'Warehouse Id:') !!}
-    {!! Form::select('warehouse_id', $ware_houseItems, null, ['class' => 'form-control custom-select']) !!}
+    {!! Form::label('warehouse_id', 'Warehouse:') !!}
+    {!! Form::select('warehouse_id', $ware_houseItems, null, ['class' => 'form-control custom-select select2']) !!}
 </div>
 
 
