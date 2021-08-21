@@ -1,11 +1,11 @@
 <!-- Product Id Field -->
-@if (Route::is('admin.stock.create'))
+@if (Route::is('admin.stocks.create'))
     <div class="form-group col-sm-6">
         <label for="product_id"> Product:</label>
         <select name="product_id" id="product_id" class="form-control custom-select select2">
             <option value="">Select a product</option>
             @foreach ($productItems as $p_id => $item)
-                <option value="{{$p_id}}" @if($stock && $stock->id == $p_id) selected @endif>{{$item}}</option>
+                <option value="{{$p_id}}" @if(isset($stock) && $stock->id == $p_id) selected @endif>{{$item}}</option>
             @endforeach
         </select>
     </div>
@@ -33,7 +33,7 @@
 </div>
 
 <!-- Old Price Field -->
-@if (Route::is('admin.stock.create')) 
+@if (Route::is('admin.stocks.create')) 
     <div class="form-group col-sm-6">
         <label for="old_price">Old Price:</label>
         <input type="text" name="old_price" id="old_price" class="form-control" readonly :value="product?product.price:null">
