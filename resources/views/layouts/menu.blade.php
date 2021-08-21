@@ -24,7 +24,7 @@
 <li class="nav-item">
     <a href="{{ route('admin.menufactures.index') }}"
        class="nav-link {{ Request::is('admin/menufactures*') ? 'active' : '' }}">
-        <p>Menufactures</p>
+        <p>Manufactures</p>
     </a>
 </li>
 
@@ -76,18 +76,25 @@
 </li>
 
 <li class="nav-item">
-    <a href="{{ route('admin.orders.index') }}"
-       class="nav-link {{ Request::is('admin/orders') ? 'active' : '' }}">
-        <p>Orders</p>
+    <a href="#" class="nav-link">
+      <p>
+        Sells
+        <i class="fas fa-angle-left right"></i>
+      </p>
     </a>
-</li>
-
-<li class="nav-item">
-    <a href="{{ route('admin.orders.create') }}"
-       class="nav-link {{ Request::is('admin/orders/create') ? 'active' : '' }}">
-        <p>Create New Order</p>
-    </a>
-</li>
+    <ul class="nav nav-treeview" style="display: none;">
+      <li class="nav-item">
+        <a href="{{ route('admin.orders.index') }}" class="nav-link {{ Request::is('admin/orders') ? 'active' : '' }}">
+          <p>Sells Lists</p>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="{{ route('admin.orders.create') }}" class="nav-link {{ Request::is('admin/orders/create') ? 'active' : '' }}">
+          <p>New Sell</p>
+        </a>
+      </li>
+    </ul>
+  </li>
 
 
 

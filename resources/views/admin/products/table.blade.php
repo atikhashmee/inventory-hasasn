@@ -19,10 +19,10 @@
                     <td>{{ $product->name }}</td>
                     <td>{{ $product->price }}</td>
                     <td>{{ $product->sku }}</td>
-                    <td>{{ $product->category->name }}</td>
-                    <td>{{ $product->brand->name }}</td>
-                    <td>{{ $product->supplier->name }}</td>
-                    <td>{{ $product->menufacture->name }}</td>
+                    <td>{{ ($product->category)? $product->category->name : 'N/A' }}</td>
+                    <td>{{ ($product->brand)? $product->brand->name: 'N/A' }}</td>
+                    <td>{{ ($product->supplier)?$product->supplier->name: 'N/A' }}</td>
+                    <td>{{ ($product->menufacture)? $product->menufacture->name: 'N/A' }}</td>
                     <td>
                         <img src="{{Storage::path('products/'.$product->feature_image)}}" alt="">
                     </td>
