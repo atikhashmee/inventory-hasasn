@@ -162,6 +162,9 @@
         $('.select2').select2();
         $('.data-table-lib').DataTable({"aaSorting": []});
     });
+    $(function () {
+        $('#datetimepicker').datetimepicker();
+    });
 </script>
 
 @stack('third_party_scripts')

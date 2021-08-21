@@ -20,7 +20,7 @@
             <td>{{ $supplier->contact_person_name }}</td>
             <td>{{ $supplier->contact_email }}</td>
             <td>{{ $supplier->contact_phone }}</td>
-            <td>{{ $supplier->country->name }}</td>
+            <td>{{ ($supplier->country)? $supplier->country->name: 'N/A' }}</td>
             <td>{{ $supplier->address }}</td>
                 <td width="120">
                     {!! Form::open(['route' => ['admin.suppliers.destroy', $supplier->id], 'method' => 'delete']) !!}

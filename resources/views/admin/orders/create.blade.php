@@ -25,18 +25,25 @@
                             <form action="#" method="POST">
                                 <div class="d-flex justify-content-between align-item-center">
                                     <div class="shop-info-section">
-                                        
                                     </div>
                                     <div class="order-info-section">
                                         <table class="table table-bordered">
                                             <tr>
                                                 <td><label for="">Order&nbsp;ID</label></td>
-                                                <td><input type="text" name="order_id" class="form-control" /> </td>
+                                                <td>
+                                                    <div class="d-flex">
+                                                        <input type="text" name="order_id" readonly class="form-control" v-model="order_id" /> 
+                                                        <button type="button" class="btn btn-primary btn-sm" @click="order_id=Date.now()">Change</button>
+                                                    </div>
+                                                   
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <td><label for="">Order&nbsp;Date</label></td>
                                                 <td>
-                                                    <input type="date" name="date" class="form-control" /> 
+                                                    <div class="d-flex">
+                                                        <input type="date" class="form-control" name="date">
+                                                    </div>
                                                 </td>
                                             </tr>
                                         </table>
@@ -44,37 +51,42 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="">Customer Name</label>
-                                    <input type="text" name="order_id" class="form-control" /> 
+                                    <input type="text" name="customer_name" class="form-control" placeholder="enter customer name" /> 
                                 </div>
                                 <div class="form-group">
                                     <label for="">Customer Address</label>
-                                    <input type="text" name="order_id" class="form-control" /> 
+                                    <input type="text" name="customer_address" class="form-control" placeholder="customer address" /> 
                                 </div>
                                 <div class="table-area">
                                     <table class="table table-bordered">
                                         <thead>
                                             <tr>
                                                 <th>SL</th>
-                                                <th>Description</th>
+                                                <th style="width: 50%">Description</th>
                                                 <th>Quantity</th>
                                                 <th>Price</th>
                                                 <th>Total</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr v-for="pl in product_lists">
+                                            <tr v-for="pl in product_lists" class="rowclass" :data-id="pl.item_id">
                                                 <td>
                                                     <a href="javascript:void(0)" class="btn btn-danger rounded-circle" @click="delete_item(pl)">
                                                         <i class="fa fa-times"></i>
                                                     </a>
                                                 </td>
                                                 <td>
-                                                    <select name="product_id" class="form-control select2" v-select2>
-                                                        <option v-for="prod in products" :value="prod.id">@{{prod.name}}</option>
+                                                    <select name="product_id" class="form-control product_id_custom_select select2">
+                                                        <option value=""></option>
+                                                        <option v-for="prod in products" :value="prod.id" :item-id="prod.item_id">@{{prod.name}}</option>
                                                     </select>
                                                 </td>
-                                                <td>@{{pl.quantity}}</td>
-                                                <td>@{{pl.price}}</td>
+                                                <td>
+                                                    <input type="number" class="form-control" v-model="pl.quantity" :max="pl.quantity" @keyup="fieldUpdate($event, pl, 'quantity')" name="quantity">
+                                                </td>
+                                                <td>
+                                                    <input type="number" class="form-control" v-model="pl.price" @keyup="fieldUpdate($event, pl, 'price')" name="price">
+                                                </td>
                                                 <td>@{{pl.totalPrice}}</td>
                                             </tr>
                                             <tr>
@@ -88,15 +100,15 @@
                                                 <td colspan="4" class="text-right">
                                                     Sub Total
                                                 </td>
-                                                <td colspan="5">12000</td>
+                                                <td colspan="5">@{{subTotalValue}}</td>
                                             </tr>
                                             <tr>
                                                 <td colspan="4" class="text-right">Discount</td>
-                                                <td colspan="5">12000</td>
+                                                <td colspan="5">@{{discount}}</td>
                                             </tr>
                                             <tr>
                                                 <td colspan="4" class="text-right">Total</td>
-                                                <td colspan="5">12000</td>
+                                                <td colspan="5">@{{subTotalValue - discount}}</td>
                                             </tr>
                                         </tfoot>
                                     </table>
@@ -139,6 +151,22 @@
                     width: '100%',
                     placeholder: 'Select',
                 });
+                $('.product_id_custom_select').on('select2:select', function (e) {
+                    let item_id = $(e.currentTarget).closest('.rowclass').data('id');
+                    let product_id = e.currentTarget.value
+                    let product_item = order_app.products.find(it => it.id == product_id)
+                    order_app.product_lists = order_app.product_lists.map(item=>{
+                        if (item.item_id === item_id) {
+                            item.product_id = product_item.id
+                            item.product_name = product_item.name
+                            item.quantity = product_item.quantity
+                            item.price = product_item.price
+                        }
+                        return item;
+                    })
+                    //order_app.updateListProducts()
+
+                });
             }, 10);
         }
     </script>
@@ -148,13 +176,23 @@
     let order_app = new Vue({
         el: '#order_new',
         data: {
-            name: 'jjj',
             product_lists: [],
-            products: []
+            products: [],
+            product_items: [],
+            subtotal: 0,
+            total: 0, 
+            discount: 0,
+            order_id: null,
         },
         mounted() {
             this.getResource()
-            initLibs()
+            this.order_id = Date.now()
+        },
+        computed: {
+            subTotalValue() {
+                this.subtotal =  this.product_lists.reduce((total, item)=> total += Number(item.quantity) * Number(item.price), 0)
+                return  this.subtotal;
+            }
         },
         methods: {
             getResource() {
@@ -166,21 +204,45 @@
                 .then(res=>{
                     if (res.status) {
                         this.products = [...res.data.products]
+                        this.product_items = [...res.data.products]
                     }
                 })
             }, 
             addToCart() {
                 let newitem = {}
-                newitem.item_id = 20
-                newitem.product_id = 20
-                newitem.product_name = 20
-                newitem.quantity = 20
-                newitem.price = 20
-                newitem.totalPrice = 20
+                newitem.item_id = Date.now() + 1
+                newitem.product_id = null,
+                newitem.product_name = null,
+                newitem.quantity = 0
+                newitem.price = 0
+                newitem.totalPrice = 0
                 this.product_lists.push(newitem)
+                initLibs()
             },
             delete_item(obj) {
                 this.product_lists.splice(this.product_lists.indexOf(obj), 1)
+            },
+            fieldUpdate(evt, obj, type) {
+                this.product_lists = this.product_lists.map(item=> {
+                    if (obj.item_id === item.item_id) {
+                        if (type === 'quantity') {
+                            item.quantity = evt.currentTarget.value
+                        } else if (type === 'price') {
+                            item.price = evt.currentTarget.value
+                        }
+                    }
+                    item.totalPrice =  item.price * item.quantity
+                    return item;
+                })
+            },
+            updateListProducts() {
+                this.products.forEach(product => {
+                    this.product_lists.forEach(cartitem=>{
+                        if (product.id === cartitem.product_id) {
+                            this.product_items = this.product_items.filter(item=>item.id !== product.id)
+                        }
+                    })
+                });
             }
         }
     })

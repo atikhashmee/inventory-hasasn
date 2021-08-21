@@ -15,7 +15,7 @@
                 <td>{!! $user->name !!}</td>
                 <td>{!! $user->email !!}</td>
                 <td>{{ $user->role }}</td>
-                <td>{{ $user->shop->name }}</td>
+                <td>{{ ($user->shop)?$user->shop->name:'N/A' }}</td>
                 <td>
                     {!! Form::open(['route' => ['admin.users.destroy', $user->id], 'method' => 'delete']) !!}
                     <div class='btn-group'>
