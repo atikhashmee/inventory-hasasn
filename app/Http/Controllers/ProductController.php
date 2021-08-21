@@ -30,6 +30,19 @@ class ProductController extends AppBaseController
             ->with('products', $products);
     }
 
+    public function getProductJson($id) {
+        try {
+            $product = Product::where('id', $id)->first();
+            if ($product) {
+                return response()->json(['status'=>true, 'data'=>$product]);
+            } else {
+                return response()->json(['status'=>false, 'data'=>'Product is not found']);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['status'=>false, 'data'=>$e->getMessage()]);
+        }
+    }
+
     /**
      * Show the form for creating a new Product.
      *
