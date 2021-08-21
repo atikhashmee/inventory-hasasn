@@ -29,7 +29,6 @@
 </li>
 
 
-
 <li class="nav-item">
     <a href="{{ route('admin.brands.index') }}"
        class="nav-link {{ Request::is('admin/brands*') ? 'active' : '' }}">
@@ -44,15 +43,6 @@
 </li>
 
 
-
-
-<li class="nav-item">
-    <a href="{{ route('admin.stocks.index') }}"
-       class="nav-link {{ Request::is('admin/stocks*') ? 'active' : '' }}">
-        <p>Purchase</p>
-    </a>
-</li>
-
 <li class="nav-item">
     <a href="{{ route('admin.products.index') }}"
        class="nav-link {{ Request::is('admin/products*') ? 'active' : '' }}">
@@ -60,11 +50,10 @@
     </a>
 </li>
 
-
 <li class="nav-item">
-    <a href="{{ route('admin.users.index') }}"
-       class="nav-link {{ Request::is('admin/users*') ? 'active' : '' }}">
-        <p>Users</p>
+    <a href="{{ route('admin.stocks.index') }}"
+       class="nav-link {{ Request::is('admin/stocks*') ? 'active' : '' }}">
+        <p>Purchase</p>
     </a>
 </li>
 
@@ -96,6 +85,12 @@
     </ul>
   </li>
 
+  <li class="nav-item">
+    <a href="{{ route('admin.users.index') }}"
+       class="nav-link {{ Request::is('admin/users*') ? 'active' : '' }}">
+        <p>Users</p>
+    </a>
+</li>
 
 
 
