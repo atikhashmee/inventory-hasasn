@@ -22,7 +22,7 @@
                 <div class="container mt-5" id="order_new">
                     <div class="row">
                         <div class="col-md-12">
-                            <form action="#" method="POST">
+                            <form action="#" method="POST" @submit.prevent="submitOrder()">
                                 <div class="d-flex justify-content-between align-item-center">
                                     <div class="shop-info-section">
                                     </div>
@@ -42,7 +42,7 @@
                                                 <td><label for="">Order&nbsp;Date</label></td>
                                                 <td>
                                                     <div class="d-flex">
-                                                        <input type="date" class="form-control" name="date">
+                                                        <input type="date" v-model="order_date" class="form-control" name="date">
                                                     </div>
                                                 </td>
                                             </tr>
@@ -51,11 +51,11 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="">Customer Name</label>
-                                    <input type="text" name="customer_name" class="form-control" placeholder="enter customer name" /> 
+                                    <input type="text" name="customer_name" v-model="customer.name" class="form-control" placeholder="enter customer name" /> 
                                 </div>
                                 <div class="form-group">
                                     <label for="">Customer Address</label>
-                                    <input type="text" name="customer_address" class="form-control" placeholder="customer address" /> 
+                                    <input type="text" name="customer_address" v-model="customer.address" class="form-control" placeholder="customer address" /> 
                                 </div>
                                 <div class="table-area">
                                     <table class="table table-bordered">
@@ -113,7 +113,7 @@
                                         </tfoot>
                                     </table>
                                 </div>
-                                <button class="btn btn-primary float-right" type="button">Place Order</button>
+                                <button class="btn btn-primary float-right" type="submit">Place Order</button>
                             </form>
                         </div>
                     </div>
@@ -183,6 +183,11 @@
             total: 0, 
             discount: 0,
             order_id: null,
+            order_date: null,
+            customer: {
+                name: null,
+                address: null,
+            }
         },
         mounted() {
             this.getResource()
@@ -243,6 +248,28 @@
                         }
                     })
                 });
+            },
+            submitOrder() {
+                let orderObj = {};
+                orderObj.items = {...this.product_lists}
+                orderObj.order_number = this.order_id;
+                orderObj.date = this.order_date;
+                orderObj.customer_name = this.customer.name;
+                orderObj.customer_address = this.customer.address;
+                orderObj.subtotal = this.subtotal;
+                orderObj.discount = this.discount;
+                fetch(`{{route('admin.orders.store')}}`, {
+                    method: 'POST',
+                    headers: {
+                        "X-CSRF-TOKEN": `{{csrf_token()}}`,
+                        'Content-Type': 'application/json'
+                    }, 
+                    body: JSON.stringify(orderObj)
+                })
+                .then(res=>res.json())
+                .then(res=>{
+                    console.log(res,'asdfs');
+                })
             }
         }
     })
