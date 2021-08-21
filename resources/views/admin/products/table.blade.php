@@ -2,7 +2,7 @@
     <table class="table data-table-lib" id="products-table">
         <thead>
             <tr>
-                <th>Feature Image</th>
+                <th>Image</th>
                 <th>Name</th>
                 <th>Sku</th>
                 <th>Category</th>
