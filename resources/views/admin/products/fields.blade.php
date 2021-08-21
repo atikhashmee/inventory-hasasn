@@ -11,10 +11,10 @@
 </div>
 
 <!-- Old Price Field -->
-<div class="form-group col-sm-6">
+{{-- <div class="form-group col-sm-6">
     {!! Form::label('old_price', 'Old Price:') !!}
     {!! Form::text('old_price', null, ['class' => 'form-control']) !!}
-</div>
+</div> --}}
 
 <!-- Price Field -->
 <div class="form-group col-sm-6">
