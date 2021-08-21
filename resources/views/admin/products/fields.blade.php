@@ -48,7 +48,7 @@
 
 <!-- Category Id Field -->
 <div class="form-group col-sm-6">
-    {!! Form::label('category_id', 'Category Id:') !!}
+    {!! Form::label('category_id', 'Category:') !!}
     <select name="category_id" id="category_id" class="form-control custom-select select2">
         <option value="">Select a category</option>
         @if (count($categoryItems) > 0)
