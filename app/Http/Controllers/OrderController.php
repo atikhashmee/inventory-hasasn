@@ -15,6 +15,10 @@ class OrderController extends Controller
         return view('admin.orders.create');
     }
 
+    public function userOrderCreate() {
+        return view('user.new_order');
+    }
+
     public function getResources() {
         try {
             $data = [];

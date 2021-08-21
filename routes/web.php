@@ -47,7 +47,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
 
 Route::group(['prefix' => 'user', 'as' => 'user.'], function () {
     Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'userDashboard'])->name('home');
-    Route::get('/new_order', [App\Http\Controllers\OrderController::class, 'index'])->name('new_order');
+    Route::get('/new_order', [App\Http\Controllers\OrderController::class, 'userOrderCreate'])->name('new_order');
 });
 
 
