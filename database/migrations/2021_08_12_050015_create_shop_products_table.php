@@ -19,8 +19,8 @@ class CreateShopProductsTable extends Migration
             $table->unsignedBigInteger('product_id');
             $table->decimal('price', 10, 2);
             $table->integer('quantity')->unsigned();
-            $table->foreign('shop_id')->references('id')->on('shops')->onDelete('cascade');
-            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
+            $table->foreign('shop_id')->references('id')->on('shops')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

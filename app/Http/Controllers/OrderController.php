@@ -6,6 +6,7 @@ use App\Models\Customer;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Product;
+use App\Models\Shop;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -15,7 +16,8 @@ class OrderController extends Controller
     }
 
     public function create() {
-        return view('admin.orders.create');
+        $data['shops'] = Shop::where('status', 'active')->get();
+        return view('admin.orders.create', $data);
     }
 
     public function userOrderCreate() {
@@ -37,6 +39,7 @@ class OrderController extends Controller
         try {
             \DB::beginTransaction();
             $data = $request->all();
+            dd($data);
             $customer = Customer::create([
                 'customer_name' => $data['customer_name'],
                 'customer_address' => $data['customer_address'],

@@ -32,11 +32,11 @@ class CreateProductsTable extends Migration
             $table->string('feature_image');
             $table->timestamps();
             $table->softDeletes();
-            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
-            $table->foreign('brand_id')->references('id')->on('brands')->onDelete('cascade');
-            $table->foreign('supplier_id')->references('id')->on('suppliers')->onDelete('cascade');
-            $table->foreign('menufacture_id')->references('id')->on('menufactures')->onDelete('cascade');
-            $table->foreign('warehouse_id')->references('id')->on('ware_houses')->onDelete('cascade');
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('brand_id')->references('id')->on('brands')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('supplier_id')->references('id')->on('suppliers')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('menufacture_id')->references('id')->on('menufactures')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('warehouse_id')->references('id')->on('ware_houses')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

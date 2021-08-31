@@ -29,7 +29,7 @@ class CreateOrderDetailsTable extends Migration
             $table->decimal('product_cost', 10, 2)->default(0)->comment('stock out product cost');
             $table->timestamp('rejected_at')->nullable();
             $table->enum('status', ['Pending', 'In Progress', 'Ready to Ship', 'Shipped', 'Canceled & Refund', 'Delivered'])->default('Pending');
-            $table->foreign('order_id')->on('orders')->references('id')->onDelete('cascade');
+            $table->foreign('order_id')->on('orders')->references('id')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

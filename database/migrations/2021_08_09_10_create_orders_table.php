@@ -17,6 +17,8 @@ class CreateOrdersTable extends Migration
             $table->id();
             $table->string('order_number', 200)->nullable();
             $table->unsignedBigInteger('customer_id');
+            $table->unsignedBigInteger('shop_id');
+            $table->unsignedBigInteger('user_id')->comment('who by order is placed');
             $table->decimal('sub_total', 10, 2)->comment('sum of order_details total');
             $table->decimal('discount_amount', 10, 2)->default(0.00);
             $table->decimal('total_amount', 10, 2)->comment('(sub_total + total_shippings_charge) - discount_amount');
@@ -28,6 +30,9 @@ class CreateOrdersTable extends Migration
             $table->enum('refund_status', ['partial', 'full'])->nullable();
             $table->timestamp('delivered_at')->nullable();
             $table->timestamps();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('shop_id')->references('id')->on('shops')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

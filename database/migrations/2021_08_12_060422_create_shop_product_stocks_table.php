@@ -20,9 +20,9 @@ class CreateShopProductStocksTable extends Migration
             $table->unsignedBigInteger('product_id');
             $table->integer('quantity')->unsigned();
             $table->decimal('price', 10, 2);
-            $table->foreign('shop_id')->references('id')->on('shops')->onDelete('cascade');
-            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
-            $table->foreign('warehouse_id')->references('id')->on('ware_houses')->onDelete('cascade');
+            $table->foreign('shop_id')->references('id')->on('shops')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('warehouse_id')->references('id')->on('ware_houses')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

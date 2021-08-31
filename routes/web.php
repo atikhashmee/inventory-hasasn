@@ -36,9 +36,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
 
 
     Route::post('shop_products/update-shop-to-shop',[App\Http\Controllers\ShopProductController::class, 'updateShopToShopProduct'])->name('shop_products.updateshoptoshop');
-    Route::get('shop_products/get-product-quantity/{product_id}/{shop_id}',[App\Http\Controllers\ShopProductController::class, 'getProductCurrentQuantity']);
     Route::get('shop_products/get-resource',[App\Http\Controllers\ShopProductController::class, 'getResource']);
     Route::get('get_product_detail/{id}', [App\Http\Controllers\ProductController::class, 'getProductJson'])->name('getProduct.individual');
+    Route::get('get_shop_products/{shop_id}', [App\Http\Controllers\ShopProductController::class, 'getShopProducts'])->name('getShop_products');
     Route::resource('shop_products', App\Http\Controllers\ShopProductController::class);
 
 

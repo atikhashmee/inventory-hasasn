@@ -46,6 +46,17 @@
                                                     </div>
                                                 </td>
                                             </tr>
+                                            <tr>
+                                                <td><label for="">Shop</label></td>
+                                                <td>
+                                                    <select name="shop_id" id="shop_id" v-model="shop_id" class="form-control"> 
+                                                        <option value="">Select a shop</option>
+                                                        @foreach ($shops as $shop)
+                                                            <option value="{{$shop->id}}">{{$shop->name}}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </td>
+                                            </tr>
                                         </table>
                                     </div>
                                 </div>
@@ -183,6 +194,7 @@
             total: 0, 
             discount: 0,
             order_id: null,
+            shop_id: "",
             order_date: null,
             customer: {
                 name: null,
@@ -258,6 +270,7 @@
                 orderObj.customer_address = this.customer.address;
                 orderObj.subtotal = this.subtotal;
                 orderObj.discount = this.discount;
+                orderObj.shop_id = this.shop_id;
                 fetch(`{{route('admin.orders.store')}}`, {
                     method: 'POST',
                     headers: {
