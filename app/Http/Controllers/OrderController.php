@@ -39,7 +39,6 @@ class OrderController extends Controller
         try {
             \DB::beginTransaction();
             $data = $request->all();
-            dd($data);
             $customer = Customer::create([
                 'customer_name' => $data['customer_name'],
                 'customer_address' => $data['customer_address'],
@@ -49,6 +48,8 @@ class OrderController extends Controller
                 $order  = Order::create([
                     'order_number' =>  $data['order_number'],
                     'sub_total'    =>  $data['subtotal'],
+                    'shop_id'  =>  $data['shop_id'],
+                    'user_id'  =>  auth()->user()->id,
                     'customer_id'  =>  $customer->id,
                     'discount_amount'  =>  $data['discount'],
                     'total_amount'  =>  $data['subtotal'] - $data['discount'],

@@ -324,8 +324,9 @@
                     })
                     .then(res=>res.json())
                     .then(res=>{
-                        console.log(res, 'asdf');
                         if (res.status) {
+                            alert('Successfully transfered')
+                            window.location.reload();
                         }
                     })
                 },

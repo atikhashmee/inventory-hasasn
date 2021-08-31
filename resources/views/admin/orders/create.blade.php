@@ -144,6 +144,7 @@
 @push('third_party_scripts')
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
     <script>
+        var orderListUrl =  "{{ route('admin.orders.index') }}"
           Vue.directive('select2', {
             inserted(el) {
                 $(el).on('select2:select', () => {
@@ -281,7 +282,9 @@
                 })
                 .then(res=>res.json())
                 .then(res=>{
-                    console.log(res,'asdfs');
+                    if (res.status) {
+                        window.location.href= orderListUrl;
+                    }
                 })
             }
         }
