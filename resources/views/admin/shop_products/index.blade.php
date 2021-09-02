@@ -92,6 +92,14 @@
                                         </td>
                                     </tr>
                                 </tbody>
+                                <tbody v-if="products.length === 0">
+                                    <tr>
+                                        <td colspan="7" class="text-center">
+                                            <h3>Please follow the criteria to see the data</h3>
+                                            <small>Select warehosue and shop</small>
+                                        </td>
+                                    </tr>
+                                </tbody>
                             </table>
                         </form>
                     </div>
