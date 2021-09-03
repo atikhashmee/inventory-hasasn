@@ -11,5 +11,5 @@ class ShopProduct extends Model
 
     protected $table = 'shop_products';
 
-    protected $fillable = ['shop_id','product_id','price','quantity'];
+    protected $fillable = ['shop_id', 'warehouse_id', 'product_id', 'price', 'quantity'];
 }

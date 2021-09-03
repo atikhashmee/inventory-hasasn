@@ -61,13 +61,19 @@ class ShopProductController extends Controller
     public function updateShopToShopProduct(Request $request) {
        try {
             $data = $request->all();
-            $shoptoshop = ShopToShop::create([
-                'shop_from'=> $data['shop_from'],
-                'shop_to'=> $data['shop_to'],
-                'product_id'=> $data['product_id'],
-                'quantity'=> $data['quantity'],
-                'price'=> $data['price'],
-            ]);
+            $shop_product = ShopProduct::where('product_id', $data['product_id'])->where('shop_id', $data['shop_to'])->first();
+            if ($shop_product) {
+                $shoptoshop = ShopToShop::create([
+                    'shop_from'=> $data['shop_from'],
+                    'shop_to'=> $data['shop_to'],
+                    'product_id'=> $data['product_id'],
+                    'quantity'=> $data['quantity'],
+                    'price'=> $data['price'],
+                ]);
+            } else {
+                return response()->json(['status'=>false, 'data'=> 'This product is not available at shop to, please add it first']);
+            }
+        
             return response()->json(['status'=>true, 'data'=>$shoptoshop]);
         } catch (\Exception $e) {
             return response()->json(['status'=>false, 'data'=>$e->getMessage()]);
@@ -110,6 +116,7 @@ class ShopProductController extends Controller
                         ]);
                     } else {
                         ShopProduct::create([
+                            'warehouse_id' => $warehouse_id,
                             'shop_id' => $data['shop_id'],
                             'product_id' => $product['id'],
                             'quantity' => $product['new_quantity']??0,

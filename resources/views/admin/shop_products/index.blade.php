@@ -335,6 +335,8 @@
                         if (res.status) {
                             alert('Successfully transfered')
                             window.location.reload();
+                        } else {
+                            $('#shoptoshopfrom').append(`<div class="form-group"><div class="text-danger">${res.data}</div></div>`)
                         }
                     })
                 },
