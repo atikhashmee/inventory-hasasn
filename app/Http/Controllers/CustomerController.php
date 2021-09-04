@@ -17,6 +17,15 @@ class CustomerController extends Controller
         //
     }
 
+    public function getAllCustomerJson(Request $request) {
+        try {
+            $data['customers'] = Customer::get();
+            return response()->json(['status'=> true, 'data'=>$data]);
+        } catch (\Exception $e) {
+            return response()->json(['status'=> false, 'data'=>$e->getMessage()]);
+        }
+    }
+
     /**
      * Show the form for creating a new resource.
      *

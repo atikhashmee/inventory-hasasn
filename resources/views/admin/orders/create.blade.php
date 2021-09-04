@@ -22,7 +22,7 @@
                 <div class="container mt-5" id="order_new">
                     <div class="row">
                         <div class="col-md-12">
-                            <form action="#" method="POST" @submit.prevent="submitOrder()">
+                            <form action="#" method="POST" @submit.prevent="submitOrder()" autocomplete="off">
                                 <div class="d-flex justify-content-between align-item-center">
                                     <div class="shop-info-section">
                                     </div>
@@ -49,7 +49,7 @@
                                             <tr>
                                                 <td><label for="">Shop</label></td>
                                                 <td>
-                                                    <select name="shop_id" id="shop_id" v-model="shop_id" class="form-control"> 
+                                                    <select name="shop_id" id="shop_id" @change="shopChangeGetData($event)" v-model="shop_id" class="form-control"> 
                                                         <option value="">Select a shop</option>
                                                         @foreach ($shops as $shop)
                                                             <option value="{{$shop->id}}">{{$shop->name}}</option>
@@ -60,14 +60,50 @@
                                         </table>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="">Customer Name</label>
-                                    <input type="text" name="customer_name" v-model="customer.name" class="form-control" placeholder="enter customer name" /> 
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="">Customer Name <span class="text-danger">*</span> </label>
+                                            <input t
+                                            ype="text" 
+                                            autocomplete="off" 
+                                            name="customer_name" 
+                                            id="customer_name" 
+                                            v-model="customer.customer_name" 
+                                            class="form-control" 
+                                            placeholder="Enter Customer Name" /> 
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="">Customer Email</label>
+                                            <input type="text" 
+                                            name="customer_email" 
+                                            v-model="customer.customer_email" 
+                                            class="form-control" 
+                                            placeholder="Enter Customer Email" /> 
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="">Customer Phone</label>
+                                            <input type="text" 
+                                            name="customer_phone" 
+                                            v-model="customer.customer_phone" 
+                                            class="form-control" 
+                                            placeholder="Enter Customer Phone" /> 
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="">Customer Address</label>
-                                    <input type="text" name="customer_address" v-model="customer.address" class="form-control" placeholder="customer address" /> 
-                                </div>
+                               <div class="row">
+                                   <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="">Customer Address</label>
+                                            <textarea name="customer_address" v-model="customer.customer_address" id="customer_address" class="form-control" cols="30"></textarea>
+                                        </div>
+                                   </div>
+                               </div>
+                                
                                 <div class="table-area">
                                     <table class="table table-bordered">
                                         <thead>
@@ -94,6 +130,7 @@
                                                 </td>
                                                 <td>
                                                     <input type="number" class="form-control" v-model="pl.quantity" :max="pl.quantity" @keyup="fieldUpdate($event, pl, 'quantity')" name="quantity">
+                                                    <small>Available Quantity @{{pl.available_quantity}}</small>
                                                 </td>
                                                 <td>
                                                     <input type="number" class="form-control" v-model="pl.price" @keyup="fieldUpdate($event, pl, 'price')" name="price">
@@ -171,16 +208,17 @@
                         if (item.item_id === item_id) {
                             item.product_id = product_item.id
                             item.product_name = product_item.name
-                            item.quantity = product_item.quantity
+                            item.quantity = product_item.shop_quantity
+                            item.available_quantity = product_item.shop_quantity
                             item.price = product_item.price
                         }
                         return item;
                     })
-                    //order_app.updateListProducts()
 
                 });
             }, 10);
         }
+        
     </script>
 @endpush
 @push('page_scripts')
@@ -198,12 +236,13 @@
             shop_id: "",
             order_date: null,
             customer: {
-                name: null,
-                address: null,
+                customer_name: null,
+                customer_email: null,
+                customer_phone: null,
+                customer_address: null,
             }
         },
         mounted() {
-            this.getResource()
             this.order_id = Date.now()
         },
         computed: {
@@ -216,13 +255,12 @@
             getResource() {
                 this.products = []
                 this.product_ids = []
-                let url = `{{route('admin.order.getResource')}}`
+                let url = `{{route('getCustomers')}}`
                 fetch(url)
                 .then(res=>res.json())
                 .then(res=>{
                     if (res.status) {
-                        this.products = [...res.data.products]
-                        this.product_items = [...res.data.products]
+                        this.customers = [...res.data.customers]
                     }
                 })
             }, 
@@ -232,6 +270,7 @@
                 newitem.product_id = null,
                 newitem.product_name = null,
                 newitem.quantity = 0
+                newitem.available_quantity = 0
                 newitem.price = 0
                 newitem.totalPrice = 0
                 this.product_lists.push(newitem)
@@ -267,8 +306,10 @@
                 orderObj.items = {...this.product_lists}
                 orderObj.order_number = this.order_id;
                 orderObj.date = this.order_date;
-                orderObj.customer_name = this.customer.name;
-                orderObj.customer_address = this.customer.address;
+                orderObj.customer_name = this.customer.customer_name;
+                orderObj.customer_address = this.customer.customer_address;
+                orderObj.customer_phone = this.customer.customer_phone;
+                orderObj.customer_email = this.customer.customer_email;
                 orderObj.subtotal = this.subtotal;
                 orderObj.discount = this.discount;
                 orderObj.shop_id = this.shop_id;
@@ -286,8 +327,49 @@
                         window.location.href= orderListUrl;
                     }
                 })
+            },
+            shopChangeGetData(evt) {
+                let shop_id = evt.currentTarget.value
+                this.products = []
+                this.product_ids = []
+                let url = `{{url('shop_stock_products')}}/${shop_id}`
+                fetch(url)
+                .then(res=>res.json())
+                .then(res=>{
+                    if (res.status) {
+                        this.products = [...res.data.products]
+                        this.product_items = [...res.data.products]
+                    }
+                })
             }
         }
     })
+    
+    $(function(){
+        $( "#customer_name" ).autocomplete({
+            source: function(request, response) {
+                $.ajax({
+                    url: `{{route('getCustomers')}}`,
+                    data: {
+                        term: request.term
+                    },
+                    success: function( res ) {
+                        if (res.status) {
+                          response(res.data.customers);
+                        }
+                    }
+                });
+            },
+            minLength: 2,
+            select: function( event, ui ) {
+                order_app.customer = {...ui.item}
+            }
+        })
+        .autocomplete( "instance" )._renderItem = function( ul, item ) {
+      return $( "<li>" )
+        .append( `<div>${item.customer_name} <br/> <small>${item.customer_address}</small> </div>` )
+        .appendTo( ul );
+    };
+  });
 </script>
 @endpush
