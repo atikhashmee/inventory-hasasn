@@ -22,6 +22,18 @@ Route::get('/', function () {
 
 Auth::routes();
 
+Route::get('test-pdf', function(){
+    $html = '<h1>Bill</h1><p>You owe me money, dude.</p>';
+    return PDF::loadFile(url('pdf-url'))->inline('github.pdf');
+    return PDF::loadHTML($html)->inline('github.pdf');
+
+    PDF::loadHTML($html)->setPaper('a4')->setOrientation('landscape')->setOption('margin-bottom', 0)->save('myfile.pdf');
+
+
+});
+Route::get('pdf-url', function() {
+    return view('pdf-layout');
+});
 // universal routes
 Route::get('shop_stock_products/{shop_id}', [App\Http\Controllers\OrderController::class, 'getProductsByShop']);
 Route::get('get-customers', [App\Http\Controllers\CustomerController::class, 'getAllCustomerJson'])->name('getCustomers');
