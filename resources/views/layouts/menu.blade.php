@@ -91,6 +91,12 @@
         <p>Users</p>
     </a>
 </li>
+  <li class="nav-item">
+    <a href="{{ route('admin.customers.index') }}"
+       class="nav-link {{ Request::is('admin/customers*') ? 'active' : '' }}">
+        <p>Customers</p>
+    </a>
+</li>
 
 
 
