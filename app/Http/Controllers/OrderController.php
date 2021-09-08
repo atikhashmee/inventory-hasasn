@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Customer;
-use App\Models\Order;
-use App\Models\OrderDetail;
-use App\Models\Product;
 use App\Models\Shop;
+use App\Models\Order;
+use App\Models\Product;
+use App\Models\Customer;
+use App\Models\OrderDetail;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -79,6 +80,30 @@ class OrderController extends Controller
                               'final_amount' => $pro_item['totalPrice'],
                            ]);
                        }
+                    }
+
+                    /* create customer transaction */
+                    Transaction::create([
+                        'customer_id' => $customer->id, 
+                        'order_id' => $order->id, 
+                        'user_id' => auth()->user()->id, 
+                        'status' => 'done', 
+                        'type' => 'out', 
+                        'flag' => 'order_placed', 
+                        'amount' => $data['subtotal'] - $data['discount']
+                    ]);
+
+                    /* if customer make any instant payment */
+                    if (isset($data['payment_amount']) && $data['payment_amount'] > 0) {
+                        Transaction::create([
+                            'customer_id' => $customer->id, 
+                            'order_id'    => $order->id, 
+                            'user_id'     => auth()->user()->id, 
+                            'status'      => 'done', 
+                            'type'        => 'in', 
+                            'flag'        => 'payment', 
+                            'amount'      => $data['payment_amount']
+                        ]);
                     }
                 }
     

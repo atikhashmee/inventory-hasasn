@@ -170,6 +170,21 @@
                                     <label for="">Write some note (Optional)</label>
                                     <textarea name="note" id="note" v-model="note" class="form-control"></textarea>
                                 </div>
+                                <div class="card">
+                                    <div class="card-header">
+                                        Payment Section
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="form-group">
+                                            <label for="">Total Payable</label>
+                                            <input type="text" readonly class="form-control" :value="subTotalValue - discount">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="">Pay Now</label>
+                                            <input type="number" name="payment_amount" v-model.number="payment_amount" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
                                 <button class="btn btn-primary float-right" type="submit">Place Order</button>
                             </form>
                         </div>
@@ -245,6 +260,7 @@
             shop_id: "",
             note: "",
             order_date: `{{date('Y-m-d')}}`,
+            payment_amount: 0,
             customer: {
                 customer_name: null,
                 customer_email: null,
@@ -324,6 +340,7 @@
                 orderObj.discount = this.discount;
                 orderObj.shop_id = this.shop_id;
                 orderObj.note = this.note;
+                orderObj.payment_amount = this.payment_amount;
                 fetch(`{{route('admin.orders.store')}}`, {
                     method: 'POST',
                     headers: {
