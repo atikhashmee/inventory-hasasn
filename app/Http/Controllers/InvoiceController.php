@@ -17,7 +17,7 @@ class InvoiceController extends Controller
         //
     }
     public function printInvoice($order_id) {
-        $data = Order::with('customer', 'orderDetail')->where('id', $order_id)->first();
+        $data = Order::with('customer', 'orderDetail', 'user')->where('id', $order_id)->first();
         if ($data) {
             $data = $data->toArray();
             $snappy = \WPDF::loadView('pdf.invoice-bill', $data);

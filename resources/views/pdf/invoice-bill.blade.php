@@ -14,13 +14,16 @@
     .doc-type h2{
         color: #fff;
     }
-    table.data-table, table.invoice-info {
+    table.data-table, table.invoice-info, table.summer-table, table.summery-table-left {
         width: 100%;
     }
-    table.data-table tr td, table.data-table tr th{
+    table.data-table tr td, table.data-table tr th, table.summery-table-left tr td{
         border: 1px solid #463838;
         border-spacing: none;
         padding: 3px;
+    }
+    table.data-table, table.summery-table-left{
+        border-collapse: collapse;
     }
     table.data-table tr td{
         text-align: center;
@@ -46,7 +49,7 @@
             <div style="margin-left: auto">
                     <p><strong>Date:</strong> {{date('d/m/Y', strtotime($created_at))}}</p>
                     <p><strong>Time:</strong> {{date('h:i a', strtotime($created_at))}}</p>
-                    <p><strong>Sold By:</strong> {{$user_id}}</p>
+                    <p><strong>Sold By:</strong> {{$user['name']}}</p>
             </div>
         </td>
     </tr>
@@ -77,6 +80,47 @@
             @endforeach
         @endif
         
+    </tbody>
+</table>
+<br />
+<br />
+<table class="summer-table">
+    <tbody>
+        <tr>
+            <td width="30%">
+                <table class="summery-table-left">
+                    <tr>
+                        <td>
+                            <p>Previous Due: 0BDT</p>
+                            <p>Sales: 1000BDT</p>
+                            <p>Collected: 0BDT</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>Net Outstanding: 11000BDT</strong>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+            <td width="30%">&nbsp;</td>
+            <td width="30%">
+                <table>
+                    <tr>
+                        <td>Subtotal</td>
+                        <td>11000BDT</td>
+                    </tr>
+                    <tr>
+                        <td>Discount</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>Total</td>
+                        <td>0</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
     </tbody>
 </table>
 
