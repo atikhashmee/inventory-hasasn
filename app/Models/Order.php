@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Customer;
+use App\Models\OrderDetail;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Order extends Model
 {
@@ -28,5 +30,26 @@ class Order extends Model
         'refund_status',
         'delivered_at'
     ];
+
+
+    /**
+     * Get the user associated with the Order
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function customer()
+    {
+        return $this->hasOne(Customer::class, 'id', 'customer_id');
+    }
+
+    /**
+     * Get all of the detail for the Order
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function orderDetail()
+    {
+        return $this->hasMany(OrderDetail::class, 'order_id', 'id');
+    }
 
 }

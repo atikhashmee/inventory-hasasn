@@ -323,8 +323,9 @@
                 })
                 .then(res=>res.json())
                 .then(res=>{
+                    console.log(res, 'asdf');
                     if (res.status) {
-                        window.location.href= orderListUrl;
+                        window.location.href= `{{url('admin/orders/')}}/${res.data.id}`;
                     }
                 })
             },

@@ -12,7 +12,8 @@ use Illuminate\Http\Request;
 class OrderController extends Controller
 {
     public function index() {
-        return view('admin.orders.index');
+        $data['orders'] = Order::paginate(100);
+        return view('admin.orders.index', $data);
     }
 
     public function create() {
@@ -82,7 +83,7 @@ class OrderController extends Controller
     
             }
             \DB::commit();
-            return response()->json(['status'=>true, 'data'=>'Order has been successfully placed']);
+            return response()->json(['status'=>true, 'data'=> $order]);
         } catch (\Exception $e) {
             return response()->json(['status'=>false, 'data'=>$e->getMessage()]);
         }
@@ -108,6 +109,11 @@ class OrderController extends Controller
             return response()->json(['status'=>false, 'data'=>$e->getMessage()]);
         }
         
+    }
+
+    public function show($id) {
+        $data['order'] = Order::where('id', $id)->first();
+        return view('admin.orders.show', $data);
     }
 
 }

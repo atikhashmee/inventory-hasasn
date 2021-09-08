@@ -37,7 +37,12 @@ return [
         'enabled' => true,
         'binary'  => env('WKHTML_PDF_BINARY', base_path('vendor\wemersonjanuario\wkhtmltopdf-windows\bin\64bit\wkhtmltopdf.exe')),
         'timeout' => false,
-        'options' => [],
+        'options' => [
+            'margin-top'    => 45,
+            'margin-right'  => 10,
+            'margin-bottom' => 30,
+            'margin-left'   => 10,
+        ],
         'env'     => [],
     ],
     
