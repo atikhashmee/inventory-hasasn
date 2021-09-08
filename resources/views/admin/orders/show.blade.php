@@ -23,15 +23,16 @@
             <div class="card-body">
                 <div class="d-flex justify-content-between">
                     <div class="order-info">
-                        <p><strong>Invoice No:</strong> {{$order->order_number}}</p>
-                        <p><strong>Customer Name:</strong> {{$order->customer->customer_name}}</p>
+                        <p><strong>Invoice&nbsp;No:</strong> {{$order->order_number}}</p>
+                        <p><strong>Customer&nbsp;Name:</strong> {{$order->customer->customer_name}}</p>
                         <p><strong>Phone:</strong> {{$order->customer->customer_phone}}</p>
                         <p><strong>E-mail:</strong> {{$order->customer->customer_email}}</p>
                         <p><strong>Address:</strong> {{$order->customer->customer_address}}</p>
                     </div>   
                     <div class="time-info">
-                        <p><strong>Date Time:</strong> {{$order->create_at}}</p>
-                        <p><strong>Sold by:</strong> {{$order->user->name}}</p>
+                        <p><strong>Date:</strong> {{date('Y-m-d', strtotime($order->created_at))}}</p>
+                        <p><strong>Time:</strong> {{date('h:i a', strtotime($order->created_at))}}</p>
+                        <p><strong>Sold&nbsp;by:</strong> {{$order->user->name}}</p>
                     </div>
                 </div>
                 <div class="table-responsive">
@@ -40,12 +41,18 @@
                             <th>SL</th>
                             <th>Item</th>
                             <th>Quantity</th>
-                            <th>Unit Price</th>
+                            <th>Unit&nbsp;Price</th>
                             <th>Total</th>
                         </thead>
                         <tbody>
+                            @php
+                                $subtotal = 0;
+                            @endphp
                             @if (count($order->orderDetail) > 0)
                                 @foreach($order->orderDetail as $detail)
+                                @php
+                                     $subtotal += $detail->product_unit_price * $detail->product_quantity;
+                                @endphp
                                     <tr>
                                         <td>{{$detail->id}}</td>
                                         <td>{{$detail->product_name}}</td>
@@ -56,9 +63,34 @@
                                 @endforeach
                             @endif
                         </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="4" class="text-right">
+                                    Subtotal:
+                                </td>
+                                <td>{{$subtotal}}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" class="text-right">
+                                    Discount (-):
+                                </td>
+                                <td>{{$order->discount_amount}}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" class="text-right">
+                                    Grand Total:
+                                </td>
+                                <td>{{$subtotal - $order->discount_amount}}</td>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
                 <div class="card-footer clearfix">
+                    <div class="float-left">
+                        @if ($order->notes!=null || !is_null($order->notes))
+                            <strong>Notes:</strong> {{$order->notes}}
+                        @endif
+                    </div>
                     <div class="float-right d-flex">
                         <a href="{{url('print-invoice/'.$order->id)}}" target="_blank" type="button"  class="btn bg-gradient-success mr-1">
                             <i class="fas fa-print"></i> Invoice/Bill

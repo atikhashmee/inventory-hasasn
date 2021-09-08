@@ -1,6 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
+    @php
+        date_default_timezone_set('asia/dhaka');
+    @endphp
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
@@ -152,7 +155,9 @@
                                             </tr>
                                             <tr>
                                                 <td colspan="4" class="text-right">Discount</td>
-                                                <td colspan="5">@{{discount}}</td>
+                                                <td colspan="5">
+                                                    <input type="number" class="form-control" name="discount_amount" id="discount_amount" v-model.number="discount">
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <td colspan="4" class="text-right">Total</td>
@@ -160,6 +165,10 @@
                                             </tr>
                                         </tfoot>
                                     </table>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">Write some note (Optional)</label>
+                                    <textarea name="note" id="note" v-model="note" class="form-control"></textarea>
                                 </div>
                                 <button class="btn btn-primary float-right" type="submit">Place Order</button>
                             </form>
@@ -234,7 +243,8 @@
             discount: 0,
             order_id: null,
             shop_id: "",
-            order_date: null,
+            note: "",
+            order_date: `{{date('Y-m-d')}}`,
             customer: {
                 customer_name: null,
                 customer_email: null,
@@ -313,6 +323,7 @@
                 orderObj.subtotal = this.subtotal;
                 orderObj.discount = this.discount;
                 orderObj.shop_id = this.shop_id;
+                orderObj.note = this.note;
                 fetch(`{{route('admin.orders.store')}}`, {
                     method: 'POST',
                     headers: {
