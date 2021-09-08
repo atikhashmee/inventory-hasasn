@@ -31,7 +31,7 @@
                     </div>   
                     <div class="time-info">
                         <p><strong>Date Time:</strong> {{$order->create_at}}</p>
-                        <p><strong>Sold by:</strong> {{$order->user_id}}</p>
+                        <p><strong>Sold by:</strong> {{$order->user->name}}</p>
                     </div>
                 </div>
                 <div class="table-responsive">

@@ -14,7 +14,7 @@
     .doc-type h2{
         color: #fff;
     }
-    table.data-table, table.invoice-info, table.summer-table, table.summery-table-left {
+    table.data-table, table.invoice-info, table.summer-table, table.summery-table-left, table.signature-table {
         width: 100%;
     }
     table.data-table tr td, table.data-table tr th, table.summery-table-left tr td{
@@ -27,6 +27,20 @@
     }
     table.data-table tr td{
         text-align: center;
+    }
+    table.sum-total{
+        width: 100%;
+        margin-left: auto;
+        border-collapse: collapse;
+    }
+    table.sum-total tr:last-child{
+        border-top: 3px solid #000;
+    }
+    table.sum-total tr:last-child td{
+        border-top: 3px solid #000;
+    }
+    table.sum-total tr td:last-child{
+        text-align: right;
     }
 </style>
 
@@ -46,11 +60,20 @@
         </td>
         <td width="50%">&nbsp;</td>
         <td width="30%">
-            <div style="margin-left: auto">
-                    <p><strong>Date:</strong> {{date('d/m/Y', strtotime($created_at))}}</p>
-                    <p><strong>Time:</strong> {{date('h:i a', strtotime($created_at))}}</p>
-                    <p><strong>Sold By:</strong> {{$user['name']}}</p>
-            </div>
+            <table style="margin-left: auto; text-align: right; width: 100%">
+                <tr>
+                    <th>Date:</th>
+                    <td>{{date('d/m/Y', strtotime($created_at))}}</td>
+                </tr>
+                <tr>
+                    <th>Time:</th>
+                    <td>{{date('h:i a', strtotime($created_at))}}</td>
+                </tr>
+                <tr>
+                    <th>Sold By:</th>
+                    <td>{{$user['name']}}</td>
+                </tr>
+            </table>
         </td>
     </tr>
 </table>
@@ -69,9 +92,9 @@
     </thead>
     <tbody>
         @if (count($order_detail) > 0)
-            @foreach ($order_detail as $detail)
+            @foreach ($order_detail as $key=> $detail)
                 <tr>
-                    <td>{{$detail['id']}}</td>
+                    <td>{{++$key}}</td>
                     <td>{{$detail['product_name']}}</td>
                     <td>{{$detail['product_quantity']}}</td>
                     <td>&pound;{{$detail['product_unit_price']}}</td>
@@ -87,7 +110,7 @@
 <table class="summer-table">
     <tbody>
         <tr>
-            <td width="30%">
+            <td width="40%">
                 <table class="summery-table-left">
                     <tr>
                         <td>
@@ -103,9 +126,9 @@
                     </tr>
                 </table>
             </td>
-            <td width="30%">&nbsp;</td>
+            <td width="20%">&nbsp;</td>
             <td width="30%">
-                <table>
+                <table class="sum-total">
                     <tr>
                         <td>Subtotal</td>
                         <td>11000BDT</td>
@@ -115,10 +138,29 @@
                         <td>0</td>
                     </tr>
                     <tr>
-                        <td>Total</td>
+                        <td><strong>Grand Total</strong></td>
                         <td>0</td>
                     </tr>
                 </table>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<br />
+<br />
+<br />
+<br />
+<br />
+
+<table class="signature-table">
+    <tbody>
+        <tr>
+            <td width="25%">
+                    <strong style="border-top: 3px solid #000">Customer Signature</strong>
+            </td>
+            <td width="40%"></td>
+            <td width="25%" style="text-align: right">
+                <strong style="border-top: 3px solid #000; margin-left:auto; text-align:right">Authority Signature</strong>
             </td>
         </tr>
     </tbody>
