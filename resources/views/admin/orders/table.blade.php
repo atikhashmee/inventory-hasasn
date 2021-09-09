@@ -24,11 +24,18 @@
                             </button>
                             <div class="dropdown-menu" role="menu" style="">
                                 <a class="dropdown-item" href="{{route('admin.orders.show', ['order'=>$order])}}">Detail</a>
+                                <a class="dropdown-item" href="{{url('print-invoice/'.$order->id)}}" target="_blank">Print Invoice</a>
                             </div>
                         </div>
                     </td>
                 </tr>
             @endforeach
+        @else
+        <tr>
+            <td class="text-center" colspan="5">
+                <strong>No Item founds</strong>
+            </td>
+        </tr>
         @endif
     </tbody>
 </table>

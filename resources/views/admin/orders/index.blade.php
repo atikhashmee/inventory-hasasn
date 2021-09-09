@@ -21,13 +21,15 @@
 
         <div class="card">
             <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <div></div>
-                    <div class="d-flex">
-                        <input type="search" name="search" class="form-control" placeholder="Order Number, Customer" >
-                        <button class="btn btn-primary"><i class="fa fa-search"></i></button>
+                <form action="{{route('admin.orders.index')}}" method="GET">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div></div>
+                        <div class="d-flex" style="flex-basis: 20%">
+                            <input type="search" name="search" class="form-control" placeholder="Order Number, Customer Name" >
+                            <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                        </div>
                     </div>
-                </div>
+                </form>
                 @include('admin.orders.table')
 
                 <div class="card-footer clearfix">

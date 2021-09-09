@@ -13,7 +13,14 @@ use Illuminate\Http\Request;
 class OrderController extends Controller
 {
     public function index() {
-        $data['orders'] = Order::paginate(100);
+        $data['orders'] = Order::where(function($q){
+            if (request()->query('search')!='') {
+                $q->where('order_number', 'LIKE', '%'.request()->query('search').'%');
+                $q->orWhereHas('customer', function($r) {
+                    $r->where('customer_name', 'LIKE', '%'.request()->query('search').'%');
+                });
+            }
+        })->orderBy('id', 'DESC')->paginate(100);
         return view('admin.orders.index', $data);
     }
 

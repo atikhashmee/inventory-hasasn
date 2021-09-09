@@ -64,113 +64,129 @@
                                         </table>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="">Customer Name <span class="text-danger">*</span> </label>
-                                            <input t
-                                            ype="text" 
-                                            autocomplete="off" 
-                                            name="customer_name" 
-                                            id="customer_name" 
-                                            v-model="customer.customer_name" 
-                                            class="form-control" 
-                                            placeholder="Enter Customer Name" /> 
-                                        </div>
+                                {{-- customer info --}}
+                                <div class="card">
+                                    <div class="card-header">
+                                        Customer Info
                                     </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="">Customer Email</label>
-                                            <input type="text" 
-                                            name="customer_email" 
-                                            v-model="customer.customer_email" 
-                                            class="form-control" 
-                                            placeholder="Enter Customer Email" /> 
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="">Customer Name <span class="text-danger">*</span> </label>
+                                                    <input type="text" 
+                                                    autocomplete="off" 
+                                                    name="customer_name" 
+                                                    id="customer_name" 
+                                                    v-model="customer.customer_name" 
+                                                    class="form-control" 
+                                                    placeholder="Enter Customer Name" /> 
+                                                    <small>(Type at list two character two get the lists, I:e, ae, ab. )</small>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="">Customer Email</label>
+                                                    <input type="text" 
+                                                    name="customer_email" 
+                                                    v-model="customer.customer_email" 
+                                                    class="form-control" 
+                                                    placeholder="Enter Customer Email" /> 
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="">Customer Phone</label>
+                                                    <input type="text" 
+                                                    name="customer_phone" 
+                                                    v-model="customer.customer_phone" 
+                                                    class="form-control" 
+                                                    placeholder="Enter Customer Phone" /> 
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="">Customer Phone</label>
-                                            <input type="text" 
-                                            name="customer_phone" 
-                                            v-model="customer.customer_phone" 
-                                            class="form-control" 
-                                            placeholder="Enter Customer Phone" /> 
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                 <div class="form-group">
+                                                     <label for="">Customer Address</label>
+                                                     <textarea name="customer_address" v-model="customer.customer_address" id="customer_address" class="form-control" cols="30"></textarea>
+                                                 </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                               <div class="row">
-                                   <div class="col-md-12">
-                                        <div class="form-group">
-                                            <label for="">Customer Address</label>
-                                            <textarea name="customer_address" v-model="customer.customer_address" id="customer_address" class="form-control" cols="30"></textarea>
-                                        </div>
-                                   </div>
-                               </div>
                                 
-                                <div class="table-area">
-                                    <table class="table table-bordered">
-                                        <thead>
-                                            <tr>
-                                                <th>SL</th>
-                                                <th style="width: 50%">Description</th>
-                                                <th>Quantity</th>
-                                                <th>Price</th>
-                                                <th>Total</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr v-for="pl in product_lists" class="rowclass" :data-id="pl.item_id">
-                                                <td>
-                                                    <a href="javascript:void(0)" class="btn btn-danger rounded-circle" @click="delete_item(pl)">
-                                                        <i class="fa fa-times"></i>
-                                                    </a>
-                                                </td>
-                                                <td>
-                                                    <select name="product_id" class="form-control product_id_custom_select select2">
-                                                        <option value=""></option>
-                                                        <option v-for="prod in products" :value="prod.id" :item-id="prod.item_id">@{{prod.name}}</option>
-                                                    </select>
-                                                </td>
-                                                <td>
-                                                    <input type="number" class="form-control" v-model="pl.quantity" :max="pl.quantity" @keyup="fieldUpdate($event, pl, 'quantity')" name="quantity">
-                                                    <small>Available Quantity @{{pl.available_quantity}}</small>
-                                                </td>
-                                                <td>
-                                                    <input type="number" class="form-control" v-model="pl.price" @keyup="fieldUpdate($event, pl, 'price')" name="price">
-                                                </td>
-                                                <td>@{{pl.totalPrice}}</td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="6">
-                                                    <button class="btn btn-primary" type="button" @click="addToCart()">Add Row</button>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <td colspan="4" class="text-right">
-                                                    Sub Total
-                                                </td>
-                                                <td colspan="5">@{{subTotalValue}}</td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="4" class="text-right">Discount</td>
-                                                <td colspan="5">
-                                                    <input type="number" class="form-control" name="discount_amount" id="discount_amount" v-model.number="discount">
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="4" class="text-right">Total</td>
-                                                <td colspan="5">@{{subTotalValue - discount}}</td>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
+                               {{-- order item --}}
+                                <div class="card">
+                                    <div class="card-header">Sell Items</div>
+                                    <div class="card-body">
+                                        <div class="table-area">
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th>SL</th>
+                                                        <th style="width: 50%">Description</th>
+                                                        <th>Quantity</th>
+                                                        <th>Price</th>
+                                                        <th>Total</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr v-for="pl in product_lists" class="rowclass" :data-id="pl.item_id">
+                                                        <td>
+                                                            <a href="javascript:void(0)" class="btn btn-danger rounded-circle" @click="delete_item(pl)">
+                                                                <i class="fa fa-times"></i>
+                                                            </a>
+                                                        </td>
+                                                        <td>
+                                                            <select name="product_id" class="form-control product_id_custom_select select2">
+                                                                <option value=""></option>
+                                                                <option v-for="prod in products" :value="prod.id" :item-id="prod.item_id">@{{prod.name}}</option>
+                                                            </select>
+                                                            <small v-if="shop_id===''">(Select a shop to get the product lists)</small>
+                                                        </td>
+                                                        <td>
+                                                            <input type="number" class="form-control" v-model="pl.quantity" :max="pl.quantity" @keyup="fieldUpdate($event, pl, 'quantity')" name="quantity">
+                                                            <small>Available Quantity @{{pl.available_quantity}}</small>
+                                                        </td>
+                                                        <td>
+                                                            <input type="number" class="form-control" v-model="pl.price" @keyup="fieldUpdate($event, pl, 'price')" name="price">
+                                                        </td>
+                                                        <td>@{{pl.totalPrice}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="6">
+                                                            <button class="btn btn-primary" type="button" @click="addToCart()">Add Row</button>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <td colspan="4" class="text-right">
+                                                            Sub Total
+                                                        </td>
+                                                        <td colspan="5">@{{subTotalValue}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="4" class="text-right">Discount</td>
+                                                        <td colspan="5">
+                                                            <input type="number" class="form-control" name="discount_amount" id="discount_amount" v-model.number="discount">
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="4" class="text-right">Total</td>
+                                                        <td colspan="5">@{{subTotalValue - discount}}</td>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="">Write some note (Optional)</label>
+                                            <textarea name="note" id="note" v-model="note" class="form-control"></textarea>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="">Write some note (Optional)</label>
-                                    <textarea name="note" id="note" v-model="note" class="form-control"></textarea>
-                                </div>
+                               {{-- payment section --}}
                                 <div class="card">
                                     <div class="card-header">
                                         Payment Section
@@ -229,17 +245,25 @@
                     let item_id = $(e.currentTarget).closest('.rowclass').data('id');
                     let product_id = e.currentTarget.value
                     let product_item = order_app.products.find(it => it.id == product_id)
-                    order_app.product_lists = order_app.product_lists.map(item=>{
-                        if (item.item_id === item_id) {
-                            item.product_id = product_item.id
-                            item.product_name = product_item.name
-                            item.quantity = product_item.shop_quantity
-                            item.available_quantity = product_item.shop_quantity
-                            item.price = product_item.price
-                        }
-                        return item;
-                    })
-
+                    /* check if the product is already added in the cart */
+                    let ifExist = order_app.product_lists.find(dt=>dt.product_id == product_item.id)
+                    if (ifExist) {
+                        alert('Already added in the list')
+                        order_app.product_lists = order_app.product_lists.filter(cartitem=>cartitem.product_id!==null)
+                        return;
+                    } else {
+                        order_app.product_lists = order_app.product_lists.map(item=>{
+                            if (item.item_id === item_id) {
+                                item.product_id = product_item.id
+                                item.product_name = product_item.name
+                                item.quantity = product_item.shop_quantity
+                                item.available_quantity = product_item.shop_quantity
+                                item.price = product_item.price
+                                item.totalPrice = item.quantity * item.price
+                            }
+                            return item;
+                        })
+                    }
                 });
             }, 10);
         }
@@ -278,19 +302,14 @@
                 return  this.subtotal;
             }
         },
+        watch: {
+            shop_id(oldval, newval) {
+               if (oldval) {
+                   this.product_lists = []
+               } 
+            }
+        },
         methods: {
-            getResource() {
-                this.products = []
-                this.product_ids = []
-                let url = `{{route('getCustomers')}}`
-                fetch(url)
-                .then(res=>res.json())
-                .then(res=>{
-                    if (res.status) {
-                        this.customers = [...res.data.customers]
-                    }
-                })
-            }, 
             addToCart() {
                 let newitem = {}
                 newitem.item_id = Date.now() + 1
@@ -310,7 +329,13 @@
                 this.product_lists = this.product_lists.map(item=> {
                     if (obj.item_id === item.item_id) {
                         if (type === 'quantity') {
-                            item.quantity = evt.currentTarget.value
+                            let givenQuantity = evt.currentTarget.value;
+                            if (Number(givenQuantity) > Number(item.available_quantity)) {
+                                item.quantity = Number(item.available_quantity)
+                            } else {
+                                item.quantity = givenQuantity
+                            }
+
                         } else if (type === 'price') {
                             item.price = evt.currentTarget.value
                         }
@@ -318,15 +343,6 @@
                     item.totalPrice =  item.price * item.quantity
                     return item;
                 })
-            },
-            updateListProducts() {
-                this.products.forEach(product => {
-                    this.product_lists.forEach(cartitem=>{
-                        if (product.id === cartitem.product_id) {
-                            this.product_items = this.product_items.filter(item=>item.id !== product.id)
-                        }
-                    })
-                });
             },
             submitOrder() {
                 let orderObj = {};
