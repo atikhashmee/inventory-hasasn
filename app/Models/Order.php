@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Customer;
 use App\Models\OrderDetail;
+use App\Models\Transaction;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -52,14 +53,16 @@ class Order extends Model
         return $this->hasMany(OrderDetail::class, 'order_id', 'id');
     }
 
-    /**
-     * Get the user that owns the Order
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
+ 
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+   
+    public function transaction()
+    {
+        return $this->hasOne(Transaction::class, 'order_id', 'id')->where('flag', 'payment');
     }
 
 }

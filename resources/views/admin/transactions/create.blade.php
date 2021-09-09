@@ -37,7 +37,7 @@
             if (customers.length > 0) {
                 customers.forEach(element => {
                     if (Number($evt.val()) === Number(element.id)) {
-                        $("#payable").val(Number(element.total_deposit) - Number(element.total_withdraw))
+                        $("#payable").val(Number(element.total_withdraw) - Number(element.total_deposit))
                         return;
                     }
                 });

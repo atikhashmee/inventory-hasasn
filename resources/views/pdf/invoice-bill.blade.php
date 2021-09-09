@@ -91,14 +91,20 @@
         </tr>
     </thead>
     <tbody>
+        @php
+            $subtotal = 0;
+        @endphp
         @if (count($order_detail) > 0)
             @foreach ($order_detail as $key=> $detail)
+            @php
+                $subtotal +=  $detail['product_unit_price'] * $detail['product_quantity'];
+            @endphp
                 <tr>
                     <td>{{++$key}}</td>
                     <td>{{$detail['product_name']}}</td>
                     <td>{{$detail['product_quantity']}}</td>
-                    <td>&pound;{{$detail['product_unit_price']}}</td>
-                    <td>&pound;{{$detail['product_unit_price'] * $detail['product_quantity']}}</td>
+                    <td>{{$detail['product_unit_price']}}</td>
+                    <td>{{$detail['product_unit_price'] * $detail['product_quantity']}}</td>
                 </tr>
             @endforeach
         @endif
@@ -114,14 +120,14 @@
                 <table class="summery-table-left">
                     <tr>
                         <td>
-                            <p>Previous Due: 0BDT</p>
-                            <p>Sales: 1000BDT</p>
-                            <p>Collected: 0BDT</p>
+                            <p>Current Due: {{$customer['current_due']}}</p>
+                            <p>Sales: {{$subtotal - $discount_amount}}</p>
+                            <p>Collected: {{$transaction['amount']}}</p>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <strong>Net Outstanding: 11000BDT</strong>
+                            <strong>Net Outstanding: {{ ($subtotal - $discount_amount) - $transaction['amount']}}</strong>
                         </td>
                     </tr>
                 </table>
@@ -131,15 +137,15 @@
                 <table class="sum-total">
                     <tr>
                         <td>Subtotal</td>
-                        <td>11000BDT</td>
+                        <td>{{$subtotal}}</td>
                     </tr>
                     <tr>
                         <td>Discount</td>
-                        <td>0</td>
+                        <td>{{$discount_amount}}</td>
                     </tr>
                     <tr>
                         <td><strong>Grand Total</strong></td>
-                        <td>0</td>
+                        <td>{{$subtotal - $discount_amount}}</td>
                     </tr>
                 </table>
             </td>

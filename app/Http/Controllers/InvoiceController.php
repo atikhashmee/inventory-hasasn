@@ -17,15 +17,16 @@ class InvoiceController extends Controller
         //
     }
     public function printInvoice($order_id) {
-        $data = Order::with('customer', 'orderDetail', 'user')->where('id', $order_id)->first();
-        if ($data) {
-            $data = $data->toArray();
+        $sqldata = Order::with('customer', 'orderDetail', 'user', 'transaction')->where('id', $order_id)->first();
+        if ($sqldata) {
+            $data = $sqldata->toArray();
+            $data['customer']['current_due'] = $sqldata->customer->current_due;
             $snappy = \WPDF::loadView('pdf.invoice-bill', $data);
             $headerHtml = view()->make('pdf.wkpdf-header')->render();
             $footerHtml = view()->make('pdf.wkpdf-footer')->render();
             $snappy->setOption('header-html', $headerHtml);
             $snappy->setOption('footer-html', $footerHtml);
-            return $snappy->stream('github.pdf');
+            return $snappy->stream(date('Y-m-d-h:i:-a').'-invoice-bill.pdf');
         } else {
             return redirect()->back()->withError('Nothing found');
         }
