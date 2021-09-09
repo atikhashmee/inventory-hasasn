@@ -86,17 +86,23 @@
   </li>
 
   <li class="nav-item">
-    <a href="{{ route('admin.users.index') }}"
-       class="nav-link {{ Request::is('admin/users*') ? 'active' : '' }}">
-        <p>Users</p>
-    </a>
-</li>
+      <a href="{{ route('admin.users.index') }}"
+        class="nav-link {{ Request::is('admin/users*') ? 'active' : '' }}">
+          <p>Users</p>
+      </a>
+  </li>
   <li class="nav-item">
-    <a href="{{ route('admin.customers.index') }}"
-       class="nav-link {{ Request::is('admin/customers*') ? 'active' : '' }}">
-        <p>Customers</p>
-    </a>
-</li>
+      <a href="{{ route('admin.customers.index') }}"
+        class="nav-link {{ Request::is('admin/customers*') ? 'active' : '' }}">
+          <p>Customers</p>
+      </a>
+  </li>
+  <li class="nav-item">
+      <a href="{{ route('admin.transactions.index') }}"
+        class="nav-link {{ Request::is('admin/transactions*') ? 'active' : '' }}">
+          <p>Transaction</p>
+      </a>
+  </li>
 
 
 
