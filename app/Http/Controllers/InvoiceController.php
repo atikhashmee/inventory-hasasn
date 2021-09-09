@@ -24,8 +24,8 @@ class InvoiceController extends Controller
             $snappy = \WPDF::loadView('pdf.invoice-bill', $data);
             $headerHtml = view()->make('pdf.wkpdf-header')->render();
             $footerHtml = view()->make('pdf.wkpdf-footer')->render();
-            $snappy->setOption('header-html', $headerHtml);
-            $snappy->setOption('footer-html', $footerHtml);
+            // $snappy->setOption('header-html', $headerHtml);
+            // $snappy->setOption('footer-html', $footerHtml);
             return $snappy->stream(date('Y-m-d-h:i:-a').'-invoice-bill.pdf');
         } else {
             return redirect()->back()->withError('Nothing found');

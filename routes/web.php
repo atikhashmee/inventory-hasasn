@@ -15,7 +15,13 @@ use Symfony\Component\Routing\Route as ComponentRoutingRoute;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+Route::get('command', function () {
+    \Artisan::call('cache:forget spatie.permission.cache');
+    \Artisan::call('cache:clear');
+    \Artisan::call('config:clear');
+    \Artisan::call('route:clear');
+    dd("All clear!");
+});
 Route::get('/', function () {
     return view('welcome');
 });
