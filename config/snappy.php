@@ -35,7 +35,7 @@ return [
     
     'pdf' => [
         'enabled' => true,
-        'binary'  => env('WKHTML_PDF_BINARY'),
+        'binary'  => env('WKHTML_PDF_BINARY', env('PDF_LIVE')?base_path('vendor/h4cc/wkhtmltopdf-amd64/bin/wkhtmltopdf-amd64'):base_path('vendor\wemersonjanuario\wkhtmltopdf-windows\bin\64bit\wkhtmltopdf.exe')),
         'timeout' => false,
         'options' => [
             'margin-top'    => 45,
@@ -48,7 +48,7 @@ return [
     
     'image' => [
         'enabled' => true,
-        'binary'  => env('WKHTML_IMG_BINARY'),
+        'binary'  => env('WKHTML_IMG_BINARY', env('PDF_LIVE')?base_path('vendor/h4cc/wkhtmltoimage-amd64/bin/wkhtmltoimage-amd64'):base_path('"vendor\h4cc\wkhtmltoimage-amd64\bin\wkhtmltoimage-amd64"')),
         'timeout' => false,
         'options' => [],
         'env'     => [],
