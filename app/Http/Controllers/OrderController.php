@@ -123,11 +123,9 @@ class OrderController extends Controller
             ->leftJoin(\DB::raw('(SELECT SUM(quantity) as total_transfer, product_id FROM shop_to_shops WHERE shop_from='.$shop_id.' GROUP BY product_id) AS TT'), 'TT.product_id', '=', 'products.id')
             ->leftJoin(\DB::raw('(SELECT SUM(quantity) as total_transfer_added, product_id FROM shop_to_shops WHERE shop_to='.$shop_id.' GROUP BY product_id) AS TA'), 'TA.product_id', '=', 'products.id')
             ->leftJoin(\DB::raw('(SELECT SUM(ODD.final_quantity) as total_out, ODD.product_id FROM order_details AS ODD LEFT JOIN orders ON ODD.order_id = orders.id WHERE orders.shop_id='.$shop_id.' GROUP BY ODD.product_id) as OD'), 'OD.product_id', '=', 'products.id')
-            ->leftJoin(\DB::raw('(SELECT SUM(quantity) as shops_stock_quantity_two, product_id, shop_id FROM `shop_product_stocks` GROUP BY product_id, shop_id) as SWW'), function($q) {
+            ->leftJoin(\DB::raw('(SELECT SUM(quantity) as shops_stock_quantity_two, product_id FROM `shop_product_stocks` WHERE shop_id='.$shop_id.'  GROUP BY product_id) as SWW'), function($q) {
                 $q->on('SWW.product_id', '=', 'products.id');
-                $q->orOn('shop_products.shop_id', '=', 'SWW.shop_id');
             })
-            //->leftJoin(\DB::raw('(SELECT SUM(quantity) as shops_stock_quantity, product_id, shop_id FROM `shop_product_stocks` WHERE warehouse_id ='.$warehouse_id.' AND shop_id='.$request->shop_id.' GROUP BY product_id) as SW'), 'SW.product_id', '=', 'products.id')
             ->where('shop_products.shop_id', $shop_id)
             ->get();
             return response()->json(['status'=>true, 'data'=> $data]);

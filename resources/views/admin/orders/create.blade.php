@@ -8,7 +8,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Orders</h1>
+                    <h1>New Sell</h1>
                 </div>
                 <div class="col-sm-6">
                 </div>
@@ -28,6 +28,7 @@
                             <form action="#" method="POST" @submit.prevent="submitOrder()" autocomplete="off">
                                 <div class="d-flex justify-content-between align-item-center">
                                     <div class="shop-info-section">
+                                        <img src="{{asset('assets/img/logo.png')}}" width="200" height="200" alt="">
                                     </div>
                                     <div class="order-info-section">
                                         <table class="table table-bordered">
