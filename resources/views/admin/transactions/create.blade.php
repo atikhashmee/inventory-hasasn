@@ -28,3 +28,20 @@
         </div>
     </div>
 @endsection
+
+@push('page_scripts')
+    <script>
+        let customers = {!! json_encode(count($customers) > 0 ? $customers->toArray() : [], JSON_HEX_TAG) !!}
+        function changeCustomer(evt) {
+            let $evt = $(evt)
+            if (customers.length > 0) {
+                customers.forEach(element => {
+                    if (Number($evt.val()) === Number(element.id)) {
+                        $("#payable").val(Number(element.total_deposit) - Number(element.total_withdraw))
+                        return;
+                    }
+                });
+            }
+        }
+    </script>
+@endpush

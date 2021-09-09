@@ -17,7 +17,10 @@ class CustomerController extends Controller
     public function index()
     {
         try {
-            $data['customers'] = Customer::paginate(100);
+            $data['customers'] = Customer::select('customers.*', \DB::raw('IFNULL(B.total_orders, 0) as totalOrdersCount'), 'B.order_ids')
+            ->leftJoin(\DB::raw('(SELECT COUNT(id) as total_orders, GROUP_CONCAT(id) as order_ids, customer_id FROM orders GROUP BY customer_id) AS B'), 'customers.id', '=', 'B.customer_id')
+            ->orderBy('totalOrdersCount', 'DESC')
+            ->paginate(100);
             return view('admin.customers.index', $data);
         } catch (\Exception $e) {
             return redirect()->back()->withError($e->getMessage());

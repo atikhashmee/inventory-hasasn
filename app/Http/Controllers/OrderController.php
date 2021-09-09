@@ -20,6 +20,10 @@ class OrderController extends Controller
                     $r->where('customer_name', 'LIKE', '%'.request()->query('search').'%');
                 });
             }
+
+            if (request()->query('order_ids')!='') {
+                $q->whereIn('id', explode(',', request()->query('order_ids')));
+            }
         })->orderBy('id', 'DESC')->paginate(100);
         return view('admin.orders.index', $data);
     }

@@ -6,6 +6,7 @@
             <th>Customer&nbsp;Phone</th>
             <th>Customer&nbsp;E-mail</th>
             <th>Customer&nbsp;Addresss</th>
+            <th>Total&nbsp;Orders</th>
             <th>Action</th>
         </tr>
     </thead>
@@ -18,6 +19,9 @@
                     <td>{{$customer->customer_phone}}</td>
                     <td>{{$customer->customer_email}}</td>
                     <td>{{$customer->customer_address}}</td>
+                    <td>
+                        <a href="{{route('admin.orders.index', ['order_ids'=>$customer->order_ids])}}">{{$customer->totalOrdersCount}}</a>
+                    </td>
                     <td>
                         <div class="btn-group">
                             <button type="button" class="btn btn-default btn-flat"><i class="fas fa-cogs"></i></button>

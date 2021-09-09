@@ -1,7 +1,7 @@
 <div class="col-md-6">
     <div class="form-group">
         <label for="customers">Select a Customer <span class="text-danger">*</span></label>
-        <select name="customer_id" id="customer_id" class="form-control select2">
+        <select name="customer_id" id="customer_id" class="form-control select2" onchange="changeCustomer(this)">
             <option value="">Select Customer</option>
             @foreach ($customers as $customer)
                 <option value="{{$customer->id}}">{{$customer->customer_name}}</option>
@@ -23,6 +23,10 @@
             <option value="payment">Payment</option>
             <option value="refund">Refund</option>
         </select>
+    </div>
+    <div class="form-group">
+        <label for="">Total Payable</label>
+        <input type="number" readonly class="form-control" id="payable">
     </div>
     <div class="form-group">
         <label for="customers">Amount <span class="text-danger">*</span> </label>

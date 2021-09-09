@@ -15,7 +15,7 @@
                 <tr>
                     <td>{{$transaction->id}}</td>
                     <td>{{$transaction->customer->customer_name}}</td>
-                    <td class="text-capitalize">{{$transaction->type}}</td>
+                    <td class="text-capitalize">{{$transaction->type == 'in'?'Deposit':'Withdraw'}}</td>
                     <td>{{$transaction->amount}}</td>
                     <td>{{$transaction->created_at}}</td>
                     <td>
@@ -27,6 +27,12 @@
                     </td>
                 </tr>
             @endforeach
+        @else
+        <tr>
+            <td class="text-center" colspan="6">
+                <span>No Items Found</span>
+            </td>
+        </tr>
         @endif
     </tbody>
 </table>
