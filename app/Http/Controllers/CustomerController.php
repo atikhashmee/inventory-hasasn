@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use Laracasts\Flash\Flash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -66,7 +67,8 @@ class CustomerController extends Controller
         ]);
         
         if ($customer) {
-            return redirect()->back()->withSuccess('Successfully Saved');
+            Flash::success('Saved successfully.');
+            return redirect()->back();
         }
     }
 
@@ -89,7 +91,8 @@ class CustomerController extends Controller
      */
     public function edit(Customer $customer)
     {
-        //
+        $data['customer'] = $customer;
+        return view('admin.customers.edit', $data);
     }
 
     /**
@@ -101,7 +104,12 @@ class CustomerController extends Controller
      */
     public function update(Request $request, Customer $customer)
     {
-        //
+        $data = $request->except('_token', '_method');
+        $udpated = $customer->update($data);
+        if ($udpated) {
+            Flash::success('Updated successfully.');
+            return redirect()->back();
+        }
     }
 
     /**
@@ -112,6 +120,7 @@ class CustomerController extends Controller
      */
     public function destroy(Customer $customer)
     {
-        //
+        Flash::success('Deleted successfully.');
+        return redirect()->route('admin.customers.index');
     }
 }
