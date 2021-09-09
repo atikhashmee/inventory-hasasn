@@ -100,7 +100,7 @@
   <li class="nav-item">
       <a href="{{ route('admin.transactions.index') }}"
         class="nav-link {{ Request::is('admin/transactions*') ? 'active' : '' }}">
-          <p>Transaction</p>
+          <p>Customer&nbsp;Transaction</p>
       </a>
   </li>
 
