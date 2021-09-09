@@ -15,14 +15,16 @@ class CreateTransactionsTable extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('tnx_id')->nullable();
             $table->unsignedBigInteger('customer_id');
             $table->unsignedBigInteger('order_id')->nullable();
             $table->unsignedBigInteger('user_id')->comment('Entry by');
             $table->enum('status', ['hold', 'done']);
             $table->enum('type', ['in', 'out']);
-            $table->enum('flag', ['order_placed', 'payment']);
+            $table->enum('flag', ['order_placed', 'payment', 'refund']);
             $table->decimal('amount', 10, 2)->default(0.00);
             $table->text('detail')->nullable();
+            $table->text('note')->nullable();
             $table->timestamps();
             $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');

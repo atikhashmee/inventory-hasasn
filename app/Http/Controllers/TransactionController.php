@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customer;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Laracasts\Flash\Flash;
 
 class TransactionController extends Controller
 {
@@ -15,6 +18,7 @@ class TransactionController extends Controller
     public function index()
     {
         $data['transactions'] = Transaction::paginate(100);
+        $data['customers'] = Customer::get();
         return view('admin.transactions.index', $data);
     }
 
@@ -25,7 +29,8 @@ class TransactionController extends Controller
      */
     public function create()
     {
-        //
+        $data['customers'] = Customer::get();
+        return view('admin.transactions.create', $data);
     }
 
     /**
@@ -36,7 +41,28 @@ class TransactionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $validator = Validator::make($request->all(), [
+                'customer_id' => 'required|integer|exists:customers,id',
+                'type' => 'required|in:in,out',
+                'flag' => 'required|in:payment,refund',
+                'amount' => 'required',
+            ]);
+            if ($validator->fails()) {
+                return redirect()->back()->withErrors($validator);
+            }
+
+            $data = $request->except('_token');
+            $data['user_id'] = auth()->user()->id;
+            $tnx = Transaction::create($data);
+            if ($tnx) {
+                Flash::success('Transaction created');
+                return redirect()->back();
+            }
+        } catch (\Exception $e) {
+            Flash::error($e->getMessage());
+            return redirect()->back();
+        }
     }
 
     /**
@@ -79,8 +105,11 @@ class TransactionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Transaction $transaction)
     {
-        //
+        $transaction->delete();
+        
+        Flash::success('Transaction deleted');
+        return redirect()->back();
     }
 }

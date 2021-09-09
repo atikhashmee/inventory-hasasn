@@ -36,7 +36,6 @@
     <link rel="stylesheet" href="//cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
     
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-
     <style>
         .select2-container .select2-selection--single {
             height: 40px !important;
