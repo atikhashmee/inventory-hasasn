@@ -370,6 +370,29 @@
                         } else if (type === 'quantity_unit') {
                             item.quantity_unit_id = evt.currentTarget.value;
                             item.quantity_unit = item.quantity_unit_id.length === 0?null:{...this.allUnits.find(ud=>ud.id==item.quantity_unit_id)};
+                            let givenQuantity = item.input_quantity || 1;
+                            if (item.quantity_unit !== null) {
+                                let unitData = {...item.quantity_unit};
+                                if ((Number(givenQuantity) * Number(unitData.quantity_base)) > Number(item.available_quantity)) {
+                                    item.quantity_unit = null;
+                                    item.quantity_unit_id = '';
+                                    item.input_quantity = Number(item.available_quantity)
+                                    item.quantity = Number(item.available_quantity)
+                                    alert('Maximum quantity limit exceeds')
+                                } else {
+                                    item.input_quantity = givenQuantity
+                                    item.quantity = (Number(givenQuantity) * Number(unitData.quantity_base))
+                                }  
+                            } else {
+                                if (Number(givenQuantity) > Number(item.available_quantity)) {
+                                    item.input_quantity = Number(item.available_quantity)
+                                    item.quantity = Number(item.available_quantity)
+                                } else {
+                                    item.input_quantity = givenQuantity
+                                    item.quantity = givenQuantity
+                                }
+                            }
+
                         }
                     }
                     item.totalPrice =  item.price * item.quantity
