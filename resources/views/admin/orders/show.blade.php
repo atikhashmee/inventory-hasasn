@@ -56,7 +56,7 @@
                                     <tr>
                                         <td>{{$detail->id}}</td>
                                         <td>{{$detail->product_name}}</td>
-                                        <td>{{$detail->product_quantity}}</td>
+                                        <td>{{$detail->quantity_unit_value!=null? $detail->quantity_unit_value.' '.$detail->unit->name: $detail->product_quantity }}</td>
                                         <td>{{$detail->product_unit_price}}</td>
                                         <td>{{$detail->product_unit_price * $detail->product_quantity}}</td>
                                     </tr>

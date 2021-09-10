@@ -69,3 +69,10 @@ Route::group(['prefix' => 'user', 'as' => 'user.'], function () {
 
 
 
+
+
+
+
+Route::group(['prefix' => 'admin'], function () {
+    Route::resource('units', App\Http\Controllers\UnitController::class, ["as" => 'admin']);
+});

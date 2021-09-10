@@ -17,7 +17,7 @@ class InvoiceController extends Controller
         //
     }
     public function printInvoice($order_id) {
-        $sqldata = Order::with('customer', 'orderDetail', 'user', 'transaction')->where('id', $order_id)->first();
+        $sqldata = Order::with('customer', 'orderDetail', 'orderDetail.unit', 'user', 'transaction')->where('id', $order_id)->first();
         if ($sqldata) {
             $data = $sqldata->toArray();
             $data['customer']['current_due'] = $sqldata->customer->current_due;

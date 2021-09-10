@@ -18,8 +18,10 @@ class CreateOrderDetailsTable extends Migration
             $table->unsignedBigInteger('order_id');
             $table->unsignedBigInteger('product_id');
             $table->unsignedBigInteger('shop_id');
+            $table->unsignedBigInteger('quantity_unit_id')->nullable();
             $table->string('product_name');
             $table->decimal('product_unit_price', 10, 2);
+            $table->unsignedInteger('quantity_unit_value')->nullable();
             $table->unsignedInteger('product_quantity')->default(1);
             $table->unsignedInteger('returned_quantity')->default(0)->comment('if admin return');
             $table->unsignedInteger('final_quantity');
@@ -33,6 +35,7 @@ class CreateOrderDetailsTable extends Migration
             $table->foreign('order_id')->on('orders')->references('id')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('shop_id')->on('shops')->references('id')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('product_id')->on('products')->references('id')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('quantity_unit_id')->on('units')->references('id')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

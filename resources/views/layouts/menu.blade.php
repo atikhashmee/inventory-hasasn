@@ -106,3 +106,12 @@
 
 
 
+
+<li class="nav-item">
+    <a href="{{ route('admin.units.index') }}"
+       class="nav-link {{ Request::is('admin/units*') ? 'active' : '' }}">
+        <p>Units</p>
+    </a>
+</li>
+
+

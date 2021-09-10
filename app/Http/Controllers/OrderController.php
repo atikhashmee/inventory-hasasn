@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Shop;
+use App\Models\Unit;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Customer;
@@ -30,6 +31,7 @@ class OrderController extends Controller
 
     public function create() {
         $data['shops'] = Shop::where('status', 'active')->get();
+        $data['units'] = Unit::select('id', 'name', 'quantity_base')->where('status', 'active')->get();
         return view('admin.orders.create', $data);
     }
 
@@ -83,6 +85,8 @@ class OrderController extends Controller
                               'order_id' => $order->id,
                               'product_id' => $pro_item['product_id'],
                               'shop_id' =>  $order->shop_id,
+                              'quantity_unit_id' =>  $pro_item['quantity_unit_id'],
+                              'quantity_unit_value' =>  $pro_item['input_quantity'],
                               'product_name' => $pro_item['product_name'],
                               'product_quantity' => $pro_item['quantity'],
                               'final_quantity' => $pro_item['quantity'],

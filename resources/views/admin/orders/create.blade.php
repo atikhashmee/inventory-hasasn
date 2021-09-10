@@ -8,7 +8,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>New Sell</h1>
+                    <h1>New Sale</h1>
                 </div>
                 <div class="col-sm-6">
                 </div>
@@ -33,7 +33,7 @@
                                     <div class="order-info-section">
                                         <table class="table table-bordered">
                                             <tr>
-                                                <td><label for="">Order&nbsp;ID</label></td>
+                                                <td><label for="">Sale&nbsp;ID</label></td>
                                                 <td>
                                                     <div class="d-flex">
                                                         <input type="text" name="order_id" readonly class="form-control" v-model="order_id" /> 
@@ -43,7 +43,7 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td><label for="">Order&nbsp;Date</label></td>
+                                                <td><label for="">Sale&nbsp;Date</label></td>
                                                 <td>
                                                     <div class="d-flex">
                                                         <input type="date" v-model="order_date" class="form-control" name="date">
@@ -125,8 +125,8 @@
                                                 <thead>
                                                     <tr>
                                                         <th>SL</th>
-                                                        <th style="width: 50%">Description</th>
-                                                        <th>Quantity</th>
+                                                        <th style="width: 40%">Description</th>
+                                                        <th style="width: 30%">Quantity</th>
                                                         <th>Price</th>
                                                         <th>Total</th>
                                                     </tr>
@@ -146,8 +146,17 @@
                                                             <small v-if="shop_id===''">(Select a shop to get the product lists)</small>
                                                         </td>
                                                         <td>
-                                                            <input type="number" class="form-control" v-model="pl.quantity" :max="pl.quantity" @keyup="fieldUpdate($event, pl, 'quantity')" name="quantity">
-                                                            <small>Available Quantity @{{pl.available_quantity}}</small>
+                                                            <div class="d-flex">
+                                                                <select name="quantity_unit_id" v-model="pl.quantity_unit_id" id="quantity_unit_id" style="flex-basis: 80%" @change="fieldUpdate($event, pl, 'quantity_unit')" class="form-control">
+                                                                    <option value="">Standard X 1</option>
+                                                                    <option :value="unit.id" v-for="unit in allUnits">@{{unit.name}} X @{{unit.quantity_base}}</option>
+                                                                </select>
+                                                                <div>
+                                                                    <input type="number" class="form-control" v-model="pl.input_quantity" :max="pl.available_quantity" @keyup="fieldUpdate($event, pl, 'quantity')" name="quantity">
+                                                                    <small>Available Quantity @{{pl.available_quantity}}</small>
+                                                                    <small>Quantity @{{pl.quantity}}</small>
+                                                                </div>
+                                                            </div>
                                                         </td>
                                                         <td>
                                                             <input type="number" class="form-control" v-model="pl.price" @keyup="fieldUpdate($event, pl, 'price')" name="price">
@@ -156,7 +165,7 @@
                                                     </tr>
                                                     <tr>
                                                         <td colspan="6">
-                                                            <button class="btn btn-primary" type="button" @click="addToCart()">Add Row</button>
+                                                            <button class="btn btn-primary" type="button" @click="addToCart()">Add Product</button>
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -202,7 +211,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <button class="btn btn-primary float-right" type="submit">Place Order</button>
+                                <button class="btn btn-primary float-right" type="submit">Create New Sale</button>
                             </form>
                         </div>
                     </div>
@@ -256,7 +265,9 @@
                             if (item.item_id === item_id) {
                                 item.product_id = product_item.id
                                 item.product_name = product_item.name
-                                item.quantity = product_item.shop_quantity
+                                item.quantity = 0
+                                item.input_quantity = 0
+                                item.quantity_unit_id = ''
                                 item.available_quantity = product_item.shop_quantity
                                 item.price = product_item.price
                                 item.totalPrice = item.quantity * item.price
@@ -267,7 +278,6 @@
                 });
             }, 10);
         }
-        
     </script>
 @endpush
 @push('page_scripts')
@@ -278,6 +288,7 @@
             product_lists: [],
             products: [],
             product_items: [],
+            allUnits: {!! json_encode(count($units) > 0 ? $units->toArray() : [], JSON_HEX_TAG) !!},
             subtotal: 0,
             total: 0, 
             discount: 0,
@@ -315,8 +326,11 @@
                 newitem.item_id = Date.now() + 1
                 newitem.product_id = null,
                 newitem.product_name = null,
+                newitem.input_quantity = 0,
                 newitem.quantity = 0
                 newitem.available_quantity = 0
+                newitem.quantity_unit_id=''
+                newitem.quantity_unit=null
                 newitem.price = 0
                 newitem.totalPrice = 0
                 this.product_lists.push(newitem)
@@ -330,14 +344,32 @@
                     if (obj.item_id === item.item_id) {
                         if (type === 'quantity') {
                             let givenQuantity = evt.currentTarget.value;
-                            if (Number(givenQuantity) > Number(item.available_quantity)) {
-                                item.quantity = Number(item.available_quantity)
+                            if (item.quantity_unit ===null) {
+                                if (Number(givenQuantity) > Number(item.available_quantity)) {
+                                    item.input_quantity = Number(item.available_quantity)
+                                    item.quantity = Number(item.available_quantity)
+                                } else {
+                                    item.input_quantity = givenQuantity
+                                    item.quantity = givenQuantity
+                                }
                             } else {
-                                item.quantity = givenQuantity
+                                let unitData = {...item.quantity_unit};
+                                if ((Number(givenQuantity) * Number(unitData.quantity_base)) > Number(item.available_quantity)) {
+                                    item.quantity_unit = null;
+                                    item.quantity_unit_id = '';
+                                    item.input_quantity = Number(item.available_quantity)
+                                    item.quantity = Number(item.available_quantity)
+                                    alert('Maximum quantity limit exceeds')
+                                } else {
+                                    item.input_quantity = givenQuantity
+                                    item.quantity = (Number(givenQuantity) * Number(unitData.quantity_base))
+                                } 
                             }
-
                         } else if (type === 'price') {
                             item.price = evt.currentTarget.value
+                        } else if (type === 'quantity_unit') {
+                            item.quantity_unit_id = evt.currentTarget.value;
+                            item.quantity_unit = item.quantity_unit_id.length === 0?null:{...this.allUnits.find(ud=>ud.id==item.quantity_unit_id)};
                         }
                     }
                     item.totalPrice =  item.price * item.quantity
