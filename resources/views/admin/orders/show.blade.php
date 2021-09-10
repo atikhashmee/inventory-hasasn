@@ -95,9 +95,9 @@
                         <a href="{{url('print-invoice/'.$order->id)}}" target="_blank" type="button"  class="btn bg-gradient-success mr-1">
                             <i class="fas fa-print"></i> Invoice/Bill
                         </a>
-                        <button type="button" class="btn bg-gradient-warning">
+                        <a href="{{url('print-challan/'.$order->id)}}" target="_blank" class="btn bg-gradient-warning">
                             <i class="fas fa-print"></i> Challan
-                        </button>
+                        </a>
                     </div>
                 </div>
             </div>

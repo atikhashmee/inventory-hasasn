@@ -25,6 +25,7 @@
                             <div class="dropdown-menu" role="menu" style="">
                                 <a class="dropdown-item" href="{{route('admin.orders.show', ['order'=>$order])}}">Detail</a>
                                 <a class="dropdown-item" href="{{url('print-invoice/'.$order->id)}}" target="_blank">Print Invoice</a>
+                                <a class="dropdown-item" href="{{url('print-challan/'.$order->id)}}" target="_blank">Print Challan</a>
                             </div>
                         </div>
                     </td>

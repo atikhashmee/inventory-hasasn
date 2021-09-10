@@ -30,7 +30,22 @@ class InvoiceController extends Controller
         } else {
             return redirect()->back()->withError('Nothing found');
         }
-        
+    }
+
+    public function printChallan($order_id) {
+        $sqldata = Order::with('customer', 'orderDetail', 'orderDetail.unit', 'user', 'transaction')->where('id', $order_id)->first();
+        if ($sqldata) {
+            $data = $sqldata->toArray();
+            $data['customer']['current_due'] = $sqldata->customer->current_due;
+            $snappy = \WPDF::loadView('pdf.challan', $data);
+            $headerHtml = view()->make('pdf.wkpdf-header')->render();
+            $footerHtml = view()->make('pdf.wkpdf-footer')->render();
+            $snappy->setOption('header-html', $headerHtml);
+            $snappy->setOption('footer-html', $footerHtml);
+            return $snappy->inline(date('Y-m-d-h:i:-a').'-challan.pdf');
+        } else {
+            return redirect()->back()->withError('Nothing found');
+        }
     }
 
     /**
