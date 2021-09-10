@@ -24,7 +24,13 @@
                 <form action="{{route('admin.orders.index')}}" method="GET">
                     <div class="d-flex justify-content-between align-items-center mb-2">
                         <div></div>
-                        <div class="d-flex" style="flex-basis: 20%">
+                        <div class="d-flex" style="flex-basis: 40%">
+                            <select name="shop_id" id="shop_id" class="form-control mr-2">
+                                <option value="">Select a shop</option>
+                                @foreach ($shops as $shop)
+                                    <option value="{{$shop->id}}">{{$shop->name}}</option>
+                                @endforeach
+                            </select>
                             <input type="search" name="search" class="form-control" placeholder="Order Number, Customer Name" >
                             <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
                         </div>

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Shop;
 use App\Models\Customer;
 use App\Models\OrderDetail;
 use App\Models\Transaction;
@@ -63,6 +64,12 @@ class Order extends Model
     public function transaction()
     {
         return $this->hasOne(Transaction::class, 'order_id', 'id')->where('flag', 'payment');
+    }
+
+    
+    public function shop()
+    {
+        return $this->belongsTo(Shop::class, 'shop_id');
     }
 
 }

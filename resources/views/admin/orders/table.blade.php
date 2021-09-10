@@ -2,6 +2,7 @@
     <thead>
         <tr>
             <th>Order&nbsp;ID</th>
+            <th>Shop</th>
             <th>Customer&nbsp;Name</th>
             <th>Order&nbsp;Amount</th>
             <th>Order&nbsp;Date</th>
@@ -13,6 +14,7 @@
             @foreach ($orders as $order)
                 <tr>
                     <td>{{$order->order_number}}</td>
+                    <td>{{$order->shop->name}}</td>
                     <td>{{$order->customer->customer_name}}</td>
                     <td>{{$order->total_amount}}</td>
                     <td>{{$order->created_at}}</td>

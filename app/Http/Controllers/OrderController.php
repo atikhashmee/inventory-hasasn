@@ -25,7 +25,11 @@ class OrderController extends Controller
             if (request()->query('order_ids')!='') {
                 $q->whereIn('id', explode(',', request()->query('order_ids')));
             }
+            if (request()->query('shop_id')!='') {
+                $q->where('shop_id', request()->query('shop_id'));
+            }
         })->orderBy('id', 'DESC')->paginate(100);
+        $data['shops'] = Shop::get();
         return view('admin.orders.index', $data);
     }
 
