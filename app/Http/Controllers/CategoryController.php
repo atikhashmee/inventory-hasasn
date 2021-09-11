@@ -22,7 +22,14 @@ class CategoryController extends AppBaseController
     public function index(Request $request)
     {
         /** @var Category $categories */
-        $categories = Category::with('nested')->select('categories.*', 'P.total_product')
+        $categories = Category::with(['nested'=>function($q) {
+            $q->select('categories.*', 'P.total_product');
+            $q->leftJoin(\DB::raw('(SELECT COUNT(*) as total_product, category_id FROM products GROUP BY category_id) AS P'), 'P.category_id', '=', 'categories.id');
+        }, 'nested.nested'=>function($q){
+            $q->select('categories.*', 'P.total_product');
+            $q->leftJoin(\DB::raw('(SELECT COUNT(*) as total_product, category_id FROM products GROUP BY category_id) AS P'), 'P.category_id', '=', 'categories.id');
+        }])
+        ->select('categories.*', 'P.total_product')
         ->leftJoin(\DB::raw('(SELECT COUNT(*) as total_product, category_id FROM products GROUP BY category_id) AS P'), 'P.category_id', '=', 'categories.id')
         ->where('categories.parent_id', 0)
         ->get();
@@ -142,10 +149,15 @@ class CategoryController extends AppBaseController
     public function destroy($id)
     {
         /** @var Category $category */
-        $category = Category::find($id);
-
+        $category = Category::withCount(['products'])->where('id', $id)->first();
         if (empty($category)) {
             Flash::error('Category not found');
+
+            return redirect(route('admin.categories.index'));
+        }
+
+        if ($category->products_count > 0) {
+            Flash::error('Category can not be deleted, It has products associated');
 
             return redirect(route('admin.categories.index'));
         }

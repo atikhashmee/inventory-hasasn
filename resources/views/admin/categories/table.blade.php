@@ -2,6 +2,7 @@
     <table class="table data-table-lib" id="categories-table">
         <thead>
         <tr>
+            <th>SL</th>
             <th>Name</th>
             <th>Total Products</th>
             <th>Action</th>
@@ -10,6 +11,7 @@
         <tbody>
         @foreach($categories as $category)
             <tr>
+                <td>{{ $category->id }}</td>
                 <td>{{ $category->name }}</td>
                 <td>{{ $category->total_product??0 }}</td>
                 <td width="120">
@@ -28,9 +30,10 @@
                     {!! Form::close() !!}
                 </td>
             </tr>
-            @if ($category->nested()->count() > 0)
-                @foreach ($category->nested()->get() as $item)
+            @if (count($category->nested) > 0)
+                @foreach ($category->nested as $item)
                     <tr>
+                        <td>{{ $item->id }}</td>
                         <td>&nbsp;&nbsp;&nbsp;-{{ $item->name }}</td>
                         <td>{{ $item->total_product??0 }}</td>
                         <td width="120">
@@ -49,9 +52,10 @@
                             {!! Form::close() !!}
                         </td>
                     </tr>
-                    @if ($item->nested()->count() > 0)
-                        @foreach ($item->nested()->get() as $childItem)
+                    @if (count($item->nested) > 0)
+                        @foreach ($item->nested as $childItem)
                             <tr>
+                                <td>{{ $childItem->id }}</td>
                                 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--{{ $childItem->name }}</td>
                                 <td>{{ $childItem->total_product??0 }}</td>
                                 <td width="120">

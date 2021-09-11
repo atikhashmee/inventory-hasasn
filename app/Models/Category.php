@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Eloquent as Model;
+use App\Models\Product;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -67,6 +68,12 @@ class Category extends Model
     public function parent(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo('App\Models\Category', 'parent_id');
+    }
+
+  
+    public function products()
+    {
+        return $this->hasMany(Product::class);
     }
     
 }
