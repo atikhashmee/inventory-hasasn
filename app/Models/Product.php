@@ -9,26 +9,20 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 /**
  * Class Product
  * @package App\Models
- * @version August 8, 2021, 5:04 pm UTC
+ * @version September 10, 2021, 6:44 pm UTC
  *
  * @property \App\Models\Category $category
+ * @property \App\Models\Country $origin
  * @property \App\Models\Brand $brand
- * @property \App\Models\Supplier $supplier
  * @property \App\Models\Menufacture $menufacture
- * @property \App\Models\WareHouse $warehouse
  * @property string $name
  * @property string $description
- * @property number $old_price
- * @property number $price
+ * @property number $product_cost
  * @property number $selling_price
- * @property integer $quantity
- * @property string $slug
- * @property string $sku
  * @property integer $category_id
+ * @property integer $origin
  * @property integer $brand_id
- * @property integer $supplier_id
  * @property integer $menufacture_id
- * @property integer $warehouse_id
  * @property string $feature_image
  */
 class Product extends Model
@@ -47,17 +41,12 @@ class Product extends Model
     public $fillable = [
         'name',
         'description',
-        'old_price',
-        'price',
+        'product_cost',
         'selling_price',
-        'quantity',
-        'slug',
-        'sku',
         'category_id',
+        'origin',
         'brand_id',
-        'supplier_id',
         'menufacture_id',
-        'warehouse_id',
         'feature_image'
     ];
 
@@ -70,17 +59,12 @@ class Product extends Model
         'id' => 'integer',
         'name' => 'string',
         'description' => 'string',
-        'old_price' => 'decimal:2',
-        'price' => 'decimal:2',
+        'product_cost' => 'decimal:2',
         'selling_price' => 'decimal:2',
-        'quantity' => 'integer',
-        'slug' => 'string',
-        'sku' => 'string',
         'category_id' => 'integer',
+        'origin' => 'integer',
         'brand_id' => 'integer',
-        'supplier_id' => 'integer',
         'menufacture_id' => 'integer',
-        'warehouse_id' => 'integer',
         'feature_image' => 'string'
     ];
 
@@ -91,11 +75,8 @@ class Product extends Model
      */
     public static $rules = [
         'name' => 'required',
-        'price' => 'required',
-        'selling_price' => 'required',
-        'quantity' => 'required',
-        'slug' => 'required|unique:products,slug',
-        'sku' => 'required|unique:products,sku'
+        'product_cost' => 'required',
+        'selling_price' => 'required'
     ];
 
     /**
@@ -109,6 +90,14 @@ class Product extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      **/
+    public function origin()
+    {
+        return $this->belongsTo(\App\Models\Country::class, 'origin', 'id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     **/
     public function brand()
     {
         return $this->belongsTo(\App\Models\Brand::class, 'brand_id', 'id');
@@ -117,24 +106,8 @@ class Product extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      **/
-    public function supplier()
-    {
-        return $this->belongsTo(\App\Models\Supplier::class, 'supplier_id', 'id');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     **/
     public function menufacture()
     {
         return $this->belongsTo(\App\Models\Menufacture::class, 'menufacture_id', 'id');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     **/
-    public function warehouse()
-    {
-        return $this->belongsTo(\App\Models\WareHouse::class, 'warehouse_id', 'id');
     }
 }

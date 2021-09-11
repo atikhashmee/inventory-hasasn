@@ -25,13 +25,7 @@
         "searchable": true
     },
     {
-        "name": "old_price",
-        "dbType": "decimal,10,2:nullable",
-        "htmlType": "text",
-        "searchable": true
-    },
-    {
-        "name": "price",
+        "name": "product_cost",
         "dbType": "decimal,10,2",
         "htmlType": "text",
         "validations": "required",
@@ -39,30 +33,9 @@
     },
     {
         "name": "selling_price",
-        "dbType": "decimal,10,2:nullable",
+        "dbType": "decimal,10,2",
         "htmlType": "text",
         "validations": "required",
-        "searchable": true
-    },
-    {
-        "name": "quantity",
-        "dbType": "integer",
-        "htmlType": "number",
-        "validations": "required",
-        "searchable": true
-    },
-    {
-        "name": "slug",
-        "dbType": "string:unique",
-        "htmlType": "text",
-        "validations": "required|unique:products,slug",
-        "searchable": true
-    },
-    {
-        "name": "sku",
-        "dbType": "string:unique",
-        "htmlType": "text",
-        "validations": "required|unique:products,sku",
         "searchable": true
     },
     {
@@ -73,18 +46,18 @@
         "relation": "mt1,Category,category_id,id"
     },
     {
+        "name": "origin",
+        "dbType": "integer:unsigned:nullable:foreign,countries,id",
+        "htmlType": "selectTable:countries:name,id",
+        "searchable": true,
+        "relation": "mt1,Country,origin,id"
+    },
+    {
         "name": "brand_id",
         "dbType": "integer:unsigned:nullable:foreign,brands,id",
         "htmlType": "selectTable:brands:name,id",
         "searchable": true,
         "relation": "mt1,Brand,brand_id,id"
-    },
-    {
-        "name": "supplier_id",
-        "dbType": "integer:unsigned:nullable:foreign,suppliers,id",
-        "htmlType": "selectTable:suppliers:name,id",
-        "searchable": true,
-        "relation": "mt1,Supplier,supplier_id,id"
     },
     {
         "name": "menufacture_id",
@@ -94,15 +67,8 @@
         "relation": "mt1,Menufacture,menufacture_id,id"
     },
     {
-        "name": "warehouse_id",
-        "dbType": "integer:unsigned:foreign,ware_houses,id",
-        "htmlType": "selectTable:ware_houses:ware_house_name,id",
-        "searchable": true,
-        "relation": "mt1,WareHouse,warehouse_id,id"
-    },
-    {
         "name": "feature_image",
-        "dbType": "string",
+        "dbType": "string:nullable",
         "htmlType": "file"
     },
     {

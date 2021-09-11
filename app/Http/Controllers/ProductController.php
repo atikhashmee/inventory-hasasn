@@ -24,23 +24,12 @@ class ProductController extends AppBaseController
     public function index(Request $request)
     {
         /** @var Product $products */
-        $products = Product::all();
+        $products = Product::select('products.*', 'countries.name as country_name')
+        ->leftJoin('countries', 'countries.id', '=', 'products.origin')
+        ->get();
 
         return view('admin.products.index')
             ->with('products', $products);
-    }
-
-    public function getProductJson($id) {
-        try {
-            $product = Product::where('id', $id)->first();
-            if ($product) {
-                return response()->json(['status'=>true, 'data'=>$product]);
-            } else {
-                return response()->json(['status'=>false, 'data'=>'Product is not found']);
-            }
-        } catch (\Exception $e) {
-            return response()->json(['status'=>false, 'data'=>$e->getMessage()]);
-        }
     }
 
     /**
@@ -62,26 +51,33 @@ class ProductController extends AppBaseController
      */
     public function store(CreateProductRequest $request)
     {
-        $input = $request->all();
+        try {
+            $input = $request->all();
 
-        /** @var Product $product */
-        if ($request->hasFile('feature_image')) {
-            $image      = $request->file('feature_image');
-            $fileName   = time() . '.' . $image->getClientOriginalExtension();
+            /** @var Product $product */
 
-            $img = Image::make($image->getRealPath());
-            $img->resize(120, 120, function ($constraint) {
-                $constraint->aspectRatio();                 
-            });
+            if ($request->hasFile('feature_image')) {
+                $image      = $request->file('feature_image');
+                $fileName   = time() . '.' . $image->getClientOriginalExtension();
 
-            $img->stream(); // <-- Key point
-            $input['feature_image'] = $fileName;
-            Storage::disk('local')->put('products'.'/'.$fileName, $img, 'public');
+                $img = Image::make($image->getRealPath());
+                $img->resize(120, 120, function ($constraint) {
+                    $constraint->aspectRatio();                 
+                });
+
+                $img->stream(); // <-- Key point
+                $input['feature_image'] = $fileName;
+                Storage::disk('local')->put('products'.'/'.$fileName, $img, 'public');
+            }
+            $product = Product::create($input);
+
+            Flash::success('Product saved successfully.');
+
+            return redirect(route('admin.products.index'));
+        } catch (\Exception $e) {
+            dd($e->getMessage());
         }
-
-        $product = Product::create($input);
-        Flash::success('Product saved successfully.');
-        return redirect(route('admin.products.index'));
+        
     }
 
     /**
@@ -144,7 +140,6 @@ class ProductController extends AppBaseController
 
             return redirect(route('admin.products.index'));
         }
-
         $data = $request->all();
         if ($request->hasFile('feature_image')) {
             $image      = $request->file('feature_image');

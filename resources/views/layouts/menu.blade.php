@@ -44,13 +44,6 @@
 
 
 <li class="nav-item">
-    <a href="{{ route('admin.products.index') }}"
-       class="nav-link {{ Request::is('admin/products*') ? 'active' : '' }}">
-        <p>Products</p>
-    </a>
-</li>
-
-<li class="nav-item">
     <a href="{{ route('admin.stocks.index') }}"
        class="nav-link {{ Request::is('admin/stocks*') ? 'active' : '' }}">
         <p>Purchase</p>
@@ -111,6 +104,19 @@
     <a href="{{ route('admin.units.index') }}"
        class="nav-link {{ Request::is('admin/units*') ? 'active' : '' }}">
         <p>Units</p>
+    </a>
+</li>
+
+
+
+
+
+
+
+<li class="nav-item">
+    <a href="{{ route('admin.products.index') }}"
+       class="nav-link {{ Request::is('admin/products*') ? 'active' : '' }}">
+        <p>Products</p>
     </a>
 </li>
 

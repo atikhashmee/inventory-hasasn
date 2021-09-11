@@ -10,16 +10,10 @@
     <p>{{ $product->description }}</p>
 </div>
 
-<!-- Old Price Field -->
+<!-- Product Cost Field -->
 <div class="col-sm-12">
-    {!! Form::label('old_price', 'Old Price:') !!}
-    <p>{{ $product->old_price }}</p>
-</div>
-
-<!-- Price Field -->
-<div class="col-sm-12">
-    {!! Form::label('price', 'Price:') !!}
-    <p>{{ $product->price }}</p>
+    {!! Form::label('product_cost', 'Product Cost:') !!}
+    <p>{{ $product->product_cost }}</p>
 </div>
 
 <!-- Selling Price Field -->
@@ -28,28 +22,16 @@
     <p>{{ $product->selling_price }}</p>
 </div>
 
-<!-- Quantity Field -->
-<div class="col-sm-12">
-    {!! Form::label('quantity', 'Quantity:') !!}
-    <p>{{ $product->quantity }}</p>
-</div>
-
-<!-- Slug Field -->
-<div class="col-sm-12">
-    {!! Form::label('slug', 'Slug:') !!}
-    <p>{{ $product->slug }}</p>
-</div>
-
-<!-- Sku Field -->
-<div class="col-sm-12">
-    {!! Form::label('sku', 'Sku:') !!}
-    <p>{{ $product->sku }}</p>
-</div>
-
 <!-- Category Id Field -->
 <div class="col-sm-12">
     {!! Form::label('category_id', 'Category Id:') !!}
     <p>{{ $product->category_id }}</p>
+</div>
+
+<!-- Origin Field -->
+<div class="col-sm-12">
+    {!! Form::label('origin', 'Origin:') !!}
+    <p>{{ $product->origin }}</p>
 </div>
 
 <!-- Brand Id Field -->
@@ -58,22 +40,10 @@
     <p>{{ $product->brand_id }}</p>
 </div>
 
-<!-- Supplier Id Field -->
-<div class="col-sm-12">
-    {!! Form::label('supplier_id', 'Supplier Id:') !!}
-    <p>{{ $product->supplier_id }}</p>
-</div>
-
 <!-- Menufacture Id Field -->
 <div class="col-sm-12">
     {!! Form::label('menufacture_id', 'Menufacture Id:') !!}
     <p>{{ $product->menufacture_id }}</p>
-</div>
-
-<!-- Warehouse Id Field -->
-<div class="col-sm-12">
-    {!! Form::label('warehouse_id', 'Warehouse Id:') !!}
-    <p>{{ $product->warehouse_id }}</p>
 </div>
 
 <!-- Feature Image Field -->

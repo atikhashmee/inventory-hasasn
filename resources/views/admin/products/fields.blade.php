@@ -10,40 +10,16 @@
     {!! Form::textarea('description', null, ['class' => 'form-control']) !!}
 </div>
 
-<!-- Old Price Field -->
-{{-- <div class="form-group col-sm-6">
-    {!! Form::label('old_price', 'Old Price:') !!}
-    {!! Form::text('old_price', null, ['class' => 'form-control']) !!}
-</div> --}}
-
-<!-- Price Field -->
+<!-- Product Cost Field -->
 <div class="form-group col-sm-6">
-    {!! Form::label('price', 'Price:') !!}
-    {!! Form::text('price', null, ['class' => 'form-control']) !!}
+    {!! Form::label('product_cost', 'Product Cost:') !!}
+    {!! Form::text('product_cost', null, ['class' => 'form-control']) !!}
 </div>
 
 <!-- Selling Price Field -->
 <div class="form-group col-sm-6">
     {!! Form::label('selling_price', 'Selling Price:') !!}
     {!! Form::text('selling_price', null, ['class' => 'form-control']) !!}
-</div>
-
-<!-- Quantity Field -->
-<div class="form-group col-sm-6">
-    {!! Form::label('quantity', 'Quantity:') !!}
-    {!! Form::number('quantity', null, ['class' => 'form-control']) !!}
-</div>
-
-<!-- Slug Field -->
-<div class="form-group col-sm-6">
-    {!! Form::label('slug', 'Slug:') !!}
-    {!! Form::text('slug', null, ['class' => 'form-control']) !!}
-</div>
-
-<!-- Sku Field -->
-<div class="form-group col-sm-6">
-    {!! Form::label('sku', 'Sku:') !!}
-    {!! Form::text('sku', null, ['class' => 'form-control']) !!}
 </div>
 
 <!-- Category Id Field -->
@@ -70,31 +46,24 @@
 </div>
 
 
-<!-- Brand Id Field -->
+<!-- Origin Field -->
 <div class="form-group col-sm-6">
-    {!! Form::label('brand_id', 'Brand:') !!}
-    {!! Form::select('brand_id', $brandItems, null, ['class' => 'form-control custom-select select2']) !!}
+    {!! Form::label('origin', 'Origin:') !!}
+    {!! Form::select('origin', $countryItems, null, ['class' => 'form-control custom-select']) !!}
 </div>
 
 
-<!-- Supplier Id Field -->
+<!-- Brand Id Field -->
 <div class="form-group col-sm-6">
-    {!! Form::label('supplier_id', 'Supplier:') !!}
-    {!! Form::select('supplier_id', $supplierItems, null, ['class' => 'form-control custom-select select2']) !!}
+    {!! Form::label('brand_id', 'Brand Id:') !!}
+    {!! Form::select('brand_id', $brandItems, null, ['class' => 'form-control custom-select']) !!}
 </div>
 
 
 <!-- Menufacture Id Field -->
 <div class="form-group col-sm-6">
-    {!! Form::label('menufacture_id', 'Menufacture:') !!}
-    {!! Form::select('menufacture_id', $menufactureItems, null, ['class' => 'form-control custom-select select2']) !!}
-</div>
-
-
-<!-- Warehouse Id Field -->
-<div class="form-group col-sm-6">
-    {!! Form::label('warehouse_id', 'Warehouse:') !!}
-    {!! Form::select('warehouse_id', $ware_houseItems, null, ['class' => 'form-control custom-select select2']) !!}
+    {!! Form::label('menufacture_id', 'Menufacture Id:') !!}
+    {!! Form::select('menufacture_id', $menufactureItems, null, ['class' => 'form-control custom-select']) !!}
 </div>
 
 

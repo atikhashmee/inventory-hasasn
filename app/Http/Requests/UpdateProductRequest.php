@@ -26,7 +26,7 @@ class UpdateProductRequest extends FormRequest
     public function rules()
     {
         $rules = Product::$rules;
-        $rules['slug'] = $rules['slug'].",".$this->route("product");$rules['sku'] = $rules['sku'].",".$this->route("product");
+        
         return $rules;
     }
 }
