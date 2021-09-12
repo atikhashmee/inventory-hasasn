@@ -173,4 +173,16 @@
         </tr>
     </tbody>
 </table>
+<br />
+<br />
+<br />
+@if ($notes)
+    <table style="width: 100%">
+        <tr>
+            <td>
+                <strong>N.B: {{$notes}}</strong>
+            </td>
+        </tr>
+    </table>
+@endif
 

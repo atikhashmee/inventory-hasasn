@@ -28,7 +28,7 @@
                             <form action="#" method="POST" @submit.prevent="submitOrder()" autocomplete="off">
                                 <div class="d-flex justify-content-between align-item-center">
                                     <div class="shop-info-section">
-                                        <img src="{{asset('assets/img/logo.png')}}" width="200" height="200" alt="">
+                                        <img src="{{asset('assets/img/not-found.png')}}" id="shop_image" width="200" height="200" alt="">
                                     </div>
                                     <div class="order-info-section">
                                         <table class="table table-bordered">
@@ -56,7 +56,7 @@
                                                     <select name="shop_id" id="shop_id" @change="shopChangeGetData($event)" v-model="shop_id" class="form-control"> 
                                                         <option value="">Select a shop</option>
                                                         @foreach ($shops as $shop)
-                                                            <option value="{{$shop->id}}">{{$shop->name}}</option>
+                                                            <option value="{{$shop->id}}" data-img="{{$shop->image_link}}">{{$shop->name}}</option>
                                                         @endforeach
                                                     </select>
                                                 </td>
@@ -440,6 +440,8 @@
             },
             shopChangeGetData(evt) {
                 let shop_id = evt.currentTarget.value
+                let img = $(evt.currentTarget).find(':selected').data('img')
+                $("#shop_image").attr('src', img)
                 this.products = []
                 this.product_ids = []
                 let url = `{{url('shop_stock_products')}}/${shop_id}`

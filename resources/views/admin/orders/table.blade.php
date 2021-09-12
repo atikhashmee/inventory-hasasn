@@ -14,8 +14,8 @@
             @foreach ($orders as $order)
                 <tr>
                     <td>{{$order->order_number}}</td>
-                    <td>{{$order->shop->name}}</td>
-                    <td>{{$order->customer->customer_name}}</td>
+                    <td>{{$order->shop->name ?? 'N/A'}}</td>
+                    <td>{{$order->customer->customer_name ?? 'N/A'}}</td>
                     <td>{{$order->total_amount}}</td>
                     <td>{{$order->created_at}}</td>
                     <td>

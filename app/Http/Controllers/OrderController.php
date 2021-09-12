@@ -34,7 +34,16 @@ class OrderController extends Controller
     }
 
     public function create() {
-        $data['shops'] = Shop::where('status', 'active')->get();
+        $shopCollection = Shop::where('status', 'active')->get();
+        $shopCollection = $shopCollection->map(function($shop) {
+            if (file_exists(public_path().'/uploads/shops/'.$shop->image)  && $shop->image) {
+                $shop->image_link = asset('/uploads/shops/'.$shop->image);
+            } else {
+                $shop->image_link = asset('assets/img/not-found.png');
+            }
+            return $shop;
+        });
+        $data['shops'] = $shopCollection;
         $data['units'] = Unit::select('id', 'name', 'quantity_base')->where('status', 'active')->get();
         return view('admin.orders.create', $data);
     }

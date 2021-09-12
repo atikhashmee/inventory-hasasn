@@ -131,4 +131,15 @@
         </tr>
     </tbody>
 </table>
-
+<br />
+<br />
+<br />
+@if ($challan_note)
+    <table style="width: 100%">
+        <tr>
+            <td>
+                <strong>N.B: {{$challan_note}}</strong>
+            </td>
+        </tr>
+    </table>
+@endif

@@ -17,12 +17,20 @@ class InvoiceController extends Controller
         //
     }
     public function printInvoice($order_id) {
-        $sqldata = Order::with('customer', 'orderDetail', 'orderDetail.unit', 'user', 'transaction')->where('id', $order_id)->first();
+        $sqldata = Order::with('customer', 'orderDetail', 'orderDetail.unit', 'user', 'transaction', 'shop')
+        ->where('id', $order_id)
+        ->first();
+        $shop = $sqldata->shop;
+        if (file_exists(public_path().'/uploads/shops/'.$shop->image)  && $shop->image) {
+            $shop->image_link = asset('/uploads/shops/'.$shop->image);
+        } else {
+            $shop->image_link = asset('assets/img/not-found.png');
+        }
         if ($sqldata) {
             $data = $sqldata->toArray();
             $data['customer']['current_due'] = $sqldata->customer->current_due;
             $snappy = \WPDF::loadView('pdf.invoice-bill', $data);
-            $headerHtml = view()->make('pdf.wkpdf-header')->render();
+            $headerHtml = view()->make('pdf.wkpdf-header', compact('shop'))->render();
             $footerHtml = view()->make('pdf.wkpdf-footer')->render();
             $snappy->setOption('header-html', $headerHtml);
             $snappy->setOption('footer-html', $footerHtml);
@@ -33,12 +41,18 @@ class InvoiceController extends Controller
     }
 
     public function printChallan($order_id) {
-        $sqldata = Order::with('customer', 'orderDetail', 'orderDetail.unit', 'user', 'transaction')->where('id', $order_id)->first();
+        $sqldata = Order::with('customer', 'orderDetail', 'orderDetail.unit', 'user', 'transaction', 'shop')->where('id', $order_id)->first();
+        $shop = $sqldata->shop;
+        if (file_exists(public_path().'/uploads/shops/'.$shop->image)  && $shop->image) {
+            $shop->image_link = asset('/uploads/shops/'.$shop->image);
+        } else {
+            $shop->image_link = asset('assets/img/not-found.png');
+        }
         if ($sqldata) {
             $data = $sqldata->toArray();
             $data['customer']['current_due'] = $sqldata->customer->current_due;
             $snappy = \WPDF::loadView('pdf.challan', $data);
-            $headerHtml = view()->make('pdf.wkpdf-header')->render();
+            $headerHtml = view()->make('pdf.wkpdf-header', compact('shop'))->render();
             $footerHtml = view()->make('pdf.wkpdf-footer')->render();
             $snappy->setOption('header-html', $headerHtml);
             $snappy->setOption('footer-html', $footerHtml);

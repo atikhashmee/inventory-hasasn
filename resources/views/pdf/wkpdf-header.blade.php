@@ -39,11 +39,11 @@
     <table>
         <tr>
             <td class="header-left-section">
-                <img src="{{asset('assets/img/logo.png')}}" alt="">
+                <img src="{{$shop->image_link}}" alt="">
             </td>
             <td width="20%">&nbsp;</td>
             <td class="header-right-section">
-                <h4 class="top-header">Midland</h4>
+                <h4 class="top-header">{{$shop->name}}</h4>
                 <p>15/2, Topkhna Road, BMA Bhaban(1st floor), G.P.O Box-2744</p>
                 <p>Dhaka 1000, Bangladesh. TEL: 9585868, FAX: 880-2-9569163</p>
                 <p>Mobile: 01755591795</p>
