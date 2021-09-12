@@ -17,7 +17,13 @@
         @foreach($products as $key =>  $product)
             <tr>
                 <td>{{ ++$key}}</td>
-                <td><img src="{{asset($product->feature_image)}}" width="50" height="50" alt=""></td>
+                <td>
+                    @if (file_exists(public_path().'/uploads/products/'.$product->feature_image) && $product->feature_image)
+                        <img src="{{asset('/uploads/products/'.$product->feature_image)}}" class="rounded-circle" width="80" height="80" />
+                    @else
+                        <img src="{{asset('assets/img/not-found.png')}}" alt="" width="80" height="80" />
+                    @endif
+                </td>
                 <td>{{ $product->name }}</td>
                 <td>{{ $product->category->name }}</td>
                 <td>{{ $product->country_name ?? 'N/A' }}</td>

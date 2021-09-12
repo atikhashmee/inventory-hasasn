@@ -25,6 +25,7 @@ class ShopFactory extends Factory
             'name' => $this->faker->word,
         'address' => $this->faker->text,
         'status' => $this->faker->randomElement(['active', 'inactive']),
+        'image' => $this->faker->word,
         'created_at' => $this->faker->date('Y-m-d H:i:s'),
         'updated_at' => $this->faker->date('Y-m-d H:i:s')
         ];

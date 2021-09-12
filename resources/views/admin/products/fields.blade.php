@@ -55,14 +55,14 @@
 
 <!-- Brand Id Field -->
 <div class="form-group col-sm-6">
-    {!! Form::label('brand_id', 'Brand Id:') !!}
+    {!! Form::label('brand_id', 'Brand:') !!}
     {!! Form::select('brand_id', $brandItems, null, ['class' => 'form-control custom-select']) !!}
 </div>
 
 
 <!-- Menufacture Id Field -->
 <div class="form-group col-sm-6">
-    {!! Form::label('menufacture_id', 'Menufacture Id:') !!}
+    {!! Form::label('menufacture_id', 'Menufacture:') !!}
     {!! Form::select('menufacture_id', $menufactureItems, null, ['class' => 'form-control custom-select']) !!}
 </div>
 

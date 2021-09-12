@@ -67,7 +67,7 @@ class ProductController extends AppBaseController
 
                 $img->stream(); // <-- Key point
                 $input['feature_image'] = $fileName;
-                Storage::disk('local')->put('products'.'/'.$fileName, $img, 'public');
+                Storage::disk('public_uploads')->put('products'.'/'.$fileName, $img);
             }
             $product = Product::create($input);
 
@@ -75,7 +75,8 @@ class ProductController extends AppBaseController
 
             return redirect(route('admin.products.index'));
         } catch (\Exception $e) {
-            dd($e->getMessage());
+            Flash::error($e->getMessage());
+            return redirect(route('admin.products.index'));
         }
         
     }
@@ -152,7 +153,10 @@ class ProductController extends AppBaseController
 
             $img->stream(); // <-- Key point
             $data['feature_image'] = $fileName;
-            Storage::disk('local')->put('products'.'/'.$fileName, $img, 'public');
+            if (file_exists(public_path().'/uploads/products/'.$product->feature_image) && $product->feature_image) {
+                unlink(public_path().'/uploads/products/'.$product->feature_image);
+            }
+            Storage::disk('public_uploads')->put('products'.'/'.$fileName, $img, 'public');
         }
         $product->fill($data);
         $product->save();

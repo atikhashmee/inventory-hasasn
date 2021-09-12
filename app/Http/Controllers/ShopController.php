@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreateShopRequest;
-use App\Http\Requests\UpdateShopRequest;
-use App\Http\Controllers\AppBaseController;
-use App\Models\Shop;
-use Illuminate\Http\Request;
 use Flash;
 use Response;
+use App\Models\Shop;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\CreateShopRequest;
+use Intervention\Image\Facades\Image;
+use App\Http\Requests\UpdateShopRequest;
+use App\Http\Controllers\AppBaseController;
 
 class ShopController extends AppBaseController
 {
@@ -50,6 +52,19 @@ class ShopController extends AppBaseController
         $input = $request->all();
 
         /** @var Shop $shop */
+         if ($request->hasFile('image')) {
+            $image      = $request->file('image');
+            $fileName   = time() . '.' . $image->getClientOriginalExtension();
+
+            $img = Image::make($image->getRealPath());
+            $img->resize(120, 120, function ($constraint) {
+                $constraint->aspectRatio();                 
+            });
+
+            $img->stream(); // <-- Key point
+            $input['image'] = $fileName;
+            Storage::disk('public_uploads')->put('shops'.'/'.$fileName, $img);
+        }
         $shop = Shop::create($input);
 
         Flash::success('Shop saved successfully.');
@@ -109,21 +124,42 @@ class ShopController extends AppBaseController
      */
     public function update($id, UpdateShopRequest $request)
     {
-        /** @var Shop $shop */
-        $shop = Shop::find($id);
+        try {
+            /** @var Shop $shop */
+            $shop = Shop::find($id);
 
-        if (empty($shop)) {
-            Flash::error('Shop not found');
+            if (empty($shop)) {
+                Flash::error('Shop not found');
 
+                return redirect(route('admin.shops.index'));
+            }
+            $data = $request->all();
+            if ($request->hasFile('image')) {
+                $image      = $request->file('image');
+                $fileName   = time() . '.' . $image->getClientOriginalExtension();
+
+                $img = Image::make($image->getRealPath());
+                $img->resize(120, 120, function ($constraint) {
+                    $constraint->aspectRatio();                 
+                });
+
+                $img->stream(); // <-- Key point
+                $data['image'] = $fileName;
+                // remove the previous one
+                if (file_exists(public_path().'/uploads/shops/'.$shop->image)  && $shop->image) {
+                    unlink(public_path().'/uploads/shops/'.$shop->image);
+                }
+                Storage::disk('public_uploads')->put('shops'.'/'.$fileName, $img);
+            }
+            $shop->fill($data);
+            $shop->save();
+            Flash::success('Shop updated successfully.');
+            return redirect(route('admin.shops.index'));
+        } catch (\Exception $e) {
+            Flash::error($e->getMessage());
             return redirect(route('admin.shops.index'));
         }
-
-        $shop->fill($request->all());
-        $shop->save();
-
-        Flash::success('Shop updated successfully.');
-
-        return redirect(route('admin.shops.index'));
+       
     }
 
     /**

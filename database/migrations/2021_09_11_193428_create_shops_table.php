@@ -19,6 +19,7 @@ class CreateShopsTable extends Migration
             $table->string('name');
             $table->text('address')->nullable();
             $table->enum('status', ['active','inactive'])->default('active');
+            $table->string('image')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
