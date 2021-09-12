@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Providers;
+namespace App\Providers;
+use App\Models\Unit;
+use App\Models\Customer;
 use App\Models\Country;
 use App\Models\Product;
 
@@ -34,6 +36,14 @@ class ViewServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        View::composer(['admin.challans.fields'], function ($view) {
+            $unitItems = Unit::pluck('name','id')->toArray();
+            $view->with('unitItems', $unitItems);
+        });
+        View::composer(['admin.challans.fields'], function ($view) {
+            $customerItems = Customer::pluck('customer_name','id')->toArray();
+            $view->with('customerItems', $customerItems);
+        });
         View::composer(['admin.products.fields'], function ($view) {
             $menufactureItems = Menufacture::pluck('name','id')->toArray();
             $view->with('menufactureItems', $menufactureItems);

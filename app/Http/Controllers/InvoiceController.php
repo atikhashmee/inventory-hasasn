@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Shop;
 use App\Models\Order;
+use App\Models\Challan;
 use Illuminate\Http\Request;
 
 class InvoiceController extends Controller
@@ -57,6 +59,28 @@ class InvoiceController extends Controller
             $snappy->setOption('header-html', $headerHtml);
             $snappy->setOption('footer-html', $footerHtml);
             return $snappy->inline(date('Y-m-d-h:i:-a').'-challan.pdf');
+        } else {
+            return redirect()->back()->withError('Nothing found');
+        }
+    }
+
+    public function printChallanCondition($challan_id) {
+        $sqldata = Challan::with('customer', 'unit')->where('id', $challan_id)
+        ->first();
+        $shop = Shop::where('id', 1)->where('status', 'active')->first();
+        if (file_exists(public_path().'/uploads/shops/'.$shop->image)  && $shop->image) {
+            $shop->image_link = asset('/uploads/shops/'.$shop->image);
+        } else {
+            $shop->image_link = asset('assets/img/not-found.png');
+        }
+        if ($sqldata) {
+            $data = $sqldata->toArray();
+            $snappy = \WPDF::loadView('pdf.challan-conditioned', $data);
+            $headerHtml = view()->make('pdf.wkpdf-header', compact('shop'))->render();
+            $footerHtml = view()->make('pdf.wkpdf-footer')->render();
+            $snappy->setOption('header-html', $headerHtml);
+            $snappy->setOption('footer-html', $footerHtml);
+            return $snappy->inline(date('Y-m-d-h:i:-a').'-challan-conditioned.pdf');
         } else {
             return redirect()->back()->withError('Nothing found');
         }

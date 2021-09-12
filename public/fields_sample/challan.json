@@ -1,0 +1,77 @@
+[
+    {
+        "name": "id",
+        "dbType": "increments",
+        "htmlType": "",
+        "validations": "",
+        "searchable": false,
+        "fillable": false,
+        "primary": true,
+        "inForm": false,
+        "inIndex": false,
+        "inView": false
+    },
+    {
+        "name": "customer_id",
+        "dbType": "integer:unsigned:foreign,customers,id",
+        "htmlType": "selectTable:customers:customer_name,id",
+        "searchable": true,
+        "relation": "mt1,Customer,customer_id,id"
+    },
+    {
+        "name": "product_type",
+        "dbType": "string",
+        "htmlType": "text",
+        "validations": "required",
+        "searchable": true
+    },
+    {
+        "name": "quantity",
+        "dbType": "integer",
+        "htmlType": "number",
+        "validations": "required",
+        "searchable": true
+    },
+    {
+        "name": "unit_id",
+        "dbType": "integer:nullable:unsigned:foreign,units,id",
+        "htmlType": "selectTable:units:name,id",
+        "searchable": true,
+        "relation": "mt1,Unit,unit_id,id"
+    },
+    {
+        "name": "total_payable",
+        "dbType": "decimal,10,2",
+        "htmlType": "text",
+        "validations": "required",
+        "searchable": true
+    },
+    {
+        "name": "challan_note",
+        "dbType": "text:nullable",
+        "htmlType": "textarea",
+        "searchable": true
+    },
+    {
+        "name": "created_at",
+        "dbType": "timestamp",
+        "htmlType": "",
+        "validations": "",
+        "searchable": false,
+        "fillable": false,
+        "primary": false,
+        "inForm": false,
+        "inIndex": false
+    },
+    {
+        "name": "updated_at",
+        "dbType": "timestamp",
+        "htmlType": "",
+        "validations": "",
+        "searchable": false,
+        "fillable": false,
+        "primary": false,
+        "inForm": false,
+        "inIndex": false
+    }
+]

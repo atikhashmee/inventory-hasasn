@@ -31,6 +31,7 @@ Auth::routes();
 // universal routes
 Route::get('print-invoice/{order_id}', [App\Http\Controllers\InvoiceController::class, 'printInvoice']);
 Route::get('print-challan/{order_id}', [App\Http\Controllers\InvoiceController::class, 'printChallan']);
+Route::get('print-challan-conditioned/{challan_id}', [App\Http\Controllers\InvoiceController::class, 'printChallanCondition']);
 Route::get('shop_stock_products/{shop_id}', [App\Http\Controllers\OrderController::class, 'getProductsByShop']);
 Route::get('get-customers', [App\Http\Controllers\CustomerController::class, 'getAllCustomerJson'])->name('getCustomers');
 Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
@@ -76,4 +77,11 @@ Route::group(['prefix' => 'user', 'as' => 'user.'], function () {
 
 Route::group(['prefix' => 'admin'], function () {
     Route::resource('units', App\Http\Controllers\UnitController::class, ["as" => 'admin']);
+});
+
+
+
+
+Route::group(['prefix' => 'admin'], function () {
+    Route::resource('challans', App\Http\Controllers\ChallanController::class, ["as" => 'admin']);
 });

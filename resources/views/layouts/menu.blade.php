@@ -122,3 +122,12 @@
 </li>
 
 
+
+<li class="nav-item">
+    <a href="{{ route('admin.challans.index') }}"
+       class="nav-link {{ Request::is('admin/challans*') ? 'active' : '' }}">
+        <p>Challans</p>
+    </a>
+</li>
+
+
