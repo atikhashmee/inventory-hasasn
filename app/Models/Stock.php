@@ -67,7 +67,7 @@ class Stock extends Model
      * @var array
      */
     public static $rules = [
-        'sku' => 'required|unique:products,sku',
+        'sku' => 'required|unique:stocks,sku',
         'price' => 'required',
         'selling_price' => 'required',
         'quantity' => 'required'

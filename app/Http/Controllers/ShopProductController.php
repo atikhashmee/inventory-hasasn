@@ -31,7 +31,7 @@ class ShopProductController extends Controller
             if ($request->shop_id !=null && $request->warehouse_id!=null) {
                 $warehouse_id = $request->warehouse_id;
                 $product_sql =  Product::select('products.*', 
-                \DB::raw('(IFNULL(S.stock_quantity, 0) + IFNULL(products.quantity, 0)) - (IFNULL(SWW.shops_stock_quantity_two, 0) + IFNULL(SP.shops_product_stock_quantity, 0)) AS warehouse_quantity'),
+                \DB::raw('IFNULL(S.stock_quantity, 0) - (IFNULL(SWW.shops_stock_quantity_two, 0) + IFNULL(SP.shops_product_stock_quantity, 0)) AS warehouse_quantity'),
                 \DB::raw('shop_products.product_id as isAdded'),
                 \DB::raw('((IFNULL(SW.shops_stock_quantity, 0) + IFNULL(SPP.shop_product_stock_quantity, 0) + IFNULL(TA.total_transfer_added, 0)) - (IFNULL(TT.total_transfer, 0) + IFNULL(OD.total_out, 0))) AS shop_quantity')
                 )
@@ -70,7 +70,7 @@ class ShopProductController extends Controller
                     'shop_to'=> $data['shop_to'],
                     'product_id'=> $data['product_id'],
                     'quantity'=> $data['quantity'],
-                    'price'=> $data['price'],
+                    'price'=> 0,
                 ]);
             } else {
                 return response()->json(['status'=>false, 'data'=> 'This product is not available at shop to, please add it first']);
@@ -114,7 +114,7 @@ class ShopProductController extends Controller
                             'shop_id' => $data['shop_id'],
                             'product_id' => $product['id'],
                             'quantity' => $product['new_quantity']??0,
-                            'price' => $product['new_price']??$product['price'],
+                            'price' => 0,
                         ]);
                     } else {
                         ShopProduct::create([
@@ -122,7 +122,7 @@ class ShopProductController extends Controller
                             'shop_id' => $data['shop_id'],
                             'product_id' => $product['id'],
                             'quantity' => $product['new_quantity']??0,
-                            'price' => $product['new_price']??$product['price'],
+                            'price' => 0,
                         ]);
                     }
                 }

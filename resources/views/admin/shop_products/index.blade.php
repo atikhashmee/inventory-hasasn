@@ -74,7 +74,6 @@
                                         <th>@{{selectedShop!==null?selectedShop.name: '-'}} Current&nbsp;Quantity</th>
                                         <th>@{{selectedShop!==null?selectedShop.name: '-'}} Add&nbsp;Quantity</th>
                                         <th>@{{selectedShop!==null?selectedShop.name: '-'}} Total&nbsp;Quantity</th>
-                                        <th>@{{selectedShop!==null?selectedShop.name: '-'}} Price</th>
                                     </tr>
                                 </thead>
                                 <tbody v-if="products.length > 0">
@@ -87,9 +86,6 @@
                                             <input type="number" class="form-control" @keyup="updateQuantity($event, product)" :max="product.warehouse_quantity">
                                         </td>
                                         <td>@{{product.total_quantity??0}}</td>
-                                        <td>
-                                            <input type="number" class="form-control" @keyup="updatePrice($event, product)">
-                                        </td>
                                     </tr>
                                 </tbody>
                                 <tbody v-if="products.length === 0">

@@ -14,6 +14,20 @@ use App\Http\Requests\UpdateProductRequest;
 
 class ProductController extends AppBaseController
 {
+    public function getProductJson($id) {
+        try {
+            $product = Product::select('products.*', 'PP.all_price')
+            ->leftJoin(\DB::raw('(SELECT GROUP_CONCAT(price) as all_price,product_id  FROM stocks GROUP BY product_id DESC) as PP'), 'PP.product_id', '=', 'products.id')
+            ->where('id', $id)->first();
+            if ($product) {
+                return response()->json(['status'=>true, 'data'=>$product]);
+            } else {
+                return response()->json(['status'=>false, 'data'=>'Product is not found']);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['status'=>false, 'data'=>$e->getMessage()]);
+        }
+    }
     /**
      * Display a listing of the Product.
      *

@@ -28,15 +28,23 @@
 
 <!-- Sku Field -->
 <div class="form-group col-sm-6">
-    {!! Form::label('sku', 'Sku:') !!}
-    {!! Form::text('sku', null, ['class' => 'form-control']) !!}
+    <div class="d-flex justify-content-between align-items-center">
+        <div style="flex-basis: 80%">
+            {!! Form::label('sku', 'Sku:') !!}
+            {!! Form::text('sku', null, ['class' => 'form-control', 'placeholder' => 'MED-34543']) !!}
+        </div>
+        <div class="d-flex flex-column" style="flex-basis: 20%">
+            <label for="">&nbsp;</label>
+            <button class="btn btn-primary"  type="button" onclick="document.getElementById('sku').value ='MED-'+makeRandomSku(6)">Generate</button>
+        </div>
+    </div>
 </div>
 
 <!-- Old Price Field -->
 @if (Route::is('admin.stocks.create')) 
     <div class="form-group col-sm-6">
         <label for="old_price">Old Price:</label>
-        <input type="text" name="old_price" id="old_price" class="form-control" readonly :value="product?product.price:null">
+        <input type="text" name="old_price" id="old_price" class="form-control" readonly :value="oldPrice">
     </div>
 @endif
 

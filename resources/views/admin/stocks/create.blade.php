@@ -48,6 +48,16 @@
         data: {
             product: null,
         },
+        computed: {
+            oldPrice() {
+                let oldprice = 0;
+                if (this.product && this.product.all_price) {
+                    let allPrice = this.product.all_price.split(',')
+                    oldprice = allPrice[0]
+                }
+                return oldprice
+            }
+        },
         mounted() {
         },
         methods: {
