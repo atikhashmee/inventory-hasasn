@@ -29,6 +29,7 @@ class Order extends Model
         'total_final_amount',
         'status',
         'notes',
+        'challan_note',
         'refund_status',
         'delivered_at'
     ];

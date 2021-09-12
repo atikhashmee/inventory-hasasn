@@ -190,8 +190,14 @@
                                             </table>
                                         </div>
                                         <div class="form-group">
-                                            <label for="">Write some note (Optional)</label>
+                                            <label for="">Addtional note (Optional) </label>
                                             <textarea name="note" id="note" v-model="note" class="form-control"></textarea>
+                                            <small>Visible to Invoice page as well </small>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="">Challan note (Optional) </label>
+                                            <textarea name="challan_note" id="challan_note" v-model="challan_note" class="form-control"></textarea>
+                                            <small>Visible to challan </small>
                                         </div>
                                     </div>
                                 </div>
@@ -261,6 +267,7 @@
                         order_app.product_lists = order_app.product_lists.filter(cartitem=>cartitem.product_id!==null)
                         return;
                     } else {
+                        console.log(product_item);
                         order_app.product_lists = order_app.product_lists.map(item=>{
                             if (item.item_id === item_id) {
                                 item.product_id = product_item.id
@@ -269,8 +276,8 @@
                                 item.input_quantity = 0
                                 item.quantity_unit_id = ''
                                 item.available_quantity = product_item.shop_quantity
-                                item.price = product_item.price
-                                item.totalPrice = item.quantity * item.price
+                                item.price = product_item.selling_price
+                                item.totalPrice = Number(item.quantity) * Number(item.selling_price)
                             }
                             return item;
                         })
@@ -295,6 +302,7 @@
             order_id: null,
             shop_id: "",
             note: "",
+            challan_note: "",
             order_date: `{{date('Y-m-d')}}`,
             payment_amount: 0,
             customer: {
@@ -412,6 +420,7 @@
                 orderObj.discount = this.discount;
                 orderObj.shop_id = this.shop_id;
                 orderObj.note = this.note;
+                orderObj.challan_note = this.challan_note;
                 orderObj.payment_amount = this.payment_amount;
                 fetch(`{{route('admin.orders.store')}}`, {
                     method: 'POST',

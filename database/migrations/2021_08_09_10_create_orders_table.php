@@ -27,6 +27,7 @@ class CreateOrdersTable extends Migration
             $table->decimal('total_final_amount', 10, 2)->default(0.00)->comment('sum of order_details final_amount');
             $table->enum('status', ['Awaiting', 'Pending', 'In Progress', 'Ready to Ship', 'Shipped', 'Returned', 'Canceled', 'Delivered', 'Failed'])->default('Pending');
             $table->longText('notes')->nullable();
+            $table->longText('challan_note')->nullable();
             $table->enum('refund_status', ['partial', 'full'])->nullable();
             $table->timestamp('delivered_at')->nullable();
             $table->timestamps();
