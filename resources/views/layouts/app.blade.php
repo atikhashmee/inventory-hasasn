@@ -62,6 +62,12 @@
             <li class="nav-item">
                 <a href="{{ route('admin.orders.create') }}" class="nav-link">New sale</a>
             </li>
+            <li class="nav-item">
+                <a href="{{ route('admin.challans.create') }}" class="nav-link">New Challan</a>
+            </li>
+            <li class="nav-item">
+                <a href="javascript:void(0)" class="nav-link">New Quotation</a>
+            </li>
             <li class="nav-item dropdown user-menu">
                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
                     <img src="https://assets.infyom.com/logo/blue_logo_150x150.png"

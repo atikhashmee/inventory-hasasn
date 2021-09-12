@@ -33,7 +33,7 @@
         <tr>
             <td>1</td>
             <td>{{$challan->product_type}}</td>
-            <td>{{$challan->quantity}} {{$challan->unitname}}</td>
+            <td>{{$challan->quantity}} {{$challan->unit->name}}</td>
         </tr>
     </tbody>
 </table>
