@@ -59,6 +59,9 @@
         </ul>
 
         <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a href="{{ route('admin.orders.create') }}" class="nav-link">New sale</a>
+            </li>
             <li class="nav-item dropdown user-menu">
                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
                     <img src="https://assets.infyom.com/logo/blue_logo_150x150.png"
