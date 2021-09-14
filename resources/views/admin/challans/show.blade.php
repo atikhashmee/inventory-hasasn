@@ -21,7 +21,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="row">
-                    @include('admin.challans.show_fields')  
+                    @include('admin.challans.show_fields')
                 </div>
             </div>
             <div class="card-footer">

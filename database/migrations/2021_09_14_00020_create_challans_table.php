@@ -16,6 +16,7 @@ class CreateChallansTable extends Migration
     {
         Schema::create('challans', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('shop_id');
             $table->unsignedBigInteger('customer_id');
             $table->string('product_type');
             $table->integer('quantity');
@@ -24,6 +25,7 @@ class CreateChallansTable extends Migration
             $table->text('challan_note')->nullable();
             $table->timestamps();
             $table->softDeletes();
+            $table->foreign('shop_id')->references('id')->on('shops')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('unit_id')->references('id')->on('units')->onDelete('cascade')->onUpdate('cascade');
         });

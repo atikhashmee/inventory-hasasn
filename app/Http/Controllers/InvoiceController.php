@@ -67,7 +67,7 @@ class InvoiceController extends Controller
     public function printChallanCondition($challan_id) {
         $sqldata = Challan::with('customer', 'unit')->where('id', $challan_id)
         ->first();
-        $shop = Shop::where('id', 1)->where('status', 'active')->first();
+        $shop = Shop::where('id', $sqldata->shop_id)->where('status', 'active')->first();
         if (file_exists(public_path().'/uploads/shops/'.$shop->image)  && $shop->image) {
             $shop->image_link = asset('/uploads/shops/'.$shop->image);
         } else {

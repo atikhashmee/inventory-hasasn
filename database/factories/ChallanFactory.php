@@ -22,7 +22,8 @@ class ChallanFactory extends Factory
     public function definition()
     {
         return [
-            'customer_id' => $this->faker->randomDigitNotNull,
+            'shop_id' => $this->faker->randomDigitNotNull,
+        'customer_id' => $this->faker->randomDigitNotNull,
         'product_type' => $this->faker->word,
         'quantity' => $this->faker->randomDigitNotNull,
         'unit_id' => $this->faker->randomDigitNotNull,

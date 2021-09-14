@@ -9,10 +9,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 /**
  * Class Challan
  * @package App\Models
- * @version September 12, 2021, 7:40 pm UTC
+ * @version September 14, 2021, 2:52 am UTC
  *
+ * @property \App\Models\Shop $shop
  * @property \App\Models\Customer $customer
  * @property \App\Models\Unit $unit
+ * @property integer $shop_id
  * @property integer $customer_id
  * @property string $product_type
  * @property integer $quantity
@@ -34,6 +36,7 @@ class Challan extends Model
 
 
     public $fillable = [
+        'shop_id',
         'customer_id',
         'product_type',
         'quantity',
@@ -49,6 +52,7 @@ class Challan extends Model
      */
     protected $casts = [
         'id' => 'integer',
+        'shop_id' => 'integer',
         'customer_id' => 'integer',
         'product_type' => 'string',
         'quantity' => 'integer',
@@ -67,6 +71,14 @@ class Challan extends Model
         'quantity' => 'required',
         'total_payable' => 'required'
     ];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     **/
+    public function shop()
+    {
+        return $this->belongsTo(\App\Models\Shop::class, 'shop_id', 'id');
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

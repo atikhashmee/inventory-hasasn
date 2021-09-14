@@ -12,6 +12,13 @@
         "inView": false
     },
     {
+        "name": "shop_id",
+        "dbType": "integer:unsigned:foreign,shops,id",
+        "htmlType": "selectTable:shops:name,id",
+        "searchable": true,
+        "relation": "mt1,Shop,shop_id,id"
+    },
+    {
         "name": "customer_id",
         "dbType": "integer:unsigned:foreign,customers,id",
         "htmlType": "selectTable:customers:customer_name,id",

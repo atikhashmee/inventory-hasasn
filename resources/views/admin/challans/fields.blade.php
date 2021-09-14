@@ -1,7 +1,14 @@
+<!-- Shop Id Field -->
+<div class="form-group col-sm-6">
+    {!! Form::label('shop_id', 'Shop:') !!}
+    {!! Form::select('shop_id', $shopItems, null, ['class' => 'form-control custom-select']) !!}
+</div>
+
+
 <!-- Customer Id Field -->
 <div class="form-group col-sm-6">
     {!! Form::label('customer_id', 'Customer:') !!}
-    {!! Form::select('customer_id', $customerItems, null, ['class' => 'form-control select2 custom-select']) !!}
+    {!! Form::select('customer_id', $customerItems, null, ['class' => 'form-control custom-select']) !!}
 </div>
 
 

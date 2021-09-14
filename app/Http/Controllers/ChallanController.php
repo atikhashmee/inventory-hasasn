@@ -54,7 +54,7 @@ class ChallanController extends AppBaseController
 
         Flash::success('Challan saved successfully.');
 
-        return redirect(route('admin.challans.show', ['challan'=> $challan]));
+        return redirect(route('admin.challans.index'));
     }
 
     /**
