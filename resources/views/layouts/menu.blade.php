@@ -131,3 +131,12 @@
 </li>
 
 
+
+<li class="nav-item">
+    <a href="{{ route('admin.quotations.index') }}"
+       class="nav-link {{ Request::is('admin/quotations*') ? 'active' : '' }}">
+        <p>Quotations</p>
+    </a>
+</li>
+
+

@@ -39,6 +39,10 @@ class ViewServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        View::composer(['admin.quotations.fields'], function ($view) {
+            $shopItems = Shop::pluck('name','id')->toArray();
+            $view->with('shopItems', $shopItems);
+        });
         View::composer(['admin.challans.fields'], function ($view) {
             $unitItems = Unit::pluck('name','id')->toArray();
             $view->with('unitItems', $unitItems);

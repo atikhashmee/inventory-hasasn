@@ -85,3 +85,10 @@ Route::group(['prefix' => 'admin'], function () {
 Route::group(['prefix' => 'admin'], function () {
     Route::resource('challans', App\Http\Controllers\ChallanController::class, ["as" => 'admin']);
 });
+
+
+
+
+Route::group(['prefix' => 'admin'], function () {
+    Route::resource('quotations', App\Http\Controllers\QuotationController::class, ["as" => 'admin']);
+});

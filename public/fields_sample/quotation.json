@@ -1,0 +1,76 @@
+[
+    {
+        "name": "id",
+        "dbType": "increments",
+        "htmlType": "",
+        "validations": "",
+        "searchable": false,
+        "fillable": false,
+        "primary": true,
+        "inForm": false,
+        "inIndex": false,
+        "inView": false
+    },
+    {
+        "name": "shop_id",
+        "dbType": "integer:unsigned:foreign,shops,id",
+        "htmlType": "selectTable:shops:name,id",
+        "searchable": true,
+        "relation": "mt1,Shop,shop_id,id"
+    },
+    {
+        "name": "recipient",
+        "dbType": "string",
+        "htmlType": "text",
+        "validations": "required",
+        "searchable": true
+    },
+    {
+        "name": "recipient_address",
+        "dbType": "text:nullable",
+        "htmlType": "textarea",
+        "searchable": true
+    },
+    {
+        "name": "date",
+        "dbType": "timestamp",
+        "htmlType": "",
+        "validations": "required",
+        "searchable": true
+    },
+    {
+        "name": "subject",
+        "dbType": "string",
+        "htmlType": "text",
+        "validations": "required",
+        "searchable": true
+    },
+    {
+        "name": "notes",
+        "dbType": "text:nullable",
+        "htmlType": "textarea",
+        "searchable": true
+    },
+    {
+        "name": "created_at",
+        "dbType": "timestamp",
+        "htmlType": "",
+        "validations": "",
+        "searchable": false,
+        "fillable": false,
+        "primary": false,
+        "inForm": false,
+        "inIndex": false
+    },
+    {
+        "name": "updated_at",
+        "dbType": "timestamp",
+        "htmlType": "",
+        "validations": "",
+        "searchable": false,
+        "fillable": false,
+        "primary": false,
+        "inForm": false,
+        "inIndex": false
+    }
+]
