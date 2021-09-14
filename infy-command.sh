@@ -9,7 +9,8 @@
 # php artisan infyom:rollback Stock scaffold
 # php artisan infyom:rollback Unit scaffold
 # php artisan infyom:rollback Challan scaffold
-php artisan infyom:rollback Quotation scaffold
+#php artisan infyom:rollback Quotation scaffold
+php artisan infyom:rollback QuotationItem scaffold
 
 #admin adding
 # php artisan infyom:scaffold WareHouse --fieldsFile='./public/fields_sample/warehouse.json'
@@ -21,4 +22,6 @@ php artisan infyom:rollback Quotation scaffold
 # php artisan infyom:scaffold Product --fieldsFile='./public/fields_sample/product.json'
 # php artisan infyom:scaffold Stock --fieldsFile='./public/fields_sample/stock.json'
 # php artisan infyom:scaffold Unit --fieldsFile='./public/fields_sample/unit.json'
-php artisan infyom:scaffold Quotation --fieldsFile='./public/fields_sample/quotation.json'
+#php artisan infyom:scaffold Quotation --fieldsFile='./public/fields_sample/quotation.json'
+php artisan infyom:model QuotationItem --fieldsFile='./public/fields_sample/quotation_items.json'
+php artisan infyom:migration QuotationItem --fieldsFile='./public/fields_sample/quotation_items.json'

@@ -1,0 +1,90 @@
+[
+    {
+        "name": "id",
+        "dbType": "increments",
+        "htmlType": "",
+        "validations": "",
+        "searchable": false,
+        "fillable": false,
+        "primary": true,
+        "inForm": false,
+        "inIndex": false,
+        "inView": false
+    },
+    {
+        "name": "quotation_id",
+        "dbType": "integer:unsigned:foreign,quotations,id",
+        "htmlType": "",
+        "searchable": true,
+        "relation": "mt1,Quotation,quotation_id,id",
+        "inView": false,
+        "inForm": false
+    },
+    {
+        "name": "item_name",
+        "dbType": "string",
+        "htmlType": "text",
+        "validations": "required",
+        "searchable": true
+    },
+    {
+        "name": "brand",
+        "dbType": "string",
+        "htmlType": "text",
+        "validations": "",
+        "searchable": true
+    },
+    {
+        "name": "model",
+        "dbType": "string",
+        "htmlType": "text",
+        "validations": "",
+        "searchable": true
+    },
+    {
+        "name": "origin",
+        "dbType": "string",
+        "htmlType": "text",
+        "searchable": true
+    },
+    {
+        "name": "quantity",
+        "dbType": "integer",
+        "htmlType": "number",
+        "searchable": true
+    },
+    {
+        "name": "unit_price",
+        "dbType": "decimal,10,2",
+        "htmlType": "text",
+        "searchable": true
+    },
+    {
+        "name": "total_price",
+        "dbType": "decimal,10,2",
+        "htmlType": "text",
+        "searchable": true
+    },
+    {
+        "name": "created_at",
+        "dbType": "timestamp",
+        "htmlType": "",
+        "validations": "",
+        "searchable": false,
+        "fillable": false,
+        "primary": false,
+        "inForm": false,
+        "inIndex": false
+    },
+    {
+        "name": "updated_at",
+        "dbType": "timestamp",
+        "htmlType": "",
+        "validations": "",
+        "searchable": false,
+        "fillable": false,
+        "primary": false,
+        "inForm": false,
+        "inIndex": false
+    }
+]

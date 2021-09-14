@@ -24,7 +24,7 @@ class CreateQuotationsTable extends Migration
             $table->text('notes')->nullable();
             $table->timestamps();
             $table->softDeletes();
-            $table->foreign('shop_id')->references('id')->on('shops');
+            $table->foreign('shop_id')->references('id')->on('shops')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 
