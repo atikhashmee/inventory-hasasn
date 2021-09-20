@@ -267,7 +267,6 @@
                         order_app.product_lists = order_app.product_lists.filter(cartitem=>cartitem.product_id!==null)
                         return;
                     } else {
-                        console.log(product_item);
                         order_app.product_lists = order_app.product_lists.map(item=>{
                             if (item.item_id === item_id) {
                                 item.product_id = product_item.id

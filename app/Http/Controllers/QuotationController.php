@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreateQuotationRequest;
-use App\Http\Requests\UpdateQuotationRequest;
-use App\Http\Controllers\AppBaseController;
-use App\Models\Quotation;
-use Illuminate\Http\Request;
 use Flash;
 use Response;
+use App\Models\Product;
+use App\Models\Quotation;
+use Illuminate\Http\Request;
+use App\Models\QuotationItem;
+use App\Http\Controllers\AppBaseController;
+use App\Http\Requests\CreateQuotationRequest;
+use App\Http\Requests\UpdateQuotationRequest;
 
 class QuotationController extends AppBaseController
 {
@@ -35,7 +37,10 @@ class QuotationController extends AppBaseController
      */
     public function create()
     {
-        return view('admin.quotations.create');
+        $data['products'] = Product::select('products.*')
+        ->with('brand', 'origin')
+        ->get();
+        return view('admin.quotations.create', $data);
     }
 
     /**
@@ -47,14 +52,34 @@ class QuotationController extends AppBaseController
      */
     public function store(CreateQuotationRequest $request)
     {
-        $input = $request->all();
-
-        /** @var Quotation $quotation */
-        $quotation = Quotation::create($input);
-
-        Flash::success('Quotation saved successfully.');
-
-        return redirect(route('admin.quotations.index'));
+        try {
+            \DB::beginTransaction();
+            $input = $request->all();
+            /** @var Quotation $quotation */
+            $quotation = Quotation::create($input);
+            if (count($input['product_id']) > 0) {
+                for ($i=0; $i < count($input['product_id']); $i++) { 
+                    QuotationItem::create([
+                        'quotation_id' => $quotation->id,
+                        'item_name' => $input['product_names'][$i],
+                        'brand' => $input['brand_name'][$i],
+                        'model' => $input['model'][$i]??'',
+                        'origin' => $input['origin'][$i],
+                        'quantity' => $input['quantity'][$i],
+                        'unit_price' => $input['unit_price'][$i],
+                        'total_price' => $input['total_price'][$i],
+                    ]);
+                }
+            }
+            Flash::success('Quotation saved successfully.');
+            \DB::commit();
+            return redirect(route('admin.quotations.index'));
+        } catch (\Exception $e) {
+            \DB::rollBack();
+            Flash::error($e->getMessage());
+            return redirect(route('admin.quotations.create'));
+        }
+       
     }
 
     /**
