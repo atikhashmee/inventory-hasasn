@@ -18,12 +18,22 @@
     </section>
 
     <div class="content px-3">
-        <div class="card">
-            <div class="card-body">
-                <div class="row">
-                    @include('admin.quotations.show_fields')
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-body">
+                        @include('admin.quotations.show_fields')
+                    </div>
+                    <div class="card-footer">
+                        <a href="#" target="_blank" class="btn btn-primary float-right">
+                            <i class="fas fa-print"></i> Print
+                        </a>
+                    </div>
                 </div>
             </div>
+            <div class="col-md-2"></div>
         </div>
+       
     </div>
 @endsection

@@ -23,6 +23,9 @@
                     <td width="120">
                         {!! Form::open(['route' => ['admin.quotations.destroy', $quotation->id], 'method' => 'delete']) !!}
                         <div class='btn-group'>
+                            <a href="#" class="btn btn-default btn-xs">
+                                <i class="fas fa-print"></i>
+                            </a>
                             <a href="{{ route('admin.quotations.show', [$quotation->id]) }}"
                             class='btn btn-default btn-xs'>
                                 <i class="far fa-eye"></i>

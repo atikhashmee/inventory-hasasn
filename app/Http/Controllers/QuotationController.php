@@ -92,14 +92,12 @@ class QuotationController extends AppBaseController
     public function show($id)
     {
         /** @var Quotation $quotation */
-        $quotation = Quotation::find($id);
+        $quotation = Quotation::with('items')->find($id);
 
         if (empty($quotation)) {
             Flash::error('Quotation not found');
-
             return redirect(route('admin.quotations.index'));
         }
-
         return view('admin.quotations.show')->with('quotation', $quotation);
     }
 
@@ -113,15 +111,16 @@ class QuotationController extends AppBaseController
     public function edit($id)
     {
         /** @var Quotation $quotation */
-        $quotation = Quotation::find($id);
-
-        if (empty($quotation)) {
+        $data['quotation'] = Quotation::with('items')->where('id', $id)->first();
+        $data['products'] = Product::select('products.*')
+        ->with('brand', 'origin')
+        ->get();
+        if (empty($data['quotation'])) {
             Flash::error('Quotation not found');
-
             return redirect(route('admin.quotations.index'));
         }
 
-        return view('admin.quotations.edit')->with('quotation', $quotation);
+        return view('admin.quotations.edit', $data);
     }
 
     /**
@@ -134,21 +133,40 @@ class QuotationController extends AppBaseController
      */
     public function update($id, UpdateQuotationRequest $request)
     {
-        /** @var Quotation $quotation */
-        $quotation = Quotation::find($id);
+        try {
+            \DB::beginTransaction();
+            $quotation = Quotation::find($id);
+            if (empty($quotation)) {
+                Flash::error('Quotation not found');
+                return redirect(route('admin.quotations.index'));
+            }
+            $quotation->fill($request->all());
+            $quotation->save();
+            QuotationItem::where('quotation_id', $quotation->id)->delete();
+            $input = $request->all();
+            if (count($input['product_id']) > 0) {
+                for ($i=0; $i < count($input['product_id']); $i++) { 
+                    QuotationItem::create([
+                        'quotation_id' => $quotation->id,
+                        'item_name' => $input['product_names'][$i],
+                        'brand' => $input['brand_name'][$i],
+                        'model' => $input['model'][$i]??'',
+                        'origin' => $input['origin'][$i],
+                        'quantity' => $input['quantity'][$i],
+                        'unit_price' => $input['unit_price'][$i],
+                        'total_price' => $input['total_price'][$i],
+                    ]);
+                }
+            }
 
-        if (empty($quotation)) {
-            Flash::error('Quotation not found');
-
+            Flash::success('Quotation updated successfully.');
+            \DB::commit();
+            return redirect(route('admin.quotations.index'));
+        } catch (\Exception $e) {
+            \DB::rollBack();
+            Flash::error($e->getMessage());
             return redirect(route('admin.quotations.index'));
         }
-
-        $quotation->fill($request->all());
-        $quotation->save();
-
-        Flash::success('Quotation updated successfully.');
-
-        return redirect(route('admin.quotations.index'));
     }
 
     /**

@@ -44,7 +44,7 @@
             <div class="col-md-3">
                 <div class="form-group">
                     <label for="">Select a Product</label>
-                    <select name="product_id[]" id="product_id" class="form-control product_id_class_name select2">
+                    <select name="product_id[]" id="product_id" v-model="qitem.product_id" class="form-control product_id_class_name select2">
                         <option value="">Product</option>
                         <option :value="pro.id" v-for="pro in products" >@{{pro.name}}</option>
                     </select>

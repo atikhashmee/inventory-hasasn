@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Eloquent as Model;
+use App\Models\QuotationItem;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -72,5 +73,15 @@ class Quotation extends Model
     public function shop()
     {
         return $this->belongsTo(\App\Models\Shop::class, 'shop_id', 'id');
+    }
+
+    /**
+     * Get all of the items for the Quotation
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function items()
+    {
+        return $this->hasMany(QuotationItem::class);
     }
 }
