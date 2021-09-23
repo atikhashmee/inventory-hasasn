@@ -26,7 +26,7 @@
                         @include('admin.quotations.show_fields')
                     </div>
                     <div class="card-footer">
-                        <a href="#" target="_blank" class="btn btn-primary float-right">
+                        <a href="{{url('print-quotation/'.$quotation->id)}}" target="_blank" class="btn btn-primary float-right">
                             <i class="fas fa-print"></i> Print
                         </a>
                     </div>

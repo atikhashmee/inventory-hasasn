@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Shop;
 use App\Models\Order;
 use App\Models\Challan;
+use App\Models\Quotation;
 use Illuminate\Http\Request;
 
 class InvoiceController extends Controller
@@ -81,6 +82,27 @@ class InvoiceController extends Controller
             $snappy->setOption('header-html', $headerHtml);
             $snappy->setOption('footer-html', $footerHtml);
             return $snappy->inline(date('Y-m-d-h:i:-a').'-challan-conditioned.pdf');
+        } else {
+            return redirect()->back()->withError('Nothing found');
+        }
+    }
+    public function printQuotation($quotation_id) {
+        $sqldata = Quotation::with('items')->where('id', $quotation_id)->first();
+        $shop = Shop::where('id', $sqldata->shop_id)->where('status', 'active')->first();
+        if (file_exists(public_path().'/uploads/shops/'.$shop->image)  && $shop->image) {
+            $shop->image_link = asset('/uploads/shops/'.$shop->image);
+        } else {
+            $shop->image_link = asset('assets/img/not-found.png');
+        }
+        if ($sqldata) {
+            $data = $sqldata->toArray();
+            //dd($data);
+            $snappy = \WPDF::loadView('pdf.quotation', $data);
+            $headerHtml = view()->make('pdf.wkpdf-header', compact('shop'))->render();
+            $footerHtml = view()->make('pdf.wkpdf-footer')->render();
+            $snappy->setOption('header-html', $headerHtml);
+            $snappy->setOption('footer-html', $footerHtml);
+            return $snappy->inline(date('Y-m-d-h:i:-a').'-quotation.pdf');
         } else {
             return redirect()->back()->withError('Nothing found');
         }
