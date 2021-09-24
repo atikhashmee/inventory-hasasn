@@ -49,6 +49,9 @@
 </div>
 
 <br />
+@php
+    $tnx_amount = $transaction['amount'] ?? 0;
+@endphp
 <table class="invoice-info">
     <tr>
         <td width="30%">
@@ -124,12 +127,12 @@
                         <td>
                             <p>Current Due: {{$customer['current_due']}}</p>
                             <p>Sales: {{$subtotal - $discount_amount}}</p>
-                            <p>Collected: {{$transaction['amount']}}</p>
+                            <p>Collected: {{$tnx_amount}}</p>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <strong>Net Outstanding: {{ ($subtotal - $discount_amount) - $transaction['amount']}}</strong>
+                            <strong>Net Outstanding: {{ ($subtotal - $discount_amount) - $tnx_amount}}</strong>
                         </td>
                     </tr>
                 </table>

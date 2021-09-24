@@ -7,12 +7,13 @@ use App\Models\Unit;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Customer;
+use Laracasts\Flash\Flash;
 use App\Models\OrderDetail;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Validator;
 use PhpParser\Node\Stmt\TryCatch;
+use Illuminate\Support\Facades\Validator;
 
 class OrderController extends Controller
 {
@@ -217,6 +218,30 @@ class OrderController extends Controller
             return response()->json(['status'=> false, 'data'=> null, 'errors' => [], 'error' => $e->getMessage()], 422);
         }
    
+    }
+
+    public function salesReturnRollback(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'detail_id' => ['required', 'integer', 'exists:order_details,id']
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator);
+        }
+
+        $detail = OrderDetail::where('id', $request->detail_id)->first();
+        if ($detail) {
+            $detail->returned_quantity = 0;
+            $detail->final_quantity = $detail->product_quantity;
+            $detail->returned_amount = 0;
+            $detail->final_amount =  $detail->product_quantity * $detail->product_unit_price;
+            $detail->save();
+            Flash::success('Successfully rollbacked.');
+            return redirect(route('admin.order.return'));
+        } else {
+            Flash::error('Record not found');
+            return redirect(route('admin.order.return'));
+        }
     }
 
 }

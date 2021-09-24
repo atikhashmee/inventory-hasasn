@@ -49,6 +49,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::resource('orders', App\Http\Controllers\OrderController::class);
     Route::resource('customers', App\Http\Controllers\CustomerController::class);
     Route::resource('transactions', App\Http\Controllers\TransactionController::class);
+    Route::resource('units', App\Http\Controllers\UnitController::class);
+    Route::resource('challans', App\Http\Controllers\ChallanController::class);
+    Route::resource('quotations', App\Http\Controllers\QuotationController::class);
 
 
     Route::post('shop_products/update-shop-to-shop',[App\Http\Controllers\ShopProductController::class, 'updateShopToShopProduct'])->name('shop_products.updateshoptoshop');
@@ -57,6 +60,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::get('get_shop_products/{shop_id}', [App\Http\Controllers\ShopProductController::class, 'getShopProducts'])->name('getShop_products');
     Route::resource('shop_products', App\Http\Controllers\ShopProductController::class);
 
+    Route::put('order/sell-return-rollback',  [App\Http\Controllers\OrderController::class, 'salesReturnRollback'])->name('order.return.rollback');
     Route::post('order/sell-return-update',  [App\Http\Controllers\OrderController::class, 'salesReturnUpdate'])->name('order.return.update');
     Route::get('order/sell-return',  [App\Http\Controllers\OrderController::class, 'showReturnLists'])->name('order.return');
     Route::get('order/sell-return/create',  [App\Http\Controllers\OrderController::class, 'salesReturnForm'])->name('order.return.create');
@@ -66,32 +70,4 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
 Route::group(['prefix' => 'user', 'as' => 'user.'], function () {
     Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'userDashboard'])->name('home');
     Route::get('/new_order', [App\Http\Controllers\OrderController::class, 'userOrderCreate'])->name('new_order');
-});
-
-
-
-
-
-
-
-
-
-
-
-Route::group(['prefix' => 'admin'], function () {
-    Route::resource('units', App\Http\Controllers\UnitController::class, ["as" => 'admin']);
-});
-
-
-
-
-Route::group(['prefix' => 'admin'], function () {
-    Route::resource('challans', App\Http\Controllers\ChallanController::class, ["as" => 'admin']);
-});
-
-
-
-
-Route::group(['prefix' => 'admin'], function () {
-    Route::resource('quotations', App\Http\Controllers\QuotationController::class, ["as" => 'admin']);
 });

@@ -59,7 +59,12 @@
                                     <td>{{$order->returned_amount}}</td>
                                     <td>{{$order->created_at}}</td>
                                     <td>
-                                        <button class="btn btn-sm btn-danger">Delete</button>
+                                        <button class="btn btn-sm btn-danger" onclick="document.getElementById('detailsForm').submit()">Delete</button>
+                                        <form action="{{route('admin.order.return.rollback')}}" id="detailsForm" method="POST">
+                                            @csrf
+                                            @method('PUT')
+                                            <input type="hidden" name="detail_id" value="{{$order->id}}">
+                                        </form>
                                     </td>
                                 </tr>
                             @endforeach
