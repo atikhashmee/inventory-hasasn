@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\Challan;
 use App\Models\Quotation;
 use Illuminate\Http\Request;
+use NumberToWords\NumberToWords;
 
 class InvoiceController extends Controller
 {
@@ -87,6 +88,9 @@ class InvoiceController extends Controller
         }
     }
     public function printQuotation($quotation_id) {
+        $numberToWords = new NumberToWords();
+        // build a new number transformer using the RFC 3066 language identifier
+        $numberTransformer = $numberToWords->getNumberTransformer('en');
         $sqldata = Quotation::with('items')->where('id', $quotation_id)->first();
         $shop = Shop::where('id', $sqldata->shop_id)->where('status', 'active')->first();
         if (file_exists(public_path().'/uploads/shops/'.$shop->image)  && $shop->image) {
@@ -95,8 +99,10 @@ class InvoiceController extends Controller
             $shop->image_link = asset('assets/img/not-found.png');
         }
         if ($sqldata) {
+            $totalSum = $sqldata->items->sum('total_price');
             $data = $sqldata->toArray();
-            //dd($data);
+            $data['amount_in_total'] = $totalSum;
+            $data['amount_in_total_words'] = $numberTransformer->toWords($totalSum);
             $snappy = \WPDF::loadView('pdf.quotation', $data);
             $headerHtml = view()->make('pdf.wkpdf-header', compact('shop'))->render();
             $footerHtml = view()->make('pdf.wkpdf-footer')->render();

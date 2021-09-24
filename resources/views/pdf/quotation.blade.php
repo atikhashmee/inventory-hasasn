@@ -80,6 +80,8 @@
         @endif
     </tbody>
 </table>
+<br>
+<p style="text-align: center; text-transform: uppercase">{{$amount_in_total_words}}</p>
 <br />
 <br />
 <br />
