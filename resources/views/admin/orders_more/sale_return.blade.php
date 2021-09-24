@@ -24,6 +24,7 @@
                                 <option value="">Select</option>
                                 <option v-for="ordr in orders" :value="ordr.id">(@{{ordr.shop.name}})  @{{ordr.order_number}} | @{{ordr.customer.customer_name}} | @{{ordr.total_final_amount}}</option>
                             </select>
+                            <span v-if="errors?.order_id?.length > 0" role="alert"  class="text-danger">@{{ errors.order_id[0] }}</span>
                         </div>
                         <div class="form-group">
                             <label for="">Select Product</label>
@@ -31,17 +32,26 @@
                                 <option value="">Select</option>
                                 <option v-for="det in orderDetails" :value="det.id">@{{det.product_name}}</option>
                             </select>
+                            <span v-if="errors?.detail_id?.length > 0" role="alert"  class="text-danger">@{{ errors.detail_id[0] }}</span>
                         </div>
                         <div class="form-group">
                             <label for="">Quantity</label>
                             <input type="number" class="form-control" v-model="detailObj.quantity" :max="detailObj.available_quantity" name="quantity" id="quantity">
-                            <small>Returnable Quantity @{{detailObj.available_quantity}}</small>
+                            <small>Returnable Quantity @{{detailObj.available_quantity}}</small> <br>
+                            <span v-if="errors?.quantity?.length > 0" role="alert"  class="text-danger">@{{ errors.quantity[0] }}</span>
                         </div>
                         <div class="form-group">
                             <label for="">Price</label>
                             <input type="number" class="form-control" v-model="detailObj.returnedPrice" name="price" id="price">
+                            <small>Amount Returnable @{{detailObj.unit_price * detailObj.available_quantity}}</small> <br>
+                            <span v-if="errors?.returnedPrice?.length > 0" role="alert"  class="text-danger">@{{ errors.returnedPrice[0] }}</span>
+                        </div>
+                        <div class="form-group">
+                            <span v-if="error" role="alert"  class="text-danger">@{{ error }}</span>
+                            <span v-if="msg" role="alert"  class="text-success">@{{ msg }}</span>
                         </div>
                         <button class="btn btn-success" type="button" @click="submitReturnedOrder()">Submit Return</button>
+                        <a class="btn btn-default" href="{{ route('admin.order.return') }}">Back</a>
                     </div>
         
                     <div class="card-footer">
@@ -89,13 +99,16 @@
                 orders: {!! json_encode(count($orders) > 0 ? $orders->toArray() : [], JSON_HEX_TAG) !!},
                 orderDetails: [],
                 detailObj: {
-                    order_id: null,
-                    detail_id: null,
+                    order_id: '',
+                    detail_id: '',
                     available_quantity: 0,
-                    quantity: 0,
+                    quantity: '',
                     unit_price: 0,
-                    returnedPrice: 0,
+                    returnedPrice: '',
                 },
+                errors: {},
+                error: null,
+                msg: '',
             },
             mounted() {
                 initLibs()
@@ -111,7 +124,18 @@
                         body: JSON.stringify(this.detailObj)
                     }).then(res=>res.json())
                     .then(res=>{
-                        console.log(res, 'asdfas');
+                        if (res.status) {
+                             this.msg = res.msg;
+                             window.location.reload();
+                        } else {
+                            if (res.errors) {
+                                this.errors = res.errors
+                            }
+
+                            if (res.error) {
+                                this.error = res.error
+                            }
+                        }
                     })
                 
                 }

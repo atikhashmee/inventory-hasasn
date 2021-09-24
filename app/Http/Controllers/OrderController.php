@@ -10,6 +10,9 @@ use App\Models\Customer;
 use App\Models\OrderDetail;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Validator;
+use PhpParser\Node\Stmt\TryCatch;
 
 class OrderController extends Controller
 {
@@ -169,13 +172,51 @@ class OrderController extends Controller
         return view('admin.orders.show', $data);
     }
 
+    public function showReturnLists() {
+        $data['orders'] = OrderDetail::select('order_details.*', 'orders.order_number')
+        ->where('returned_quantity', '>', 0)
+        ->join('orders', 'orders.id', '=', 'order_details.order_id')
+        ->paginate(100);
+        return view('admin.orders_more.index', $data); 
+    }
     public function salesReturnForm() {  
         $data['orders'] = Order::with('shop', 'customer', 'orderDetail', 'orderDetail.product')->get();
         return view('admin.orders_more.sale_return', $data); 
     }
 
     public function salesReturnUpdate(Request $request) {
-        dd($request->all());
+        try {
+            $validator = Validator::make($request->all(), [
+                'order_id' => ['required', 'integer', 'exists:orders,id'],
+                'detail_id' => ['required', 'integer', 'exists:order_details,id'],
+                'quantity'  => ['required'],
+                'returnedPrice'  => ['required'],
+            ]);
+    
+            if ($validator->fails()) {
+                return response()->json(['status'=> false, 'data'=> null, 'errors' => $validator->errors(), 'error' => ''], 422);
+            }
+            $od_detail = OrderDetail::where('id', $request->detail_id)->first();
+            if ($od_detail) {
+                if ($od_detail->final_quantity <= $request->quantity) {
+                    return response()->json(['status'=> false, 'data'=> null, 'errors' => [], 'error' => 'Returned quantity exceed original quanitty'], 422);
+                }
+
+                if ($od_detail->final_amount <= $request->returnedPrice) {
+                    return response()->json(['status'=> false, 'data'=> null, 'errors' => [], 'error' => 'Returned price exceed original price'], 422);
+                }
+
+                $od_detail->returned_quantity = $request->quantity;
+                $od_detail->returned_amount = $request->returnedPrice;
+                $od_detail->final_quantity = $od_detail->final_quantity - $request->quantity;
+                $od_detail->final_amount = $od_detail->final_amount - $request->returnedPrice;
+                $od_detail->save();
+            }
+            return response()->json(['status'=> true, 'msg'=> 'Success', 'data'=> null, 'errors' => [], 'error' => ''], 200);
+        } catch (\Exception $e) {
+            return response()->json(['status'=> false, 'data'=> null, 'errors' => [], 'error' => $e->getMessage()], 422);
+        }
+   
     }
 
 }
