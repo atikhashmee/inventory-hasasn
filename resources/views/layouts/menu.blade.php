@@ -5,7 +5,12 @@
         <p>Ware Houses</p>
     </a>
 </li>
-
+<li class="nav-item">
+  <a href="{{ route('admin.shops.index') }}"
+     class="nav-link {{ Request::is('admin/shops*') ? 'active' : '' }}">
+      <p>Shops</p>
+  </a>
+</li>
 
 <li class="nav-item">
     <a href="{{ route('admin.categories.index') }}"
@@ -21,7 +26,12 @@
     </a>
 </li>
 
-
+<li class="nav-item">
+  <a href="{{ route('admin.units.index') }}"
+     class="nav-link {{ Request::is('admin/units*') ? 'active' : '' }}">
+      <p>Units</p>
+  </a>
+</li>
 <li class="nav-item">
     <a href="{{ route('admin.brands.index') }}"
        class="nav-link {{ Request::is('admin/brands*') ? 'active' : '' }}">
@@ -35,6 +45,12 @@
     </a>
 </li>
 
+<li class="nav-item">
+  <a href="{{ route('admin.products.index') }}"
+     class="nav-link {{ Request::is('admin/products*') ? 'active' : '' }}">
+      <p>Products</p>
+  </a>
+</li>
 
 <li class="nav-item">
     <a href="{{ route('admin.stocks.index') }}"
@@ -95,53 +111,20 @@
       </a>
   </li>
 
+  <li class="nav-item">
+      <a href="{{ route('admin.challans.index') }}"
+        class="nav-link {{ Request::is('admin/challans*') ? 'active' : '' }}">
+          <p>Challans</p>
+      </a>
+  </li>
 
 
 
-<li class="nav-item">
-    <a href="{{ route('admin.units.index') }}"
-       class="nav-link {{ Request::is('admin/units*') ? 'active' : '' }}">
-        <p>Units</p>
-    </a>
-</li>
-
-
-
-
-
-
-
-<li class="nav-item">
-    <a href="{{ route('admin.products.index') }}"
-       class="nav-link {{ Request::is('admin/products*') ? 'active' : '' }}">
-        <p>Products</p>
-    </a>
-</li>
-
-
-<li class="nav-item">
-    <a href="{{ route('admin.shops.index') }}"
-       class="nav-link {{ Request::is('admin/shops*') ? 'active' : '' }}">
-        <p>Shops</p>
-    </a>
-</li>
-
-
-
-<li class="nav-item">
-    <a href="{{ route('admin.challans.index') }}"
-       class="nav-link {{ Request::is('admin/challans*') ? 'active' : '' }}">
-        <p>Challans</p>
-    </a>
-</li>
-
-
-
-<li class="nav-item">
-    <a href="{{ route('admin.quotations.index') }}"
-       class="nav-link {{ Request::is('admin/quotations*') ? 'active' : '' }}">
-        <p>Quotations</p>
-    </a>
-</li>
+  <li class="nav-item">
+      <a href="{{ route('admin.quotations.index') }}"
+        class="nav-link {{ Request::is('admin/quotations*') ? 'active' : '' }}">
+          <p>Quotations</p>
+      </a>
+  </li>
 
 
