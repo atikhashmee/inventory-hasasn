@@ -169,4 +169,13 @@ class OrderController extends Controller
         return view('admin.orders.show', $data);
     }
 
+    public function salesReturnForm() {  
+        $data['orders'] = Order::with('shop', 'customer', 'orderDetail', 'orderDetail.product')->get();
+        return view('admin.orders_more.sale_return', $data); 
+    }
+
+    public function salesReturnUpdate(Request $request) {
+        dd($request->all());
+    }
+
 }

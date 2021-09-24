@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Unit;
+use App\Models\Product;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -36,6 +37,12 @@ class OrderDetail extends Model
     public function unit()
     {
         return $this->belongsTo(Unit::class, 'quantity_unit_id');
+    }
+
+
+    public function product()
+    {
+        return $this->hasOne(Product::class, 'id', 'product_id');
     }
 
     

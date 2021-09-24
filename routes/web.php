@@ -57,7 +57,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::get('get_shop_products/{shop_id}', [App\Http\Controllers\ShopProductController::class, 'getShopProducts'])->name('getShop_products');
     Route::resource('shop_products', App\Http\Controllers\ShopProductController::class);
 
-
+    Route::post('order/sell-return-update',  [App\Http\Controllers\OrderController::class, 'salesReturnUpdate'])->name('order.return.update');
+    Route::get('order/sell-return',  [App\Http\Controllers\OrderController::class, 'salesReturnForm'])->name('order.return');
     Route::get('order-resource',  [App\Http\Controllers\OrderController::class, 'getResources'])->name('order.getResource');
 });
 

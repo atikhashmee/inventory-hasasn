@@ -68,6 +68,11 @@
           <p>New Sell</p>
         </a>
       </li>
+      <li class="nav-item">
+        <a href="{{ route('admin.order.return') }}" class="nav-link {{ Request::is('admin/order/sell-return') ? 'active' : '' }}">
+          <p>Sell Return</p>
+        </a>
+      </li>
     </ul>
   </li>
 
