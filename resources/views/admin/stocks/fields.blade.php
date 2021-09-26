@@ -25,9 +25,10 @@
     {!! Form::select('warehouse_id', $ware_houseItems, null, ['class' => 'form-control custom-select select2']) !!}
 </div>
 
-
+<input type="hidden" name="sku" id="sku">
+<input type="hidden" name="selling_price" id="selling_price" value="0">
 <!-- Sku Field -->
-<div class="form-group col-sm-6">
+{{-- <div class="form-group col-sm-6">
     <div class="d-flex justify-content-between align-items-center">
         <div style="flex-basis: 80%">
             {!! Form::label('sku', 'Sku:') !!}
@@ -38,27 +39,27 @@
             <button class="btn btn-primary"  type="button" onclick="document.getElementById('sku').value ='MED-'+makeRandomSku(6)">Generate</button>
         </div>
     </div>
-</div>
+</div> --}}
 
 <!-- Old Price Field -->
 @if (Route::is('admin.stocks.create')) 
     <div class="form-group col-sm-6">
-        <label for="old_price">Old Price:</label>
+        <label for="old_price">Old Price: (Old Purchase Price)</label>
         <input type="text" name="old_price" id="old_price" class="form-control" readonly :value="oldPrice">
     </div>
 @endif
 
 <!-- Price Field -->
 <div class="form-group col-sm-6">
-    {!! Form::label('price', 'Price:') !!}
+    {!! Form::label('price', 'Price: (Current Purchase Price)') !!}
     {!! Form::text('price', null, ['class' => 'form-control']) !!}
 </div>
 
 <!-- Selling Price Field -->
-<div class="form-group col-sm-6">
+{{-- <div class="form-group col-sm-6">
     {!! Form::label('selling_price', 'Selling Price:') !!}
     {!! Form::text('selling_price', null, ['class' => 'form-control']) !!}
-</div>
+</div> --}}
 
 <!-- Quantity Field -->
 <div class="form-group col-sm-6">

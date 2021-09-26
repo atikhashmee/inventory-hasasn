@@ -43,6 +43,7 @@
 
 @push('page_scripts')
 <script>
+    document.getElementById('sku').value = makeRandomSku(6)
     let stock_app = new Vue({
         el: '#purchase_form',
         data: {

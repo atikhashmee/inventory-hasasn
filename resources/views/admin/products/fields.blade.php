@@ -3,6 +3,19 @@
     {!! Form::label('name', 'Name:') !!}
     {!! Form::text('name', null, ['class' => 'form-control']) !!}
 </div>
+<!-- Sku Field -->
+<div class="form-group col-sm-6">
+    <div class="d-flex justify-content-between align-items-center">
+        <div style="flex-basis: 80%">
+            {!! Form::label('code', 'Code:') !!}
+            {!! Form::text('code', null, ['class' => 'form-control', 'placeholder' => 'MED-34543']) !!}
+        </div>
+        <div class="d-flex flex-column" style="flex-basis: 20%">
+            <label for="">&nbsp;</label>
+            <button class="btn btn-primary"  type="button" onclick="document.getElementById('code').value ='MED-'+makeRandomSku(6)">Generate</button>
+        </div>
+    </div>
+</div>
 
 <!-- Description Field -->
 <div class="form-group col-sm-12 col-lg-12">
@@ -12,13 +25,13 @@
 
 <!-- Product Cost Field -->
 <div class="form-group col-sm-6">
-    {!! Form::label('product_cost', 'Product Cost:') !!}
+    {!! Form::label('product_cost', 'Product Cost: (Current Purchase Price)') !!}
     {!! Form::text('product_cost', null, ['class' => 'form-control']) !!}
 </div>
 
 <!-- Selling Price Field -->
 <div class="form-group col-sm-6">
-    {!! Form::label('selling_price', 'Selling Price:') !!}
+    {!! Form::label('selling_price', 'Selling Price: (Current Selling Price)') !!}
     {!! Form::text('selling_price', null, ['class' => 'form-control']) !!}
 </div>
 

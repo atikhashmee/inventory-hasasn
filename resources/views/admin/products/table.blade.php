@@ -24,7 +24,7 @@
                         <img src="{{asset('assets/img/not-found.png')}}" alt="" width="80" height="80" />
                     @endif
                 </td>
-                <td>{{ $product->name }}</td>
+                <td> <span class="p-1" style="border: 1px solid #d3d3d3; font-size:14px">{{ $product->code }}</span> {{ $product->name }}</td>
                 <td>{{ $product->category->name }}</td>
                 <td>{{ $product->country_name ?? 'N/A' }}</td>
                 <td>{{ $product->brand->name }}</td>

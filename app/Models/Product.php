@@ -40,6 +40,7 @@ class Product extends Model
 
     public $fillable = [
         'name',
+        'code',
         'description',
         'product_cost',
         'selling_price',
@@ -58,6 +59,7 @@ class Product extends Model
     protected $casts = [
         'id' => 'integer',
         'name' => 'string',
+        'code' => 'string',
         'description' => 'string',
         'product_cost' => 'decimal:2',
         'selling_price' => 'decimal:2',
@@ -75,6 +77,7 @@ class Product extends Model
      */
     public static $rules = [
         'name' => 'required',
+        'code' => 'required|unique:products,code',
         'product_cost' => 'required',
         'selling_price' => 'required'
     ];

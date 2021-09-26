@@ -23,7 +23,7 @@ Route::get('command', function () {
     dd("All clear!");
 });
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/login');
 });
 
 Auth::routes();

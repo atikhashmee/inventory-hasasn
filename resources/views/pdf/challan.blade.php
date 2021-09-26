@@ -134,11 +134,11 @@
 <br />
 <br />
 <br />
-@if ($notes)
+@if ($challan_note)
     <table style="width: 100%">
         <tr>
             <td>
-                <strong>N.B: {{$notes}}</strong>
+                <strong>N.B: {{$challan_note}}</strong>
             </td>
         </tr>
     </table>
