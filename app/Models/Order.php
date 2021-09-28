@@ -30,6 +30,7 @@ class Order extends Model
         'status',
         'notes',
         'challan_note',
+        'order_challan_type',
         'refund_status',
         'delivered_at'
     ];

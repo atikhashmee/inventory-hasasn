@@ -61,6 +61,15 @@
                                                     </select>
                                                 </td>
                                             </tr>
+                                            <tr>
+                                                <td><label for="">Sales Type</label></td>
+                                                <td>
+                                                    <select name="sales_type" id="sales_type" class="form-control" v-model="sale_type">
+                                                        <option>Walk-in</option>
+                                                        <option>Challan</option>
+                                                    </select>
+                                                </td>
+                                            </tr>
                                         </table>
                                     </div>
                                 </div>
@@ -271,6 +280,8 @@
                             if (item.item_id === item_id) {
                                 item.product_id = product_item.id
                                 item.product_name = product_item.name
+                                item.product_purchase_price = product_item.product_cost
+                                item.product_selling_price = product_item.selling_price
                                 item.quantity = 0
                                 item.input_quantity = 0
                                 item.quantity_unit_id = ''
@@ -300,6 +311,7 @@
             discount: 0,
             order_id: null,
             shop_id: "",
+            sale_type: "Walk-in",
             note: "",
             challan_note: "",
             order_date: `{{date('Y-m-d')}}`,
@@ -338,6 +350,8 @@
                 newitem.available_quantity = 0
                 newitem.quantity_unit_id=''
                 newitem.quantity_unit=null
+                newitem.product_purchase_price=0
+                newitem.product_selling_price=0
                 newitem.price = 0
                 newitem.totalPrice = 0
                 this.product_lists.push(newitem)
@@ -373,7 +387,15 @@
                                 } 
                             }
                         } else if (type === 'price') {
-                            item.price = evt.currentTarget.value
+                            let inputPrice = evt.currentTarget.value
+                            console.log(Number(item.product_purchase_price), Number(inputPrice), Number(inputPrice) < Number(item.product_purchase_price));
+                            if (Number(inputPrice) < Number(item.product_purchase_price)) {
+                                //evt.currentTarget.value = item.product_purchase_price
+                                item.price = item.product_purchase_price
+                                //alert('Price can not be less than Purchase price')
+                            } else {
+                                item.price = evt.currentTarget.value
+                            }
                         } else if (type === 'quantity_unit') {
                             item.quantity_unit_id = evt.currentTarget.value;
                             item.quantity_unit = item.quantity_unit_id.length === 0?null:{...this.allUnits.find(ud=>ud.id==item.quantity_unit_id)};
@@ -411,6 +433,7 @@
                 orderObj.items = {...this.product_lists}
                 orderObj.order_number = this.order_id;
                 orderObj.date = this.order_date;
+                orderObj.sale_type = this.sale_type;
                 orderObj.customer_name = this.customer.customer_name;
                 orderObj.customer_address = this.customer.customer_address;
                 orderObj.customer_phone = this.customer.customer_phone;
@@ -431,7 +454,6 @@
                 })
                 .then(res=>res.json())
                 .then(res=>{
-                    console.log(res, 'asdf');
                     if (res.status) {
                         window.location.href= `{{url('admin/orders/')}}/${res.data.id}`;
                     }

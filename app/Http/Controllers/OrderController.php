@@ -87,6 +87,7 @@ class OrderController extends Controller
                     'order_number' =>  $data['order_number'],
                     'sub_total'    =>  $data['subtotal'],
                     'shop_id'  =>  $data['shop_id'],
+                    'order_challan_type'  =>  strtolower($data['sale_type']),
                     'notes'  =>  $data['note'],
                     'challan_note'  =>  $data['challan_note'],
                     'user_id'  =>  auth()->user()->id,

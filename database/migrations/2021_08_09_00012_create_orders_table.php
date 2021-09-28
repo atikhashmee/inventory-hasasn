@@ -29,6 +29,7 @@ class CreateOrdersTable extends Migration
             $table->longText('notes')->nullable();
             $table->longText('challan_note')->nullable();
             $table->enum('refund_status', ['partial', 'full'])->nullable();
+            $table->enum('order_challan_type', ['walk-in', 'challan'])->default('walk-in');
             $table->timestamp('delivered_at')->nullable();
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
