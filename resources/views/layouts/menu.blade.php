@@ -128,8 +128,8 @@
   </li>
 
   <li class="nav-item">
-      <a href="{{ route('admin.quotations.index') }}"
-        class="nav-link {{ Request::is('admin/quotations*') ? 'active' : '' }}">
+      <a href="#"
+        class="nav-link">
           <p>Reports</p>
       </a>
   </li>
