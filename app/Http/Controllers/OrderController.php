@@ -200,11 +200,11 @@ class OrderController extends Controller
             }
             $od_detail = OrderDetail::where('id', $request->detail_id)->first();
             if ($od_detail) {
-                if ($od_detail->final_quantity <= $request->quantity) {
+                if ($od_detail->final_quantity < $request->quantity) {
                     return response()->json(['status'=> false, 'data'=> null, 'errors' => [], 'error' => 'Returned quantity exceed original quanitty'], 422);
                 }
 
-                if ($od_detail->final_amount <= $request->returnedPrice) {
+                if ($od_detail->final_amount < $request->returnedPrice) {
                     return response()->json(['status'=> false, 'data'=> null, 'errors' => [], 'error' => 'Returned price exceed original price'], 422);
                 }
 
