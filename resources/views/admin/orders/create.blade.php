@@ -161,14 +161,14 @@
                                                                     <option :value="unit.id" v-for="unit in allUnits">@{{unit.name}} X @{{unit.quantity_base}}</option>
                                                                 </select>
                                                                 <div>
-                                                                    <input type="number" class="form-control" v-model="pl.input_quantity" :max="pl.available_quantity" @keyup="fieldUpdate($event, pl, 'quantity')" name="quantity">
+                                                                    <input type="number" class="form-control" v-model="pl.input_quantity" :max="pl.available_quantity" @blur="fieldUpdate($event, pl, 'quantity')" name="quantity">
                                                                     <small>Available Quantity @{{pl.available_quantity}}</small>
                                                                     <small>Quantity @{{pl.quantity}}</small>
                                                                 </div>
                                                             </div>
                                                         </td>
                                                         <td>
-                                                            <input type="number" class="form-control" v-model="pl.price" @keyup="fieldUpdate($event, pl, 'price')" name="price">
+                                                            <input type="number" class="form-control" v-model="pl.price" @blur="fieldUpdate($event, pl, 'price')" name="price">
                                                         </td>
                                                         <td>@{{pl.totalPrice}}</td>
                                                     </tr>
@@ -287,7 +287,7 @@
                                 item.quantity_unit_id = ''
                                 item.available_quantity = product_item.shop_quantity
                                 item.price = product_item.selling_price
-                                item.totalPrice = Number(item.quantity) * Number(item.selling_price)
+                                item.totalPrice = Number(item.quantity) * Number(item.price)
                             }
                             return item;
                         })
@@ -388,11 +388,9 @@
                             }
                         } else if (type === 'price') {
                             let inputPrice = evt.currentTarget.value
-                            console.log(Number(item.product_purchase_price), Number(inputPrice), Number(inputPrice) < Number(item.product_purchase_price));
                             if (Number(inputPrice) < Number(item.product_purchase_price)) {
-                                //evt.currentTarget.value = item.product_purchase_price
                                 item.price = item.product_purchase_price
-                                //alert('Price can not be less than Purchase price')
+                                alert('Price can not be less than Purchase price')
                             } else {
                                 item.price = evt.currentTarget.value
                             }
