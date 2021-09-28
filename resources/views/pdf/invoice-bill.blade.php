@@ -179,11 +179,18 @@
 <br />
 <br />
 <br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
 @if ($notes)
     <table style="width: 100%">
         <tr>
-            <td>
-                <strong>N.B: {{$notes}}</strong>
+            <td style="text-align: center;">
+                <p style="text-justify: inter-word;">{{$notes}}</p>
             </td>
         </tr>
     </table>

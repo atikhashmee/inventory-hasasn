@@ -131,14 +131,22 @@
         </tr>
     </tbody>
 </table>
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
 <br />
 <br />
 <br />
 @if ($challan_note)
     <table style="width: 100%">
         <tr>
-            <td>
-                <strong>N.B: {{$challan_note}}</strong>
+            <td style="text-align: center;">
+                <p style="text-justify: inter-word;"><strong>N.B: </strong>{{$challan_note}}</p>
             </td>
         </tr>
     </table>
