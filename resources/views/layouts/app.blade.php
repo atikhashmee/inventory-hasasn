@@ -56,6 +56,9 @@
             <li class="nav-item">
                 <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
             </li>
+            <li class="nav-item">
+                <a href="{{ route('admin.home') }}" class="nav-link">Dashboard</a>
+            </li>
         </ul>
 
         <ul class="navbar-nav ml-auto">
@@ -66,7 +69,7 @@
                 <a href="{{ route('admin.challans.create') }}" class="nav-link">New Challan</a>
             </li>
             <li class="nav-item">
-                <a href="javascript:void(0)" class="nav-link">New Quotation</a>
+                <a href="{{ route('admin.quotations.create') }}" class="nav-link">New Quotation</a>
             </li>
             <li class="nav-item dropdown user-menu">
                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
