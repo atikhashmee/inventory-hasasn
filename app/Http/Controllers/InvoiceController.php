@@ -6,8 +6,12 @@ use App\Models\Shop;
 use App\Models\Order;
 use App\Models\Challan;
 use App\Models\Quotation;
+use Endroid\QrCode\QrCode;
 use Illuminate\Http\Request;
+use Endroid\QrCode\Color\Color;
 use NumberToWords\NumberToWords;
+use Endroid\QrCode\Writer\PngWriter;
+use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelHigh;
 
 class InvoiceController extends Controller
 {
@@ -20,6 +24,28 @@ class InvoiceController extends Controller
     {
         //
     }
+
+    public function qrCodeGenerator() {
+        $qr = QrCode::create("BEGIN:VCARD
+        VERSION:3.0
+        N:Doe;John;
+        TEL;TYPE=work,VOICE:123456789
+        EMAIL:john@doe.com
+        ORG:Code Boxx
+        TITLE:Crash Test Dummy
+        URL:https://code-boxx.com
+        VERSION:3.0
+        END:VCARD");
+        // (B1) CORRECTION LEVEL
+        $qr->setErrorCorrectionLevel(new ErrorCorrectionLevelHigh());
+        // (B2) SIZE & MARGIN
+        $qr->setSize(175);
+        $qr->setMargin(0);
+        // (B3) COLORS
+        // $qr->setForegroundColor(new Color(0, 0, 255));
+        // $qr->setBackgroundColor(new Color(255, 255, 255));
+        return (new PngWriter())->write($qr);
+    }
     public function printInvoice($order_id) {
         $sqldata = Order::with('customer', 'orderDetail', 'orderDetail.unit', 'user', 'transaction', 'shop')->where('id', $order_id)->first();
         $shop = $sqldata->shop;
@@ -30,9 +56,11 @@ class InvoiceController extends Controller
         }
         if ($sqldata) {
             $data = $sqldata->toArray();
+         
+            $qrCode = $this->qrCodeGenerator();
             $data['customer']['current_due'] = $sqldata->customer->current_due;
             $snappy = \WPDF::loadView('pdf.invoice-bill', $data);
-            $headerHtml = view()->make('pdf.wkpdf-header', compact('shop'))->render();
+            $headerHtml = view()->make('pdf.wkpdf-header', compact('shop', 'qrCode'))->render();
             $footerHtml = view()->make('pdf.wkpdf-footer')->render();
             $snappy->setOption('header-html', $headerHtml);
             $snappy->setOption('footer-html', $footerHtml);
@@ -54,7 +82,8 @@ class InvoiceController extends Controller
             $data = $sqldata->toArray();
             $data['customer']['current_due'] = $sqldata->customer->current_due;
             $snappy = \WPDF::loadView('pdf.challan', $data);
-            $headerHtml = view()->make('pdf.wkpdf-header', compact('shop'))->render();
+            $qrCode = $this->qrCodeGenerator();
+            $headerHtml = view()->make('pdf.wkpdf-header', compact('shop', 'qrCode'))->render();
             $footerHtml = view()->make('pdf.wkpdf-footer')->render();
             $snappy->setOption('header-html', $headerHtml);
             $snappy->setOption('footer-html', $footerHtml);

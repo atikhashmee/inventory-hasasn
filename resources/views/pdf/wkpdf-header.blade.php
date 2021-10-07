@@ -41,7 +41,9 @@
             <td class="header-left-section">
                 <img src="{{$shop->image_link}}" alt="">
             </td>
-            <td width="20%">&nbsp;</td>
+            <td width="20%">
+                <img src="{{ $qrCode->getDataUri() }}" alt="">
+            </td>
             <td class="header-right-section">
                 <h4 class="top-header">{{$shop->name}}</h4>
                 <p>15/2, Topkhna Road, BMA Bhaban(1st floor), G.P.O Box-2744</p>
