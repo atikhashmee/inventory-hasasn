@@ -42,7 +42,7 @@
                 <img src="{{$shop->image_link}}" alt="">
             </td>
             <td width="20%">
-                <img src="{{ $qrCode ? $qrCode->getDataUri():null }}" alt="">
+                <img src="{{ isset($qrCode) ? $qrCode->getDataUri():null }}" alt="">
             </td>
             <td class="header-right-section">
                 <h4 class="top-header">{{$shop->name}}</h4>
