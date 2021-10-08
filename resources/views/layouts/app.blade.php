@@ -33,6 +33,8 @@
           href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css"
           integrity="sha512-aEe/ZxePawj0+G2R+AaIxgrQuKT68I28qh+wgLrcAJOz3rxCP+TwrK5SPN+E5I+1IQjNtcfvb96HDagwrKRdBw=="
           crossorigin="anonymous"/>
+          
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
     <link rel="stylesheet" href="//cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
     
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -57,19 +59,19 @@
                 <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
             </li>
             <li class="nav-item">
-                <a href="{{ route('admin.home') }}" class="nav-link">Dashboard</a>
+                <a href="{{ route('admin.home') }}" class="nav-link btn btn-default">Dashboard</a>
             </li>
         </ul>
 
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-                <a href="{{ route('admin.orders.create') }}" class="nav-link">New sale</a>
+                <a href="{{ route('admin.orders.create') }}" class="nav-link btn btn-warning mr-2">New sale</a>
             </li>
             <li class="nav-item">
-                <a href="{{ route('admin.challans.create') }}" class="nav-link">New Challan</a>
+                <a href="{{ route('admin.challans.create') }}" class="nav-link btn btn-warning mr-2">New Challan</a>
             </li>
             <li class="nav-item">
-                <a href="{{ route('admin.quotations.create') }}" class="nav-link">New Quotation</a>
+                <a href="{{ route('admin.quotations.create') }}" class="nav-link btn btn-warning mr-2">New Quotation</a>
             </li>
             <li class="nav-item dropdown user-menu">
                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
@@ -162,6 +164,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-switch/1.3/bootstrapSwitch.min.js"
         integrity="sha512-DAc/LqVY2liDbikmJwUS1MSE3pIH0DFprKHZKPcJC7e3TtAOzT55gEMTleegwyuIWgCfOPOM8eLbbvFaG9F/cA=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 <script src="//cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script>
@@ -189,6 +192,9 @@
         }
         return result;
     }
+    $(document).ready(function() {
+        $('#summernote').summernote();
+    });
 </script>
 
 @stack('third_party_scripts')

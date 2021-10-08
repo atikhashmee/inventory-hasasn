@@ -46,11 +46,12 @@
             </td>
             <td class="header-right-section">
                 <h4 class="top-header">{{$shop->name}}</h4>
-                <p>15/2, Topkhna Road, BMA Bhaban(1st floor), G.P.O Box-2744</p>
+                {!!$shop->address!!}
+                {{-- <p>15/2, Topkhna Road, BMA Bhaban(1st floor), G.P.O Box-2744</p>
                 <p>Dhaka 1000, Bangladesh. TEL: 9585868, FAX: 880-2-9569163</p>
                 <p>Mobile: 01755591795</p>
                 <p>E-mail: meditechash@gmail.com, ahmidiland@gmail.com</p>
-                <p class="website-text">www.meditech.com.bd</p>
+                <p class="website-text">www.meditech.com.bd</p> --}}
             </td>
         </tr>
     </table>

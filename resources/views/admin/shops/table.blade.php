@@ -13,7 +13,11 @@
         @foreach($shops as $shop)
             <tr>
                 <td class="text-capitalize">{{ $shop->name }}</td>
-                <td>{{ $shop->address }}</td>
+                <td style="  text-align: center;line-height: 20px;">
+                    <p>
+                        {!! $shop->address !!}
+                    </p>
+                </td>
                 <td class="text-capitalize">{{ $shop->status }}</td>
                 <td>
                     @if (file_exists(public_path().'/uploads/shops/'.$shop->image) && $shop->image)

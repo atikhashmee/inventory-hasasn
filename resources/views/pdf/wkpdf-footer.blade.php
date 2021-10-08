@@ -14,7 +14,7 @@
             text-align: center;
         }
         img{
-            height: 50px;
+            height: 35px;
         }
         .divider-footer {
             border-bottom: 2px solid #000;
@@ -31,32 +31,35 @@
         <h2>goods once sold will not be taken back</h2>
     </div>
     <div class="divider-footer"></div>
+    {{-- <td><img src="{{asset('assets/img/pdf-footer/Olympus_logo.png')}}"  alt=""></td> --}}
+    {{-- <td><img src="{{asset('assets/img/pdf-footer/sony_logo.png')}}"  alt=""></td> --}}
+    {{-- <td><img src="{{asset('assets/img/pdf-footer/Yuwell.jpg')}}"  alt=""></td> --}}
+    {{-- <td><img src="{{asset('assets/img/pdf-footer/3mlittmann.png')}}"  alt=""></td>
+    <td><img src="{{asset('assets/img/pdf-footer/alp-k2.jpg')}}"  alt=""></td> --}}
+    {{-- <td><img src="{{asset('assets/img/pdf-footer/Fuji.jpg')}}"  alt=""></td> --}}
     <table>
         <tbody>
             <tr>
-                <td><img src="{{asset('assets/img/pdf-footer/3mlittmann.png')}}"  alt=""></td>
-                <td><img src="{{asset('assets/img/pdf-footer/alp-k2.jpg')}}"  alt=""></td>
                 <td><img src="{{asset('assets/img/pdf-footer/Ambu.png')}}"  alt=""></td>
                 <td><img src="{{asset('assets/img/pdf-footer/Bistos.png')}}"  alt=""></td>
                 <td><img src="{{asset('assets/img/pdf-footer/Ceracarta.png')}}"  alt=""></td>
                 <td><img src="{{asset('assets/img/pdf-footer/Digisystem.jpg')}}"  alt=""></td>
                 <td><img src="{{asset('assets/img/pdf-footer/EcoMed.jpg')}}"  alt=""></td>
                 <td><img src="{{asset('assets/img/pdf-footer/erma-inc-logo.png')}}"  alt=""></td>
-                <td><img src="{{asset('assets/img/pdf-footer/Fuji.jpg')}}"  alt=""></td>
                 <td><img src="{{asset('assets/img/pdf-footer/Fukuda-ME.png')}}"  alt=""></td>
+                <td><img src="{{asset('assets/img/pdf-footer/edan2.png')}}"  alt=""></td>
+                <td><img src="{{asset('assets/img/pdf-footer/zerone.png')}}"  alt=""></td>
             </tr>
             <tr>
-                <td><img src="{{asset('assets/img/pdf-footer/Heal-Force.jpg')}}"  alt=""></td>
                 <td><img src="{{asset('assets/img/pdf-footer/Fukuda-Sangyo.PNG')}}"  alt=""></td>
-                <td><img src="{{asset('assets/img/pdf-footer/Olympus_logo.png')}}"  alt=""></td>
+                <td><img src="{{asset('assets/img/pdf-footer/Heal-Force.jpg')}}"  alt=""></td>
                 <td><img src="{{asset('assets/img/pdf-footer/Parker.jpg')}}"  alt=""></td>
                 <td><img src="{{asset('assets/img/pdf-footer/Shin-Ei-(Sharp).PNG')}}"  alt=""></td>
                 <td><img src="{{asset('assets/img/pdf-footer/SMAF-Logo.PNG')}}"  alt=""></td>
-                <td><img src="{{asset('assets/img/pdf-footer/sony_logo.png')}}"  alt=""></td>
                 <td><img src="{{asset('assets/img/pdf-footer/Sturdy.png')}}"  alt=""></td>
                 <td><img src="{{asset('assets/img/pdf-footer/tanita.jpg')}}"  alt=""></td>
                 <td><img src="{{asset('assets/img/pdf-footer/Triup.jpg')}}"  alt=""></td>
-                {{-- <td><img src="{{asset('assets/img/pdf-footer/Yuwell.jpg')}}"  alt=""></td> --}}
+                <td><img src="{{asset('assets/img/pdf-footer/Yuwell.jpg')}}"  alt=""></td>
             </tr>
         </tbody>
     </table>
