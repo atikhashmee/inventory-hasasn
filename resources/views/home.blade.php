@@ -113,7 +113,7 @@
                             @foreach ($recent_sales as $key => $sale)
                                 <tr>
                                     <td>{{++$key}}</td>
-                                    <td>{{$sale->customer->customer_name}}</td>
+                                    <td>{{$sale->customer->customer_name ?? 'N/A'}}</td>
                                     <td>{{$sale->total_final_amount}}</td>
                                 </tr>
                             @endforeach
@@ -151,8 +151,8 @@
                             @foreach ($recent_purchase as $key => $pur)
                                 <tr>
                                     <td>{{++$key}}</td>
-                                    <td>{{$pur->supplier->name}}</td>
-                                    <td>{{$pur->product->name}}</td>
+                                    <td>{{$pur->supplier->name ?? 'N/A'}}</td>
+                                    <td>{{$pur->product->name ?? 'N/A'}}</td>
                                     <td>{{$pur->quantity}}</td>
                                     <td>{{$pur->price}}</td>
                                 </tr>
