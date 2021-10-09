@@ -8,10 +8,17 @@
                     @component('admin.reports.nav')@endcomponent
                 </div>
                 <div class="col-sm-6">
-                    <a class="btn btn-primary float-right"
-                       href="{{ route('admin.shops.create') }}">
-                        Add New
-                    </a>
+                    <form action="{{route('admin.report.payment')}}">
+                        <div class="d-flex flex-row-reverse">
+                            <button class="btn btn-default" type="submit"><i class="fa fa-filter">Filter</i></button>
+                            <select name="shop_id" class="form-control select2">
+                                <option value="">Select Customer</option>
+                                @foreach ($customers as $customer)
+                                    <option value="{{$customer->id}}">{{$customer->customer_name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

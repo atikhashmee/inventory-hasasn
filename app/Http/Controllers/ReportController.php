@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Shop;
 use App\Models\Order;
 use App\Models\Stock;
+use App\Models\Product;
+use App\Models\Customer;
+use App\Models\Supplier;
 use Laracasts\Flash\Flash;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
@@ -38,8 +42,9 @@ class ReportController extends Controller
                     $data[intVal($dateArr[1])][intVal($dateArr[2])] = $item->countId;
                 }
             }
-            
-            return view('admin.reports.sales', compact('data'));
+            $shops = Shop::get();
+            $customers = Customer::get();
+            return view('admin.reports.sales', compact('data', 'customers', 'shops'));
         } catch (\Exception $e) {
             Flash::error($e->getMessage());
             return redirect()->back()->withErrors(['error' => $e->getMessage()]);
@@ -70,7 +75,9 @@ class ReportController extends Controller
                 //     $data[intVal($dateArr[1])][intVal($dateArr[2])] = $item->countId;
                 // }
             }
-            return view('admin.reports.purchase', compact('data'));
+            $products = Product::get();
+            $suppliers = Supplier::get();
+            return view('admin.reports.purchase', compact('data', 'products', 'suppliers'));
         } catch (\Exception $e) {
             Flash::error($e->getMessage());
             return redirect()->back()->withErrors(['error' => $e->getMessage()]);
@@ -101,7 +108,8 @@ class ReportController extends Controller
                 //     $data[intVal($dateArr[1])][intVal($dateArr[2])] = $item->countId;
                 // }
             }
-            return view('admin.reports.purchase', compact('data'));
+            $customers = Customer::get();
+            return view('admin.reports.payment', compact('data', 'customers'));
         } catch (\Exception $e) {
             Flash::error($e->getMessage());
             return redirect()->back()->withErrors(['error' => $e->getMessage()]);

@@ -8,10 +8,14 @@
                     @component('admin.reports.nav')@endcomponent
                 </div>
                 <div class="col-sm-6">
-                    <a class="btn btn-primary float-right"
-                       href="{{ route('admin.shops.create') }}">
-                        Add New
-                    </a>
+                    <form action="{{route('admin.report.profitloss')}}">
+                        <div class="d-flex flex-row-reverse">
+                            <button class="btn btn-default" type="submit"><i class="fa fa-filter">Filter</i></button>
+                            <select name="shop_id" class="form-control select2">
+                                <option value="">2021</option>
+                            </select>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
