@@ -23,13 +23,17 @@ class ReportController extends Controller
     {
         try {
             $year = $request->year ?? date('Y');
-                $sql = Order::select(
-                        \DB::raw('COUNT(id) AS countId'),
-                        \DB::raw('SUM(total_final_amount) AS charges'),
-                        \DB::raw('DATE(created_at) AS date')
-                    )
-                    ->whereYear('created_at', $year)
-                    ->groupBy(\DB::raw('DATE(created_at)'));
+            $sql = Order::select(\DB::raw('COUNT(id) AS countId'),\DB::raw('SUM(total_final_amount) AS charges'),\DB::raw('DATE(created_at) AS date'))
+                ->where(function($q) use($request) {
+                    if (!empty($request->shop_id)) {
+                        $q->where('shop_id', $request->shop_id);
+                    }
+                    if (!empty($request->customer_id)) {
+                        $q->where('customer_id', $request->customer_id);
+                    }
+                })
+                ->whereYear('created_at', $year)
+                ->groupBy(\DB::raw('DATE(created_at)'));
            
 
             $items = $sql->get();
@@ -49,6 +53,19 @@ class ReportController extends Controller
             Flash::error($e->getMessage());
             return redirect()->back()->withErrors(['error' => $e->getMessage()]);
         }
+    }
+
+    public function salesDetail(Request $request)
+    {
+        $orders = Order::whereDate('created_at', $request->date)->get();
+        return view('admin.reports.sales_detail', compact('orders'));
+    }
+
+    public function purchaseDetail(Request $request)
+    {
+        $stocks = Stock::whereDate('created_at', $request->date)->get();
+        
+        return view('admin.reports.sales_detail', compact('stocks'));
     }
 
     public function purchaseReport(Request $request)
@@ -153,71 +170,5 @@ class ReportController extends Controller
             Flash::error($e->getMessage());
             return redirect()->back();
         }
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }

@@ -11,17 +11,20 @@
                     <form action="{{route('admin.report.sells')}}">
                         <div class="d-flex flex-row-reverse">
                             <button class="btn btn-default" type="submit"><i class="fa fa-filter">Filter</i></button>
-                            <select name="shop_id" class="form-control select2">
-                                <option value="">Select Shop</option>
-                                @foreach ($shops as $shop)
-                                    <option value="{{$shop->id}}">{{$shop->name}}</option>
-                                @endforeach
-                            </select>
                             <select name="customer_id" class="form-control select2">
                                 <option value="">Select Customer</option>
                                 @foreach ($customers as $customer)
-                                    <option value="{{$customer->id}}">{{$customer->customer_name}}</option>
+                                    <option value="{{$customer->id}}" @if(Request::get('customer_id') == $customer->id) selected @endif>{{$customer->customer_name}}</option>
                                 @endforeach
+                            </select>
+                            <select name="shop_id" class="form-control select2">
+                                <option value="">Select Shop</option>
+                                @foreach ($shops as $shop)
+                                    <option value="{{$shop->id}}" @if(Request::get('shop_id') == $shop->id) selected @endif>{{$shop->name}}</option>
+                                @endforeach
+                            </select>
+                            <select name="year" class="form-control" style="width: 20%">
+                                <option>2021</option>
                             </select>
                         </div>
                     </form>
@@ -62,7 +65,13 @@
                             <tr>
                                 <td>{{ $i }}</td>
                                 @for ($j = 1; $j < 13; $j++)
-                                    <td>{{ isset($data[$j][$i]) ? $data[$j][$i] : 0 }}</td>
+                                    <td>
+                                        @if (isset($data[$j][$i]))
+                                        <a href="{{route('admin.report.sells_detail')}}?date=2021-{{$j}}-{{$i}}">{{$data[$j][$i]}}</a>
+                                        @else
+                                        0
+                                        @endif
+                                    </td>
                                     @php
                                         $monthData[$j][] = isset($data[$j][$i]) ? $data[$j][$i] : 0;
                                     @endphp
