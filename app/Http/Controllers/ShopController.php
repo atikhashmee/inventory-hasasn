@@ -24,7 +24,9 @@ class ShopController extends AppBaseController
     public function index(Request $request)
     {
         /** @var Shop $shops */
-        $shops = Shop::all();
+        $shops = Shop::select('shops.*', 'SP.total_products')
+        ->leftJoin(\DB::raw('(SELECT COUNT(shop_products.id) as total_products, shop_id FROM shop_products INNER JOIN products ON products.id = shop_products.product_id WHERE products.deleted_at IS NULL GROUP BY shop_products.shop_id) as SP'), 'SP.shop_id', '=', 'shops.id')
+        ->get();
 
         return view('admin.shops.index')
             ->with('shops', $shops);

@@ -22,7 +22,9 @@ class WareHouseController extends AppBaseController
     public function index(Request $request)
     {
         /** @var WareHouse $wareHouses */
-        $wareHouses = WareHouse::all();
+        $wareHouses = WareHouse::select('ware_houses.*', 'SP.total_products')
+        ->leftJoin(\DB::raw('(SELECT COUNT(shop_products.id) as total_products, warehouse_id FROM shop_products INNER JOIN products ON products.id = shop_products.product_id WHERE products.deleted_at IS NULL GROUP BY shop_products.warehouse_id) as SP'), 'SP.warehouse_id', '=', 'ware_houses.id')
+        ->get();
 
         return view('admin.ware_houses.index')
             ->with('wareHouses', $wareHouses);

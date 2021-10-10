@@ -3,9 +3,10 @@
         <thead>
         <tr>
             <th>Name</th>
-        <th>Address</th>
-        <th>Status</th>
-        <th>Image</th>
+            <th>Total Products</th>
+            <th class="text-center">Address</th>
+            <th>Status</th>
+            <th>Image</th>
             <th colspan="3">Action</th>
         </tr>
         </thead>
@@ -13,7 +14,10 @@
         @foreach($shops as $shop)
             <tr>
                 <td class="text-capitalize">{{ $shop->name }}</td>
-                <td style="  text-align: center;line-height: 20px;">
+                <td class="text-capitalize">
+                    <a href="{{ route('admin.products.index') }}?shop_id={{$shop->id}}" class="btn-link">{{$shop->total_products ?? 0}}</a>
+                </td>
+                <td style="text-align: center;line-height: 20px;">
                     <p>
                         {!! $shop->address !!}
                     </p>

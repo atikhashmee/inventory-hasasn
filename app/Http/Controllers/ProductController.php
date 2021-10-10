@@ -38,9 +38,23 @@ class ProductController extends AppBaseController
     public function index(Request $request)
     {
         /** @var Product $products */
-        $products = Product::select('products.*', 'countries.name as country_name')
-        ->leftJoin('countries', 'countries.id', '=', 'products.origin')
-        ->get();
+       $product_sql = Product::select('products.*', 'countries.name as country_name')
+     
+        ->leftJoin('countries', 'countries.id', '=', 'products.origin');
+        if (request()->query('shop_id')!='') {
+            $product_sql->join('shop_products', function($q) {
+               $q->on('shop_products.product_id', '=', 'products.id');
+            });
+            $product_sql->where('shop_products.shop_id', request()->query('shop_id'));
+        }
+        if (request()->query('warehouse_id')!='') {
+            $product_sql->join('shop_products', function($q) {
+                $q->on('shop_products.product_id', '=', 'products.id');
+            });
+            $product_sql->where('shop_products.warehouse_id', request()->query('warehouse_id'));
+        }
+        
+        $products =   $product_sql->get();
 
         return view('admin.products.index')
             ->with('products', $products);

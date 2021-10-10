@@ -3,6 +3,7 @@
         <thead>
         <tr>
             <th>Ware House Name</th>
+            <th>Total Products</th>
             <th>Action</th>
         </tr>
         </thead>
@@ -10,6 +11,9 @@
         @foreach($wareHouses as $wareHouse)
             <tr>
                 <td>{{ $wareHouse->ware_house_name }}</td>
+                <td>
+                    <a href="{{ route('admin.products.index') }}?warehouse_id={{$wareHouse->id}}" class="btn-link">{{$wareHouse->total_products ?? 0}}</a>
+                </td>
                 <td width="120">
                     {!! Form::open(['route' => ['admin.wareHouses.destroy', $wareHouse->id], 'method' => 'delete']) !!}
                     <div class='btn-group'>
