@@ -16,6 +16,7 @@ use Symfony\Component\Routing\Route as ComponentRoutingRoute;
 |
 */
 Route::get('command', function () {
+    dd(public_path());
     \Artisan::call('cache:forget spatie.permission.cache');
     \Artisan::call('cache:clear');
     \Artisan::call('config:clear');
