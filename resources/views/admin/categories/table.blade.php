@@ -9,9 +9,12 @@
         </tr>
         </thead>
         <tbody>
+        @php
+            $counter = 0;
+        @endphp
         @foreach($categories as $category)
             <tr>
-                <td>{{ $category->id }}</td>
+                <td>{{ ++$counter }}</td>
                 <td>{{ $category->name }}</td>
                 <td>{{ $category->total_product??0 }}</td>
                 <td width="120">
@@ -33,7 +36,7 @@
             @if (count($category->nested) > 0)
                 @foreach ($category->nested as $item)
                     <tr>
-                        <td>{{ $item->id }}</td>
+                        <td>{{ ++$counter }}</td>
                         <td>&nbsp;&nbsp;&nbsp;-{{ $item->name }}</td>
                         <td>{{ $item->total_product??0 }}</td>
                         <td width="120">
@@ -55,7 +58,7 @@
                     @if (count($item->nested) > 0)
                         @foreach ($item->nested as $childItem)
                             <tr>
-                                <td>{{ $childItem->id }}</td>
+                                <td>{{ ++$counter }}</td>
                                 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--{{ $childItem->name }}</td>
                                 <td>{{ $childItem->total_product??0 }}</td>
                                 <td width="120">
@@ -77,7 +80,6 @@
                         @endforeach
                     @endif
                 @endforeach
-                
             @endif
         @endforeach
         </tbody>

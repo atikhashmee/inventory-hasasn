@@ -42,6 +42,9 @@
         .select2-container .select2-selection--single {
             height: 40px !important;
         }
+        .right-menus .nav-link {
+            color: #fff !important;
+        }
     </style>
 
     @stack('third_party_stylesheets')
@@ -63,15 +66,15 @@
             </li>
         </ul>
 
-        <ul class="navbar-nav ml-auto">
+        <ul class="navbar-nav ml-auto right-menus">
             <li class="nav-item">
-                <a href="{{ route('admin.orders.create') }}" class="nav-link btn btn-warning mr-2">New sale</a>
+                <a href="{{ route('admin.orders.create') }}" class="nav-link btn btn-success mr-2">New sale</a>
             </li>
             <li class="nav-item">
-                <a href="{{ route('admin.challans.create') }}" class="nav-link btn btn-warning mr-2">New Challan</a>
+                <a href="{{ route('admin.challans.create') }}" class="nav-link btn btn-success mr-2">New Challan</a>
             </li>
             <li class="nav-item">
-                <a href="{{ route('admin.quotations.create') }}" class="nav-link btn btn-warning mr-2">New Quotation</a>
+                <a href="{{ route('admin.quotations.create') }}" class="nav-link btn btn-success mr-2">New Quotation</a>
             </li>
             <li class="nav-item dropdown user-menu">
                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
