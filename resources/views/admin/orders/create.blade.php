@@ -279,6 +279,7 @@
                         order_app.product_lists = order_app.product_lists.map(item=>{
                             if (item.item_id === item_id) {
                                 item.product_id = product_item.id
+                                item.warenty_duration = product_item.warenty_duration
                                 item.product_name = product_item.name
                                 item.product_purchase_price = product_item.product_cost
                                 item.product_selling_price = product_item.selling_price
@@ -354,6 +355,7 @@
                 newitem.product_selling_price=0
                 newitem.price = 0
                 newitem.totalPrice = 0
+                newitem.warenty_duration = null
                 this.product_lists.push(newitem)
                 initLibs()
             },

@@ -26,6 +26,7 @@ class CreateProductsTable extends Migration
             $table->unsignedBigInteger('brand_id')->nullable();
             $table->unsignedBigInteger('menufacture_id')->nullable();
             $table->string('feature_image')->nullable();
+            $table->string('warenty_duration')->nullable()->comment('(in month) from sales date');
             $table->timestamps();
             $table->softDeletes();
             $table->foreign('category_id')->references('id')->on('categories');

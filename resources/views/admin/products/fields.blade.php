@@ -79,6 +79,12 @@
     {!! Form::select('menufacture_id', $menufactureItems, null, ['class' => 'form-control custom-select']) !!}
 </div>
 
+<!-- product warenty duration Field -->
+<div class="form-group col-sm-6">
+    {!! Form::label('warenty_duration', 'Warenty: (in month)') !!}
+    {!! Form::text('warenty_duration', null, ['class' => 'form-control']) !!}
+</div>
+
 
 <!-- Feature Image Field -->
 <div class="form-group col-sm-6">

@@ -20,6 +20,7 @@ class CreateOrderDetailsTable extends Migration
             $table->unsignedBigInteger('shop_id');
             $table->unsignedBigInteger('quantity_unit_id')->nullable();
             $table->string('product_name');
+            $table->decimal('product_original_unit_price', 10, 2);
             $table->decimal('product_unit_price', 10, 2);
             $table->unsignedInteger('quantity_unit_value')->nullable();
             $table->unsignedInteger('product_quantity')->default(1);
@@ -30,6 +31,7 @@ class CreateOrderDetailsTable extends Migration
             $table->decimal('returned_amount', 10, 2)->default(0)->comment('if admin return');
             $table->decimal('final_amount', 10, 2)->default(0)->comment('total - returned_amount');
             $table->decimal('product_cost', 10, 2)->default(0)->comment('stock out product cost');
+            $table->string('warenty_duration')->nullable();
             $table->timestamp('rejected_at')->nullable();
             $table->enum('status', ['Pending', 'In Progress', 'Ready to Ship', 'Shipped', 'Canceled & Refund', 'Delivered'])->default('Pending');
             $table->foreign('order_id')->on('orders')->references('id')->onDelete('cascade')->onUpdate('cascade');

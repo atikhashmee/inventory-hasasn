@@ -19,6 +19,7 @@ class OrderDetail extends Model
         'quantity_unit_id',
         'quantity_unit_value',
         'product_name',
+        'product_original_unit_price',
         'product_unit_price',
         'product_quantity',
         'returned_quantity',
@@ -28,6 +29,7 @@ class OrderDetail extends Model
         'returned_amount',
         'final_amount',
         'product_cost',
+        'warenty_duration',
         'rejected_at',
         'status'
     ];

@@ -26,7 +26,7 @@ class UpdateProductRequest extends FormRequest
     public function rules()
     {
         $rules = Product::$rules;
-        
+        $rules['code'] = $this->isMethod('post') ? 'required|unique:products,code':'required';
         return $rules;
     }
 }

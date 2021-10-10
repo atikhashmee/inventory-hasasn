@@ -48,7 +48,8 @@ class Product extends Model
         'origin',
         'brand_id',
         'menufacture_id',
-        'feature_image'
+        'feature_image',
+        'warenty_duration'
     ];
 
     /**
@@ -67,7 +68,8 @@ class Product extends Model
         'origin' => 'integer',
         'brand_id' => 'integer',
         'menufacture_id' => 'integer',
-        'feature_image' => 'string'
+        'feature_image' => 'string',
+        'warenty_duration' => 'string'
     ];
 
     /**

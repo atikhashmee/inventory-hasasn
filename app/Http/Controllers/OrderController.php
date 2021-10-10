@@ -120,9 +120,11 @@ class OrderController extends Controller
                               'product_name' => $pro_item['product_name'],
                               'product_quantity' => $pro_item['quantity'],
                               'final_quantity' => $pro_item['quantity'],
+                              'product_original_unit_price' => $pro_item['product_purchase_price'],
                               'product_unit_price' => $pro_item['price'],
                               'sub_total' => $pro_item['totalPrice'],
                               'final_amount' => $pro_item['totalPrice'],
+                              'warenty_duration' => $pro_item['warenty_duration'],
                            ]);
                        }
                     }
