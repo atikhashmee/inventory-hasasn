@@ -36,7 +36,7 @@ return [
         ],
         'public_uploads' => [
             'driver' => 'local',
-            'root' => public_path().'/uploads',
+            'root' => env('PDF_LIVE')?asset('uploads/'):public_path().'/uploads',
         ],
 
         'public' => [
