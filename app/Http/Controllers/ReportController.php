@@ -64,8 +64,7 @@ class ReportController extends Controller
     public function purchaseDetail(Request $request)
     {
         $stocks = Stock::whereDate('created_at', $request->date)->get();
-        
-        return view('admin.reports.sales_detail', compact('stocks'));
+        return view('admin.reports.purchase_detail', compact('stocks'));
     }
 
     public function purchaseReport(Request $request)
@@ -77,6 +76,14 @@ class ReportController extends Controller
                         \DB::raw('SUM(price) AS totalPrice'),
                         \DB::raw('DATE(created_at) AS date')
                     )
+                    ->where(function($q) use($request) {
+                        if (!empty($request->supplier_id)) {
+                            $q->where('supplier_id', $request->supplier_id);
+                        }
+                        if (!empty($request->product_id)) {
+                            $q->where('product_id', $request->product_id);
+                        }
+                    })
                     ->whereYear('created_at', $year)
                     ->groupBy(\DB::raw('DATE(created_at)'));
            
@@ -110,6 +117,11 @@ class ReportController extends Controller
                         \DB::raw('SUM(amount) AS amounts'),
                         \DB::raw('DATE(created_at) AS date')
                     )
+                    ->where(function($q) use($request) {
+                        if (!empty($request->customer_id)) {
+                            $q->where('customer_id', $request->customer_id);
+                        }
+                    })
                     ->whereYear('created_at', $year)
                     ->groupBy(\DB::raw('DATE(created_at)'));
            

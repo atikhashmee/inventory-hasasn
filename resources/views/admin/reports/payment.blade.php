@@ -11,10 +11,10 @@
                     <form action="{{route('admin.report.payment')}}">
                         <div class="d-flex flex-row-reverse">
                             <button class="btn btn-default" type="submit"><i class="fa fa-filter">Filter</i></button>
-                            <select name="shop_id" class="form-control select2">
+                            <select name="customer_id" class="form-control select2">
                                 <option value="">Select Customer</option>
                                 @foreach ($customers as $customer)
-                                    <option value="{{$customer->id}}">{{$customer->customer_name}}</option>
+                                    <option value="{{$customer->id}}" @if(Request::get('customer_id') == $customer->id) selected @endif>{{$customer->customer_name}}</option>
                                 @endforeach
                             </select>
                         </div>

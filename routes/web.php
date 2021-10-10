@@ -69,6 +69,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin', 'as' => 'admin.'], fu
     Route::group(['prefix' => 'report', 'as' => 'report.'], function() {
         Route::get('sells', [App\Http\Controllers\ReportController::class, 'index'])->name('sells');
         Route::get('sells-detail', [App\Http\Controllers\ReportController::class, 'salesDetail'])->name('sells_detail');
+        Route::get('purchase-detail', [App\Http\Controllers\ReportController::class, 'purchaseDetail'])->name('purchase_detail');
         Route::get('purchase', [App\Http\Controllers\ReportController::class, 'purchaseReport'])->name('purchase');
         Route::get('payment', [App\Http\Controllers\ReportController::class, 'paymentReport'])->name('payment');
         Route::get('profit-loss', [App\Http\Controllers\ReportController::class, 'profitLoss'])->name('profitloss');
