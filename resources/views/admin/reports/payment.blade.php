@@ -36,7 +36,7 @@
                     <table class="table tbl-border table-hover table-2nd-no-sort" id="file_export">
                         <thead>
                         <tr>
-                            <th></th>
+                            <th>Date/Month</th>
                             <th>January</th>
                             <th>February</th>
                             <th>March</th>
