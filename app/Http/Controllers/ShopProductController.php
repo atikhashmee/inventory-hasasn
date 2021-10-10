@@ -35,7 +35,7 @@ class ShopProductController extends Controller
                 \DB::raw('shop_products.product_id as isAdded'),
                 \DB::raw('((IFNULL(SW.shops_stock_quantity, 0) + IFNULL(SPP.shop_product_stock_quantity, 0) + IFNULL(TA.total_transfer_added, 0)) - (IFNULL(TT.total_transfer, 0) + IFNULL(OD.total_out, 0))) AS shop_quantity')
                 )
-                ->leftJoin(\DB::raw('(SELECT SUM(quantity) as stock_quantity, product_id FROM `stocks` WHERE warehouse_id ='.$warehouse_id.' GROUP BY product_id) as S'), 'S.product_id', '=', 'products.id')
+                ->leftJoin(\DB::raw('(SELECT SUM(quantity) as stock_quantity, product_id FROM `stocks` WHERE warehouse_id ='.$warehouse_id.' AND deleted_at is NULL GROUP BY product_id) as S'), 'S.product_id', '=', 'products.id')
                 ->leftJoin(\DB::raw('(SELECT SUM(quantity) as shops_stock_quantity_two, product_id FROM `shop_product_stocks` WHERE warehouse_id ='.$warehouse_id.' GROUP BY product_id) as SWW'), 'SWW.product_id', '=', 'products.id')
                 ->leftJoin(\DB::raw('(SELECT SUM(quantity) as shops_stock_quantity, product_id FROM `shop_product_stocks` WHERE warehouse_id ='.$warehouse_id.' AND shop_id='.$request->shop_id.' GROUP BY product_id) as SW'), 'SW.product_id', '=', 'products.id')
                 ->leftJoin(\DB::raw('(SELECT SUM(quantity) as shops_product_stock_quantity, product_id FROM `shop_products` GROUP BY product_id) as SP'), 'SP.product_id', '=', 'products.id')
