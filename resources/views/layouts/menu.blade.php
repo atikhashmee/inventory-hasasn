@@ -69,24 +69,24 @@
 <li class="nav-item">
     <a href="#" class="nav-link">
       <p>
-        Sells
+        Sales
         <i class="fas fa-angle-left right"></i>
       </p>
     </a>
     <ul class="nav nav-treeview" style="display: none;">
       <li class="nav-item">
         <a href="{{ route('admin.orders.index') }}" class="nav-link {{ Request::is('admin/orders') ? 'active' : '' }}">
-          <p>Sells Lists</p>
+          <p>Sales Lists</p>
         </a>
       </li>
       <li class="nav-item">
         <a href="{{ route('admin.orders.create') }}" class="nav-link {{ Request::is('admin/orders/create') ? 'active' : '' }}">
-          <p>New Sell</p>
+          <p>New Sale</p>
         </a>
       </li>
       <li class="nav-item">
         <a href="{{ route('admin.order.return') }}" class="nav-link {{ Request::is('admin/order/sell-return') ? 'active' : '' }}">
-          <p>Sell Return</p>
+          <p>Sale Return</p>
         </a>
       </li>
     </ul>

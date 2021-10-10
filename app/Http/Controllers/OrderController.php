@@ -19,6 +19,13 @@ class OrderController extends Controller
 {
     public function index() {
         $data['orders'] = Order::where(function($q){
+
+            if (request()->query('start')!='' && request()->query('end')!='') {
+                $q->whereBetween('created_at', [request()->query('start'),  request()->query('end')]);
+            }
+
+           
+
             if (request()->query('search')!='') {
                 $q->where('order_number', 'LIKE', '%'.request()->query('search').'%');
                 $q->orWhereHas('customer', function($r) {
@@ -32,8 +39,12 @@ class OrderController extends Controller
             if (request()->query('shop_id')!='') {
                 $q->where('shop_id', request()->query('shop_id'));
             }
+            if (request()->query('customer_id')!='') {
+                $q->where('customer_id', request()->query('customer_id'));
+            }
         })->orderBy('id', 'DESC')->paginate(100);
         $data['shops'] = Shop::get();
+        $data['customers'] = Customer::get();
         return view('admin.orders.index', $data);
     }
 

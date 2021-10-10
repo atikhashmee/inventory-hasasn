@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use Flash;
+use Response;
+use App\Models\Stock;
+use App\Models\Product;
+use App\Models\Supplier;
+use Illuminate\Http\Request;
 use App\Http\Requests\CreateStockRequest;
 use App\Http\Requests\UpdateStockRequest;
 use App\Http\Controllers\AppBaseController;
-use App\Models\Stock;
-use Illuminate\Http\Request;
-use Flash;
-use Response;
 
 class StockController extends AppBaseController
 {
@@ -22,10 +24,25 @@ class StockController extends AppBaseController
     public function index(Request $request)
     {
         /** @var Stock $stocks */
-        $stocks = Stock::all();
+        $stocks = Stock::where(function($q) use($request) {
+            if (request()->query('start')!='' && request()->query('end')!='') {
+                $q->whereBetween('created_at', [request()->query('start'),  request()->query('end')]);
+            }
 
+            if (!empty($request->supplier_id)) {
+                $q->where('supplier_id', $request->supplier_id);
+            }
+            if (!empty($request->product_id)) {
+                $q->where('product_id', $request->product_id);
+            }
+
+        })->paginate(50);
+        $suppliers = Supplier::get();
+        $products = Product::get();
         return view('admin.stocks.index')
-            ->with('stocks', $stocks);
+            ->with('stocks', $stocks)
+            ->with('suppliers', $suppliers)
+            ->with('products', $products);
     }
 
     /**
