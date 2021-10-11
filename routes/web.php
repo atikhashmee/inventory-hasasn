@@ -65,6 +65,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin', 'as' => 'admin.'], fu
     Route::get('order/sell-return',  [App\Http\Controllers\OrderController::class, 'showReturnLists'])->name('order.return');
     Route::get('order/sell-return/create',  [App\Http\Controllers\OrderController::class, 'salesReturnForm'])->name('order.return.create');
     Route::get('order-resource',  [App\Http\Controllers\OrderController::class, 'getResources'])->name('order.getResource');
+    Route::get('warenty-check',  [App\Http\Controllers\HomeController::class, 'warentyCheck'])->name('warenty.check');
+    Route::post('warenty-check-validation',  [App\Http\Controllers\HomeController::class, 'getWarentyCheckData'])->name('warenty.check.validation');
     
     Route::group(['prefix' => 'report', 'as' => 'report.'], function() {
         Route::get('sells', [App\Http\Controllers\ReportController::class, 'index'])->name('sells');

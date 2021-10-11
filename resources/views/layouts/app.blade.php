@@ -61,8 +61,11 @@
             <li class="nav-item">
                 <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item mr-2">
                 <a href="{{ route('admin.home') }}" class="nav-link btn btn-default">Dashboard</a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ route('admin.warenty.check') }}" class="nav-link btn btn-default">Warenty Check</a>
             </li>
         </ul>
 
