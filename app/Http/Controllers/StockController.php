@@ -69,6 +69,10 @@ class StockController extends AppBaseController
         /** @var Stock $stock */
         $stock = Stock::create($input);
 
+        if ($stock) {
+            Product::where('id', $stock->product_id)->update(['product_cost' => $stock->price]);
+        }
+
         Flash::success('Stock saved successfully.');
 
         return redirect(route('admin.stocks.index'));

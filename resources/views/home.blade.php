@@ -21,11 +21,9 @@
       <!-- Small boxes (Stat box) -->
       <div class="row">
         <div class="col-lg-3 col-6">
-          <!-- small box -->
           <div class="small-box bg-info">
             <div class="inner">
               <h3>{{$total_sales_today}}</h3>
-
               <p>Today Sales</p>
             </div>
             <div class="icon">
@@ -34,13 +32,10 @@
             <a href="javascript:void(0)" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
           </div>
         </div>
-        <!-- ./col -->
         <div class="col-lg-3 col-6">
-          <!-- small box -->
           <div class="small-box bg-success">
             <div class="inner">
               <h3>{{$total_purchase_today}}</h3>
-
               <p>Today Purchase</p>
             </div>
             <div class="icon">
@@ -49,13 +44,10 @@
             <a href="javascript:void(0)" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
           </div>
         </div>
-        <!-- ./col -->
         <div class="col-lg-3 col-6">
-          <!-- small box -->
           <div class="small-box bg-warning">
             <div class="inner">
               <h3>{{$total_payment_today}}</h3>
-
               <p>Today Payments</p>
             </div>
             <div class="icon">
@@ -64,13 +56,10 @@
             <a href="javascript:void(0)" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
           </div>
         </div>
-        <!-- ./col -->
         <div class="col-lg-3 col-6">
-          <!-- small box -->
           <div class="small-box bg-danger">
             <div class="inner">
               <h3>{{$total_due_today}}</h3>
-
               <p>Today Due</p>
             </div>
             <div class="icon">
@@ -79,7 +68,32 @@
             <a href="javascript:void(0)" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
           </div>
         </div>
-        <!-- ./col -->
+
+        <div class="col-lg-3 col-6">
+          <div class="small-box" style="background: #6f42c1; color: #fff">
+            <div class="inner">
+              <h3>{{$total_regular_sales}}</h3>
+              <p>Regular sales</p>
+            </div>
+            <div class="icon">
+              <i class="ion ion-pie-graph"></i>
+            </div>
+            <a href="javascript:void(0)" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-6">
+          <div class="small-box" style="background: #007bff; color: #fff">
+            <div class="inner">
+              <h3>{{$total_condition_sales}}</h3>
+              <p>Condition sales</p>
+            </div>
+            <div class="icon">
+              <i class="ion ion-pie-graph"></i>
+            </div>
+            <a href="javascript:void(0)" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+          </div>
+        </div>
       </div>
       <!-- /.row -->
       <!-- Main row -->

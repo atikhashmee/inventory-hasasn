@@ -17,7 +17,7 @@ class ProductController extends AppBaseController
     public function getProductJson($id) {
         try {
             $product = Product::select('products.*', 'PP.all_price')
-            ->leftJoin(\DB::raw('(SELECT GROUP_CONCAT(price) as all_price,product_id  FROM stocks GROUP BY product_id DESC) as PP'), 'PP.product_id', '=', 'products.id')
+            ->leftJoin(\DB::raw('(SELECT GROUP_CONCAT(price) as all_price,product_id FROM stocks GROUP BY product_id) as PP'), 'PP.product_id', '=', 'products.id')
             ->where('id', $id)->first();
             if ($product) {
                 return response()->json(['status'=>true, 'data'=>$product]);

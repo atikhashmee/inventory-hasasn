@@ -1,7 +1,7 @@
 <table class="table table-bordered">
     <thead>
         <tr>
-            <th>Order&nbsp;ID</th>
+            <th>Order&nbsp;Number</th>
             <th>Shop</th>
             <th>Customer&nbsp;Name</th>
             <th>Order&nbsp;Amount</th>

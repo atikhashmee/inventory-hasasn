@@ -42,6 +42,9 @@ class OrderController extends Controller
             if (request()->query('customer_id')!='') {
                 $q->where('customer_id', request()->query('customer_id'));
             }
+            if (request()->query('order_challan_type')!='') {
+                $q->where('order_challan_type', request()->query('order_challan_type'));
+            }
         })->orderBy('id', 'DESC')->paginate(100);
         $data['shops'] = Shop::get();
         $data['customers'] = Customer::get();

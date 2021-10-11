@@ -32,6 +32,8 @@ class HomeController extends Controller
         $end   = date('Y-m-d 23:59:59');
         $data = [];
         $data['total_sales_today'] = Order::whereBetween('created_at', [$start, $end])->sum('total_final_amount');
+        $data['total_regular_sales'] = Order::where('order_challan_type', 'walk-in')->sum('total_final_amount');
+        $data['total_condition_sales'] = Order::where('order_challan_type', 'challan')->sum('total_final_amount');
         $data['total_purchase_today'] = Stock::whereBetween('created_at', [$start, $end])->sum('price');
         $data['total_payment_today'] = Transaction::where('type', 'in')->whereNotNull('order_id')->where('flag', 'payment')->whereBetween('created_at', [$start, $end])->sum('amount');
         $totalDeposit = Transaction::where("type", "in")->whereNotNull('order_id')->whereBetween('created_at', [$start, $end])->groupBy('customer_id')->sum('amount');

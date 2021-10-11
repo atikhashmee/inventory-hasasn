@@ -54,7 +54,7 @@
                 let oldprice = 0;
                 if (this.product && this.product.all_price) {
                     let allPrice = this.product.all_price.split(',')
-                    oldprice = allPrice[0]
+                    oldprice = allPrice[allPrice.length - 1]
                 }
                 return oldprice
             }

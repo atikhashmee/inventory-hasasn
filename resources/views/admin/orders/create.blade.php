@@ -65,8 +65,8 @@
                                                 <td><label for="">Sales Type</label></td>
                                                 <td>
                                                     <select name="sales_type" id="sales_type" class="form-control" v-model="sale_type">
-                                                        <option>Walk-in</option>
-                                                        <option>Challan</option>
+                                                        <option value="Walk-in">Regular</option>
+                                                        <option value="challan">Condition</option>
                                                     </select>
                                                 </td>
                                             </tr>

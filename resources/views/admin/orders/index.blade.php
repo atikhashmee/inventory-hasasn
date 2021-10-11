@@ -23,12 +23,17 @@
             <div class="card-body">
                 <form action="{{route('admin.orders.index')}}" method="GET">
                     <div class="d-flex justify-content-between align-items-center mb-2">
-                        <div></div>
                         <div class="d-flex">
                             <div class="form-group  mr-2">
                                 <input type="text" class="form-control" id="rangePicker">
                                 <input type="hidden" name="start" id="start">
                                 <input type="hidden" name="end" id="end">
+                            </div>
+                            <div class="form-group mr-2">
+                                <select name="order_challan_type" id="order_challan_type" class="form-control">
+                                    <option value="walk-in">Regular</option>
+                                    <option value="challan">Condition</option>
+                                </select>
                             </div>
                             <div class="form-group mr-2">
                                 <select name="customer_id" id="customer_id" class="form-control select2">
