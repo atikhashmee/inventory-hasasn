@@ -27,7 +27,7 @@
                             <span v-if="error" role="alert"  class="text-danger">@{{ error }}</span>
                             <span v-if="msg" role="alert"  class="text-success">@{{ msg }}</span>
                         </div>
-                        <button class="btn btn-success" type="button" @click="queryData()">Submit Return</button>
+                        <button class="btn btn-success" type="button" @click="queryData()">Check Validity</button>
                         <a class="btn btn-default" href="{{ route('admin.order.return') }}">Back</a>
                     </div>
         
@@ -47,9 +47,9 @@
                         </thead>
                         <tbody>
                             <tr v-for="item in order_items">
-                                <td>{{item.id}}</td>
-                                <td>{{item.product_name}}</td>
-                                <td>{{item.time_left}}</td>
+                                <td>@{{item.product_id}}</td>
+                                <td>@{{item.product_name}}</td>
+                                <td>@{{item.time_left}}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -77,6 +77,9 @@
             },
             methods: {
                 queryData() {
+                    this.order_items = [];
+                    this.error = null,
+                    this.msg =  '',
                     fetch(`{{route('admin.warenty.check.validation')}}`,  {
                         method: 'POST',
                         headers: {

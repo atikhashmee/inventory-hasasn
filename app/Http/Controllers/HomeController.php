@@ -57,27 +57,34 @@ class HomeController extends Controller
     }
 
     public function getWarentyCheckData(Request $request) {
-        $order = Order::with('orderDetail')->where('order_number', $request->order_number)->first();
-        $products = [];
-        if ($order) {
-            $details = $order->orderDetail;
-            if (count($details) > 0) {
-                foreach ($details as $detail) {
-                    $products[$detail->id] = [
-                        'product_id' => $detail->product_id,
-                        'product_name' => $detail->product_name,
-                        'time_left' => 'Not Set'
-                    ];
-                    if ($detail->warenty_duration != null && intval($detail->warenty_duration) > 0) {
-                        $effectiveDate = date('Y-m-d', strtotime("+".$detail->warenty_duration." months", strtotime($detail->created_at)));
-                        $now = time(); // or your date as well
-                        $your_date = strtotime($effectiveDate);
-                        $datediff = $now - $your_date;
-                        $products[$detail->id]['time_left'] = round($datediff / (60 * 60 * 24));
+        try {
+            $order = Order::with('orderDetail')->where('order_number', $request->order_number)->first();
+            $products = [];
+            if ($order) {
+                $details = $order->orderDetail;
+                if (count($details) > 0) {
+                    foreach ($details as $detail) {
+                        $products[$detail->id] = [
+                            'product_id' => $detail->product_id,
+                            'product_name' => $detail->product_name,
+                            'time_left' => 'Not Set'
+                        ];
+                        if ($detail->warenty_duration != null && intval($detail->warenty_duration) > 0) {
+                            $effectiveDate = date('Y-m-d h:i:s a', strtotime("+".$detail->warenty_duration." months", strtotime($detail->created_at)));
+                            $now = time(); // or your date as well
+                            $your_date = strtotime($effectiveDate);
+                            $datediff = $now - $your_date;
+                            $products[$detail->id]['time_left'] = round($datediff / (60 * 60 * 24))." Days Left";
+                        }
                     }
                 }
+                return response()->json(['status' => true, 'msg' => 'Data Found', 'data' => $products]);
+            } else {
+                return response()->json(['status' => false, 'error' => 'Data Not Found', 'data' => null]);  
             }
+        } catch (\Exception $e) {
+            return response()->json(['status' => false, 'error' => $e->getMessage(), 'data' => null]);  
         }
-        return response()->json(['status' => true, 'msg' => 'Data Found', 'data' => $products]);
+        
     }
 }
