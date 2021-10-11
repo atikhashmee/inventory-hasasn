@@ -53,9 +53,9 @@
                             <tr>
                                 <td>{{ $i }}</td>
                                 @for ($j = 1; $j < 13; $j++)
-                                    <td>{{ isset($data[$j][$i]) ? ($data[$j][$i]['sell'] ?? 0 - $data[$j][$i]['buy'] ?? 0) : 0 }}</td>
+                                    <td>{{ isset($data[$j][$i]) ? $data[$j][$i] : 0 }}</td>
                                     @php
-                                        $monthData[$j][] = isset($data[$j][$i]) ? ($data[$j][$i]['sell'] ?? 0 - $data[$j][$i]['buy'] ?? 0) : 0;
+                                        $monthData[$j][] = isset($data[$j][$i]) ? $data[$j][$i] : 0;
                                     @endphp
                                 @endfor
                             </tr>

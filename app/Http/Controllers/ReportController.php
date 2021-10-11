@@ -149,33 +149,30 @@ class ReportController extends Controller
     {
         try {
             $year = $request->year ?? date('Y');
-            $year = $request->year ?? date('Y');
             $orderSql = Order::select(
+                    \DB::raw('GROUP_CONCAT(IFNULL(ORD.total_purchase, 0)-IFNULL(ORD.total_sells,0)) as amount_final'),
                     \DB::raw('COUNT(id) AS countId'),
                     \DB::raw('SUM(total_final_amount) AS charges'),
                     \DB::raw('DATE(created_at) AS date')
                 )
-                ->whereYear('created_at', $year)
-                ->groupBy(\DB::raw('DATE(created_at)'));
+                ->leftJoin(\DB::raw("(SELECT SUM(product_original_unit_price * final_quantity) as total_purchase, SUM(product_unit_price * final_quantity) as total_sells, order_id FROM order_details GROUP BY order_id) as ORD"), 'ORD.order_id', '=', 'orders.id')
+                ->whereYear('orders.created_at', $year)
+                ->groupBy(\DB::raw('DATE(orders.created_at)'));
             $sells = $orderSql->get();
-
-            $purchaseSql = Stock::select(
-                \DB::raw('COUNT(id) AS countId'),
-                \DB::raw('SUM(price) AS totalPrice'),
-                \DB::raw('DATE(created_at) AS date')
-            )
-            ->whereYear('created_at', $year)
-            ->groupBy(\DB::raw('DATE(created_at)'));
-            $purchases = $purchaseSql->get();
             $data = [];
             foreach ($sells as $item) {
                 $dateArr = explode('-', $item->date);
-                $data[intVal($dateArr[1])][intVal($dateArr[2])]['sell'] = $item->charges;
-            }
-            
-            foreach ($purchases as $items) {
-                $dateArr = explode('-', $items->date);
-                $data[intVal($dateArr[1])][intVal($dateArr[2])]['buy'] = $items->totalPrice;
+                $daySUm = 0;
+                $allData = explode(',', $item->amount_final);
+                if (count($allData) > 0) {
+                    foreach ($allData as $eachsale) {
+                        if (strpos($eachsale, '-') !== false) {
+                            list($purchaseAmount, $salesAmount) = explode('-', $eachsale);
+                            $daySUm += intval($purchaseAmount) +  intval($salesAmount);
+                        }
+                    }
+                }
+                $data[intVal($dateArr[1])][intVal($dateArr[2])] = $daySUm;
             }
             return view('admin.reports.profit_loss', compact('data'));
         } catch (\Exception $e) {
