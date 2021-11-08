@@ -13,7 +13,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        if (env('PDF_LIVE')) {
+            $this->app->bind('path.public', function() {
+                return base_path() . '/../../public_html';
+            });
+        }
     }
 
     /**
