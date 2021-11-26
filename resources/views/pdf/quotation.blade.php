@@ -55,17 +55,21 @@
         </tr>
     </thead>
     <tbody>
+        @php
+            $subtotal = 0;
+        @endphp
         @if (count($items) > 0)
             @foreach ($items as $k => $item)
+                @php
+                    $subtotal +=  $item['unit_price'] * $item['quantity'];
+                @endphp
                 <tr>
                     <td>{{++$k}}</td>
                     <td style="text-align: left; padding-left: 20px">
                         <p>{{$item['item_name']}}</p>
                         <span>
-                            <strong>Brand: </strong> DPA-1
-                            |<strong>Model: </strong> 105422
+                            <strong>Brand: </strong> {{$item['brand']}}
                         </span>
-
                     </td>
                     <td>{{$item['origin']}}</td>
                     <td>{{$item['quantity']}}</td>
@@ -81,6 +85,10 @@
     </tbody>
 </table>
 <br>
+<div style="width: 200px; margin-left: auto;">
+    <p style="text-align: right; border-bottom: 2px solid #000;">Grand Total</p>
+    <p style="text-align: right;">{{$subtotal}}</p>
+</div>
 <p style="text-align: center; text-transform: uppercase"> <strong>In Word:</strong> {{$amount_in_total_words}}</p>
 <br />
 <br />

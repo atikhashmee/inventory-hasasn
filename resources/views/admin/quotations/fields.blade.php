@@ -41,7 +41,7 @@
 <div class="items-area mb-3">
     <div class="each-item rowclass" v-for="qitem in quotation_items" :data-id="qitem.item_id">
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="form-group">
                     <label for="">Select a Product</label>
                     <select name="product_id[]" id="product_id" v-model="qitem.product_id" class="form-control product_id_class_name select2">
@@ -50,24 +50,24 @@
                     </select>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="form-group">
                     <label for="">Product Name</label>
                     <input type="text" class="form-control" name="product_names[]" v-model="qitem.product_name">
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="form-group">
                     <label for="">Brand Name</label>
                     <input type="text" class="form-control" name="brand_name[]" v-model="qitem.brand_name">
                 </div>
             </div>
-            <div class="col-md-3">
+            {{-- <div class="col-md-3">
                 <div class="form-group">
                     <label for="">Model</label>
                     <input type="text" class="form-control" name="model[]" v-model="qitem.model">
                 </div>
-            </div>
+            </div> --}}
             
         </div>
         <div class="row">
@@ -80,13 +80,13 @@
             <div class="col-md-3">
                 <div class="form-group">
                     <label for="">Quantity</label>
-                    <input type="text" class="form-control" name="quantity[]"  v-model="qitem.quantity">
+                    <input type="text" class="form-control" name="quantity[]" @input="changeCalculation(qitem)"  v-model="qitem.quantity">
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="form-group">
                     <label for="">Unit Price</label>
-                    <input type="text" class="form-control" name="unit_price[]" v-model="qitem.unit_price">
+                    <input type="text" class="form-control" name="unit_price[]" @input="changeCalculation(qitem)" v-model="qitem.unit_price">
                 </div>
             </div>
             <div class="col-md-3">

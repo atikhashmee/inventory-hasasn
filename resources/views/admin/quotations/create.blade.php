@@ -91,11 +91,14 @@
                         product_id: null,
                         product_name: null,
                         brand_name: null,
-                        model: null,
+                        // model: null,
                         origin: null, 
                         quantity: null,
                         unit_price: null,
                         total_price: null,
+                        total_price_calculated: () => {
+                            this.quantity * this.unit_price
+                        }
                     })
                 initLibs()
                 this.products = {!! json_encode($products, JSON_HEX_TAG) !!};
@@ -110,13 +113,27 @@
                         product_id: null,
                         product_name: null,
                         brand_name: null,
-                        model: null,
+                        // model: null,
                         origin: null, 
                         quantity: null,
                         unit_price: null,
                         total_price: null,
+                        total_price_calculated: () => {
+                            this.quantity * this.unit_price
+                        }
                     })
                     initLibs()
+                },
+                changeCalculation(qitem) {
+                    if (this.quotation_items.length > 0) {
+                        this.quotation_items = this.quotation_items.map(element => {
+                            if (qitem.item_id == element.item_id) {
+                                element = {...qitem}
+                                element.total_price = Number(element?.unit_price) * Number(element?.quantity);
+                            }
+                            return element;
+                        });
+                    }
                 }
             }
         })
