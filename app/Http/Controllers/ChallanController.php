@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreateChallanRequest;
-use App\Http\Requests\UpdateChallanRequest;
-use App\Http\Controllers\AppBaseController;
-use App\Models\Challan;
-use Illuminate\Http\Request;
 use Flash;
 use Response;
+use App\Models\Shop;
+use App\Models\Challan;
+use App\Models\Customer;
+use Illuminate\Http\Request;
+use App\Http\Controllers\AppBaseController;
+use App\Http\Requests\CreateChallanRequest;
+use App\Http\Requests\UpdateChallanRequest;
 
 class ChallanController extends AppBaseController
 {
@@ -22,10 +24,22 @@ class ChallanController extends AppBaseController
     public function index(Request $request)
     {
         /** @var Challan $challans */
-        $challans = Challan::all();
+        $challans = Challan::where(function($q) {
+            if (request()->challan_type) {
+                $q->where('challan_type', request()->challan_type);
+            }
+            if (request()->query('customer_id')!='') {
+                $q->where('customer_id', request()->query('customer_id'));
+            }
+            if (request()->query('shop_id')!='') {
+                $q->where('shop_id', request()->query('shop_id'));
+            }
+        })->get();
 
-        return view('admin.challans.index')
-            ->with('challans', $challans);
+        $data['shops'] = Shop::get();
+        $data['customers'] = Customer::get();
+        $data['challans'] =  $challans;
+        return view('admin.challans.index', $data);
     }
 
     /**

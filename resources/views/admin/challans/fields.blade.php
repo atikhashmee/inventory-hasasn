@@ -11,6 +11,12 @@
     {!! Form::select('customer_id', $customerItems, null, ['class' => 'form-control custom-select']) !!}
 </div>
 
+<!-- Challan Type -->
+<div class="form-group col-sm-6">
+    {!! Form::label('challan_type', 'Challan Type:') !!}
+    {!! Form::select('challan_type', $challan_types, null, ['class' => 'form-control custom-select']) !!}
+</div>
+
 
 <!-- Product Type Field -->
 <div class="form-group col-sm-6">

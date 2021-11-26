@@ -41,6 +41,7 @@ class Challan extends Model
         'product_type',
         'quantity',
         'unit_id',
+        'challan_type',
         'total_payable',
         'challan_note'
     ];

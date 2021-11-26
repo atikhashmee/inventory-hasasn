@@ -19,6 +19,7 @@ class CreateChallansTable extends Migration
             $table->unsignedBigInteger('shop_id');
             $table->unsignedBigInteger('customer_id');
             $table->string('product_type');
+            $table->string('challan_type')->nullable();
             $table->integer('quantity');
             $table->unsignedBigInteger('unit_id')->nullable();
             $table->decimal('total_payable', 10, 2);
