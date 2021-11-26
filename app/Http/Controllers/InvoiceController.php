@@ -42,7 +42,7 @@ class InvoiceController extends Controller
         $qr->setSize(175);
         $qr->setMargin(0);
         // (B3) COLORS
-        // $qr->setForegroundColor(new Color(0, 0, 255));
+        // $qr->setForegroundColor(new Color(255, 10, 0));
         // $qr->setBackgroundColor(new Color(255, 255, 255));
         return (new PngWriter())->write($qr);
     }
@@ -103,9 +103,10 @@ class InvoiceController extends Controller
             $shop->image_link = asset('assets/img/not-found.png');
         }
         if ($sqldata) {
-            $data = $sqldata->toArray();
+            $data = $sqldata->toArray();  
+            $qrCode = $this->qrCodeGenerator();
             $snappy = \WPDF::loadView('pdf.challan-conditioned', $data);
-            $headerHtml = view()->make('pdf.wkpdf-header', compact('shop'))->render();
+            $headerHtml = view()->make('pdf.wkpdf-header', compact('shop', 'qrCode'))->render();
             $footerHtml = view()->make('pdf.wkpdf-footer')->render();
             $snappy->setOption('header-html', $headerHtml);
             $snappy->setOption('footer-html', $footerHtml);
@@ -128,10 +129,11 @@ class InvoiceController extends Controller
         if ($sqldata) {
             $totalSum = $sqldata->items->sum('total_price');
             $data = $sqldata->toArray();
+            $qrCode = $this->qrCodeGenerator();
             $data['amount_in_total'] = $totalSum;
             $data['amount_in_total_words'] = $numberTransformer->toWords($totalSum);
             $snappy = \WPDF::loadView('pdf.quotation', $data);
-            $headerHtml = view()->make('pdf.wkpdf-header', compact('shop'))->render();
+            $headerHtml = view()->make('pdf.wkpdf-header', compact('shop', 'qrCode'))->render();
             $footerHtml = view()->make('pdf.wkpdf-footer')->render();
             $snappy->setOption('header-html', $headerHtml);
             $snappy->setOption('footer-html', $footerHtml);

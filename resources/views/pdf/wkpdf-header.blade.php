@@ -12,16 +12,15 @@
             box-sizing: border-box;
         }
         .header-left-section{
-            border: 1px solid #fff;
-            width: 30%;
+            margin-top: 20px;
+            width: 40%;
             text-align: center;
-        }
-        .header-left-section img{
-            width: 100%;
+            position: relative;
         }
         .header-right-section{
             text-align: center;
             line-height: 20px;
+            padding-top: 10px;
         }
         .top-header{
             font-size: 25px;
@@ -33,16 +32,43 @@
             color: red;
             font-size: 18px; 
         }
+        .horizonatal-bar {
+            position: fixed;
+            left: 0;
+            top: 0%;
+        }
+        .qr-code {
+            width: 80px;
+            position: absolute;
+            bottom: -5%;
+            left: 43%;
+        }
+        .logo {
+            position: absolute;
+            top: -10%;
+            left: 40%;
+            width: 120px;
+        }
+        .logo img, .qr-code img{
+            width: 100%;
+        }
     </style>
 </head>
 <body>
+    <div class="horizonatal-bar">
+        <img src="{{ asset("assets/img/bar.png") }}" alt="">
+    </div>
     <table>
         <tr>
             <td class="header-left-section">
-                <img src="{{$shop->image_link}}" alt="">
+                <div class="logo">
+                    <img src="{{$shop->image_link}}" alt="">
+                </div>
+                <div class="qr-code">
+                    <img src="{{ isset($qrCode) ? $qrCode->getDataUri() : null }}" alt="">
+                </div>
             </td>
             <td width="20%">
-                <img src="{{ isset($qrCode) ? $qrCode->getDataUri():null }}" alt="">
             </td>
             <td class="header-right-section">
                 <h4 class="top-header">{{$shop->name}}</h4>
