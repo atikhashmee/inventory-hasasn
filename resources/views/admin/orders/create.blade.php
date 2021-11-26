@@ -37,7 +37,7 @@
                                                 <td>
                                                     <div class="d-flex">
                                                         <input type="text" name="order_id" readonly class="form-control" v-model="order_id" /> 
-                                                        <button type="button" class="btn btn-primary btn-sm" @click="order_id=Date.now()">Change</button>
+                                                        <button type="button" class="btn btn-primary btn-sm" @click="order_id=salesIdDateFormat()">Change</button>
                                                     </div>
                                                    
                                                 </td>
@@ -157,7 +157,7 @@
                                                         <td>
                                                             <div class="d-flex">
                                                                 <select name="quantity_unit_id" v-model="pl.quantity_unit_id" id="quantity_unit_id" style="flex-basis: 80%" @change="fieldUpdate($event, pl, 'quantity_unit')" class="form-control">
-                                                                    <option value="">Standard X 1</option>
+                                                                    <option value="">Unit X 1</option>
                                                                     <option :value="unit.id" v-for="unit in allUnits">@{{unit.name}} X @{{unit.quantity_base}}</option>
                                                                 </select>
                                                                 <div>
@@ -325,7 +325,7 @@
             }
         },
         mounted() {
-            this.order_id = Date.now()
+            this.order_id = this.salesIdDateFormat()
         },
         computed: {
             subTotalValue() {
@@ -474,6 +474,11 @@
                         this.product_items = [...res.data.products]
                     }
                 })
+            },
+            salesIdDateFormat() {
+                let d = new Date();
+                let str = `${d.getFullYear()}${d.getMonth()}${d.getDate()}-${String(Date.now()).substring(6)}`;
+                return str;
             }
         }
     })
