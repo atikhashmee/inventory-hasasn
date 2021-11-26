@@ -79,15 +79,15 @@
     <thead>
         <tr>
             <th>SL</th>
-            <th>Product Type</th>
             <th>Quantity</th>
+            <th>Product Type</th>
         </tr>
     </thead>
     <tbody>
         <tr>
             <td>1</td>
-            <td>{{$product_type}}</td>
             <td>{{$quantity}} {{$unit['name']}}</td>
+            <td>{{$product_type}}</td>
         </tr>
     </tbody>
 </table>

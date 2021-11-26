@@ -84,8 +84,8 @@
     <thead>
         <tr>
             <th>SL</th>
-            <th>Item Name</th>
             <th>Quantity</th>
+            <th>Item Name</th>
         </tr>
     </thead>
     <tbody>
@@ -99,10 +99,10 @@
             @endphp
                 <tr>
                     <td>{{++$key}}</td>
-                    <td>{{$detail['product_name']}}</td>
                     <td>
                         {{$detail['quantity_unit_id']!=null? $detail['quantity_unit_value'].' '.$detail['unit']['name']: $detail['product_quantity'] }}
                     </td>
+                    <td>{{$detail['product_name']}}</td>
                 </tr>
             @endforeach
         @endif
