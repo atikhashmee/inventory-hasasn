@@ -22,7 +22,7 @@ class OrderController extends Controller
         $data['orders'] = Order::where(function($q){
 
             if (request()->query('start')!='' && request()->query('end')!='') {
-                $q->whereBetween('created_at', [request()->query('start'),  request()->query('end')]);
+                $q->whereBetween(\DB::raw('Date("created_at")'), [request()->query('start'),  request()->query('end')]);
             }
 
            
