@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Unit;
 use App\Models\Product;
+use App\Models\WarentySerial;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -47,5 +48,14 @@ class OrderDetail extends Model
         return $this->hasOne(Product::class, 'id', 'product_id');
     }
 
+    /**
+     * Get all of the warenty for the OrderDetail
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function warenty()
+    {
+        return $this->hasMany(WarentySerial::class, 'order_detail_id', 'id');
+    }
     
 }

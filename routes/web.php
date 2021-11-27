@@ -66,6 +66,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin', 'as' => 'admin.'], fu
     Route::get('order/sell-return/create',  [App\Http\Controllers\OrderController::class, 'salesReturnForm'])->name('order.return.create');
     Route::get('order-resource',  [App\Http\Controllers\OrderController::class, 'getResources'])->name('order.getResource');
     Route::get('warenty-check',  [App\Http\Controllers\HomeController::class, 'warentyCheck'])->name('warenty.check');
+    Route::post('submit-warenty-serial-number',  [App\Http\Controllers\OrderController::class, 'submitWarentlySerial'])->name('submit.warenty.serial');
+    Route::get('set-warenty-serial-number/{order_id}',  [App\Http\Controllers\OrderController::class, 'setWarentySerial'])->name('set.warenty.serial');
     Route::post('warenty-check-validation',  [App\Http\Controllers\HomeController::class, 'getWarentyCheckData'])->name('warenty.check.validation');
     
     Route::group(['prefix' => 'report', 'as' => 'report.'], function() {

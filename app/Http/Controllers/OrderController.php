@@ -11,6 +11,7 @@ use Laracasts\Flash\Flash;
 use App\Models\OrderDetail;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use App\Models\WarentySerial;
 use Illuminate\Validation\Rule;
 use PhpParser\Node\Stmt\TryCatch;
 use Illuminate\Support\Facades\Validator;
@@ -259,6 +260,45 @@ class OrderController extends Controller
             Flash::error('Record not found');
             return redirect(route('admin.order.return'));
         }
+    }
+
+    public function setWarentySerial($order_id) {
+        $data = [];
+        $data['products'] = OrderDetail::with('warenty')->select('order_details.*')
+        ->join('products', 'products.id', '=', 'order_details.product_id')
+        ->where('order_details.order_id', $order_id)
+        ->whereNotNull('products.warenty_duration')
+        ->get();
+        $data['order_id'] = $order_id;
+        return view('admin.orders.warenty_serial', $data);
+    }
+
+    public function submitWarentlySerial(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'order_id' => 'required'
+        ]);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+        $order_id = $request->order_id;
+        $order_details = $request->serial_number;
+        WarentySerial::where('order_id' , $order_id)->delete();
+
+        if (count($order_details) > 0) {
+            foreach ($order_details as $detail_id =>  $detail) {
+                if (count($detail) > 0) {
+                    foreach ($detail as $key => $de) {
+                        WarentySerial::create([
+                            'order_id' => $order_id,
+                            'order_detail_id' => $detail_id,
+                            'quanitty_serial_number' => $key,
+                            'serial_number' => $de[0],
+                        ]);
+                    }
+                }
+            }
+        }
+        return redirect()->route('admin.orders.show', ['order' => $order_id]);
     }
 
 }
