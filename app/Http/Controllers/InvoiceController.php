@@ -54,7 +54,7 @@ class InvoiceController extends Controller
         if ($sqldata) {
             $data = $sqldata->toArray();
          
-            $qrCode = $this->qrCodeGenerator();
+            $qrCode = null; // $this->qrCodeGenerator();
             $data['customer']['current_due'] = $sqldata->customer->current_due;
             $snappy = \WPDF::loadView('pdf.invoice-bill', $data);
             $headerHtml = view()->make('pdf.wkpdf-header', compact('shop', 'qrCode'))->render();
@@ -79,7 +79,7 @@ class InvoiceController extends Controller
             $data = $sqldata->toArray();
             $data['customer']['current_due'] = $sqldata->customer->current_due;
             $snappy = \WPDF::loadView('pdf.challan', $data);
-            $qrCode = $this->qrCodeGenerator();
+            $qrCode = null; // $this->qrCodeGenerator();
             $headerHtml = view()->make('pdf.wkpdf-header', compact('shop', 'qrCode'))->render();
             $footerHtml = view()->make('pdf.wkpdf-footer')->render();
             $snappy->setOption('header-html', $headerHtml);
@@ -101,7 +101,7 @@ class InvoiceController extends Controller
         }
         if ($sqldata) {
             $data = $sqldata->toArray();  
-            $qrCode = $this->qrCodeGenerator();
+            $qrCode = null; // $this->qrCodeGenerator();
             $snappy = \WPDF::loadView('pdf.challan-conditioned', $data);
             $headerHtml = view()->make('pdf.wkpdf-header', compact('shop', 'qrCode'))->render();
             $footerHtml = view()->make('pdf.wkpdf-footer')->render();
@@ -127,7 +127,7 @@ class InvoiceController extends Controller
         if ($sqldata) {
             $totalSum = $sqldata->items->sum('total_price');
             $data = $sqldata->toArray();
-            $qrCode = $this->qrCodeGenerator();
+            $qrCode = null; // $this->qrCodeGenerator();
             $data['amount_in_total'] = $totalSum;
             $data['amount_in_total_words'] = $numberTransformer->toWords($totalSum);
             $snappy = \WPDF::loadView('pdf.quotation', $data);
@@ -173,7 +173,7 @@ class InvoiceController extends Controller
                 }
                 $serials[] = $eachItem;
             }
-            $qrCode = $this->qrCodeGenerator();
+            $qrCode = null; // $this->qrCodeGenerator();
             $data['customer']['current_due'] = $sqldata->customer->current_due;
             $data['serials'] = $serials;
             $snappy = \WPDF::loadView('pdf.warenty-serial-numbers', $data);

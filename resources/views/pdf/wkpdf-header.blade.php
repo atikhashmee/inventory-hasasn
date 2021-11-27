@@ -65,7 +65,8 @@
                     <img src="{{$shop->image_link}}" alt="">
                 </div>
                 <div class="qr-code">
-                    <img src="{{ isset($qrCode) ? $qrCode->getDataUri() : null }}" alt="">
+                    {{-- <img src="{{ isset($qrCode) ? $qrCode->getDataUri() : null }}" alt=""> --}}
+                    <img src="https://chart.googleapis.com/chart?cht=qr&chs=100x100&chl=stuff" alt="">
                 </div>
             </td>
             <td width="20%">
