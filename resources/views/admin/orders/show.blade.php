@@ -92,8 +92,8 @@
                         @endif
                     </div>
                     <div class="float-right d-flex">
-                        <a href="{{url('admin/set-warenty-serial-number/'.$order->id)}}" target="_blank" type="button"  class="btn bg-gradient-success mr-1">
-                             serial
+                        <a href="{{url('admin/set-warenty-serial-number/'.$order->id)}}" type="button"  class="btn bg-gradient-success mr-1">
+                            Warenty Serial
                         </a>
                         <a href="{{url('print-invoice/'.$order->id)}}" target="_blank" type="button"  class="btn bg-gradient-success mr-1">
                             <i class="fas fa-print"></i> Invoice/Bill

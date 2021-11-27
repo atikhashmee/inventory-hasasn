@@ -29,6 +29,7 @@
             <input type="hidden" name="order_id" value="{{$order_id}}">
             <div class="card">
                 <div class="card-header">
+                    <a href="{{route("admin.orders.show", ['order' => $order_id])}}" class="btn btn-primary">Back</a>
                     <button type="submit" class="btn btn-success float-right">Save Changes</button>
                 </div>
                 <div class="card-body">

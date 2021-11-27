@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\Challan;
 use App\Models\Quotation;
 use Endroid\QrCode\QrCode;
+use App\Models\OrderDetail;
 use Illuminate\Http\Request;
 use Endroid\QrCode\Color\Color;
 use NumberToWords\NumberToWords;
@@ -15,11 +16,6 @@ use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelHigh;
 
 class InvoiceController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         //
@@ -46,6 +42,7 @@ class InvoiceController extends Controller
         // $qr->setBackgroundColor(new Color(255, 255, 255));
         return (new PngWriter())->write($qr);
     }
+
     public function printInvoice($order_id) {
         $sqldata = Order::with('customer', 'orderDetail', 'orderDetail.unit', 'user', 'transaction', 'shop')->where('id', $order_id)->first();
         $shop = $sqldata->shop;
@@ -115,6 +112,7 @@ class InvoiceController extends Controller
             return redirect()->back()->withError('Nothing found');
         }
     }
+
     public function printQuotation($quotation_id) {
         $numberToWords = new NumberToWords();
         // build a new number transformer using the RFC 3066 language identifier
@@ -143,69 +141,49 @@ class InvoiceController extends Controller
         }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
+    public function printWarentySerails($order_id) {
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        $sqldata = Order::with('customer', 'orderDetail', 'orderDetail.warenty', 'user', 'shop')->where('id', $order_id)->first();
+        $shop = $sqldata->shop;
+        if (file_exists(public_path().'/uploads/shops/'.$shop->image)  && $shop->image) {
+            $shop->image_link = asset('/uploads/shops/'.$shop->image);
+        } else {
+            $shop->image_link = asset('assets/img/not-found.png');
+        }
+        if ($sqldata) {
+            $data = $sqldata->toArray();
+            $order_details = OrderDetail::with('warenty')->select('order_details.*')
+            ->join('products', 'products.id', '=', 'order_details.product_id')
+            ->where('order_details.order_id', $order_id)
+            ->whereNotNull('products.warenty_duration')
+            ->get();
+            $serials = [];
+            $eachItem = [];
+            if (count($order_details) > 0) {
+                foreach ($order_details as $detail) {
+                    $eachItem['product_name'] = $detail->product_name;
+                    $eachItem['serial_items'] = [];
+                    if (count($detail->warenty) > 0) {
+                        foreach ($detail->warenty as $warenty) {
+                            if ($warenty->serial_number) {
+                                $eachItem['serial_items'][$warenty->quanitty_serial_number] = $warenty->serial_number;
+                            }
+                        }
+                    }
+                }
+                $serials[] = $eachItem;
+            }
+            $qrCode = $this->qrCodeGenerator();
+            $data['customer']['current_due'] = $sqldata->customer->current_due;
+            $data['serials'] = $serials;
+            $snappy = \WPDF::loadView('pdf.warenty-serial-numbers', $data);
+            $headerHtml = view()->make('pdf.wkpdf-header', compact('shop', 'qrCode'))->render();
+            $footerHtml = view()->make('pdf.wkpdf-footer')->render();
+            $snappy->setOption('header-html', $headerHtml);
+            $snappy->setOption('footer-html', $footerHtml);
+            return $snappy->inline(date('Y-m-d-h:i:-a').'-invoice-bill.pdf');
+        } else {
+            return redirect()->back()->withError('Nothing found');
+        }
     }
 }

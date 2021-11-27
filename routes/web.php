@@ -31,6 +31,7 @@ Auth::routes();
 // universal routes
 Route::get('print-invoice/{order_id}', [App\Http\Controllers\InvoiceController::class, 'printInvoice']);
 Route::get('print-challan/{order_id}', [App\Http\Controllers\InvoiceController::class, 'printChallan']);
+Route::get('print-warenty-serials/{order_id}', [App\Http\Controllers\InvoiceController::class, 'printWarentySerails']);
 Route::get('print-challan-conditioned/{challan_id}', [App\Http\Controllers\InvoiceController::class, 'printChallanCondition']);
 Route::get('print-quotation/{quotation_id}', [App\Http\Controllers\InvoiceController::class, 'printQuotation']);
 Route::get('shop_stock_products/{shop_id}', [App\Http\Controllers\OrderController::class, 'getProductsByShop']);
