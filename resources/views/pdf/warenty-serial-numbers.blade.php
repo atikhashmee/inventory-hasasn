@@ -45,7 +45,7 @@
 </style>
 
 <div class="doc-type">
-    <h2>Warenty Numbers</h2>
+    <h2>Warenty Card</h2>
 </div>
 <br />
 <table class="invoice-info">

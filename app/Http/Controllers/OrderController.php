@@ -188,6 +188,11 @@ class OrderController extends Controller
 
     public function show($id) {
         $data['order'] = Order::where('id', $id)->first();
+        $data['wr_order_details'] = OrderDetail::with('warenty')->select('order_details.*')
+        ->join('products', 'products.id', '=', 'order_details.product_id')
+        ->where('order_details.order_id', $id)
+        ->whereNotNull('products.warenty_duration')
+        ->get();
         return view('admin.orders.show', $data);
     }
 

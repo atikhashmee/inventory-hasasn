@@ -54,7 +54,7 @@ class ProductController extends AppBaseController
             $product_sql->where('shop_products.warehouse_id', request()->query('warehouse_id'));
         }
         
-        $products =   $product_sql->get();
+        $products =   $product_sql->paginate(10);
 
         return view('admin.products.index')
             ->with('products', $products);
