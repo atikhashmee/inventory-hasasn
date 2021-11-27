@@ -59,7 +59,7 @@
                                                     <tr>
                                                         <td class="quantity_serial">{{$i}}</td>
                                                         <td> 
-                                                            <input type="number" name="serial_number[{{$order_detail->id}}][{{$i}}][]" value="{{isset($serials[$i]) ? $serials[$i] : null }}" class="form-control">
+                                                            <input type="text" name="serial_number[{{$order_detail->id}}][{{$i}}][]" value="{{isset($serials[$i]) ? $serials[$i] : null }}" class="form-control">
                                                         </td>
                                                     </tr>
                                                 @endfor
