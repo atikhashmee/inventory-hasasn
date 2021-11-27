@@ -477,7 +477,7 @@
             },
             salesIdDateFormat() {
                 let d = new Date();
-                let str = `${d.getFullYear()}${d.getMonth()}${d.getDate()}-${String(Date.now()).substring(6)}`;
+                let str = `${d.getFullYear()}${d.getMonth()+1}${d.getDate()}-${String(Date.now()).substring(6)}`;
                 return str;
             }
         }
