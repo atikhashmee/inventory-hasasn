@@ -11,17 +11,46 @@
             margin: 0;
             box-sizing: border-box;
         }
+        body {
+            position:relative;
+            width:100%;
+            height:100%;
+        }
+        .invoice-wrapper {
+            position:relative;
+            width:100%;
+            height:200px;
+            top:80px;
+            margin-bottom:10px;
+        }
+        .horizonatal-bar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            right:0;
+            width:100%;
+        }
+        .horizonatal-bar img {
+            width: 120%;
+            position: fixed;
+            left: 0;
+            top: 63px;
+            z-index:-1;
+        }
         .header-left-section{
             margin-top: 20px;
             width: 40%;
             text-align: center;
             position: relative;
+            height:150px;
         }
         .header-right-section{
             text-align: center;
             line-height: 20px;
             padding-top: 10px;
+            height:150px;
         }
+        
         .top-header{
             font-size: 25px;
             text-transform: uppercase;
@@ -32,15 +61,11 @@
             color: red;
             font-size: 18px; 
         }
-        .horizonatal-bar {
-            position: fixed;
-            left: 0;
-            top: 0%;
-        }
+        
         .qr-code {
             width: 80px;
             position: absolute;
-            bottom: -5%;
+            bottom: 0;
             left: 43%;
         }
         .logo {
@@ -50,28 +75,32 @@
             width: 120px;
         }
         .logo img, .qr-code img{
-            width: 100%;
+            height:75px;
         }
     </style>
 </head>
 <body>
-    <div class="horizonatal-bar">
-        <img src="{{ asset("assets/img/bar.png") }}" alt="">
-    </div>
+    
+    <div class="invoice-wrapper">
+        <div class="horizonatal-bar">
+            <img src="{{ asset("assets/img/bar.png") }}" alt="">
+        
+        </div>
+    
     <table>
         <tr>
             <td class="header-left-section">
                 <div class="logo">
                     <img src="{{$shop->image_link}}" alt="">
-                </div>
-                <div class="qr-code">
-                    {{-- <img src="{{ isset($qrCode) ? $qrCode->getDataUri() : null }}" alt=""> --}}
+                    <br><br>
                     <img src="https://chart.googleapis.com/chart?cht=qr&chs=100x100&chl=stuff" alt="">
                 </div>
+                
             </td>
             <td width="20%">
             </td>
             <td class="header-right-section">
+                
                 <h4 class="top-header">{{$shop->name}}</h4>
                 {!!$shop->address!!}
                 {{-- <p>15/2, Topkhna Road, BMA Bhaban(1st floor), G.P.O Box-2744</p>
@@ -79,8 +108,12 @@
                 <p>Mobile: 01755591795</p>
                 <p>E-mail: meditechash@gmail.com, ahmidiland@gmail.com</p>
                 <p class="website-text">www.meditech.com.bd</p> --}}
+                
             </td>
         </tr>
     </table>
+    </div>
+    
+    
 </body>
 </html>
