@@ -69,6 +69,7 @@
                                 item.brand_name = product_item.brand.name
                                 item.quantity = 0
                                 item.model = ''
+                                item.unit =  0
                                 item.origin = product_item.origin.name
                                 item.unit_price = product_item.selling_price
                                 item.total_price =  (product_item.selling_price * item.quantity)
@@ -96,6 +97,7 @@
                         quantity: null,
                         unit_price: null,
                         total_price: null,
+                        unit: 0,
                         total_price_calculated: () => {
                             this.quantity * this.unit_price
                         }
@@ -118,6 +120,7 @@
                         quantity: null,
                         unit_price: null,
                         total_price: null,
+                        unit: 0,
                         total_price_calculated: () => {
                             this.quantity * this.unit_price
                         }

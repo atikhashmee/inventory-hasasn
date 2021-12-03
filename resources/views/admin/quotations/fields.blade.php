@@ -78,9 +78,15 @@
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="form-group">
-                    <label for="">Quantity</label>
-                    <input type="text" class="form-control" name="quantity[]" @input="changeCalculation(qitem)"  v-model="qitem.quantity">
+                <div class="form-group d-flex">
+                    <div>
+                        <label for="">Quantity</label>
+                        <input type="text" class="form-control" name="quantity[]" @input="changeCalculation(qitem)"  v-model="qitem.quantity">
+                    </div>
+                    <div>
+                        {!! Form::label('unit_id', 'Unit:') !!}
+                        {!! Form::select('unit_id', $unitItems, null, ['class' => 'form-control custom-select', 'v-model' => "qitem.unit", "name" => "unit[]"]) !!}
+                    </div>
                 </div>
             </div>
             <div class="col-md-3">

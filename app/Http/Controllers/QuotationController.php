@@ -61,6 +61,7 @@ class QuotationController extends AppBaseController
                 for ($i=0; $i < count($input['product_id']); $i++) { 
                     QuotationItem::create([
                         'quotation_id' => $quotation->id,
+                        'quantity_unit_id' => $input['unit'][$i] == 0 ? null : $input['unit'][$i],
                         'item_name' => $input['product_names'][$i],
                         'brand' => $input['brand_name'][$i],
                         'model' => $input['model'][$i]??'',

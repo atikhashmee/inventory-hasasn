@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Unit;
 use App\Models\Brand;
 use Eloquent as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -37,6 +38,7 @@ class QuotationItem extends Model
 
     public $fillable = [
         'quotation_id',
+        'quantity_unit_id',
         'item_name',
         'brand',
         'model',
@@ -79,4 +81,10 @@ class QuotationItem extends Model
     {
         return $this->belongsTo(\App\Models\Quotation::class, 'quotation_id', 'id');
     }
+
+    public function unit()
+    {
+        return $this->belongsTo(Unit::class, 'quantity_unit_id');
+    }
+
 }

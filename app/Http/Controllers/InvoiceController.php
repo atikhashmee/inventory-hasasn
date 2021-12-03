@@ -121,7 +121,7 @@ class InvoiceController extends Controller
         $numberToWords = new NumberToWords();
         // build a new number transformer using the RFC 3066 language identifier
         $numberTransformer = $numberToWords->getNumberTransformer('en');
-        $sqldata = Quotation::with('items')->where('id', $quotation_id)->first();
+        $sqldata = Quotation::with('items', 'items.unit')->where('id', $quotation_id)->first();
         $shop = Shop::where('id', $sqldata->shop_id)->where('status', 'active')->first();
         if (file_exists(public_path().'/uploads/shops/'.$shop->image)  && $shop->image) {
             $shop->image_link = asset('/uploads/shops/'.$shop->image);

@@ -41,7 +41,9 @@ class ViewServiceProvider extends ServiceProvider
     {
         View::composer(['admin.quotations.fields'], function ($view) {
             $shopItems = Shop::pluck('name','id')->toArray();
-            $view->with('shopItems', $shopItems);
+            $unitItems = Unit::pluck('name','id')->toArray();
+            array_unshift($unitItems, 'Unit');
+            $view->with('shopItems', $shopItems)->with('unitItems', $unitItems);
         });
         View::composer(['admin.challans.fields'], function ($view) {
             $challan_types = ['Condition With Charge' => 'Condition With Charge', 'Condition Only' => 'Condition Only', 'Charge Only' => 'Charge Only' ];

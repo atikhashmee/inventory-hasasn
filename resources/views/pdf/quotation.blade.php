@@ -72,7 +72,9 @@
                         </span>
                     </td>
                     <td>{{$item['origin']}}</td>
-                    <td>{{$item['quantity']}}</td>
+                    <td>{{$item['quantity']}}
+                        {{$item['quantity_unit_id']!=null? $item['unit']['name']: ' Unit' }}
+                    </td>
                     <td>{{$item['unit_price']}}</td>
                     <td>{{$item['total_price']}}</td>
                 </tr>
