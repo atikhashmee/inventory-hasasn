@@ -100,7 +100,7 @@
                 <tr>
                     <td>{{++$key}}</td>
                     <td>
-                        {{$detail['quantity_unit_id']!=null? $detail['quantity_unit_value'].' '.$detail['unit']['name']: $detail['product_quantity'] }}
+                        {{$detail['quantity_unit_id']!=null? $detail['quantity_unit_value'].' '.$detail['unit']['name']: $detail['product_quantity'].' Unit' }}
                     </td>
                     <td>{{$detail['product_name']}}</td>
                 </tr>

@@ -96,7 +96,7 @@
                             <a href="{{url('admin/set-warenty-serial-number/'.$order->id)}}" type="button"  class="btn bg-gradient-success mr-1">
                                 Warenty Serial
                             </a>
-                            <a href="{{url('print-warenty-serials/'.$order->id)}}" type="button"  class="btn bg-gradient-success mr-1">
+                            <a href="{{url('print-warenty-serials/'.$order->id)}}" target="_blank" type="button"  class="btn bg-gradient-success mr-1">
                                 <i class="fas fa-print"></i>Print Warenty Serial
                             </a>
                         @endif

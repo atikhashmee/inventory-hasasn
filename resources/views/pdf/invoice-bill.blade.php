@@ -106,7 +106,7 @@
                     <td>{{++$key}}</td>
                     <td>{{$detail['product_name']}}</td>
                     <td>
-                        {{$detail['quantity_unit_id']!=null? $detail['quantity_unit_value'].' '.$detail['unit']['name']: $detail['product_quantity'] }}
+                        {{$detail['quantity_unit_id']!=null? $detail['quantity_unit_value'].' '.$detail['unit']['name']: $detail['product_quantity'].' Unit' }}
                     </td>
                     <td>{{$detail['product_unit_price']}}</td>
                     <td>{{$detail['product_unit_price'] * $detail['product_quantity']}}</td>
@@ -157,6 +157,7 @@
         </tr>
     </tbody>
 </table>
+<p style="text-align: center; text-transform: uppercase"> <strong>In Word:</strong> {{$amount_in_total_words->toWords(($subtotal - $discount_amount))}}</p>
 <br />
 <br />
 <br />

@@ -50,8 +50,8 @@
             <th>Description of Items</th>
             <th>Origin</th>
             <th>Quantity</th>
-            <th>Unit Price</th>
-            <th>Total Price</th>
+            <th>Unit Price(Taka)</th>
+            <th>Total Price(Taka)</th>
         </tr>
     </thead>
     <tbody>
@@ -87,9 +87,9 @@
 <br>
 <div style="width: 200px; margin-left: auto;">
     <p style="text-align: right; border-bottom: 2px solid #000;">Grand Total</p>
-    <p style="text-align: right;">{{$subtotal}}</p>
+    <p style="text-align: right;">{{$subtotal}} Taka</p>
 </div>
-<p style="text-align: center; text-transform: uppercase"> <strong>In Word:</strong> {{$amount_in_total_words}}</p>
+<p style="text-align: center; text-transform: uppercase"> <strong>In Word(Taka):</strong> {{$amount_in_total_words}}</p>
 <br />
 <br />
 <br />
@@ -118,7 +118,7 @@
                 <br>
                 <br>
                 <br>
-                <strong style="border-top: 1px solid #000; margin-left:auto; text-align:right">Managing Director</strong>
+                <strong style="border-top: 1px solid #000; margin-left:auto; text-align:right">Authorized Person</strong>
             </td>
             <td width="40%">&nbsp;</td>
             <td width="25%">&nbsp;</td>

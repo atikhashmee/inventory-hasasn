@@ -44,6 +44,9 @@ class InvoiceController extends Controller
     }
 
     public function printInvoice($order_id) {
+        $numberToWords = new NumberToWords();
+          // build a new number transformer using the RFC 3066 language identifier
+        $numberTransformer = $numberToWords->getNumberTransformer('en');
         $sqldata = Order::with('customer', 'orderDetail', 'orderDetail.unit', 'user', 'transaction', 'shop')->where('id', $order_id)->first();
         $shop = $sqldata->shop;
         if (file_exists(public_path().'/uploads/shops/'.$shop->image)  && $shop->image) {
@@ -54,6 +57,7 @@ class InvoiceController extends Controller
         if ($sqldata) {
             $data = $sqldata->toArray();
          
+            $data['amount_in_total_words'] = $numberTransformer;
             $qrCode = null; // $this->qrCodeGenerator();
             $data['customer']['current_due'] = $sqldata->customer->current_due;
             $snappy = \WPDF::loadView('pdf.invoice-bill', $data);
