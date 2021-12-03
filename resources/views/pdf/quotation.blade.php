@@ -97,33 +97,49 @@
 <br />
 <br />
 <br />
-@if ($notes)
 <table style="width: 100%">
     <tr>
         <td>
-            <strong>N.B: {{$notes}}</strong>
+            <strong>Terms & Condition</strong>
+            <p>1. Delivery: From ready stock</p>
+            <p>2. Payment: By cash, cheque or Pay Order</p>
+            <p>3. Validity: Our Quotation is valid for 1 month</p>
+            <p>4. Vat & Tax: Our price <b>does not include</b> local vat or tax</p>
+            <p>5. Warenty: 1 year free service warenty will be provided</p>
         </td>
     </tr>
 </table>
+<br />
+<br />
+<br />
+@if ($notes)
+    <table style="width: 100%">
+        <tr>
+            <td>
+                <strong>N.B: {{$notes}}</strong>
+            </td>
+        </tr>
+    </table>
 @endif
 
 <br />
 <br />
 <br />
 <br />
-<table class="signature-table">
+<table class="signature-table" style="width: 100%">
     <tbody>
         <tr>
-            <td width="25%">
-                <p>Thanks & Regards,</p>
-                <p>Yours faithfully,</p>
-                <br>
-                <br>
-                <br>
-                <strong style="border-top: 1px solid #000; margin-left:auto; text-align:right">Authorized Person</strong>
-            </td>
-            <td width="40%">&nbsp;</td>
             <td width="25%">&nbsp;</td>
+            <td width="40%">&nbsp;</td>
+            <td width="25%">
+                    <p>Thanks & Regards,</p>
+                    <p>Yours faithfully,</p>
+                    <br>
+                    <br>
+                    <br>
+                    <strong style="border-top: 1px solid #000; margin-left:auto; text-align:right">Authorized Person</strong> 
+                
+            </td>
         </tr>
     </tbody>
 </table>
