@@ -107,14 +107,15 @@
             <td width="30%">
                 <table class="sum-total">
                     <tr>
-                        <td><strong>Total Payable</strong></td>
-                        <td>{{$total_payable}}</td>
+                        <td><strong>Total Payable(Taka)</strong></td>
+                        <td>{{intval($total_payable)}}</td>
                     </tr>
                 </table>
             </td>
         </tr>
     </tbody>
 </table>
+<p style="text-align: center; text-transform: uppercase"> <strong>In Word(Taka):</strong> {{$amount_in_total_words->toWords(($total_payable))}}</p>
 <br />
 <br />
 <br />
@@ -139,6 +140,15 @@
         <tr>
             <td>
                 <strong>N.B: {{$challan_note}}</strong>
+            </td>
+        </tr>
+    </table>
+@endif
+@if ($challan_type)
+    <table style="width: 100%">
+        <tr>
+            <td>
+               <strong>{{$challan_type}}</strong> 
             </td>
         </tr>
     </table>

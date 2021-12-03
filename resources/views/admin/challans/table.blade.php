@@ -24,6 +24,7 @@
                     {!! Form::open(['route' => ['admin.challans.destroy', $challan->id], 'method' => 'delete']) !!}
                     <div class='btn-group'>
                         <a href="{{url('print-challan-conditioned/'.$challan->id)}}"
+                            target="_blank"
                             class='btn btn-default btn-xs'>
                             <i class="fas fa-print"></i>
                         </a>
