@@ -43,7 +43,10 @@
         text-align: right;
     }
 </style>
-
+<br />
+<br />
+<br />
+<br />
 <div class="doc-type">
     <h2>Invoice/BIll</h2>
 </div>
@@ -89,8 +92,8 @@
             <th>SL</th>
             <th>Item Name</th>
             <th>Quantity</th>
-            <th>Unit Price</th>
-            <th>Total</th>
+            <th>Unit Price(Taka)</th>
+            <th>Total(Taka)</th>
         </tr>
     </thead>
     <tbody>
@@ -141,15 +144,15 @@
             <td width="30%">
                 <table class="sum-total">
                     <tr>
-                        <td>Subtotal</td>
+                        <td>Subtotal(Taka)</td>
                         <td>{{$subtotal}}</td>
                     </tr>
                     <tr>
-                        <td>Discount</td>
+                        <td>Discount(Taka)</td>
                         <td>{{$discount_amount}}</td>
                     </tr>
                     <tr>
-                        <td><strong>Grand Total</strong></td>
+                        <td><strong>Grand Total</strong>(Taka)</td>
                         <td>{{$subtotal - $discount_amount}}</td>
                     </tr>
                 </table>
@@ -157,6 +160,8 @@
         </tr>
     </tbody>
 </table>
+<br />
+<br />
 <p style="text-align: center; text-transform: uppercase"> <strong>In Word:</strong> {{$amount_in_total_words->toWords(($subtotal - $discount_amount))}}</p>
 <br />
 <br />
