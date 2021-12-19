@@ -5,6 +5,7 @@
                 <th>SL</th>
                 <th>Image</th>
                 <th>Name</th>
+                <th>Quantity</th>
                 <th>Category</th>
                 <th>Origin</th>
                 <th>Brand</th>
@@ -30,6 +31,7 @@
                         <div class="badge badge-success">{{$product->warenty_duration}} MWR</div>
                     @endif
                 </td>
+                <td>{{ $product->quantity }}</td>
                 <td>{{ $product->category->name }}</td>
                 <td>{{ $product->country_name ?? 'N/A' }}</td>
                 <td>{{ $product->brand->name }}</td>
