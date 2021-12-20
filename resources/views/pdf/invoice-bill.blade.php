@@ -162,7 +162,7 @@
 </table>
 <br />
 <br />
-<p style="text-align: center; text-transform: uppercase"> <strong>In Word:</strong> {{$amount_in_total_words->toWords(($subtotal - $discount_amount))}}</p>
+<p style="text-align: center; text-transform: uppercase"> <strong>In Word:</strong> {{numberToWord(($subtotal - $discount_amount))}}</p>
 <br />
 <br />
 <br />

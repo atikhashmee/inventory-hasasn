@@ -17,7 +17,6 @@
         "infyomlabs/adminlte-templates": "^3.0",
         "infyomlabs/laravel-generator": "^3.0",
         "intervention/image": "^2.6",
-        "kwn/number-to-words": "^2.1",
         "laravel/framework": "^8.40",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.0",
@@ -42,7 +41,11 @@
     "autoload-dev": {
         "psr-4": {
             "Tests\\": "tests/"
-        }
+        },
+
+        "files": [
+            "app/Helpers.php"
+        ]
     },
     "scripts": {
         "post-autoload-dump": [

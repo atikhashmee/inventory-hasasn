@@ -56,6 +56,10 @@ class HomeController extends Controller
     }
 
     public function warentyCheck() {
+        $f = new \NumberFormatter("bn_BD", \NumberFormatter::SPELLOUT);
+        $f->setSymbol(\NumberFormatter::CURRENCY_SYMBOL, '');
+        return $f->formatCurrency(100432, 'bn_BD');
+        return $f->format(12);
         return view('admin.orders_more.warenty_check');
     }
 
