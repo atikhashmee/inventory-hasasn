@@ -86,8 +86,12 @@
         <table class="data-table">
             <thead>
                 <tr>
-                    <th>{{++$sl}}</th>
-                    <th>{{ $product['product_name']}}</th>
+                    {{-- <th>{{++$sl}}</th>
+                    <th>{{ $product['product_name']}}</th> --}}
+                    <th>SL #{{++$sl}}</th>
+                    <th>Item Name</th>
+                    <th>Serial Number</th>
+                    <th>Warenty Period</th>
                 </tr>
             </thead>
             <tbody>
@@ -95,7 +99,9 @@
                     @foreach ($product['serial_items'] as $serial => $number)
                         <tr>
                             <td>{{$serial}}</td>
+                            <td>{{ $product['product_name']}}</td>
                             <td>{{$number}}</td>
+                            <td>--</td>
                         </tr>
                     @endforeach
                 @endif
