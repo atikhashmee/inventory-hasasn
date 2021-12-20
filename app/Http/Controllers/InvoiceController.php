@@ -174,7 +174,9 @@ class InvoiceController extends Controller
                     if (count($detail->warenty) > 0) {
                         foreach ($detail->warenty as $warenty) {
                             if ($warenty->serial_number) {
-                                $eachItem['serial_items'][$warenty->quanitty_serial_number] = $warenty->serial_number;
+                                $eachItem['serial_items'][$warenty->quanitty_serial_number]['s_number'] = $warenty->serial_number;
+                                $effectiveDate = date('Y-m-d h:i:s a', strtotime("+".$detail->warenty_duration." months", strtotime($detail->created_at)));
+                                $eachItem['serial_items'][$warenty->quanitty_serial_number]['warenty_preiod'] = $effectiveDate;
                             }
                         }
                     }

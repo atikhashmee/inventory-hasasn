@@ -100,8 +100,8 @@
                         <tr>
                             <td>{{$serial}}</td>
                             <td>{{ $product['product_name']}}</td>
-                            <td>{{$number}}</td>
-                            <td>--</td>
+                            <td>{{$number['s_number']}}</td>
+                            <td>{{$number['warenty_preiod']}}</td>
                         </tr>
                     @endforeach
                 @endif
