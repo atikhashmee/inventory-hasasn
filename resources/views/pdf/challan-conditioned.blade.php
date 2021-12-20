@@ -43,7 +43,10 @@
         text-align: right;
     }
 </style>
-
+<br />
+<br />
+<br />
+<br />
 <div class="doc-type">
     <h2>CHALLAN</h2>
 </div>
