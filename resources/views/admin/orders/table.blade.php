@@ -28,6 +28,9 @@
                                 <a class="dropdown-item" href="{{route('admin.orders.show', ['order'=>$order])}}">Detail</a>
                                 <a class="dropdown-item" href="{{url('print-invoice/'.$order->id)}}" target="_blank">Print Invoice</a>
                                 <a class="dropdown-item" href="{{url('print-challan/'.$order->id)}}" target="_blank">Print Challan</a>
+                                @if (intval($order->wr_order_details) > 0)
+                                    <a class="dropdown-item" href="{{url('print-warenty-serials/'.$order->id)}}" target="_blank"></i>Print Warenty Serial</a>
+                                @endif
                             </div>
                         </div>
                     </td>

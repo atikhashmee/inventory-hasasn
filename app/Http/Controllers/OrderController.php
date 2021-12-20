@@ -19,7 +19,9 @@ use Illuminate\Support\Facades\Validator;
 class OrderController extends Controller
 {
     public function index() {
-        $data['orders'] = Order::where(function($q){
+        $data['orders'] = Order::select('orders.*', \DB::raw("IFNULL(OD.total_warenty_items, 0) as wr_order_details"))
+        ->leftJoin(\DB::raw("(SELECT COUNT(order_details.id) as total_warenty_items, order_details.order_id FROM order_details INNER JOIN products ON products.id = order_details.product_id WHERE products.warenty_duration IS NOT NULL GROUP BY order_details.order_id) AS OD"), 'OD.order_id', '=', 'orders.id')
+        ->where(function($q){
 
             if (request()->query('start')!='' && request()->query('end')!='') {
                 $q->whereBetween(\DB::raw('DATE(created_at)'), [request()->query('start'),  request()->query('end')]);
