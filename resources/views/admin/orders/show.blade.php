@@ -20,6 +20,12 @@
         <div class="clearfix"></div>
 
         <div class="card">
+            <div class="card-header">
+                <div class="w-100 d-flex justify-content-between">
+                    <a @if($order->prev_order_id!=null) href="{{route('admin.orders.show', ['order'=>$order->prev_order_id])}}" @else href="javascript:void(0)"  @endif class="btn btn-default @if($order->prev_order_id == null) disabled @endif">Prev</a>
+                    <a @if($order->next_order_id!=null) href="{{route('admin.orders.show', ['order'=>$order->next_order_id])}}" @else href="javascript:void(0)"  @endif class="btn btn-default @if($order->next_order_id == null) disabled @endif">Next</a>
+                </div>
+            </div>
             <div class="card-body">
                 <div class="d-flex justify-content-between">
                     <div class="order-info">

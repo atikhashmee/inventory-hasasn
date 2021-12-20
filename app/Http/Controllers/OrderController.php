@@ -187,7 +187,12 @@ class OrderController extends Controller
     }
 
     public function show($id) {
-        $data['order'] = Order::where('id', $id)->first();
+        $data['order'] = Order::select(
+            'orders.*', 
+            \DB::raw("(SELECT id FROM orders WHERE id > ".$id." LIMIT 1) as next_order_id"),
+            \DB::raw("(SELECT id FROM orders WHERE id < ".$id." ORDER BY id DESC LIMIT 1) as prev_order_id")
+            )
+        ->where('id', $id)->first();
         $data['wr_order_details'] = OrderDetail::with('warenty')->select('order_details.*')
         ->join('products', 'products.id', '=', 'order_details.product_id')
         ->where('order_details.order_id', $id)

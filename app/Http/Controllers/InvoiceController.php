@@ -189,7 +189,7 @@ class InvoiceController extends Controller
             $footerHtml = view()->make('pdf.wkpdf-footer')->render();
             $snappy->setOption('header-html', $headerHtml);
             $snappy->setOption('footer-html', $footerHtml);
-            return $snappy->inline(date('Y-m-d-h:i:-a').'-invoice-bill.pdf');
+            return $snappy->inline(date('Y-m-d-h:i:-a').'-warenty-card.pdf');
         } else {
             return redirect()->back()->withError('Nothing found');
         }
