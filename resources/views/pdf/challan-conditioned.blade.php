@@ -118,7 +118,7 @@
         </tr>
     </tbody>
 </table>
-<p style="text-align: center; text-transform: uppercase"> <strong>In Word(Taka):</strong> {{$amount_in_total_words->toWords(($total_payable))}}</p>
+<p style="text-align: center; text-transform: uppercase"> <strong>In Word(Taka):</strong> {{numberToWord(($total_payable))}}</p>
 <br />
 <br />
 <br />

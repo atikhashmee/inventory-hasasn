@@ -8,9 +8,6 @@ use App\Models\Challan;
 use App\Models\Quotation;
 use Endroid\QrCode\QrCode;
 use App\Models\OrderDetail;
-use Illuminate\Http\Request;
-use Endroid\QrCode\Color\Color;
-use NumberToWords\NumberToWords;
 use Endroid\QrCode\Writer\PngWriter;
 use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelHigh;
 
@@ -90,9 +87,6 @@ class InvoiceController extends Controller
     }
 
     public function printChallanCondition($challan_id) {
-        $numberToWords = new NumberToWords();
-        // build a new number transformer using the RFC 3066 language identifier
-        $numberTransformer = $numberToWords->getNumberTransformer('en');
         $sqldata = Challan::with('customer', 'unit')->where('id', $challan_id)
         ->first();
         $shop = Shop::where('id', $sqldata->shop_id)->where('status', 'active')->first();
@@ -104,7 +98,6 @@ class InvoiceController extends Controller
         if ($sqldata) {
             $data = $sqldata->toArray();  
             $qrCode = null; // $this->qrCodeGenerator();
-            $data['amount_in_total_words'] = $numberTransformer;
             $snappy = \WPDF::loadView('pdf.challan-conditioned', $data);
             $headerHtml = view()->make('pdf.wkpdf-header', compact('shop', 'qrCode'))->render();
             $footerHtml = view()->make('pdf.wkpdf-footer')->render();

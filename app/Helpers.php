@@ -40,7 +40,7 @@ if ( ! function_exists('numberToWord')) {
         $result = implode('', $str);
         $points = ($point) ? "." . $words[$point / 10] . " " . $words[$point = $point % 10] : '';
 
-        return ucfirst($result.$points);
+        return ucfirst($result.$points)." Taka";
     }
 }
 
