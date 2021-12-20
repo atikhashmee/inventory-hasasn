@@ -54,14 +54,14 @@
 <br />
 <table class="invoice-info">
     <tr>
-        <td width="30%">
+        <td width="50%">
             <p><strong>Invoice Number:</strong> {{$order_number}}</p>
             <p><strong>Customer Name:</strong> {{$customer['customer_name']}}</p>
             <p><strong>Phone No:</strong> {{$customer['customer_phone']}}</p>
             <p><strong>E-mail:</strong> {{$customer['customer_email']}}</p>
             <p><strong>Address:</strong>{{$customer['customer_address']}} </p>
         </td>
-        <td width="50%">&nbsp;</td>
+        <td width="20%">&nbsp;</td>
         <td width="30%">
             <table style="margin-left: auto; text-align: right; width: 100%">
                 <tr>

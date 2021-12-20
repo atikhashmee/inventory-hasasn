@@ -60,7 +60,12 @@ class HomeController extends Controller
     }
 
     public function getWarentyCheckData(Request $request) {
+       
         try {
+
+            if ( $request->order_number == null ||  $request->order_number == '') {
+                return response()->json(['status' => false, 'error' => 'Enter Order or Serial Number', 'data' => null]); 
+            }
             if ($request->search_type == 'ON') {
                 $order = Order::with('orderDetail')->where('order_number', $request->order_number)->first();
                 $products = [];
@@ -89,7 +94,8 @@ class HomeController extends Controller
             } else if ($request->search_type == 'SN') {
                 $warenty = WarentySerial::select('warenty_serials.order_detail_id', 'order_details.product_id', 'order_details.product_name', 'order_details.warenty_duration', 'order_details.created_at')
                 ->leftJoin('order_details', 'order_details.id', '=', 'warenty_serials.order_detail_id')
-                ->where('serial_number', $request->order_number)->first();
+                ->where('warenty_serials.serial_number', $request->order_number)
+                ->first();
                 $products = [];
                 if ($warenty) {
                     $products[$warenty->order_detail_id] = [

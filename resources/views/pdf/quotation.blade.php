@@ -20,12 +20,12 @@
 </table>
 <table width="100%">
     <tr>
-        <td width="30%">
+        <td width="50%">
             <strong>To</strong> <br>
             <strong class="text-uppercase">{{$recipient}}</strong>
             <p>{{$recipient_address}}</p>
         </td>
-        <td width="50%">&nbsp;</td>
+        <td width="20%">&nbsp;</td>
         <td width="30%">&nbsp;</td>
     </tr>
 </table>
