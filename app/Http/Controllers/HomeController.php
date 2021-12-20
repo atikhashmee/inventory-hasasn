@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
-use App\Models\Product;
 use App\Models\Stock;
+use App\Models\Product;
 use App\Models\Transaction;
-use Doctrine\DBAL\Schema\View;
 use Illuminate\Http\Request;
+use App\Models\WarentySerial;
+use Doctrine\DBAL\Schema\View;
 
 class HomeController extends Controller
 {
@@ -62,33 +63,51 @@ class HomeController extends Controller
         try {
             if ($request->search_type == 'ON') {
                 $order = Order::with('orderDetail')->where('order_number', $request->order_number)->first();
-            } else if ($request->search_type == 'SN') {
-                $order = Order::with('orderDetail')
-                ->leftJoin('warenty_serials', 'orders.id', '=', 'warenty_serials.order_id')
-                ->where('warenty_serials.serial_number', $request->order_number)->first();
-            }
-            $products = [];
-            if ($order) {
-                $details = $order->orderDetail;
-                if (count($details) > 0) {
-                    foreach ($details as $detail) {
-                        $products[$detail->id] = [
-                            'product_id' => $detail->product_id,
-                            'product_name' => $detail->product_name,
-                            'time_left' => 'Not Set'
-                        ];
-                        if ($detail->warenty_duration != null && intval($detail->warenty_duration) > 0) {
-                            $effectiveDate = date('Y-m-d h:i:s a', strtotime("+".$detail->warenty_duration." months", strtotime($detail->created_at)));
-                            $now = time(); // or your date as well
-                            $your_date = strtotime($effectiveDate);
-                            $datediff = $now - $your_date;
-                            $products[$detail->id]['time_left'] = round($datediff / (60 * 60 * 24))." Days Left";
+                $products = [];
+                if ($order) {
+                    $details = $order->orderDetail;
+                    if (count($details) > 0) {
+                        foreach ($details as $detail) {
+                            $products[$detail->id] = [
+                                'product_id' => $detail->product_id,
+                                'product_name' => $detail->product_name,
+                                'time_left' => 'Not Set'
+                            ];
+                            if ($detail->warenty_duration != null && intval($detail->warenty_duration) > 0) {
+                                $effectiveDate = date('Y-m-d h:i:s a', strtotime("+".$detail->warenty_duration." months", strtotime($detail->created_at)));
+                                $now = time(); // or your date as well
+                                $your_date = strtotime($effectiveDate);
+                                $datediff = $now - $your_date;
+                                $products[$detail->id]['time_left'] = round($datediff / (60 * 60 * 24))." Days Left";
+                            }
                         }
                     }
+                    return response()->json(['status' => true, 'msg' => 'Data Found', 'data' => $products]);
+                } else {
+                    return response()->json(['status' => false, 'error' => 'Data Not Found', 'data' => null]);  
                 }
-                return response()->json(['status' => true, 'msg' => 'Data Found', 'data' => $products]);
-            } else {
-                return response()->json(['status' => false, 'error' => 'Data Not Found', 'data' => null]);  
+            } else if ($request->search_type == 'SN') {
+                $warenty = WarentySerial::select('warenty_serials.order_detail_id', 'order_details.product_id', 'order_details.product_name', 'order_details.warenty_duration', 'order_details.created_at')
+                ->leftJoin('order_details', 'order_details.id', '=', 'warenty_serials.order_detail_id')
+                ->where('serial_number', $request->order_number)->first();
+                $products = [];
+                if ($warenty) {
+                    $products[$warenty->order_detail_id] = [
+                        'product_id' => $warenty->product_id,
+                        'product_name' => $warenty->product_name,
+                        'time_left' => 'Not Set'
+                    ];
+                    if ($warenty->warenty_duration != null && intval($warenty->warenty_duration) > 0) {
+                        $effectiveDate = date('Y-m-d h:i:s a', strtotime("+".$warenty->warenty_duration." months", strtotime($warenty->created_at)));
+                        $now = time(); // or your date as well
+                        $your_date = strtotime($effectiveDate);
+                        $datediff = $now - $your_date;
+                        $products[$warenty->order_detail_id]['time_left'] = round($datediff / (60 * 60 * 24))." Days Left";
+                    }
+                    return response()->json(['status' => true, 'msg' => 'Data Found', 'data' => $products]);
+                } else {
+                    return response()->json(['status' => false, 'error' => 'Data Not Found', 'data' => null]);  
+                }
             }
         } catch (\Exception $e) {
             return response()->json(['status' => false, 'error' => $e->getMessage(), 'data' => null]);  
