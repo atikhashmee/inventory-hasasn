@@ -91,7 +91,7 @@
                     <th>SL #{{++$sl}}</th>
                     <th>Item Name</th>
                     <th>Serial Number</th>
-                    <th>Warenty Period</th>
+                    <th>Warenty Period (End date)</th>
                 </tr>
             </thead>
             <tbody>
