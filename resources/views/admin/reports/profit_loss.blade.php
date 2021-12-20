@@ -53,7 +53,13 @@
                             <tr>
                                 <td>{{ $i }}</td>
                                 @for ($j = 1; $j < 13; $j++)
-                                    <td>{{ isset($data[$j][$i]) ? $data[$j][$i] : 0 }}</td>
+                                    <td>
+                                        @if (isset($data[$j][$i]))
+                                            <a  href="{{route('admin.report.sells_detail')}}?date=2021-{{$j}}-{{$i}}">{{$data[$j][$i]}}</a>
+                                        @else
+                                            --
+                                        @endif
+                                    </td>
                                     @php
                                         $monthData[$j][] = isset($data[$j][$i]) ? $data[$j][$i] : 0;
                                     @endphp
