@@ -60,7 +60,13 @@ class HomeController extends Controller
 
     public function getWarentyCheckData(Request $request) {
         try {
-            $order = Order::with('orderDetail')->where('order_number', $request->order_number)->first();
+            if ($request->search_type == 'ON') {
+                $order = Order::with('orderDetail')->where('order_number', $request->order_number)->first();
+            } else if ($request->search_type == 'SN') {
+                $order = Order::with('orderDetail')
+                ->leftJoin('warenty_serials', 'orders.id', '=', 'warenty_serials.order_id')
+                ->where('warenty_serials.serial_number', $request->order_number)->first();
+            }
             $products = [];
             if ($order) {
                 $details = $order->orderDetail;

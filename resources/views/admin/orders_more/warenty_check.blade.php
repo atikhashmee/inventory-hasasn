@@ -5,7 +5,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-12">
-                    <h1>Create Sale Return</h1>
+                    <h1>Warenty Check</h1>
                 </div>
             </div>
         </div>
@@ -19,9 +19,13 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="form-group">
-                            <label for="">Sale Number</label>
-                            <input type="text" name="order_number" v-model="order_number" class="form-control" placeholder="Sale Number">
+                            <label for="">Sale Number Or Serial Number</label>
+                            <input type="text" name="order_number" v-model="order_number" class="form-control" placeholder="Sale Number Or Serial Number">
                             <span v-if="errors?.order_id?.length > 0" role="alert"  class="text-danger">@{{ errors.order_id[0] }}</span>
+                        </div>
+                        <div class="form-group">
+                            <input type="radio" name="search_type" value="ON" v-model="search_type"> Sale Number
+                            <input type="radio" name="search_type" value="SN" v-model="search_type"> Serial Number
                         </div>
                         <div class="form-group">
                             <span v-if="error" role="alert"  class="text-danger">@{{ error }}</span>
@@ -69,6 +73,7 @@
             data: {
                 order_items: [],
                 order_number: '',
+                search_type: 'ON',
                 errors: {},
                 error: null,
                 msg: '',
@@ -87,7 +92,8 @@
                             'Content-Type': 'application/json'
                         }, 
                         body: JSON.stringify({
-                            order_number: this.order_number
+                            order_number: this.order_number,
+                            search_type: this.search_type
                         })
                     }).then(res=>res.json())
                     .then(res=>{
