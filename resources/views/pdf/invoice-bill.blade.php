@@ -128,8 +128,8 @@
                 <table class="summery-table-left">
                     <tr>
                         <td>
-                            <p>Current Due: {{$customer['current_due'] - ($subtotal - $discount_amount)}}</p>
-                            <p>Sales: {{($subtotal - $discount_amount)}}</p>
+                            <p>Current Due: {{number_format($customer['current_due'] - ($subtotal - $discount_amount), 2, '.', ',')}}</p>
+                            <p>Sales: {{number_format(($subtotal - $discount_amount) , 2, '.', ',')}}</p>
                             <p>Collected: {{$tnx_amount}}</p>
                         </td>
                     </tr>
