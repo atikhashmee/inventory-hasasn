@@ -128,4 +128,4 @@
 <br />
 <br />
 <br />
-<p style="text-align: center; text-transform: uppercase"> 1. Warenty Void : Sticker removed items, Burn case & physically damage products</p>
+<p style="text-align: center; text-transform: uppercase"> 1. Warenty Void : Sticker removed items, Burn case, Water case & physically damage products</p>

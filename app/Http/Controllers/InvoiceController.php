@@ -161,7 +161,7 @@ class InvoiceController extends Controller
                         foreach ($detail->warenty as $warenty) {
                             if ($warenty->serial_number) {
                                 $eachItem['serial_items'][$warenty->quanitty_serial_number]['s_number'] = $warenty->serial_number;
-                                $effectiveDate = date('Y-m-d h:i:s a', strtotime("+".$detail->warenty_duration." months", strtotime($detail->created_at)));
+                                $effectiveDate = date('Y-m-d', strtotime("+".$detail->warenty_duration." months", strtotime($detail->created_at)));
                                 $eachItem['serial_items'][$warenty->quanitty_serial_number]['warenty_preiod'] = $effectiveDate;
                             }
                         }
@@ -172,9 +172,10 @@ class InvoiceController extends Controller
             $qrCode = null; // $this->qrCodeGenerator();
             $data['customer']['current_due'] = $sqldata->customer->current_due;
             $data['serials'] = $serials;
+            $footer_precuation = true;
             $snappy = \WPDF::loadView('pdf.warenty-serial-numbers', $data);
             $headerHtml = view()->make('pdf.wkpdf-header', compact('shop', 'qrCode'))->render();
-            $footerHtml = view()->make('pdf.wkpdf-footer')->render();
+            $footerHtml = view()->make('pdf.wkpdf-footer', compact('footer_precuation'))->render();
             $snappy->setOption('header-html', $headerHtml);
             $snappy->setOption('footer-html', $footerHtml);
             return $snappy->inline(date('Y-m-d-h:i:-a').'-warenty-card.pdf');
