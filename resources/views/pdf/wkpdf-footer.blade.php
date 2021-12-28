@@ -51,12 +51,12 @@
                 <td><img src="{{asset('assets/img/pdf-footer-two/7.png')}}"  alt=""></td>
                 <td><img src="{{asset('assets/img/pdf-footer-two/24.png')}}"  alt=""></td>
                 <td><img src="{{asset('assets/img/pdf-footer-two/8.png')}}"  alt=""></td>
-                <td><img src="{{asset('assets/img/pdf-footer-two/20.jpg')}}"  alt=""></td>
                 <td><img src="{{asset('assets/img/pdf-footer-two/3.png')}}"  alt=""></td>
             </tr>
             <tr>
                 <td><img src="{{asset('assets/img/pdf-footer-two/2.png')}}"  alt=""></td>
                 <td><img src="{{asset('assets/img/pdf-footer-two/11.png')}}"  alt=""></td>
+                <td><img src="{{asset('assets/img/pdf-footer-two/20.jpg')}}"  alt=""></td>
                 <td><img src="{{asset('assets/img/pdf-footer-two/12.png')}}"  alt=""></td>
                 <td><img src="{{asset('assets/img/pdf-footer-two/13.png')}}"  alt=""></td>
                 <td><img src="{{asset('assets/img/pdf-footer-two/14.png')}}"  alt=""></td>
