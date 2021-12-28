@@ -118,6 +118,7 @@
         </tr>
     </tbody>
 </table>
+<br />
 <p style="text-align: center; text-transform: uppercase"> <strong>In Word(Taka):</strong> {{numberToWord(($total_payable))}}</p>
 <br />
 <br />
@@ -151,7 +152,7 @@
     <table style="width: 100%">
         <tr>
             <td>
-               <strong>{{$challan_type}}</strong> 
+               <strong style="font-size: 18px">{{$challan_type}}</strong> 
             </td>
         </tr>
     </table>
