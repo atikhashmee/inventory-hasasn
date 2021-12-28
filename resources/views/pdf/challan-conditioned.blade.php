@@ -17,8 +17,12 @@
     table.data-table, table.invoice-info, table.summer-table, table.summery-table-left, table.signature-table {
         width: 100%;
     }
-    table.data-table tr td, table.data-table tr th, table.summery-table-left tr td, table.sum-total tr td{
+    table.data-table tr td, table.data-table tr th, table.summery-table-left tr td{
         border: 1px solid #463838;
+        border-spacing: none;
+        padding: 3px;
+    }
+    table.sum-total tr td{
         border-spacing: none;
         padding: 3px;
     }
