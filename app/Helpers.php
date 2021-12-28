@@ -19,7 +19,7 @@ if ( ! function_exists('numberToWord')) {
         '30' => 'thirty', '40' => 'forty', '50' => 'fifty',
         '60' => 'sixty', '70' => 'seventy',
         '80' => 'eighty', '90' => 'ninety');
-        $digits = array('', 'hundred', 'thousand', 'lakh', 'crore');
+        $digits = array('', 'hundred', 'thousand', 'lac', 'crore');
         while ($i < $digits_1) {
             $divider = ($i == 2) ? 10 : 100;
             $number = floor($no % $divider);

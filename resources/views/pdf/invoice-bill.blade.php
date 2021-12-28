@@ -135,7 +135,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <strong>Net Outstanding: {{ $customer['current_due'] - $tnx_amount}}</strong>
+                            <strong>Net Outstanding: {{ number_format($customer['current_due'] - $tnx_amount, 2, ',') }}</strong>
                         </td>
                     </tr>
                 </table>
@@ -153,7 +153,7 @@
                     </tr>
                     <tr>
                         <td><strong>Grand Total</strong>(Taka)</td>
-                        <td>{{$subtotal - $discount_amount}}</td>
+                        <td>{{number_format($subtotal - $discount_amount, 2, ',') }}</td>
                     </tr>
                 </table>
             </td>
