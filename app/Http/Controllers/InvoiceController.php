@@ -125,8 +125,8 @@ class InvoiceController extends Controller
             $data['amount_in_total'] = $totalSum;
             $data['amount_in_total_words'] = numberToWord($totalSum);
             $snappy = \WPDF::loadView('pdf.quotation', $data);
-            $headerHtml = view()->make('pdf.wkpdf-header', compact('shop', 'qrCode', 'footer_precuation'))->render();
-            $footerHtml = view()->make('pdf.wkpdf-footer')->render();
+            $headerHtml = view()->make('pdf.wkpdf-header', compact('shop', 'qrCode'))->render();
+            $footerHtml = view()->make('pdf.wkpdf-footer', compact('footer_precuation'))->render();
             $snappy->setOption('header-html', $headerHtml);
             $snappy->setOption('footer-html', $footerHtml);
             return $snappy->inline(date('Y-m-d-h:i:-a').'-quotation.pdf');
