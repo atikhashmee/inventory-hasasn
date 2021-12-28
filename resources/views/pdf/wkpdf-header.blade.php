@@ -40,7 +40,7 @@
                 <td style="text-align: center; width: 340px; vertical-align: top;">
                     <img src="{{$shop->image_link}}" style="height: 90px;">
                     <div style="width: 100%; margin-bottom: 8px;"></div>
-                    <img src="https://chart.googleapis.com/chart?cht=qr&chs=100x100&chl=http://www.meditechbd.com/" alt="">
+                    <img src="https://chart.googleapis.com/chart?cht=qr&chs=100x100&chl=www.meditech.com.bd" alt="">
                 </td>
                 <td style="text-align: center; vertical-align: top;">
                     <div style="width: 100%; position: relative; top: 40px;">
