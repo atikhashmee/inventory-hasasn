@@ -99,7 +99,7 @@
             </td>
             <td class="header-right-section">
                 
-                <div style="width: 100%; position:relative; left:30%">
+                <div style="width: 100%; position:relative; left:50%">
                     <h4 class="top-header">{{$shop->name}}</h4>
                     {!!$shop->address!!}
                 </div>
