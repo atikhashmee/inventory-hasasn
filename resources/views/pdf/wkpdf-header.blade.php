@@ -20,7 +20,7 @@
             position:relative;
             width:890px;
             height:200px;
-            top:80px;
+            top:50px;
             margin-bottom:10px;
         }        
         .top-header{
