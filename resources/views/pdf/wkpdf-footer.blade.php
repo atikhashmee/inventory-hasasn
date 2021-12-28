@@ -20,7 +20,7 @@
             border-bottom: 2px solid #000;
             margin-bottom: 10px;
         }
-        .precausion h2{
+        .precausion h4{
             text-align: center;
             text-transform: uppercase;
         }
