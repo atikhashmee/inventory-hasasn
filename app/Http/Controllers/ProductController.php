@@ -75,8 +75,10 @@ class ProductController extends AppBaseController
         //dd($product_sql->get()->toArray());
         $products =   $product_sql->orderBy('id', 'DESC')->paginate(10);
 
+        $serial = pagiSerial($products, 10);
         return view('admin.products.index')
-            ->with('products', $products);
+            ->with('products', $products)
+            ->with('serial', $serial);
     }
 
     /**

@@ -17,7 +17,7 @@
         <tbody>
         @foreach($products as $key =>  $product)
             <tr>
-                <td>{{ ++$key}}</td>
+                <td>{{ $serial-- }}</td>
                 <td>
                     @if (file_exists(public_path().'/uploads/products/'.$product->feature_image) && $product->feature_image)
                         <img src="{{asset('/uploads/products/'.$product->feature_image)}}" class="rounded-circle" width="80" height="80" />

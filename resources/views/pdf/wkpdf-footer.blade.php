@@ -27,9 +27,11 @@
     </style>
 </head>
 <body>
-    <div class="precausion">
-        <h4>goods once sold will not be taken back</h4>
-    </div>
+    @if (!isset($footer_precuation))
+        <div class="precausion">
+            <h4>goods once sold will not be taken back</h4>
+        </div>
+    @endif
     <div class="divider-footer"></div>
     {{-- <td><img src="{{asset('assets/img/pdf-footer/Olympus_logo.png')}}"  alt=""></td> --}}
     {{-- <td><img src="{{asset('assets/img/pdf-footer/sony_logo.png')}}"  alt=""></td> --}}

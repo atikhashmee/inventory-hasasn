@@ -121,10 +121,11 @@ class InvoiceController extends Controller
             $totalSum = $sqldata->items->sum('total_price');
             $data = $sqldata->toArray();
             $qrCode = null; // $this->qrCodeGenerator();
+            $footer_precuation = true;
             $data['amount_in_total'] = $totalSum;
             $data['amount_in_total_words'] = numberToWord($totalSum);
             $snappy = \WPDF::loadView('pdf.quotation', $data);
-            $headerHtml = view()->make('pdf.wkpdf-header', compact('shop', 'qrCode'))->render();
+            $headerHtml = view()->make('pdf.wkpdf-header', compact('shop', 'qrCode', 'footer_precuation'))->render();
             $footerHtml = view()->make('pdf.wkpdf-footer')->render();
             $snappy->setOption('header-html', $headerHtml);
             $snappy->setOption('footer-html', $footerHtml);

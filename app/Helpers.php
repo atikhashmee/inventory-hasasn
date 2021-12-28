@@ -44,4 +44,15 @@ if ( ! function_exists('numberToWord')) {
     }
 }
 
+if ( ! function_exists('pagiSerial')) {
+    function pagiSerial($data, $perPage)
+    {
+        $page = request()->page ?? 1;
+        $start = $perPage * ($page-1);
+        return $data->total() - $start;
+
+        //return (!empty(request()->page)) ? ((15 * (request()->page - 1)) + 1) : 1;
+    }
+}
+
 ?>
