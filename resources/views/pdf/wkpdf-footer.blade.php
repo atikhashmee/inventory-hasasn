@@ -40,22 +40,22 @@
     <table>
         <tbody>
             <tr>
-                <td><img src="{{asset('assets/img/pdf-footer-two/22.png')}}"  alt=""></td>
                 <td><img src="{{asset('assets/img/pdf-footer-two/1.png')}}"  alt=""></td>
+                <td><img src="{{asset('assets/img/pdf-footer-two/22.png')}}"  alt=""></td>
                 <td><img src="{{asset('assets/img/pdf-footer-two/21.png')}}"  alt=""></td>
-                <td><img src="{{asset('assets/img/pdf-footer-two/2.png')}}"  alt=""></td>
                 <td><img src="{{asset('assets/img/pdf-footer-two/19.png')}}"  alt=""></td>
-                <td><img src="{{asset('assets/img/pdf-footer-two/3.png')}}"  alt=""></td>
-                <td><img src="{{asset('assets/img/pdf-footer-two/4.png')}}"  alt=""></td>
+                <td><img src="{{asset('assets/img/pdf-footer-two/10.png')}}"  alt=""></td>
                 <td><img src="{{asset('assets/img/pdf-footer-two/9.png')}}"  alt=""></td>
                 <td><img src="{{asset('assets/img/pdf-footer-two/5.png')}}"  alt=""></td>
                 <td><img src="{{asset('assets/img/pdf-footer-two/6.png')}}"  alt=""></td>
                 <td><img src="{{asset('assets/img/pdf-footer-two/7.png')}}"  alt=""></td>
+                <td><img src="{{asset('assets/img/pdf-footer-two/24.png')}}"  alt=""></td>
                 <td><img src="{{asset('assets/img/pdf-footer-two/8.png')}}"  alt=""></td>
                 <td><img src="{{asset('assets/img/pdf-footer-two/20.jpg')}}"  alt=""></td>
+                <td><img src="{{asset('assets/img/pdf-footer-two/3.png')}}"  alt=""></td>
             </tr>
             <tr>
-                <td><img src="{{asset('assets/img/pdf-footer-two/10.png')}}"  alt=""></td>
+                <td><img src="{{asset('assets/img/pdf-footer-two/2.png')}}"  alt=""></td>
                 <td><img src="{{asset('assets/img/pdf-footer-two/11.png')}}"  alt=""></td>
                 <td><img src="{{asset('assets/img/pdf-footer-two/12.png')}}"  alt=""></td>
                 <td><img src="{{asset('assets/img/pdf-footer-two/13.png')}}"  alt=""></td>
@@ -65,7 +65,7 @@
                 <td><img src="{{asset('assets/img/pdf-footer-two/17.png')}}"  alt=""></td>
                 <td><img src="{{asset('assets/img/pdf-footer-two/18.png')}}"  alt=""></td>
                 <td><img src="{{asset('assets/img/pdf-footer-two/23.png')}}"  alt=""></td>
-                <td><img src="{{asset('assets/img/pdf-footer-two/24.png')}}"  alt=""></td>
+                <td><img src="{{asset('assets/img/pdf-footer-two/4.png')}}"  alt=""></td>
             </tr>
         </tbody>
     </table>
