@@ -40,6 +40,32 @@
     <table>
         <tbody>
             <tr>
+                <td><img src="{{asset('assets/img/pdf-footer-two/1.png')}}"  alt=""></td>
+                <td><img src="{{asset('assets/img/pdf-footer-two/2.png')}}"  alt=""></td>
+                <td><img src="{{asset('assets/img/pdf-footer-two/3.png')}}"  alt=""></td>
+                <td><img src="{{asset('assets/img/pdf-footer-two/4.png')}}"  alt=""></td>
+                <td><img src="{{asset('assets/img/pdf-footer-two/5.png')}}"  alt=""></td>
+                <td><img src="{{asset('assets/img/pdf-footer-two/6.png')}}"  alt=""></td>
+                <td><img src="{{asset('assets/img/pdf-footer-two/7.png')}}"  alt=""></td>
+                <td><img src="{{asset('assets/img/pdf-footer-two/8.png')}}"  alt=""></td>
+                <td><img src="{{asset('assets/img/pdf-footer-two/9.png')}}"  alt=""></td>
+            </tr>
+            <tr>
+                <td><img src="{{asset('assets/img/pdf-footer-two/10.png')}}"  alt=""></td>
+                <td><img src="{{asset('assets/img/pdf-footer-two/11.png')}}"  alt=""></td>
+                <td><img src="{{asset('assets/img/pdf-footer-two/12.png')}}"  alt=""></td>
+                <td><img src="{{asset('assets/img/pdf-footer-two/13.png')}}"  alt=""></td>
+                <td><img src="{{asset('assets/img/pdf-footer-two/14.png')}}"  alt=""></td>
+                <td><img src="{{asset('assets/img/pdf-footer-two/15.png')}}"  alt=""></td>
+                <td><img src="{{asset('assets/img/pdf-footer-two/16.png')}}"  alt=""></td>
+                <td><img src="{{asset('assets/img/pdf-footer-two/17.png')}}"  alt=""></td>
+                <td><img src="{{asset('assets/img/pdf-footer-two/18.png')}}"  alt=""></td>
+            </tr>
+        </tbody>
+    </table>
+    {{-- <table>
+        <tbody>
+            <tr>
                 <td><img src="{{asset('assets/img/pdf-footer/Ambu.png')}}"  alt=""></td>
                 <td><img src="{{asset('assets/img/pdf-footer/Bistos.png')}}"  alt=""></td>
                 <td><img src="{{asset('assets/img/pdf-footer/Ceracarta.png')}}"  alt=""></td>
@@ -62,6 +88,6 @@
                 <td><img src="{{asset('assets/img/pdf-footer/Yuwell.jpg')}}"  alt=""></td>
             </tr>
         </tbody>
-    </table>
+    </table> --}}
 </body>
 </html>
