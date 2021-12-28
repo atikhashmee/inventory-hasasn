@@ -28,7 +28,7 @@
 </head>
 <body>
     <div class="precausion">
-        <h2>goods once sold will not be taken back</h2>
+        <h4>goods once sold will not be taken back</h4>
     </div>
     <div class="divider-footer"></div>
     {{-- <td><img src="{{asset('assets/img/pdf-footer/Olympus_logo.png')}}"  alt=""></td> --}}
@@ -40,19 +40,19 @@
     <table>
         <tbody>
             <tr>
+                <td><img src="{{asset('assets/img/pdf-footer-two/22.png')}}"  alt=""></td>
                 <td><img src="{{asset('assets/img/pdf-footer-two/1.png')}}"  alt=""></td>
+                <td><img src="{{asset('assets/img/pdf-footer-two/21.png')}}"  alt=""></td>
                 <td><img src="{{asset('assets/img/pdf-footer-two/2.png')}}"  alt=""></td>
+                <td><img src="{{asset('assets/img/pdf-footer-two/19.png')}}"  alt=""></td>
                 <td><img src="{{asset('assets/img/pdf-footer-two/3.png')}}"  alt=""></td>
                 <td><img src="{{asset('assets/img/pdf-footer-two/4.png')}}"  alt=""></td>
+                <td><img src="{{asset('assets/img/pdf-footer-two/9.png')}}"  alt=""></td>
                 <td><img src="{{asset('assets/img/pdf-footer-two/5.png')}}"  alt=""></td>
                 <td><img src="{{asset('assets/img/pdf-footer-two/6.png')}}"  alt=""></td>
                 <td><img src="{{asset('assets/img/pdf-footer-two/7.png')}}"  alt=""></td>
                 <td><img src="{{asset('assets/img/pdf-footer-two/8.png')}}"  alt=""></td>
-                <td><img src="{{asset('assets/img/pdf-footer-two/9.png')}}"  alt=""></td>
-                <td><img src="{{asset('assets/img/pdf-footer-two/19.png')}}"  alt=""></td>
                 <td><img src="{{asset('assets/img/pdf-footer-two/20.jpg')}}"  alt=""></td>
-                <td><img src="{{asset('assets/img/pdf-footer-two/21.png')}}"  alt=""></td>
-                <td><img src="{{asset('assets/img/pdf-footer-two/22.png')}}"  alt=""></td>
             </tr>
             <tr>
                 <td><img src="{{asset('assets/img/pdf-footer-two/10.png')}}"  alt=""></td>
