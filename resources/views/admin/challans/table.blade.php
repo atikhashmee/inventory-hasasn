@@ -2,6 +2,7 @@
     <table class="table" id="challans-table">
         <thead>
         <tr>
+            <th>SL</th>
             <th>Shop</th>
         <th>Customer</th>
         <th>Product Type</th>
@@ -14,6 +15,7 @@
         <tbody>
         @foreach($challans as $challan)
             <tr>
+                <td>{{ $serial-- }}</td>
                 <td>{{$challan->shop->name }}</td>
             <td>{{ $challan->customer->customer_name }}</td>
             <td>{{ $challan->product_type }}</td>
@@ -45,3 +47,4 @@
         </tbody>
     </table>
 </div>
+{{ $challans->links() }}

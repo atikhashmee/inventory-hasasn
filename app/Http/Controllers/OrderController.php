@@ -49,6 +49,7 @@ class OrderController extends Controller
                 $q->where('order_challan_type', request()->query('order_challan_type'));
             }
         })->orderBy('id', 'DESC')->paginate(100);
+        $data['serial'] = pagiSerial($data['orders'], 100);
         $data['shops'] = Shop::get();
         $data['customers'] = Customer::get();
         return view('admin.orders.index', $data);

@@ -14,7 +14,7 @@
         <tbody>
             @foreach($stocks as $key =>  $stock)
                 <tr>
-                    <td>{{++$key}}</td>
+                    <td>{{ $serial-- }}</td>
                     <td class="text-left"> <span class="p-1" style="border: 1px solid #d3d3d3; font-size:14px">{{ ($stock->product)?$stock->product->code:'N' }}</span> {{ ($stock->product)?$stock->product->name:'N/A' }}</td>
                     <td>{{ ($stock->supplier)?$stock->supplier->name:'N/A' }}</td>
                     <td>{{ ($stock->warehouse)?$stock->warehouse->ware_house_name:'N/A' }}</td>

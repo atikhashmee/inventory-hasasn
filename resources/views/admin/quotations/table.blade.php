@@ -2,6 +2,7 @@
     <table class="table" id="quotations-table">
         <thead>
             <tr>
+                <th>SL</th>
                 <th>Shop</th>
                 <th>Recipient</th>
                 <th>Recipient&nbsp;Address</th>
@@ -14,7 +15,8 @@
         <tbody>
             @foreach($quotations as $quotation)
                 <tr>
-                    <td>{{ $quotation->shop->name }}</td>
+                <td>{{ $serial-- }}</td>
+                <td>{{ $quotation->shop->name }}</td>
                 <td>{{ $quotation->recipient }}</td>
                 <td>{{ $quotation->recipient_address }}</td>
                 <td>{{ $quotation->date }}</td>
@@ -43,3 +45,4 @@
         </tbody>
     </table>
 </div>
+{{ $quotations->links() }}

@@ -24,9 +24,11 @@ class QuotationController extends AppBaseController
     public function index(Request $request)
     {
         /** @var Quotation $quotations */
-        $quotations = Quotation::all();
+        $quotations = Quotation::orderBy('id', 'DESC')->paginate(50);
 
+        $serial = pagiSerial($quotations, 50);
         return view('admin.quotations.index')
+            ->with('serial', $serial)
             ->with('quotations', $quotations);
     }
 

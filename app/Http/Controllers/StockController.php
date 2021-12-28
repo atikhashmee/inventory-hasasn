@@ -36,12 +36,15 @@ class StockController extends AppBaseController
                 $q->where('product_id', $request->product_id);
             }
 
-        })->paginate(50);
+        })->orderBy('id', 'DESC')->paginate(50);
+        
+        $serial = pagiSerial($stocks, 50);
         $suppliers = Supplier::get();
         $products = Product::get();
         return view('admin.stocks.index')
             ->with('stocks', $stocks)
             ->with('suppliers', $suppliers)
+            ->with('serial', $serial)
             ->with('products', $products);
     }
 

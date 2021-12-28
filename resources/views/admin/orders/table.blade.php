@@ -1,6 +1,7 @@
 <table class="table table-bordered">
     <thead>
         <tr>
+            <th>SL</th>
             <th>Order&nbsp;Number</th>
             <th>Shop</th>
             <th>Customer&nbsp;Name</th>
@@ -13,6 +14,7 @@
         @if (count($orders) > 0)
             @foreach ($orders as $order)
                 <tr>
+                    <td>{{ $serial-- }}</td>
                     <td>{{$order->order_number}}</td>
                     <td>{{$order->shop->name ?? 'N/A'}}</td>
                     <td>{{$order->customer->customer_name ?? 'N/A'}}</td>

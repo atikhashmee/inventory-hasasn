@@ -34,8 +34,9 @@ class ChallanController extends AppBaseController
             if (request()->query('shop_id')!='') {
                 $q->where('shop_id', request()->query('shop_id'));
             }
-        })->get();
+        })->orderBy('id', 'DESC')->paginate(50);
 
+        $data['serial'] = pagiSerial($challans, 50);
         $data['shops'] = Shop::get();
         $data['customers'] = Customer::get();
         $data['challans'] =  $challans;
