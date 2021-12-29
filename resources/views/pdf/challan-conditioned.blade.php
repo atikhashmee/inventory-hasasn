@@ -115,7 +115,7 @@
                 <table class="sum-total">
                     <tr>
                         <td><strong>Total Payable(Taka)</strong></td>
-                        <td>{{intval($total_payable)}}</td>
+                        <td>{{number_format(intval($total_payable), 2, '.', ',')}}</td>
                     </tr>
                 </table>
             </td>
@@ -155,8 +155,8 @@
 @if ($challan_type)
     <table style="width: 100%">
         <tr>
-            <td>
-               <strong style="font-size: 18px; text-align:center">Challan Type: {{$challan_type}}</strong> 
+            <td style="text-align:center">
+               <strong style="font-size: 18px">Challan Type: {{$challan_type}}</strong> 
             </td>
         </tr>
     </table>
