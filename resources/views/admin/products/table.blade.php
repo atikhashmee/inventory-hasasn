@@ -9,7 +9,7 @@
                 <th>Category</th>
                 <th>Origin</th>
                 <th>Brand</th>
-                <th>Menufacture</th>
+                <th>Manufacture</th>
                 <th>Price</th>
                 <th>Action</th>
             </tr>
