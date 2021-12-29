@@ -156,7 +156,7 @@
     <table style="width: 100%">
         <tr>
             <td>
-               <strong style="font-size: 18px">{{$challan_type}}</strong> 
+               <strong style="font-size: 18px; text-align:center">Challan Type: {{$challan_type}}</strong> 
             </td>
         </tr>
     </table>

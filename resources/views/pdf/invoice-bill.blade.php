@@ -48,7 +48,7 @@
 <br />
 <br />
 <div class="doc-type">
-    <h2>Invoice/BIll</h2>
+    <h2>Invoice/Bill</h2>
 </div>
 
 <br />
