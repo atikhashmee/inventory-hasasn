@@ -56,6 +56,9 @@ class OrderController extends Controller
     }
 
     public function create() {
+        $user =  auth()->user();
+        $data['user'] = $user;
+        $data['role'] = $user->role;
         $shopCollection = Shop::where('status', 'active')->get();
         $shopCollection = $shopCollection->map(function($shop) {
             if (file_exists(public_path().'/uploads/shops/'.$shop->image)  && $shop->image) {
@@ -67,11 +70,18 @@ class OrderController extends Controller
         });
         $data['shops'] = $shopCollection;
         $data['units'] = Unit::select('id', 'name', 'quantity_base')->where('status', 'active')->get();
+        $data['user'] = $user;
+        $data['role'] = $user->role;
         return view('admin.orders.create', $data);
     }
 
     public function userOrderCreate() {
-        return view('user.new_order');
+        $data = [];
+        $user =  auth()->user();
+        $data['units'] = Unit::select('id', 'name', 'quantity_base')->where('status', 'active')->get();
+        $data['user'] = $user;
+        $data['role'] = $user->role;
+        return view('user.new_order', $data);
     }
 
     public function getResources() {
