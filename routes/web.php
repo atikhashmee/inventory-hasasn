@@ -86,4 +86,5 @@ Route::group(['prefix' => 'user', 'as' => 'user.'], function () {
     Route::get('/new_order', [App\Http\Controllers\OrderController::class, 'userOrderCreate'])->name('new_order');
     Route::get('/sale-lists', [App\Http\Controllers\OrderController::class, 'userOrderLists'])->name('sales_lists');
     Route::get('/order/{order_id}', [App\Http\Controllers\OrderController::class, 'userOrderDetail'])->name('order_detail');
+    Route::resource('products', App\Http\Controllers\ProductController::class);
 });

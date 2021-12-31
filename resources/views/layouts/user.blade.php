@@ -32,6 +32,13 @@
                 <a class="dropdown-item" href="{{route('user.sales_lists')}}">Lists</a>
               </div>
             </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-expanded="false">Catalog</a>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="{{route("user.products.index")}}">Products</a>
+                <a class="dropdown-item" href="#">Purchase</a>
+              </div>
+            </li>
             <li class="nav-item">
               <a class="nav-link" href="javascript:void(0)" onclick="document.getElementById('logout-form').submit()">Logout</a>
               <form action="{{route('logout')}}" method="POST" id="logout-form"> @csrf </form>

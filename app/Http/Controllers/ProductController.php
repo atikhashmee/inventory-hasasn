@@ -37,6 +37,7 @@ class ProductController extends AppBaseController
      */
     public function index(Request $request)
     {
+        $user = auth()->user();
         /** @var Product $products */
        $product_sql = Product::select('products.*', 'countries.name as country_name')
         ->leftJoin('countries', 'countries.id', '=', 'products.origin');
@@ -71,14 +72,20 @@ class ProductController extends AppBaseController
             $product_sql->leftJoin(\DB::raw("(SELECT SUM(quantity) as total_supply_out_one, product_id FROM shop_products GROUP BY product_id) as TS1"), "TS1.product_id", "=", "products.id");
             $product_sql->leftJoin(\DB::raw("(SELECT SUM(quantity) as total_supply_out_two, product_id FROM shop_product_stocks GROUP BY product_id) as TS2"), "TS2.product_id", "=", "products.id");
         }
-
         //dd($product_sql->get()->toArray());
         $products =   $product_sql->orderBy('id', 'DESC')->paginate(10);
 
         $serial = pagiSerial($products, 10);
-        return view('admin.products.index')
+        if ($user->role == 'admin') {
+            return view('admin.products.index')
             ->with('products', $products)
             ->with('serial', $serial);
+        } else {
+            return view('user.products.index')
+            ->with('products', $products)
+            ->with('serial', $serial);
+        }
+       
     }
 
     /**
@@ -88,7 +95,12 @@ class ProductController extends AppBaseController
      */
     public function create()
     {
-        return view('admin.products.create');
+        $user = auth()->user();
+        if ($user->role == 'admin') {
+            return view('admin.products.create');
+        } else {
+            return view('user.products.create');
+        }
     }
 
     /**
