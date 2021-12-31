@@ -84,4 +84,6 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin', 'as' => 'admin.'], fu
 Route::group(['prefix' => 'user', 'as' => 'user.'], function () {
     Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'userDashboard'])->name('home');
     Route::get('/new_order', [App\Http\Controllers\OrderController::class, 'userOrderCreate'])->name('new_order');
+    Route::get('/sale-lists', [App\Http\Controllers\OrderController::class, 'userOrderLists'])->name('sales_lists');
+    Route::get('/order/{order_id}', [App\Http\Controllers\OrderController::class, 'userOrderDetail'])->name('order_detail');
 });

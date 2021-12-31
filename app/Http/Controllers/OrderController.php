@@ -18,16 +18,22 @@ use Illuminate\Support\Facades\Validator;
 
 class OrderController extends Controller
 {
-    public function index() {
-        $data['orders'] = Order::select('orders.*', \DB::raw("IFNULL(OD.total_warenty_items, 0) as wr_order_details"))
-        ->leftJoin(\DB::raw("(SELECT COUNT(order_details.id) as total_warenty_items, order_details.order_id FROM order_details INNER JOIN products ON products.id = order_details.product_id WHERE products.warenty_duration IS NOT NULL GROUP BY order_details.order_id) AS OD"), 'OD.order_id', '=', 'orders.id')
-        ->where(function($q){
+    public function index(Request $request) {
+        $user = auth()->user();
+        $data['orders'] = $this->orderLists($request, $user->id);
+        $data['serial'] = pagiSerial($data['orders'], 100);
+        $data['shops'] = Shop::get();
+        $data['customers'] = Customer::get();
+        return view('admin.orders.index', $data);
+    }
 
+    public function orderLists(Request $request, $user_id) {
+        return Order::select('orders.*', \DB::raw("IFNULL(OD.total_warenty_items, 0) as wr_order_details"))
+        ->leftJoin(\DB::raw("(SELECT COUNT(order_details.id) as total_warenty_items, order_details.order_id FROM order_details INNER JOIN products ON products.id = order_details.product_id WHERE products.warenty_duration IS NOT NULL GROUP BY order_details.order_id) AS OD"), 'OD.order_id', '=', 'orders.id')
+        ->where(function($q) {
             if (request()->query('start')!='' && request()->query('end')!='') {
                 $q->whereBetween(\DB::raw('DATE(created_at)'), [request()->query('start'),  request()->query('end')]);
             }
-
-           
 
             if (request()->query('search')!='') {
                 $q->where('order_number', 'LIKE', '%'.request()->query('search').'%');
@@ -48,11 +54,9 @@ class OrderController extends Controller
             if (request()->query('order_challan_type')!='') {
                 $q->where('order_challan_type', request()->query('order_challan_type'));
             }
-        })->orderBy('id', 'DESC')->paginate(100);
-        $data['serial'] = pagiSerial($data['orders'], 100);
-        $data['shops'] = Shop::get();
-        $data['customers'] = Customer::get();
-        return view('admin.orders.index', $data);
+        })
+        ->where('user_id', $user_id)
+        ->orderBy('id', 'DESC')->paginate(100);
     }
 
     public function create() {
@@ -82,6 +86,30 @@ class OrderController extends Controller
         $data['user'] = $user;
         $data['role'] = $user->role;
         return view('user.new_order', $data);
+    }
+
+    public function userOrderLists(Request $request) {
+        $user = auth()->user();
+        $data['orders'] = $this->orderLists($request, $user->id);
+        $data['serial'] = pagiSerial($data['orders'], 100);
+        $data['shops']  = Shop::get();
+        $data['customers'] = Customer::get();
+        return view('user.orders', $data);
+    }
+
+    public function userOrderDetail($order_id) {
+        $data['order'] = Order::select(
+            'orders.*', 
+            \DB::raw("(SELECT id FROM orders WHERE id > ".$order_id." LIMIT 1) as next_order_id"),
+            \DB::raw("(SELECT id FROM orders WHERE id < ".$order_id." ORDER BY id DESC LIMIT 1) as prev_order_id")
+            )
+        ->where('id', $order_id)->first();
+        $data['wr_order_details'] = OrderDetail::with('warenty')->select('order_details.*')
+        ->join('products', 'products.id', '=', 'order_details.product_id')
+        ->where('order_details.order_id', $order_id)
+        ->whereNotNull('products.warenty_duration')
+        ->get();
+        return view('user.order_detail', $data);
     }
 
     public function getResources() {

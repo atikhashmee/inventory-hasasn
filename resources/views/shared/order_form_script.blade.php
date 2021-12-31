@@ -77,10 +77,16 @@
                 customer_email: null,
                 customer_phone: null,
                 customer_address: null,
-            }
+            },
+            user_role: null,
         },
         mounted() {
-            this.order_id = this.salesIdDateFormat()
+            this.order_id  = this.salesIdDateFormat()
+            this.user_role = document.querySelector('#user_role').value;
+            if (this.user_role !== 'admin') {
+                this.shop_id = document.querySelector('#shop_id').value;
+                this.shopDataFetch(this.shop_id)
+            }
         },
         computed: {
             subTotalValue() {
@@ -214,10 +220,7 @@
                     }
                 })
             },
-            shopChangeGetData(evt) {
-                let shop_id = evt.currentTarget.value
-                let img = $(evt.currentTarget).find(':selected').data('img')
-                $("#shop_image").attr('src', img)
+            shopDataFetch(shop_id) {
                 this.products = []
                 this.product_ids = []
                 let url = `{{url('shop_stock_products')}}/${shop_id}`
@@ -229,6 +232,12 @@
                         this.product_items = [...res.data.products]
                     }
                 })
+            },
+            shopChangeGetData(evt) {
+                let shop_id = evt.currentTarget.value
+                let img = $(evt.currentTarget).find(':selected').data('img')
+                $("#shop_image").attr('src', img)
+                this.shopDataFetch(shop_id);
             },
             salesIdDateFormat() {
                 let d = new Date();

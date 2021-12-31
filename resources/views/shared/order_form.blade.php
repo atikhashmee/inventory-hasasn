@@ -1,5 +1,6 @@
 <div class="card">
     <div class="card-body">
+        <input type="hidden" id="user_role" value="{{$role}}">
         <div class="container mt-5" id="order_new">
             <div class="row">
                 <div class="col-md-12">
@@ -40,7 +41,7 @@
                                             </td>
                                         </tr>
                                     @else
-                                        <input type="hidden" name="shop_id" value="{{$user->shop_id}}">
+                                        <input type="hidden" name="shop_id" id="shop_id" value="{{$user->shop_id}}">
                                     @endif
                                     <tr>
                                         <td><label for="">Sales Type</label></td>
