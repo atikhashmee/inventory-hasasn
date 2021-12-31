@@ -4,7 +4,7 @@
     <div class="container mt-5">
         <div class="row">
             <div class="col-md-12">
-                <form action="{{route('admin.orders.index')}}" method="GET">
+                <form action="{{route('user.sales_lists')}}" method="GET">
                     <div class="d-flex justify-content-between align-items-center mb-2">
                         <div class="d-flex">
                             <div class="form-group  mr-2">
@@ -91,3 +91,21 @@
         </div>
     </div>
 @endsection
+
+@push('third_party_stylesheets')
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+@endpush
+@push('third_party_scripts')
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+@endpush
+
+@push('page_scripts')
+    <script>
+        $('#rangePicker').daterangepicker();
+        $('#rangePicker').on('apply.daterangepicker', function(ev, picker) {
+            $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
+            $('#start').val(picker.startDate.format('YYYY-MM-DD'))
+            $('#end').val(picker.endDate.format('YYYY-MM-DD'))
+        });
+    </script>
+@endpush

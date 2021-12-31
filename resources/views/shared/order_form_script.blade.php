@@ -216,7 +216,11 @@
                 .then(res=>res.json())
                 .then(res=>{
                     if (res.status) {
-                        window.location.href= `{{url('admin/orders/')}}/${res.data.id}`;
+                        if (this.user_role === 'admin') {
+                            window.location.href= `{{url('admin/orders/')}}/${res.data.id}`;
+                        } else if(this.user_role === 'staff') {
+                            window.location.href= `{{url('user/order/')}}/${res.data.id}`;
+                        }
                     }
                 })
             },
