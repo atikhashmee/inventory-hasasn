@@ -58,5 +58,17 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     @stack('third_party_scripts')
     @stack('page_scripts')
+
+    <script>
+      function makeRandomSku(len) {
+          let result = '';
+          let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+          let charactersLength = characters.length;
+          for ( let i = 0; i < len; i++ ) {
+              result += characters.charAt(Math.floor(Math.random() * charactersLength));
+          }
+          return result;
+      }
+    </script>
   </body>
 </html>

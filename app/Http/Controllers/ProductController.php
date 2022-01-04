@@ -73,6 +73,7 @@ class ProductController extends AppBaseController
             $product_sql->leftJoin(\DB::raw("(SELECT SUM(quantity) as total_supply_out_two, product_id FROM shop_product_stocks GROUP BY product_id) as TS2"), "TS2.product_id", "=", "products.id");
         }
         //dd($product_sql->get()->toArray());
+        $product_sql->where('user_id', $user->id);
         $products =   $product_sql->orderBy('id', 'DESC')->paginate(10);
 
         $serial = pagiSerial($products, 10);
@@ -114,6 +115,7 @@ class ProductController extends AppBaseController
     {
         try {
             $input = $request->all();
+            $user = auth()->user();
 
             /** @var Product $product */
 
@@ -130,11 +132,13 @@ class ProductController extends AppBaseController
                 $input['feature_image'] = $fileName;
                 Storage::disk('public_uploads')->put('products'.'/'.$fileName, $img);
             }
+
+            $input['user_id'] = $user->id;
             $product = Product::create($input);
 
             Flash::success('Product saved successfully.');
 
-            return redirect(route('admin.products.index'));
+            return $user->role == 'admin' ? redirect(route('admin.products.index')) : redirect(route('user.products.index'));
         } catch (\Exception $e) {
             Flash::error($e->getMessage());
             return redirect(route('admin.products.index'));
@@ -152,15 +156,19 @@ class ProductController extends AppBaseController
     public function show($id)
     {
         /** @var Product $product */
+        $user = auth()->user();
         $product = Product::find($id);
 
         if (empty($product)) {
             Flash::error('Product not found');
-
             return redirect(route('admin.products.index'));
         }
-
-        return view('admin.products.show')->with('product', $product);
+        if ($user->role == 'admin') {
+            return view('admin.products.show')->with('product', $product);
+        } else {
+            return view('user.products.show')->with('product', $product);
+        }
+    
     }
 
     /**
@@ -174,6 +182,7 @@ class ProductController extends AppBaseController
     {
         /** @var Product $product */
         $product = Product::find($id);
+        $user = auth()->user();
 
         if (empty($product)) {
             Flash::error('Product not found');
@@ -181,7 +190,13 @@ class ProductController extends AppBaseController
             return redirect(route('admin.products.index'));
         }
 
-        return view('admin.products.edit')->with('product', $product);
+        if ($user->role == 'admin') {
+            return view('admin.products.edit')->with('product', $product);
+        } else {
+            return view('user.products.edit')->with('product', $product);
+        }
+
+       
     }
 
     /**
@@ -195,6 +210,7 @@ class ProductController extends AppBaseController
     public function update($id, UpdateProductRequest $request)
     {
         /** @var Product $product */
+        $user = auth()->user();
         $product = Product::find($id);
 
         if (empty($product)) {
@@ -223,8 +239,11 @@ class ProductController extends AppBaseController
         $product->save();
 
         Flash::success('Product updated successfully.');
-
-        return redirect(route('admin.products.index'));
+        if ($user->role == 'admin') {
+            return redirect(route('admin.products.index'));
+        } else {
+            return redirect(route('user.products.index'));
+        }
     }
 
     /**
@@ -238,19 +257,21 @@ class ProductController extends AppBaseController
      */
     public function destroy($id)
     {
+        $user = auth()->user();
         /** @var Product $product */
         $product = Product::find($id);
 
         if (empty($product)) {
             Flash::error('Product not found');
-
             return redirect(route('admin.products.index'));
         }
 
         $product->delete();
-
         Flash::success('Product deleted successfully.');
-
-        return redirect(route('admin.products.index'));
+        if ($user->role == 'admin') {
+            return redirect(route('admin.products.index'));
+        } else {
+            return redirect(route('user.products.index'));
+        }
     }
 }
