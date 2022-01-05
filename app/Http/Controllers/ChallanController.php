@@ -24,7 +24,8 @@ class ChallanController extends AppBaseController
     public function index(Request $request)
     {
         /** @var Challan $challans */
-        $challans = Challan::where(function($q) {
+        $user = auth()->user();
+        $challanSql = Challan::where(function($q) {
             if (request()->challan_type) {
                 $q->where('challan_type', request()->challan_type);
             }
@@ -34,13 +35,22 @@ class ChallanController extends AppBaseController
             if (request()->query('shop_id')!='') {
                 $q->where('shop_id', request()->query('shop_id'));
             }
-        })->orderBy('id', 'DESC')->paginate(50);
+        });
+        if ($user->role != 'admin') {
+            $challanSql->where('user_id', $user->id);
+        }
+        $challans = $challanSql->orderBy('id', 'DESC')->paginate(50);
 
         $data['serial'] = pagiSerial($challans, 50);
         $data['shops'] = Shop::get();
         $data['customers'] = Customer::get();
         $data['challans'] =  $challans;
-        return view('admin.challans.index', $data);
+
+        if ($user->role == 'admin') {
+            return view('admin.challans.index', $data);
+        } else {
+            return view('user.challans.index', $data);
+        }
     }
 
     /**
@@ -50,7 +60,12 @@ class ChallanController extends AppBaseController
      */
     public function create()
     {
-        return view('admin.challans.create');
+        $user = auth()->user();
+        if ($user->role == 'admin') {
+            return view('admin.challans.create');
+        } else {
+            return view('user.challans.create');
+        }
     }
 
     /**
@@ -63,13 +78,18 @@ class ChallanController extends AppBaseController
     public function store(CreateChallanRequest $request)
     {
         $input = $request->all();
+        $user = auth()->user();
 
         /** @var Challan $challan */
+        $input['user_id'] = $user->id;
         $challan = Challan::create($input);
 
         Flash::success('Challan saved successfully.');
-
-        return redirect(route('admin.challans.index'));
+        if ($user->role == 'admin') {
+            return redirect(route('admin.challans.index'));
+        } else {
+            return redirect(route('user.challans.index'));
+        }
     }
 
     /**
@@ -83,14 +103,24 @@ class ChallanController extends AppBaseController
     {
         /** @var Challan $challan */
         $challan = Challan::find($id);
+        $user = auth()->user();
 
         if (empty($challan)) {
             Flash::error('Challan not found');
+            if ($user->role == 'admin') {
+                return redirect(route('admin.challans.index'));
+            } else {
+                return redirect(route('user.challans.index'));
+            }
 
-            return redirect(route('admin.challans.index'));
         }
 
-        return view('admin.challans.show')->with('challan', $challan);
+        if ($user->role == 'admin') {
+            return view('admin.challans.show')->with('challan', $challan);
+        } else {
+            return view('user.challans.show')->with('challan', $challan);
+        }
+
     }
 
     /**
@@ -104,14 +134,23 @@ class ChallanController extends AppBaseController
     {
         /** @var Challan $challan */
         $challan = Challan::find($id);
+        $user = auth()->user();
 
         if (empty($challan)) {
             Flash::error('Challan not found');
 
-            return redirect(route('admin.challans.index'));
+            if ($user->role == 'admin') {
+                return redirect(route('admin.challans.index'));
+            } else {
+                return redirect(route('user.challans.index'));
+            }
         }
 
-        return view('admin.challans.edit')->with('challan', $challan);
+        if ($user->role == 'admin') {
+            return view('admin.challans.edit')->with('challan', $challan);
+        } else {
+            return view('user.challans.edit')->with('challan', $challan);
+        }
     }
 
     /**
@@ -126,11 +165,16 @@ class ChallanController extends AppBaseController
     {
         /** @var Challan $challan */
         $challan = Challan::find($id);
+        $user = auth()->user();
 
         if (empty($challan)) {
             Flash::error('Challan not found');
 
-            return redirect(route('admin.challans.index'));
+            if ($user->role == 'admin') {
+                return redirect(route('admin.challans.index'));
+            } else {
+                return redirect(route('user.challans.index'));
+            }
         }
 
         $challan->fill($request->all());
@@ -138,7 +182,12 @@ class ChallanController extends AppBaseController
 
         Flash::success('Challan updated successfully.');
 
-        return redirect(route('admin.challans.index'));
+        if ($user->role == 'admin') {
+            return redirect(route('admin.challans.index'));
+        } else {
+            return redirect(route('user.challans.index'));
+        }
+
     }
 
     /**
@@ -154,17 +203,25 @@ class ChallanController extends AppBaseController
     {
         /** @var Challan $challan */
         $challan = Challan::find($id);
+        $user = auth()->user();
 
         if (empty($challan)) {
             Flash::error('Challan not found');
-
-            return redirect(route('admin.challans.index'));
+            if ($user->role == 'admin') {
+                return redirect(route('admin.challans.index'));
+            } else {
+                return redirect(route('user.challans.index'));
+            }
         }
 
         $challan->delete();
 
         Flash::success('Challan deleted successfully.');
 
-        return redirect(route('admin.challans.index'));
+        if ($user->role == 'admin') {
+            return redirect(route('admin.challans.index'));
+        } else {
+            return redirect(route('user.challans.index'));
+        }
     }
 }

@@ -73,7 +73,10 @@ class ProductController extends AppBaseController
             $product_sql->leftJoin(\DB::raw("(SELECT SUM(quantity) as total_supply_out_two, product_id FROM shop_product_stocks GROUP BY product_id) as TS2"), "TS2.product_id", "=", "products.id");
         }
         //dd($product_sql->get()->toArray());
-        $product_sql->where('user_id', $user->id);
+        if ($user->role != 'admin') {
+            $product_sql->where('user_id', $user->id);
+        } 
+        
         $products =   $product_sql->orderBy('id', 'DESC')->paginate(10);
 
         $serial = pagiSerial($products, 10);

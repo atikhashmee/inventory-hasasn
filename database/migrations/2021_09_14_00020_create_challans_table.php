@@ -16,6 +16,7 @@ class CreateChallansTable extends Migration
     {
         Schema::create('challans', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('shop_id');
             $table->unsignedBigInteger('customer_id');
             $table->string('product_type');

@@ -45,19 +45,19 @@ class ViewServiceProvider extends ServiceProvider
             array_unshift($unitItems, 'Unit');
             $view->with('shopItems', $shopItems)->with('unitItems', $unitItems);
         });
-        View::composer(['admin.challans.fields'], function ($view) {
+        View::composer(['admin.challans.fields', 'user.challans.fields'], function ($view) {
             $challan_types = ['Condition With Charge' => 'Condition With Charge', 'Condition Only' => 'Condition Only', 'Charge Only' => 'Charge Only' ];
             $view->with('challan_types', $challan_types);
         });
-        View::composer(['admin.challans.fields'], function ($view) {
+        View::composer(['admin.challans.fields', 'user.challans.fields'], function ($view) {
             $unitItems = Unit::pluck('name','id')->toArray();
             $view->with('unitItems', $unitItems);
         });
-        View::composer(['admin.challans.fields'], function ($view) {
+        View::composer(['admin.challans.fields', 'user.challans.fields'], function ($view) {
             $customerItems = Customer::pluck('customer_name','id')->toArray();
             $view->with('customerItems', $customerItems);
         });
-        View::composer(['admin.challans.fields'], function ($view) {
+        View::composer(['admin.challans.fields', 'user.challans.fields'], function ($view) {
             $shopItems = Shop::pluck('name','id')->toArray();
             $view->with('shopItems', $shopItems);
         });
@@ -85,8 +85,13 @@ class ViewServiceProvider extends ServiceProvider
             $supplierItems = Supplier::pluck('name','id')->toArray();
             $view->with('supplierItems', $supplierItems);
         });
-        View::composer(['admin.stocks.fields', 'user.stocks.fields'], function ($view) {
+        View::composer(['admin.stocks.fields'], function ($view) {
             $productItems = Product::pluck('name','id')->toArray();
+            $view->with('productItems', $productItems);
+        });
+        View::composer(['user.stocks.fields'], function ($view) {
+            $user = auth()->user();
+            $productItems = Product::where('user_id', $user->id)->pluck('name','id')->toArray();
             $view->with('productItems', $productItems);
         });
         View::composer(['admin.stocks.fields'], function ($view) {

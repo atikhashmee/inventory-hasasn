@@ -43,14 +43,16 @@ class StockController extends AppBaseController
         
         $serial = pagiSerial($stocks, 50);
         $suppliers = Supplier::get();
-        $products = Product::get();
+        
         if ($user->role == 'admin') {
+            $products = Product::get();
             return view('admin.stocks.index')
             ->with('stocks', $stocks)
             ->with('suppliers', $suppliers)
             ->with('serial', $serial)
             ->with('products', $products);
         } else {
+            $products = Product::where('user_id', $user->id)->get();
             return view('user.stocks.index')
             ->with('stocks', $stocks)
             ->with('suppliers', $suppliers)

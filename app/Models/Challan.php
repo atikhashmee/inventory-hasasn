@@ -36,6 +36,7 @@ class Challan extends Model
 
 
     public $fillable = [
+        'user_id',
         'shop_id',
         'customer_id',
         'product_type',
@@ -53,6 +54,7 @@ class Challan extends Model
      */
     protected $casts = [
         'id' => 'integer',
+        'user_id' => 'integer',
         'shop_id' => 'integer',
         'customer_id' => 'integer',
         'product_type' => 'string',
