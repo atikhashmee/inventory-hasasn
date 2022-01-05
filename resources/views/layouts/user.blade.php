@@ -10,6 +10,15 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="//cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
+    <style>
+      .select2-container .select2-selection--single {
+          height: 40px !important;
+      }
+      .right-menus .nav-link {
+          color: #fff !important;
+      }
+    </style>
     @stack('third_party_stylesheets')
     <title>Meditech::User Panel</title>
   </head>
@@ -36,7 +45,7 @@
               <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-expanded="false">Catalog</a>
               <div class="dropdown-menu">
                 <a class="dropdown-item" href="{{route("user.products.index")}}">Products</a>
-                <a class="dropdown-item" href="#">Purchase</a>
+                <a class="dropdown-item" href="{{route("user.stocks.index")}}">Purchase</a>
               </div>
             </li>
             <li class="nav-item">
@@ -56,9 +65,7 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    @stack('third_party_scripts')
-    @stack('page_scripts')
-
+    <script src="//cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
     <script>
       function makeRandomSku(len) {
           let result = '';
@@ -69,6 +76,15 @@
           }
           return result;
       }
+
+      $(document).ready(function() {
+          $('.select2').select2();
+          $('.data-table-lib').DataTable({"aaSorting": []});
+      });
     </script>
+    @stack('third_party_scripts')
+    @stack('page_scripts')
+
+    
   </body>
 </html>

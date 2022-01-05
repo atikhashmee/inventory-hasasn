@@ -19,6 +19,7 @@ class CreateStocksTable extends Migration
             $table->unsignedBigInteger('product_id');
             $table->unsignedBigInteger('supplier_id');
             $table->unsignedBigInteger('warehouse_id');
+            $table->unsignedBigInteger('user_id');
             $table->string('sku')->unique();
             $table->decimal('old_price', 10, 2)->nullable();
             $table->decimal('price', 10, 2);

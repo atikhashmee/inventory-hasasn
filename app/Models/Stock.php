@@ -40,6 +40,7 @@ class Stock extends Model
         'product_id',
         'supplier_id',
         'warehouse_id',
+        'user_id',
         'sku',
         'old_price',
         'price',
