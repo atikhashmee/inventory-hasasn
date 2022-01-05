@@ -17,7 +17,8 @@ class TransactionController extends Controller
      */
     public function index()
     {
-        $data['transactions'] = Transaction::select('transactions.*')
+        $user = auth()->user();
+        $transSql  = Transaction::select('transactions.*')
         ->where(function($q) {
             if (request()->query('start')!='' && request()->query('end')!='') {
                 $q->whereBetween('created_at', [request()->query('start'),  request()->query('end')]);
@@ -26,9 +27,13 @@ class TransactionController extends Controller
             if (request()->query('customer_id')!='') {
                 $q->where('customer_id', request()->query('customer_id'));
             }
-        })
-        ->orderBy('id', 'DESC')
-        ->paginate(100);
+        });
+        
+        if ($user->role != 'admin') {
+            $transSql->where('user_id', $user->id);
+        }
+
+        $data['transactions'] =  $transSql->orderBy('id', 'DESC')->paginate(100);
         $data['totalDiposit'] = $data['transactions']->getCollection()->reduce(function($total, $item){
             if ($item->type == 'in') {
                 return $total + $item->amount;
@@ -40,7 +45,12 @@ class TransactionController extends Controller
             }
         }, 0);
         $data['customers'] = Customer::get();
-        return view('admin.transactions.index', $data);
+
+        if ($user->role == 'admin') {
+            return view('admin.transactions.index', $data);
+        } else {
+            return view('user.transactions.index', $data);
+        }
     }
 
     /**
@@ -50,11 +60,17 @@ class TransactionController extends Controller
      */
     public function create()
     {
+        $user = auth()->user();
         $data['customers'] = Customer::select('customers.id', 'customers.customer_name', \DB::raw('IFNULL(TD.total_deposit, 0) as total_deposit'), \DB::raw('IFNULL(TW.total_withdraw, 0) as total_withdraw'))
         ->leftJoin(\DB::raw('(SELECT SUM(amount) as total_deposit, customer_id FROM transactions WHERE type="in" GROUP BY customer_id) AS TD'), 'TD.customer_id', '=', 'customers.id')
         ->leftJoin(\DB::raw('(SELECT SUM(amount) as total_withdraw, customer_id FROM transactions WHERE type="out" GROUP BY customer_id) AS TW'), 'TW.customer_id', '=', 'customers.id')
         ->get();
-        return view('admin.transactions.create', $data);
+
+        if ($user->role == 'admin') {
+            return view('admin.transactions.create', $data);
+        } else {
+            return view('user.transactions.create', $data);
+        }
     }
 
     /**
@@ -65,6 +81,7 @@ class TransactionController extends Controller
      */
     public function store(Request $request)
     {
+        $user = auth()->user();
         try {
             $validator = Validator::make($request->all(), [
                 'customer_id' => 'required|integer|exists:customers,id',
@@ -77,7 +94,7 @@ class TransactionController extends Controller
             }
 
             $data = $request->except('_token');
-            $data['user_id'] = auth()->user()->id;
+            $data['user_id'] = $user->id;
             $tnx = Transaction::create($data);
             if ($tnx) {
                 Flash::success('Transaction created');

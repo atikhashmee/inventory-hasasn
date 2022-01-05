@@ -52,6 +52,9 @@
               <a class="nav-link" href="{{route("user.customers.index")}}">Customer</a>
             </li>
             <li class="nav-item active">
+              <a class="nav-link" href="{{route("user.transactions.index")}}">Transactions</a>
+            </li>
+            <li class="nav-item active">
               <a class="nav-link" href="{{route("user.challans.index")}}">Challan</a>
             </li>
             <li class="nav-item">

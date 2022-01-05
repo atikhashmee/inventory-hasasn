@@ -90,4 +90,5 @@ Route::group(['prefix' => 'user', 'as' => 'user.'], function () {
     Route::resource('stocks', App\Http\Controllers\StockController::class);
     Route::resource('customers', App\Http\Controllers\CustomerController::class);
     Route::resource('challans', App\Http\Controllers\ChallanController::class);
+    Route::resource('transactions', App\Http\Controllers\TransactionController::class);
 });
