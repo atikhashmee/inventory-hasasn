@@ -21,6 +21,7 @@ class ReportController extends Controller
      */
     public function index(Request $request)
     {
+        $user = auth()->user();
         try {
             $year = $request->year ?? date('Y');
             $sql = Order::select(\DB::raw('COUNT(id) AS countId'),\DB::raw('SUM(total_final_amount) AS charges'),\DB::raw('DATE(created_at) AS date'))
@@ -48,7 +49,13 @@ class ReportController extends Controller
             }
             $shops = Shop::get();
             $customers = Customer::get();
-            return view('admin.reports.sales', compact('data', 'customers', 'shops'));
+            
+            if ($user->role == 'admin') {
+                return view('admin.reports.sales', compact('data', 'customers', 'shops'));
+            } else {
+                return view('user.reports.sales', compact('data', 'customers', 'shops'));
+            }
+
         } catch (\Exception $e) {
             Flash::error($e->getMessage());
             return redirect()->back()->withErrors(['error' => $e->getMessage()]);
@@ -57,18 +64,29 @@ class ReportController extends Controller
 
     public function salesDetail(Request $request)
     {
+        $user = auth()->user();
         $orders = Order::whereDate('created_at', $request->date)->get();
-        return view('admin.reports.sales_detail', compact('orders'));
+        if ($user->role == 'admin') {
+            return view('admin.reports.sales_detail', compact('orders'));
+        } else {
+            return view('user.reports.sales_detail', compact('orders'));
+        }
     }
 
     public function purchaseDetail(Request $request)
     {
+        $user = auth()->user();
         $stocks = Stock::whereDate('created_at', $request->date)->get();
-        return view('admin.reports.purchase_detail', compact('stocks'));
+        if ($user->role == 'admin') {
+            return view('admin.reports.purchase_detail', compact('stocks'));
+        } else {
+            return view('user.reports.purchase_detail', compact('stocks'));
+        }
     }
 
     public function purchaseReport(Request $request)
     {
+        $user = auth()->user();
         try {
             $year = $request->year ?? date('Y');
                 $sql = Stock::select(
@@ -101,7 +119,11 @@ class ReportController extends Controller
             }
             $products = Product::get();
             $suppliers = Supplier::get();
-            return view('admin.reports.purchase', compact('data', 'products', 'suppliers'));
+            if ($user->role == 'admin') {
+                return view('admin.reports.purchase', compact('data', 'products', 'suppliers'));
+            } else {
+                return view('user.reports.purchase', compact('data', 'products', 'suppliers'));
+            }
         } catch (\Exception $e) {
             Flash::error($e->getMessage());
             return redirect()->back()->withErrors(['error' => $e->getMessage()]);
@@ -110,6 +132,8 @@ class ReportController extends Controller
 
     public function paymentReport(Request $request)
     {
+        
+        $user = auth()->user();
         try {
             $year = $request->year ?? date('Y');
                 $sql = Transaction::select(
@@ -138,7 +162,11 @@ class ReportController extends Controller
                 // }
             }
             $customers = Customer::get();
-            return view('admin.reports.payment', compact('data', 'customers'));
+            if ($user->role == 'admin') {
+                return view('admin.reports.payment', compact('data', 'customers'));
+            } else {
+                return view('user.reports.payment', compact('data', 'customers'));
+            }
         } catch (\Exception $e) {
             Flash::error($e->getMessage());
             return redirect()->back()->withErrors(['error' => $e->getMessage()]);
@@ -147,6 +175,8 @@ class ReportController extends Controller
 
     public function profitLoss(Request $request)
     {
+        
+        $user = auth()->user();
         try {
             $year = $request->year ?? date('Y');
             $orderSql = Order::select(
@@ -174,7 +204,11 @@ class ReportController extends Controller
                 }
                 $data[intVal($dateArr[1])][intVal($dateArr[2])] = $daySUm;
             }
-            return view('admin.reports.profit_loss', compact('data'));
+            if ($user->role == 'admin') {
+                return view('admin.reports.profit_loss', compact('data'));
+            } else {
+                return view('user.reports.profit_loss', compact('data'));
+            }
         } catch (\Exception $e) {
             Flash::error($e->getMessage());
             return redirect()->back();

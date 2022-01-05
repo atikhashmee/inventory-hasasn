@@ -57,6 +57,9 @@
             <li class="nav-item active">
               <a class="nav-link" href="{{route("user.challans.index")}}">Challan</a>
             </li>
+            <li class="nav-item active">
+              <a class="nav-link" href="{{ route('user.report.sells') }}">Report</a>
+            </li>
             <li class="nav-item">
               <a class="nav-link" href="javascript:void(0)" onclick="document.getElementById('logout-form').submit()">Logout</a>
               <form action="{{route('logout')}}" method="POST" id="logout-form"> @csrf </form>

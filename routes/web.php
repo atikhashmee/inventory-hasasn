@@ -91,4 +91,13 @@ Route::group(['prefix' => 'user', 'as' => 'user.'], function () {
     Route::resource('customers', App\Http\Controllers\CustomerController::class);
     Route::resource('challans', App\Http\Controllers\ChallanController::class);
     Route::resource('transactions', App\Http\Controllers\TransactionController::class);
+
+    Route::group(['prefix' => 'report', 'as' => 'report.'], function() {
+        Route::get('sells', [App\Http\Controllers\ReportController::class, 'index'])->name('sells');
+        Route::get('sells-detail', [App\Http\Controllers\ReportController::class, 'salesDetail'])->name('sells_detail');
+        Route::get('purchase-detail', [App\Http\Controllers\ReportController::class, 'purchaseDetail'])->name('purchase_detail');
+        Route::get('purchase', [App\Http\Controllers\ReportController::class, 'purchaseReport'])->name('purchase');
+        Route::get('payment', [App\Http\Controllers\ReportController::class, 'paymentReport'])->name('payment');
+        Route::get('profit-loss', [App\Http\Controllers\ReportController::class, 'profitLoss'])->name('profitloss');
+    });
 });
