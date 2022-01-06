@@ -132,6 +132,7 @@ class OrderController extends Controller
                 'customer_email' => $data['customer_email'],
                 'customer_phone' => $data['customer_phone'],
             ], [
+                'user_id' => auth()->user()->id,
                 'customer_name' => $data['customer_name'],
                 'customer_email' => $data['customer_email'],
                 'customer_phone' => $data['customer_phone'],

@@ -25,7 +25,7 @@ class StockController extends AppBaseController
     {
         $user = auth()->user();
         /** @var Stock $stocks */
-        $stocks = Stock::where(function($q) use($request) {
+        $stocksql = Stock::where(function($q) use($request) {
             if (request()->query('start')!='' && request()->query('end')!='') {
                 $q->whereBetween('created_at', [request()->query('start'),  request()->query('end')]);
             }
@@ -37,9 +37,11 @@ class StockController extends AppBaseController
                 $q->where('product_id', $request->product_id);
             }
 
-        })
-        ->where('user_id', $user->id)
-        ->orderBy('id', 'DESC')->paginate(50);
+        });
+        if ($user->role != 'admin') {
+            $stocksql->where('user_id', $user->id);
+        }
+        $stocks = $stocksql->orderBy('id', 'DESC')->paginate(50);
         
         $serial = pagiSerial($stocks, 50);
         $suppliers = Supplier::get();

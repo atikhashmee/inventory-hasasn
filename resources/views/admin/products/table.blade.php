@@ -11,6 +11,7 @@
                 <th>Brand</th>
                 <th>Manufacture</th>
                 <th>Price</th>
+                <th>Added&nbsp;By</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -37,6 +38,7 @@
                 <td>{{ $product->brand->name }}</td>
                 <td>{{ $product->menufacture->name }}</td>
                 <td>{{ $product->selling_price }}</td>
+                <td>{{ $product->user_id }}</td>
                 <td width="120">
                     {!! Form::open(['route' => ['admin.products.destroy', $product->id], 'method' => 'delete']) !!}
                     <div class='btn-group'>
