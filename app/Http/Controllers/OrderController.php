@@ -127,12 +127,18 @@ class OrderController extends Controller
         try {
             \DB::beginTransaction();
             $data = $request->all();
+            $user = auth()->user(); 
+            $shop_id = $user->shop_id;
+            if ($user->role == 'admin') {
+                $shop_id = $data['shop_id'];
+            }
             $customer = Customer::updateOrCreate([
                 'customer_name' => $data['customer_name'],
                 'customer_email' => $data['customer_email'],
                 'customer_phone' => $data['customer_phone'],
             ], [
-                'user_id' => auth()->user()->id,
+                'shop_id' => $shop_id,
+                'user_id' => $user->id,
                 'customer_name' => $data['customer_name'],
                 'customer_email' => $data['customer_email'],
                 'customer_phone' => $data['customer_phone'],
@@ -147,7 +153,7 @@ class OrderController extends Controller
                     'order_challan_type'  =>  strtolower($data['sale_type']),
                     'notes'  =>  $data['note'],
                     'challan_note'  =>  $data['challan_note'],
-                    'user_id'  =>  auth()->user()->id,
+                    'user_id'  =>  $user->id,
                     'customer_id'  =>  $customer->id,
                     'discount_amount'  =>  $data['discount'],
                     'total_amount'  =>  $data['subtotal'] - $data['discount'],

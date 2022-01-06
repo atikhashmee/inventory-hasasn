@@ -28,7 +28,7 @@ class CustomerController extends Controller
             } else {
                 $data['customers'] = Customer::select('customers.*', \DB::raw('IFNULL(B.total_orders, 0) as totalOrdersCount'), 'B.order_ids')
                 ->leftJoin(\DB::raw('(SELECT COUNT(id) as total_orders, GROUP_CONCAT(id) as order_ids, customer_id FROM orders GROUP BY customer_id) AS B'), 'customers.id', '=', 'B.customer_id')
-                ->where('user_id', $user->id)
+                ->where('shop_id', $user->shop_id)
                 ->orderBy('totalOrdersCount', 'DESC')
                 ->paginate(100);
                 return view('user.customers.index', $data);
@@ -80,6 +80,7 @@ class CustomerController extends Controller
         }
         $user = auth()->user();
         $customer = Customer::create([
+            'shop_id' => $user->shop_id,
             'user_id' => $user->id,
             'customer_name' => $data['customer_name'],
             'customer_email' => $data['customer_email'],
