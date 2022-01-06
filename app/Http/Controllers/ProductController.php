@@ -40,26 +40,26 @@ class ProductController extends AppBaseController
         $user = auth()->user();
         /** @var Product $products */
        $product_sql = Product::select('products.*', 'countries.name as country_name')
-        ->leftJoin('countries', 'countries.id', '=', 'products.origin');
-
+        ->leftJoin('countries', 'countries.id', '=', 'products.origin')
+        ->leftJoin(\DB::raw("(SELECT SUM(quantity) as total_wareHouse_in, product_id FROM stocks GROUP BY product_id) as TS"), "TS.product_id", "=", "products.id")
+        ->leftJoin(\DB::raw("(SELECT SUM(quantity) as total_shop_in, product_id FROM shop_product_stocks GROUP BY product_id) as TS2"), "TS2.product_id", "=", "products.id")
+        ->leftJoin(\DB::raw("(SELECT SUM(final_quantity) as total_sell, product_id FROM order_details GROUP BY product_id) as TS3"), "TS3.product_id", "=", "products.id")
+        ->leftJoin(\DB::raw("(SELECT SUM(quantity) as total_shop_tranfer_out, shop_from, product_id FROM shop_to_shops GROUP BY product_id, shop_from) as TST"), "TST.product_id", "=", "products.id")
+        ->leftJoin(\DB::raw("(SELECT SUM(quantity) as total_shop_tranfer_in, shop_to, product_id FROM shop_to_shops GROUP BY product_id, shop_to) as TST1"), "TST1.product_id", "=", "products.id");
         
         if (request()->query('warehouse_id') == '' && request()->query('shop_id') =='') {
-            $product_sql->addSelect(\DB::raw("(IFNULL(TS.total_supply_in, 0) + IFNULL(TS1.total_supply_out_one, 0) + IFNULL(TS2.total_supply_out_two, 0)) as quantity"));
-            $product_sql->leftJoin(\DB::raw("(SELECT SUM(quantity) as total_supply_in, product_id FROM stocks GROUP BY product_id) as TS"), "TS.product_id", "=", "products.id");
-            $product_sql->leftJoin(\DB::raw("(SELECT SUM(quantity) as total_supply_out_one, product_id FROM shop_products GROUP BY product_id) as TS1"), "TS1.product_id", "=", "products.id");
-            $product_sql->leftJoin(\DB::raw("(SELECT SUM(quantity) as total_supply_out_two, product_id FROM shop_product_stocks GROUP BY product_id) as TS2"), "TS2.product_id", "=", "products.id");
+            $product_sql->addSelect(\DB::raw("(IFNULL(TS.total_wareHouse_in, 0) + IFNULL(TS2.total_shop_in, 0) + IFNULL(TST.total_shop_tranfer_in, 0)) - IFNULL(TS3.total_sell, 0) as quantity"));
         }
-        if (request()->query('shop_id')!='') {
+
+        if (request()->query('shop_id') !='' ) {
             $product_sql->join('shop_products', function($q) {
                 $q->on('shop_products.product_id', '=', 'products.id');
             });
             $product_sql->where('shop_products.shop_id', request()->query('shop_id'));
+
+            $product_sql->addSelect(\DB::raw("(IFNULL(TS2.total_shop_in, 0) - (IFNULL(TST.total_shop_tranfer, 0) + IFNULL(TS3.total_sell, 0))) as quantity")); 
             
-            $product_sql->addSelect(\DB::raw("( (IFNULL(TS1.total_in_one, 0) + IFNULL(TS2.total_in_two, 0)) - (IFNULL(TST.total_shop_tranfer, 0) + IFNULL(TS3.total_sell, 0))) as quantity")); 
             $product_sql->leftJoin(\DB::raw("(SELECT SUM(quantity) as total_shop_tranfer, product_id FROM shop_to_shops GROUP BY product_id) as TST"), "TST.product_id", "=", "products.id");
-            $product_sql->leftJoin(\DB::raw("(SELECT SUM(quantity) as total_in_one, product_id FROM shop_products GROUP BY product_id) as TS1"), "TS1.product_id", "=", "products.id");
-            $product_sql->leftJoin(\DB::raw("(SELECT SUM(quantity) as total_in_two, product_id FROM shop_product_stocks GROUP BY product_id) as TS2"), "TS2.product_id", "=", "products.id");
-            $product_sql->leftJoin(\DB::raw("(SELECT SUM(final_quantity) as total_sell, product_id FROM order_details GROUP BY product_id) as TS3"), "TS3.product_id", "=", "products.id");
         }
 
         if (request()->query('warehouse_id') != '') {
@@ -74,7 +74,8 @@ class ProductController extends AppBaseController
         }
         //dd($product_sql->get()->toArray());
         if ($user->role != 'admin') {
-            $product_sql->where('user_id', $user->id);
+            $product_sql->where('products.user_id', $user->id);
+            $product_sql->orWhere('shop_products.shop_id', $user->shop_id);
         } 
         
         $products =   $product_sql->orderBy('id', 'DESC')->paginate(10);

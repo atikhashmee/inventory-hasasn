@@ -106,25 +106,24 @@ class ShopProductController extends Controller
             $products = json_decode($data['products'], true);
             if (count($products) > 0) {
                 foreach ($products as $product) {
-                   $shopProduct =  ShopProduct::where('shop_id', $data['shop_id'])
-                    ->where('product_id', $product['id'])->first();
-                    if ($shopProduct) {
-                        ShopProductStock::create([
-                            'warehouse_id' => $warehouse_id,
-                            'shop_id' => $data['shop_id'],
-                            'product_id' => $product['id'],
-                            'quantity' => $product['new_quantity']??0,
-                            'price' => 0,
-                        ]);
-                    } else {
+                   $shopProduct = ShopProduct::where('shop_id', $data['shop_id'])->where('product_id', $product['id'])->first();
+                    if (!$shopProduct) {
                         ShopProduct::create([
                             'warehouse_id' => $warehouse_id,
                             'shop_id' => $data['shop_id'],
                             'product_id' => $product['id'],
-                            'quantity' => $product['new_quantity']??0,
+                            'quantity' => 0,
                             'price' => 0,
                         ]);
                     }
+
+                    ShopProductStock::create([
+                        'warehouse_id' => $warehouse_id,
+                        'shop_id' => $data['shop_id'],
+                        'product_id' => $product['id'],
+                        'quantity' => $product['new_quantity']??0,
+                        'price' => 0,
+                    ]);
                 }
             }
             return response()->json(['status'=>true, 'data'=>null]);

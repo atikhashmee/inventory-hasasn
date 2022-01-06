@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\User;
 use Eloquent as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -116,5 +117,15 @@ class Product extends Model
     public function menufacture()
     {
         return $this->belongsTo(\App\Models\Menufacture::class, 'menufacture_id', 'id');
+    }
+
+    /**
+     * Get the user that owns the Product
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id',);
     }
 }
