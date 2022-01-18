@@ -15,7 +15,7 @@ class CreateShopProductStocksTable extends Migration
     {
         Schema::create('shop_product_stocks', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('warehouse_id');
+            $table->unsignedBigInteger('warehouse_id')->nullable();
             $table->unsignedBigInteger('shop_id');
             $table->unsignedBigInteger('product_id');
             $table->integer('quantity')->unsigned();

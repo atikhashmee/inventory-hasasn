@@ -25,7 +25,6 @@ class CreateSuppliersTable extends Migration
             $table->text('address');
             $table->timestamps();
             $table->softDeletes();
-            $table->foreign('country_id')->references('id')->on('countries')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

@@ -47,9 +47,9 @@ class ProductController extends AppBaseController
         ->leftJoin(\DB::raw("(SELECT SUM(quantity) as total_shop_tranfer_out, shop_from, product_id FROM shop_to_shops GROUP BY product_id, shop_from) as TST"), "TST.product_id", "=", "products.id")
         ->leftJoin(\DB::raw("(SELECT SUM(quantity) as total_shop_tranfer_in, shop_to, product_id FROM shop_to_shops GROUP BY product_id, shop_to) as TST1"), "TST1.product_id", "=", "products.id");
         
-        if (request()->query('warehouse_id') == '' && request()->query('shop_id') =='') {
-            $product_sql->addSelect(\DB::raw("(IFNULL(TS.total_wareHouse_in, 0) + IFNULL(TS2.total_shop_in, 0) + IFNULL(TST.total_shop_tranfer_in, 0)) - IFNULL(TS3.total_sell, 0) as quantity"));
-        }
+        // if (request()->query('warehouse_id') == '' && request()->query('shop_id') =='') {
+        //     $product_sql->addSelect(\DB::raw("(IFNULL(TS.total_wareHouse_in, 0) + IFNULL(TS2.total_shop_in, 0) + IFNULL(TST.total_shop_tranfer_in, 0)) - IFNULL(TS3.total_sell, 0) as quantity"));
+        // }
 
         if (request()->query('shop_id') !='' ) {
             $product_sql->join('shop_products', function($q) {

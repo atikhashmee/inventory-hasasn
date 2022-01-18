@@ -8,6 +8,7 @@ use App\Models\WareHouse;
 use App\Models\ShopToShop;
 use App\Models\ShopProduct;
 use Illuminate\Http\Request;
+use App\Models\ShopInventory;
 use App\Models\ShopProductStock;
 
 class ShopProductController extends Controller
@@ -63,20 +64,36 @@ class ShopProductController extends Controller
     public function updateShopToShopProduct(Request $request) {
        try {
             $data = $request->all();
-            $shop_product = ShopProduct::where('product_id', $data['product_id'])->where('shop_id', $data['shop_to'])->first();
-            if ($shop_product) {
-                $shoptoshop = ShopToShop::create([
-                    'shop_from'=> $data['shop_from'],
-                    'shop_to'=> $data['shop_to'],
-                    'product_id'=> $data['product_id'],
-                    'quantity'=> $data['quantity'],
-                    'price'=> 0,
-                ]);
-            } else {
-                return response()->json(['status'=>false, 'data'=> 'This product is not available at shop to, please add it first']);
-            }
+
+            $shop_stock = ShopProductStock::create([
+                'shop_id' => $data['shop_to'], 
+                'product_id' => $data['product_id'],
+                'quantity' => $data['quantity'],
+                'price' => 0,
+            ]);
+
+            $shop_inventory = ShopInventory::create([
+                'type' => 'shop_transfer',
+                'stock_id' => $shop_stock->id,
+                'shop_id' => $data['shop_from'], 
+                'product_id' => $data['product_id'], 
+                'quantity' => $data['quantity']
+            ]);
+
+            // $shop_product = ShopProduct::where('product_id', $data['product_id'])->where('shop_id', $data['shop_to'])->first();
+            // if ($shop_product) {
+            //     $shoptoshop = ShopToShop::create([
+            //         'shop_from'=> $data['shop_from'],
+            //         'shop_to'=> $data['shop_to'],
+            //         'product_id'=> $data['product_id'],
+            //         'quantity'=> $data['quantity'],
+            //         'price'=> 0,
+            //     ]);
+            // } else {
+            //     return response()->json(['status'=>false, 'data'=> 'This product is not available at shop to, please add it first']);
+            // }
         
-            return response()->json(['status'=>true, 'data'=>$shoptoshop]);
+            return response()->json(['status'=>true, 'data'=>$shop_inventory]);
         } catch (\Exception $e) {
             return response()->json(['status'=>false, 'data'=>$e->getMessage()]);
         }
