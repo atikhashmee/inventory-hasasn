@@ -163,7 +163,8 @@ class OrderController extends Controller
                     $items = $data['items'];
                     if (count($items) > 0) {
                        foreach ($items as $key => $pro_item) {
-                           OrderDetail::create([
+                        
+                            $order_detail =  OrderDetail::create([
                               'order_id' => $order->id,
                               'product_id' => $pro_item['product_id'],
                               'shop_id' =>  $order->shop_id,
@@ -178,6 +179,10 @@ class OrderController extends Controller
                               'final_amount' => $pro_item['totalPrice'],
                               'warenty_duration' => $pro_item['warenty_duration'],
                            ]);
+                           if ($order_detail) {
+                               $settle_quantity = $order_detail->final_quantity;
+                               
+                           }
                        }
                     }
 
