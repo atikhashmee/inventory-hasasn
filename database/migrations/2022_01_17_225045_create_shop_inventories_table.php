@@ -17,6 +17,7 @@ class CreateShopInventoriesTable extends Migration
             $table->id();
             $table->enum('type', ['order_placed', 'shop_transfer'])->nullable();
             $table->unsignedBigInteger('order_detail_id')->nullable();
+            $table->unsignedBigInteger('transfer_id')->nullable()->comment('stock data transfer id');
             $table->unsignedBigInteger('stock_id')->nullable();
             $table->unsignedBigInteger('shop_id')->nullable();
             $table->unsignedBigInteger('product_id');

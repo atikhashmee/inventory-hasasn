@@ -10,6 +10,7 @@ use App\Models\ShopProduct;
 use Illuminate\Http\Request;
 use App\Models\ShopInventory;
 use App\Models\ShopProductStock;
+use Illuminate\Support\Facades\DB;
 
 class ShopProductController extends Controller
 {
@@ -72,28 +73,42 @@ class ShopProductController extends Controller
                 'price' => 0,
             ]);
 
-            $shop_inventory = ShopInventory::create([
-                'type' => 'shop_transfer',
-                'stock_id' => $shop_stock->id,
-                'shop_id' => $data['shop_from'], 
-                'product_id' => $data['product_id'], 
-                'quantity' => $data['quantity']
-            ]);
+            if ($shop_stock) {
+                $settle_quantity = $shop_stock->quantity;
+                $stocks = ShopProductStock::select('shop_product_stocks.*', 'ST.total_stock_out', DB::raw('(shop_product_stocks.quantity - IFNULL(ST.total_stock_out, 0)) AS stockQty'))
+                ->leftJoin(DB::raw("(SELECT SUM(quantity) as total_stock_out, stock_id FROM shop_inventories GROUP BY stock_id) as ST"), 'shop_product_stocks.id', '=', 'ST.stock_id')
+                ->where('shop_id', $data['shop_from'])
+                ->where('product_id', $shop_stock->product_id)
+                ->having('stockQty', '>', 0)
+                ->get();
 
-            // $shop_product = ShopProduct::where('product_id', $data['product_id'])->where('shop_id', $data['shop_to'])->first();
-            // if ($shop_product) {
-            //     $shoptoshop = ShopToShop::create([
-            //         'shop_from'=> $data['shop_from'],
-            //         'shop_to'=> $data['shop_to'],
-            //         'product_id'=> $data['product_id'],
-            //         'quantity'=> $data['quantity'],
-            //         'price'=> 0,
-            //     ]);
-            // } else {
-            //     return response()->json(['status'=>false, 'data'=> 'This product is not available at shop to, please add it first']);
-            // }
+                foreach ($stocks as $key => $st) {
+                    $checkQty = ($settle_quantity - $st->stockQty);
+                    if ($checkQty > 0) {
+                        $stQty = $st->stockQty;
+                     } else {
+                         $stQty = $settle_quantity;
+                     }
+                     $stOut =  ShopInventory::create([
+                         'type' => 'shop_transfer',
+                         'transfer_id' => $shop_stock->id,
+                         'stock_id' => $st->id,
+                         'product_id' => $st->product_id,
+                         'shop_id' =>  $st->shop_id,
+                         'quantity' =>  $stQty
+                     ]);
+
+                     if ($stOut) {
+                         $settle_quantity = $settle_quantity-$stOut->quantity;
+                     }
+
+                     if ($settle_quantity == 0) {
+                         break;
+                     }
+                }
+            }
         
-            return response()->json(['status'=>true, 'data'=>$shop_inventory]);
+            return response()->json(['status'=>true, 'data'=>$shop_stock]);
         } catch (\Exception $e) {
             return response()->json(['status'=>false, 'data'=>$e->getMessage()]);
         }

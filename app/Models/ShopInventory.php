@@ -9,5 +9,5 @@ class ShopInventory extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['type','order_detail_id','stock_id','shop_id', 'product_id', 'quantity'];
+    protected $fillable = ['type','order_detail_id', 'transfer_id', 'stock_id','shop_id', 'product_id', 'quantity'];
 }
