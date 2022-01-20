@@ -43,14 +43,16 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="form-group mr-2">
-                                <select name="shop_id" id="shop_id" class="form-control select2">
-                                    <option value="">Select a shop</option>
-                                    @foreach ($shops as $shop)
-                                        <option value="{{$shop->id}}">{{$shop->name}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
+                            @if ($user->role == 'admin')
+                                <div class="form-group mr-2">
+                                    <select name="shop_id" id="shop_id" class="form-control select2">
+                                        <option value="">Select a shop</option>
+                                        @foreach ($shops as $shop)
+                                            <option value="{{$shop->id}}">{{$shop->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            @endif
                             <div class="form-group mr-2">
                                 <input type="search" name="search" class="form-control" placeholder="Order Number, Customer Name" >
                             </div>

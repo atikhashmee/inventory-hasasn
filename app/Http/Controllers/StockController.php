@@ -27,31 +27,52 @@ class StockController extends AppBaseController
     {
         $user = auth()->user();
         /** @var Stock $stocks */
-        $stocksql = Stock::where(function($q) use($request) {
-            if (request()->query('start')!='' && request()->query('end')!='') {
-                $q->whereBetween('created_at', [request()->query('start'),  request()->query('end')]);
-            }
-
-            if (!empty($request->supplier_id)) {
-                $q->where('supplier_id', $request->supplier_id);
-            }
-            if (!empty($request->product_id)) {
-                $q->where('product_id', $request->product_id);
-            }
-
-        });
-        if ($user->role != 'admin') {
-            $stocksql->where('user_id', $user->id);
+        if ($user->role == 'admin') {
+            $stocksql = Stock::where(function($q) use($request) {
+                if (request()->query('start')!='' && request()->query('end')!='') {
+                    $q->whereBetween('created_at', [request()->query('start'),  request()->query('end')]);
+                }
+    
+                if (!empty($request->supplier_id)) {
+                    $q->where('supplier_id', $request->supplier_id);
+                }
+                if (!empty($request->product_id)) {
+                    $q->where('product_id', $request->product_id);
+                }
+    
+            });
+            
+            $stocks = $stocksql->orderBy('id', 'DESC')->paginate(50);
+            $products = Product::get();
+        } else {
+            $stocksql = ShopProductStock::where(function($q) use($request) {
+                if (request()->query('start')!='' && request()->query('end')!='') {
+                    $q->whereBetween('created_at', [request()->query('start'),  request()->query('end')]);
+                }
+    
+                if (!empty($request->supplier_id)) {
+                    $q->where('supplier_id', $request->supplier_id);
+                }
+                if (!empty($request->product_id)) {
+                    $q->where('product_id', $request->product_id);
+                }
+            });
+            $stocksql->where('type', 'user_transfer');
+            $stocks = $stocksql->orderBy('id', 'DESC')->paginate(50);
+            $products = Product::leftJoin('shop_products', 'shop_products.product_id', '=', 'products.id')
+            ->where('products.user_id', $user->id)
+            ->orWhere('shop_products.shop_id', $user->shop_id)
+            ->get();
         }
-        $stocks = $stocksql->orderBy('id', 'DESC')->paginate(50);
+        
         
         $serial = pagiSerial($stocks, 50);
         $suppliers = Supplier::get();
         
-        $products = Product::get();
         return view('admin.stocks.index')
         ->with('stocks', $stocks)
         ->with('suppliers', $suppliers)
+        ->with('user', $user)
         ->with('serial', $serial)
         ->with('products', $products);
        

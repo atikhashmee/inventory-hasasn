@@ -5,7 +5,9 @@
                 <th>S/N</th>
                 <th class="text-left">Product</th>
                 <th>Supplier</th>
-                <th>Warehouse</th>
+                @if ($user->role == 'admin')
+                    <th>Warehouse</th>
+                @endif
                 <th>Price</th>
                 <th>Quantity</th>
                 {{-- <th>Action</th> --}}
@@ -17,7 +19,9 @@
                     <td>{{ $serial-- }}</td>
                     <td class="text-left"> <span class="p-1" style="border: 1px solid #d3d3d3; font-size:14px">{{ ($stock->product)?$stock->product->code:'N' }}</span> {{ ($stock->product)?$stock->product->name:'N/A' }}</td>
                     <td>{{ ($stock->supplier)?$stock->supplier->name:'N/A' }}</td>
-                    <td>{{ ($stock->warehouse)?$stock->warehouse->ware_house_name:'N/A' }}</td>
+                    @if ($user->role == 'admin')
+                        <td>{{ ($stock->warehouse)?$stock->warehouse->ware_house_name:'N/A' }}</td>
+                    @endif
                     <td>{{ $stock->price }}</td>
                     <td>{{ $stock->quantity }}</td>
                     {{-- <td width="120">

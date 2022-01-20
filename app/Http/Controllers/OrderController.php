@@ -27,8 +27,13 @@ class OrderController extends Controller
         $user = auth()->user();
         $data['orders'] = $this->orderLists($request, $user);
         $data['serial'] = pagiSerial($data['orders'], 100);
-        $data['shops']  = Shop::get();
-        $data['customers'] = Customer::get();
+        if ($user->role == 'admin') {
+            $data['shops']  = Shop::get();
+            $data['customers'] = Customer::get();
+        } else {
+            $data['customers'] = Customer::where('user_id', $user->id)->get();
+        }
+        $data['user'] = $user;
         return view('admin.orders.index', $data);
     }
 
@@ -269,8 +274,9 @@ class OrderController extends Controller
     public function getProductsByShop($shop_id) {
         try {
             $data = [];
+            $user = auth()->user();
             $data['products'] =  Product::select('products.*',  \DB::raw('(IFNULL(spQ.shop_stock_in, 0) - IFNULL(spO.shop_stock_out, 0)) AS shop_quantity'))
-            ->join('shop_products', 'shop_products.product_id', '=', 'products.id')
+            ->leftJoin('shop_products', 'shop_products.product_id', '=', 'products.id')
             ->leftJoin(\DB::raw('(SELECT SUM(quantity) as shop_stock_in, product_id, shop_id FROM shop_product_stocks GROUP BY shop_id, product_id) as spQ'), function($q) use($shop_id) {
                 $q->on('spQ.product_id', '=', 'products.id');
                 $q->where('spQ.shop_id', $shop_id);
@@ -285,7 +291,10 @@ class OrderController extends Controller
             // ->leftJoin(\DB::raw('(SELECT SUM(quantity) as shops_stock_quantity_two, product_id FROM `shop_product_stocks` WHERE shop_id='.$shop_id.'  GROUP BY product_id) as SWW'), function($q) {
             //     $q->on('SWW.product_id', '=', 'products.id');
             // })
-            ->where('shop_products.shop_id', $shop_id)
+            ->where(function($q) use($user) {
+                $q->where('products.user_id', $user->id);
+                $q->orWhere('shop_products.shop_id', $user->shop_id);
+            })
             ->get();
             return response()->json(['status'=>true, 'data'=> $data]);
         } catch (\Exception $e) {

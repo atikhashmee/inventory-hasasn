@@ -47,7 +47,12 @@ class TransactionController extends Controller
             return $total;
         }, 0);
 
-        $data['customers'] = Customer::get();
+        if ($user->role == 'admin') {
+            $data['customers'] = Customer::get();
+        } else {
+            $data['customers'] = Customer::where('shop_id', $user->shop_id)->get();
+        }
+
         return view('admin.transactions.index', $data);
     }
 
@@ -58,10 +63,16 @@ class TransactionController extends Controller
      */
     public function create()
     {
-        $data['customers'] = Customer::select('customers.id', 'customers.customer_name', \DB::raw('IFNULL(TD.total_deposit, 0) as total_deposit'), \DB::raw('IFNULL(TW.total_withdraw, 0) as total_withdraw'))
+        $user = auth()->user();
+        $customer_sql = Customer::select('customers.id', 'customers.customer_name', \DB::raw('IFNULL(TD.total_deposit, 0) as total_deposit'), \DB::raw('IFNULL(TW.total_withdraw, 0) as total_withdraw'))
         ->leftJoin(\DB::raw('(SELECT SUM(amount) as total_deposit, customer_id FROM transactions WHERE type="in" GROUP BY customer_id) AS TD'), 'TD.customer_id', '=', 'customers.id')
-        ->leftJoin(\DB::raw('(SELECT SUM(amount) as total_withdraw, customer_id FROM transactions WHERE type="out" GROUP BY customer_id) AS TW'), 'TW.customer_id', '=', 'customers.id')
-        ->get();
+        ->leftJoin(\DB::raw('(SELECT SUM(amount) as total_withdraw, customer_id FROM transactions WHERE type="out" GROUP BY customer_id) AS TW'), 'TW.customer_id', '=', 'customers.id');
+        if ($user->role != 'admin') {
+            $customer_sql->where("shop_id", $user->shop_id);
+        } 
+        $data['customers'] = $customer_sql->get();
+
+        
         return view('admin.transactions.create', $data);
     }
 
