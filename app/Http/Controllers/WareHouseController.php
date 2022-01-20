@@ -23,7 +23,7 @@ class WareHouseController extends AppBaseController
     {
         /** @var WareHouse $wareHouses */
         $wareHouses = WareHouse::select('ware_houses.*', 'SP.total_products')
-        ->leftJoin(\DB::raw('(SELECT COUNT(id) as total_products, warehouse_id FROM stocks GROUP BY warehouse_id) as SP'), 'SP.warehouse_id', '=', 'ware_houses.id')
+        ->leftJoin(\DB::raw('(SELECT COUNT(DISTINCT product_id) as total_products, warehouse_id FROM stocks GROUP BY warehouse_id HAVING warehouse_id IS NOT NULL) as SP'), 'SP.warehouse_id', '=', 'ware_houses.id')
         ->get();
         return view('admin.ware_houses.index')
             ->with('wareHouses', $wareHouses);
