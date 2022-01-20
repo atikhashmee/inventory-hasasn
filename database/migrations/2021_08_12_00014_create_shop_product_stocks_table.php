@@ -16,13 +16,18 @@ class CreateShopProductStocksTable extends Migration
         Schema::create('shop_product_stocks', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('warehouse_id')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->unsignedBigInteger('supplier_id')->nullable();
             $table->unsignedBigInteger('shop_id');
             $table->unsignedBigInteger('product_id');
             $table->integer('quantity')->unsigned();
             $table->decimal('price', 10, 2);
+            $table->enum('type', ['warehouse_transfer', 'shop_transfer', 'user_transfer'])->nullable();
             $table->foreign('shop_id')->references('id')->on('shops')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('warehouse_id')->references('id')->on('ware_houses')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('supplier_id')->references('id')->on('suppliers')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

@@ -51,7 +51,7 @@ class ShopProductController extends Controller
                     $q->on('spO.product_id', '=', 'products.id');
                     $q->where('spO.shop_id', $request->shop_id);
                 });
-                $data['products'] = $product_sql->get();
+                $data['products'] = $product_sql->orderBy('shop_quantity', 'DESC')->get();
             }
             return response()->json(['status'=> true, 'data'=>$data]);
         } catch (\Exception $e) {
@@ -62,6 +62,7 @@ class ShopProductController extends Controller
 
     public function updateShopToShopProduct(Request $request) {
        try {
+            $user = auth()->user();
             $data = $request->all();
             ShopProduct::updateOrCreate(
                 [
@@ -71,14 +72,16 @@ class ShopProductController extends Controller
                 [
                 'shop_id' => $data['shop_to'],
                 'product_id' => $data['product_id'],
-                'quantity' => $data['quantity'],
+                'quantity' => 0,
                 'price' => 0,
             ]);
 
             $shop_stock = ShopProductStock::create([
+                'user_id' => $user->id,
                 'shop_id' => $data['shop_to'], 
                 'product_id' => $data['product_id'],
                 'quantity' => $data['quantity'],
+                'type' => 'shop_transfer',
                 'price' => 0,
             ]);
 
@@ -145,6 +148,8 @@ class ShopProductController extends Controller
             $data = $request->all();
             $warehouse_id = $request->warehouse_id;
             $products = json_decode($data['products'], true);
+            $user = auth()->user();
+
             if (count($products) > 0) {
                 foreach ($products as $product) {
                    $shopProduct = ShopProduct::where('shop_id', $data['shop_id'])->where('product_id', $product['id'])->first();
@@ -157,14 +162,17 @@ class ShopProductController extends Controller
                             'price' => 0,
                         ]);
                     }
-
-                    ShopProductStock::create([
-                        'warehouse_id' => $warehouse_id,
-                        'shop_id' => $data['shop_id'],
-                        'product_id' => $product['id'],
-                        'quantity' => $product['new_quantity']??0,
-                        'price' => 0,
-                    ]);
+                    if ($product['new_quantity'] > 0) {
+                        ShopProductStock::create([
+                            'warehouse_id' => $warehouse_id,
+                            'user_id' => $user->id,
+                            'shop_id' => $data['shop_id'],
+                            'product_id' => $product['id'],
+                            'quantity' => $product['new_quantity'],
+                            'type' => 'warehouse_transfer',
+                            'price' => 0,
+                        ]);
+                    }
                 }
             }
             return response()->json(['status'=>true, 'data'=>null]);

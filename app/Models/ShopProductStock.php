@@ -11,5 +11,5 @@ class ShopProductStock extends Model
 
     protected $table = 'shop_product_stocks';
 
-    protected $fillable = ['warehouse_id', 'shop_id', 'product_id', 'quantity', 'price'];
+    protected $fillable = ['warehouse_id', 'user_id', 'supplier_id', 'shop_id', 'product_id', 'type', 'quantity', 'price'];
 }

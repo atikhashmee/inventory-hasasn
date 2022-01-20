@@ -7,7 +7,9 @@ use Response;
 use App\Models\Stock;
 use App\Models\Product;
 use App\Models\Supplier;
+use App\Models\ShopProduct;
 use Illuminate\Http\Request;
+use App\Models\ShopProductStock;
 use App\Http\Requests\CreateStockRequest;
 use App\Http\Requests\UpdateStockRequest;
 use App\Http\Controllers\AppBaseController;
@@ -63,7 +65,15 @@ class StockController extends AppBaseController
     public function create()
     {
         $user = auth()->user();
-        return view('admin.stocks.create');
+        if ($user->role == 'admin') {
+            $productItems = Product::pluck('name','id')->toArray();
+        } else {
+            $productItems = Product::leftJoin('shop_products', 'shop_products.product_id', '=', 'products.id')
+            ->where('products.user_id', $user->id)
+            ->orWhere('shop_products.shop_id', $user->shop_id)
+            ->pluck('products.name','products.id')->toArray();
+        }
+        return view('admin.stocks.create')->with('productItems', $productItems);
     }
 
     /**
@@ -81,12 +91,34 @@ class StockController extends AppBaseController
         /** @var Stock $stock */
         
         $input['user_id'] = $user->id;
-        $stock = Stock::create($input);
 
+        if ($user->role == 'admin') {
+            $stock = Stock::create($input);
+        } else {
+            ShopProduct::updateOrCreate(
+                [
+                    'product_id' => $input['product_id'],
+                    'shop_id' => $user->shop_id
+                ],
+                [
+                'shop_id' => $user->shop_id,
+                'product_id' => $input['product_id'],
+                'quantity' => 0,
+                'price' => 0,
+            ]);
+            $stock = ShopProductStock::create([
+                'user_id' => $user->id,
+                'shop_id' => $user->shop_id, 
+                'product_id' => $input['product_id'],
+                'supplier_id' => $input['product_id'],
+                'quantity' => $input['quantity'],
+                'type' => 'user_transfer',
+                'price' => $input['price']
+            ]);
+        }
         if ($stock) {
             Product::where('id', $stock->product_id)->update(['product_cost' => $stock->price]);
         }
-
         Flash::success('Stock saved successfully.');
         return redirect(route('admin.stocks.index'));
     }

@@ -85,39 +85,7 @@ class ViewServiceProvider extends ServiceProvider
             $supplierItems = Supplier::pluck('name','id')->toArray();
             $view->with('supplierItems', $supplierItems);
         });
-        View::composer(['admin.stocks.fields'], function ($view) {
-            $productItems = Product::pluck('name','id')->toArray();
-            $view->with('productItems', $productItems);
-        });
-        View::composer(['user.stocks.fields'], function ($view) {
-            $user = auth()->user();
-            $productItems = Product::where('user_id', $user->id)->pluck('name','id')->toArray();
-            $view->with('productItems', $productItems);
-        });
-        View::composer(['admin.stocks.fields'], function ($view) {
-            $ware_houseItems = WareHouse::pluck('ware_house_name','id')->toArray();
-            $view->with('ware_houseItems', $ware_houseItems);
-        });
-        View::composer(['admin.stocks.fields'], function ($view) {
-            $supplierItems = Supplier::pluck('name','id')->toArray();
-            $view->with('supplierItems', $supplierItems);
-        });
-        View::composer(['admin.stocks.fields'], function ($view) {
-            $productItems = Product::pluck('name','id')->toArray();
-            $view->with('productItems', $productItems);
-        });
-        View::composer(['admin.stocks.fields'], function ($view) {
-            $ware_houseItems = WareHouse::pluck('ware_house_name','id')->toArray();
-            $view->with('ware_houseItems', $ware_houseItems);
-        });
-        View::composer(['admin.stocks.fields'], function ($view) {
-            $supplierItems = Supplier::pluck('name','id')->toArray();
-            $view->with('supplierItems', $supplierItems);
-        });
-        View::composer(['admin.stocks.fields'], function ($view) {
-            $productItems = Product::pluck('name','id')->toArray();
-            $view->with('productItems', $productItems);
-        });
+
         View::composer(['admin.suppliers.fields'], function ($view) {
             $countryItems = Country::pluck('name','id')->toArray();
             $view->with('countryItems', $countryItems);
@@ -129,14 +97,6 @@ class ViewServiceProvider extends ServiceProvider
         View::composer(['admin.categories.fields'], function ($view) {
             $categoryItems = Category::with('nested')->where('parent_id', 0)->get();
             $view->with('categoryItems', $categoryItems);
-        });
-        View::composer(['admin.stocks.fields'], function ($view) {
-            $ware_houseItems = WareHouse::pluck('ware_house_name','id')->toArray();
-            $view->with('ware_houseItems', $ware_houseItems);
-        });
-        View::composer(['admin.stocks.fields'], function ($view) {
-            $productItems = Product::pluck('name','id')->toArray();
-            $view->with('productItems', $productItems);
         });
         
     }

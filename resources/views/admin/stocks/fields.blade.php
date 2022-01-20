@@ -18,12 +18,13 @@
     {!! Form::select('supplier_id', $supplierItems, null, ['class' => 'form-control custom-select select2']) !!}
 </div>
 
-
-<!-- Warehouse Id Field -->
-<div class="form-group col-sm-6">
-    {!! Form::label('warehouse_id', 'Warehouse:') !!}
-    {!! Form::select('warehouse_id', $ware_houseItems, null, ['class' => 'form-control custom-select select2']) !!}
-</div>
+@if (auth()->user()->role == 'admin')
+    <!-- Warehouse Id Field -->
+    <div class="form-group col-sm-6">
+        {!! Form::label('warehouse_id', 'Warehouse:') !!}
+        {!! Form::select('warehouse_id', $ware_houseItems, null, ['class' => 'form-control custom-select select2']) !!}
+    </div>
+@endif
 
 <input type="hidden" name="sku" id="sku">
 <input type="hidden" name="selling_price" id="selling_price" value="0">
