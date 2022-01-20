@@ -53,18 +53,18 @@
                         
                     </div>
                 </div>
-                <table border="1" class="ml-auto p-2">
+                <table border="1" class="table">
                     <tr>
-                        <td colspan="5">Total Deposit</td>
+                        <td colspan="5">Total Payment</td>
                         <td class="text-right">{{$totalDiposit}}</td>
                     </tr>
                     <tr>
-                        <td colspan="5">Total Withdraw</td>
+                        <td colspan="5">Total Sales</td>
                         <td class="text-right">{{$totalWithdraw}}</td>
                     </tr>
                     <tr>
                         <td colspan="5">Due</td>
-                        <td class="text-right">125485</td>
+                        <td class="text-right">{{$totalDiposit - $totalWithdraw}}</td>
                     </tr>
                 </table>
             </div>

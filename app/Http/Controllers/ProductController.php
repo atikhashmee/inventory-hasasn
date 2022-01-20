@@ -41,50 +41,53 @@ class ProductController extends AppBaseController
         /** @var Product $products */
        $product_sql = Product::select('products.*', 'countries.name as country_name')
         ->leftJoin('countries', 'countries.id', '=', 'products.origin');
-        
-        if (request()->query('warehouse_id') == '' && request()->query('shop_id') =='') {
-            $product_sql->addSelect(\DB::raw("(IFNULL(TS.total_wareHouse_in, 0) + IFNULL(TS2.total_shop_in, 0)) - IFNULL(TS3.total_sell, 0) as quantity"));
-            $product_sql->leftJoin(\DB::raw("(SELECT SUM(quantity) as total_wareHouse_in, product_id FROM stocks GROUP BY product_id) as TS"), "TS.product_id", "=", "products.id")
-            ->leftJoin(\DB::raw("(SELECT SUM(quantity) as total_shop_in, product_id FROM shop_product_stocks GROUP BY product_id) as TS2"), "TS2.product_id", "=", "products.id")
-            ->leftJoin(\DB::raw("(SELECT SUM(final_quantity) as total_sell, product_id FROM order_details GROUP BY product_id) as TS3"), "TS3.product_id", "=", "products.id");
-        }
-
-        if (request()->query('shop_id') !='' ) {
-            $product_sql->join('shop_products', function($q) {
-                $q->on('shop_products.product_id', '=', 'products.id');
-            });
-            $product_sql->where('shop_products.shop_id', request()->query('shop_id'));
-            $product_sql->addSelect(\DB::raw('(IFNULL(spQ.shop_stock_in, 0) - IFNULL(spO.shop_stock_out, 0)) AS quantity')); 
-            $product_sql->leftJoin(\DB::raw('(SELECT SUM(quantity) as shop_stock_in, product_id, shop_id FROM shop_product_stocks GROUP BY shop_id, product_id) as spQ'), function($q) use($request) {
-                $q->on('spQ.product_id', '=', 'products.id');
-                $q->where('spQ.shop_id', $request->shop_id);
-            })
-            ->leftJoin(\DB::raw('(SELECT SUM(quantity) as shop_stock_out, product_id, shop_id FROM shop_inventories GROUP BY shop_id, product_id) as spO'), function($q) use($request) {
-                $q->on('spO.product_id', '=', 'products.id');
-                $q->where('spO.shop_id', $request->shop_id);
-            });
-        }
-
-        if (request()->query('warehouse_id') != '') {
-            $product_sql->addSelect(\DB::raw("(IFNULL(TS.total_supply_in, 0) - IFNULL(TS2.total_supply_out, 0)) as quantity"));
-
-            $product_sql->join(\DB::raw('(SELECT COUNT(id) as total_products, product_id, warehouse_id FROM stocks GROUP BY product_id, warehouse_id) as STTOCK'), function($q) {
-                $q->on('STTOCK.product_id', '=', 'products.id');
-                $q->where('STTOCK.warehouse_id', request()->query('warehouse_id'));
-            });
-
-            $product_sql->leftJoin(\DB::raw("(SELECT SUM(quantity) as total_supply_in, product_id, warehouse_id FROM stocks GROUP BY product_id, warehouse_id) as TS"), function($q) {
-                $q->on("TS.product_id", "=", "products.id");
-                $q->where("TS.warehouse_id", request()->query('warehouse_id'));
-            });
-            $product_sql->leftJoin(\DB::raw("(SELECT SUM(quantity) as total_supply_out, product_id, warehouse_id FROM shop_product_stocks GROUP BY product_id, warehouse_id) as TS2"), function($q) {
-                $q->on("TS2.product_id", "=", "products.id");
-                $q->where("TS2.warehouse_id", request()->query('warehouse_id'));
-            });
+        if ($user->role == 'admin') {
             
+            if (request()->query('warehouse_id') == '' && request()->query('shop_id') =='') {
+                $product_sql->addSelect(\DB::raw("(IFNULL(TS.total_wareHouse_in, 0) + IFNULL(TS2.total_shop_in, 0)) - IFNULL(TS3.total_sell, 0) as quantity"));
+                $product_sql->leftJoin(\DB::raw("(SELECT SUM(quantity) as total_wareHouse_in, product_id FROM stocks GROUP BY product_id) as TS"), "TS.product_id", "=", "products.id")
+                ->leftJoin(\DB::raw("(SELECT SUM(quantity) as total_shop_in, product_id FROM shop_product_stocks GROUP BY product_id) as TS2"), "TS2.product_id", "=", "products.id")
+                ->leftJoin(\DB::raw("(SELECT SUM(final_quantity) as total_sell, product_id FROM order_details GROUP BY product_id) as TS3"), "TS3.product_id", "=", "products.id");
+            }
+
+            if (request()->query('shop_id') !='' ) {
+                $product_sql->join('shop_products', function($q) {
+                    $q->on('shop_products.product_id', '=', 'products.id');
+                });
+                $product_sql->where('shop_products.shop_id', request()->query('shop_id'));
+                $product_sql->addSelect(\DB::raw('(IFNULL(spQ.shop_stock_in, 0) - IFNULL(spO.shop_stock_out, 0)) AS quantity')); 
+                $product_sql->leftJoin(\DB::raw('(SELECT SUM(quantity) as shop_stock_in, product_id, shop_id FROM shop_product_stocks GROUP BY shop_id, product_id) as spQ'), function($q) use($request) {
+                    $q->on('spQ.product_id', '=', 'products.id');
+                    $q->where('spQ.shop_id', $request->shop_id);
+                })
+                ->leftJoin(\DB::raw('(SELECT SUM(quantity) as shop_stock_out, product_id, shop_id FROM shop_inventories GROUP BY shop_id, product_id) as spO'), function($q) use($request) {
+                    $q->on('spO.product_id', '=', 'products.id');
+                    $q->where('spO.shop_id', $request->shop_id);
+                });
+            }
+
+            if (request()->query('warehouse_id') != '') {
+                $product_sql->addSelect(\DB::raw("(IFNULL(TS.total_supply_in, 0) - IFNULL(TS2.total_supply_out, 0)) as quantity"));
+
+                $product_sql->join(\DB::raw('(SELECT COUNT(id) as total_products, product_id, warehouse_id FROM stocks GROUP BY product_id, warehouse_id) as STTOCK'), function($q) {
+                    $q->on('STTOCK.product_id', '=', 'products.id');
+                    $q->where('STTOCK.warehouse_id', request()->query('warehouse_id'));
+                });
+
+                $product_sql->leftJoin(\DB::raw("(SELECT SUM(quantity) as total_supply_in, product_id, warehouse_id FROM stocks GROUP BY product_id, warehouse_id) as TS"), function($q) {
+                    $q->on("TS.product_id", "=", "products.id");
+                    $q->where("TS.warehouse_id", request()->query('warehouse_id'));
+                });
+                $product_sql->leftJoin(\DB::raw("(SELECT SUM(quantity) as total_supply_out, product_id, warehouse_id FROM shop_product_stocks GROUP BY product_id, warehouse_id) as TS2"), function($q) {
+                    $q->on("TS2.product_id", "=", "products.id");
+                    $q->where("TS2.warehouse_id", request()->query('warehouse_id'));
+                });
+                
+            }
         }
-        //dd($product_sql->get()->toArray());
+
         if ($user->role != 'admin') {
+            $product_sql->leftJoin('shop_products', 'shop_products.product_id', '=', 'products.id');
             $product_sql->where('products.user_id', $user->id);
             $product_sql->orWhere('shop_products.shop_id', $user->shop_id);
         } 

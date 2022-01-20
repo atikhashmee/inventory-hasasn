@@ -25,15 +25,15 @@ class OrderController extends Controller
 {
     public function index(Request $request) {
         $user = auth()->user();
-        $data['orders'] = $this->orderLists($request, $user->id);
+        $data['orders'] = $this->orderLists($request, $user);
         $data['serial'] = pagiSerial($data['orders'], 100);
-        $data['shops'] = Shop::get();
+        $data['shops']  = Shop::get();
         $data['customers'] = Customer::get();
         return view('admin.orders.index', $data);
     }
 
-    public function orderLists(Request $request, $user_id) {
-        return Order::select('orders.*', \DB::raw("IFNULL(OD.total_warenty_items, 0) as wr_order_details"))
+    public function orderLists(Request $request, $user) {
+        $order_sql =  Order::select('orders.*', \DB::raw("IFNULL(OD.total_warenty_items, 0) as wr_order_details"))
         ->leftJoin(\DB::raw("(SELECT COUNT(order_details.id) as total_warenty_items, order_details.order_id FROM order_details INNER JOIN products ON products.id = order_details.product_id WHERE products.warenty_duration IS NOT NULL GROUP BY order_details.order_id) AS OD"), 'OD.order_id', '=', 'orders.id')
         ->where(function($q) {
             if (request()->query('start')!='' && request()->query('end')!='') {
@@ -59,9 +59,13 @@ class OrderController extends Controller
             if (request()->query('order_challan_type')!='') {
                 $q->where('order_challan_type', request()->query('order_challan_type'));
             }
-        })
-        ->where('user_id', $user_id)
-        ->orderBy('id', 'DESC')->paginate(100);
+        });
+        if ($user->role != 'admin') {
+            $order_sql->where('user_id', $user->id);
+        }
+        
+        return $order_sql->orderBy('id', 'DESC')
+        ->paginate(100);
     }
 
     public function create() {
@@ -168,7 +172,10 @@ class OrderController extends Controller
                     $items = $data['items'];
                     if (count($items) > 0) {
                         foreach ($items as $key => $pro_item) {
-                            
+                                if ($pro_item['quantity'] == 0) {
+                                    throw new \Exception($pro_item['product_name']." Quantity has to be at least 1", 1);
+                                }
+
                                 $order_detail =  OrderDetail::create([
                                 'order_id' => $order->id,
                                 'product_id' => $pro_item['product_id'],
@@ -201,8 +208,6 @@ class OrderController extends Controller
                                         } else {
                                             $stQty = $settle_quantity;
                                         }
-                                        //dd($st->stockQty, $checkQty, $stQty);
-
                                         $stOut =  ShopInventory::create([
                                             'type' => 'order_placed',
                                             'order_detail_id' => $order_detail->id,
@@ -223,7 +228,7 @@ class OrderController extends Controller
                             }
 
                             if ($settle_quantity != 0) {
-                                throw new \Exception($pro_item['product_name']." Stock Out", 1);
+                                throw new \Exception($pro_item['product_name']." Given Quantity exceeds stock", 1);
                             }
                         }
                     }

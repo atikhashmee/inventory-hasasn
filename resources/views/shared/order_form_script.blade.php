@@ -79,6 +79,7 @@
                 customer_address: null,
             },
             user_role: null,
+            error: '',
         },
         mounted() {
             this.order_id  = this.salesIdDateFormat()
@@ -221,6 +222,8 @@
                         } else if(this.user_role === 'staff') {
                             window.location.href= `{{url('user/order/')}}/${res.data.id}`;
                         }
+                    } else {
+                        this.error = res.data
                     }
                 })
             },

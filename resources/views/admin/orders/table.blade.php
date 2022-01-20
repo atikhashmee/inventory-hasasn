@@ -7,6 +7,7 @@
             <th>Customer&nbsp;Name</th>
             <th>Order&nbsp;Amount</th>
             <th>Order&nbsp;Date</th>
+            <th>Sold&nbsp;By</th>
             <th>Action</th>
         </tr>
     </thead>
@@ -20,6 +21,7 @@
                     <td>{{$order->customer->customer_name ?? 'N/A'}}</td>
                     <td>{{$order->total_amount}}</td>
                     <td>{{$order->created_at}}</td>
+                    <td>{{$order->user? $order->user->name : 'N/A'}}</td>
                     <td>
                         <div class="btn-group">
                             <button type="button" class="btn btn-default btn-flat"><i class="fas fa-cogs"></i></button>

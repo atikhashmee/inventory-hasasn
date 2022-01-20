@@ -209,6 +209,7 @@
                             </div>
                         </div>
                         <button class="btn btn-primary float-right" type="submit">Create New Sale</button>
+                        <span v-if="error" class="text-danger">@{{error}}</span>
                     </form>
                 </div>
             </div>
