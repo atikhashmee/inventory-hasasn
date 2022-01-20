@@ -33,18 +33,13 @@ class ShopProductController extends Controller
             if ($request->shop_id !=null && $request->warehouse_id!=null) {
                 $warehouse_id = $request->warehouse_id;
                 $product_sql =  Product::select('products.*', 
-                \DB::raw('IFNULL(S.stock_quantity, 0) - (IFNULL(SWW.shops_stock_quantity_two, 0) + IFNULL(SP.shops_product_stock_quantity, 0)) AS warehouse_quantity'),
+                \DB::raw('(IFNULL(S.stock_quantity, 0) - IFNULL(SWW.shops_stock_quantity_two, 0)) AS warehouse_quantity'),
                 \DB::raw('shop_products.product_id as isAdded'),
                 \DB::raw('(IFNULL(spQ.shop_stock_in, 0) - IFNULL(spO.shop_stock_out, 0)) AS shop_quantity')
                 )
                 ->leftJoin(\DB::raw('(SELECT SUM(quantity) as stock_quantity, product_id FROM `stocks` WHERE warehouse_id ='.$warehouse_id.' AND deleted_at is NULL GROUP BY product_id) as S'), 'S.product_id', '=', 'products.id')
                 ->leftJoin(\DB::raw('(SELECT SUM(quantity) as shops_stock_quantity_two, product_id FROM `shop_product_stocks` WHERE warehouse_id ='.$warehouse_id.' GROUP BY product_id) as SWW'), 'SWW.product_id', '=', 'products.id')
-                ->leftJoin(\DB::raw('(SELECT SUM(quantity) as shops_stock_quantity, product_id FROM `shop_product_stocks` WHERE warehouse_id ='.$warehouse_id.' AND shop_id='.$request->shop_id.' GROUP BY product_id) as SW'), 'SW.product_id', '=', 'products.id')
-                ->leftJoin(\DB::raw('(SELECT SUM(quantity) as shops_product_stock_quantity, product_id FROM `shop_products` GROUP BY product_id) as SP'), 'SP.product_id', '=', 'products.id')
-                ->leftJoin(\DB::raw('(SELECT SUM(quantity) as shop_product_stock_quantity, product_id, shop_id FROM `shop_products` GROUP BY product_id, shop_id) as SPP'), function($q) use($request){
-                    $q->on('SPP.product_id', '=', 'products.id');
-                    $q->where('SPP.shop_id', $request->shop_id);
-                })
+                
                 ->leftJoin('shop_products', function($q) use($request) {
                     $q->on('shop_products.product_id', '=', 'products.id');
                     $q->where('shop_products.shop_id', $request->shop_id);
@@ -69,6 +64,17 @@ class ShopProductController extends Controller
     public function updateShopToShopProduct(Request $request) {
        try {
             $data = $request->all();
+            ShopProduct::updateOrCreate(
+                [
+                    'product_id' => $data['product_id'],
+                    'shop_id' => $data['shop_to']
+                ],
+                [
+                'shop_id' => $data['shop_to'],
+                'product_id' => $data['product_id'],
+                'quantity' => $data['quantity'],
+                'price' => 0,
+            ]);
 
             $shop_stock = ShopProductStock::create([
                 'shop_id' => $data['shop_to'], 
@@ -172,11 +178,19 @@ class ShopProductController extends Controller
     public function getShopProducts($shop_id) {
        try {
         $data = [];
-        $product_sql = Product::select('products.*', \DB::raw('((IFNULL(shop_products.quantity, 0) + IFNULL(ST.total_Stock, 0)) - (IFNULL(OD.total_out, 0) + IFNULL(TT.total_transfer, 0))) as available_quanity'))
+        $product_sql = Product::select('products.*', \DB::raw('(IFNULL(spQ.shop_stock_in, 0) - IFNULL(spO.shop_stock_out, 0)) AS available_quanity'))
             ->join('shop_products', 'shop_products.product_id', '=', 'products.id')
-            ->leftJoin(\DB::raw('(SELECT SUM(quantity) as total_Stock, product_id FROM shop_product_stocks GROUP BY product_id) as ST'), 'ST.product_id', '=', 'products.id')
-            ->leftJoin(\DB::raw('(SELECT SUM(ODD.final_quantity) as total_out, ODD.product_id FROM order_details AS ODD LEFT JOIN orders ON ODD.order_id = orders.id WHERE orders.shop_id='.$shop_id.' GROUP BY ODD.product_id) as OD'), 'OD.product_id', '=', 'products.id')
-            ->leftJoin(\DB::raw('(SELECT SUM(quantity) as total_transfer, product_id FROM shop_to_shops WHERE shop_from='.$shop_id.' GROUP BY product_id) AS TT'), 'TT.product_id', '=', 'products.id')
+            ->leftJoin(\DB::raw('(SELECT SUM(quantity) as shop_stock_in, product_id, shop_id FROM shop_product_stocks GROUP BY shop_id, product_id) as spQ'), function($q) use($shop_id) {
+                $q->on('spQ.product_id', '=', 'products.id');
+                $q->where('spQ.shop_id', $shop_id);
+            })
+            ->leftJoin(\DB::raw('(SELECT SUM(quantity) as shop_stock_out, product_id, shop_id FROM shop_inventories GROUP BY shop_id, product_id) as spO'), function($q) use($shop_id) {
+                $q->on('spO.product_id', '=', 'products.id');
+                $q->where('spO.shop_id', $shop_id);
+            })
+            // ->leftJoin(\DB::raw('(SELECT SUM(quantity) as total_Stock, product_id FROM shop_product_stocks GROUP BY product_id) as ST'), 'ST.product_id', '=', 'products.id')
+            // ->leftJoin(\DB::raw('(SELECT SUM(ODD.final_quantity) as total_out, ODD.product_id FROM order_details AS ODD LEFT JOIN orders ON ODD.order_id = orders.id WHERE orders.shop_id='.$shop_id.' GROUP BY ODD.product_id) as OD'), 'OD.product_id', '=', 'products.id')
+            // ->leftJoin(\DB::raw('(SELECT SUM(quantity) as total_transfer, product_id FROM shop_to_shops WHERE shop_from='.$shop_id.' GROUP BY product_id) AS TT'), 'TT.product_id', '=', 'products.id')
             ->where('shop_products.shop_id', $shop_id);
         $data['products'] = $product_sql->get();
         return response()->json(['status'=>true, 'data'=>$data]);
