@@ -33,19 +33,21 @@ class TransactionController extends Controller
             $transSql->where('user_id', $user->id);
         }
 
-        $data['transactions'] =  $transSql->orderBy('id', 'DESC')->paginate(100);
+        $data['transactions'] = $transSql->orderBy('id', 'DESC')->paginate(100);
         $data['totalDiposit'] = $data['transactions']->getCollection()->reduce(function($total, $item){
             if ($item->type == 'in') {
                 return $total + $item->amount;
             }
+            return $total;
         }, 0);
         $data['totalWithdraw'] = $data['transactions']->getCollection()->reduce(function($total, $item){
             if ($item->type=='out') {
                 return $total + $item->amount;
             }
+            return $total;
         }, 0);
-        $data['customers'] = Customer::get();
 
+        $data['customers'] = Customer::get();
         if ($user->role == 'admin') {
             return view('admin.transactions.index', $data);
         } else {

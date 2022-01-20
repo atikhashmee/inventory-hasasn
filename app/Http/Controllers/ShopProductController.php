@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Shop;
 use App\Models\Product;
 use App\Models\WareHouse;
-use App\Models\ShopToShop;
 use App\Models\ShopProduct;
 use Illuminate\Http\Request;
 use App\Models\ShopInventory;

@@ -15,7 +15,18 @@
                 <tr>
                     <td>{{$transaction->id}}</td>
                     <td>{{$transaction->customer->customer_name}}</td>
-                    <td class="text-capitalize">{{$transaction->type == 'in'?'Deposit':'Withdraw'}}</td>
+                    <td class="text-capitalize">
+                        @if ($transaction->type == 'in')
+                            <span>Payment</span>
+                            @if ($transaction->order_id)
+                                <span style="border: 1px solid #d3d3d3; padding: 3px">
+                                    <a href="{{route('admin.orders.show', ['order'=>$transaction->order_id])}}" target="_blank">{{$transaction->order_id}}</a>
+                                </span>
+                            @endif
+                        @else
+                            <span>Sale</span>
+                        @endif
+                    </td>
                     <td>{{$transaction->amount}}</td>
                     <td>{{$transaction->created_at}}</td>
                     <td>
