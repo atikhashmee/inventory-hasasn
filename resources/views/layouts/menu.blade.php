@@ -1,71 +1,78 @@
 
-<li class="nav-item">
+@if (auth()->user()->role == 'admin')
+  <li class="nav-item">
     <a href="{{ route('admin.wareHouses.index') }}"
-       class="nav-link {{ Request::is('admin/wareHouses*') ? 'active' : '' }}">
+      class="nav-link {{ Request::is('admin/wareHouses*') ? 'active' : '' }}">
         <p>Ware Houses</p>
     </a>
-</li>
-<li class="nav-item">
+  </li>
+  <li class="nav-item">
   <a href="{{ route('admin.shops.index') }}"
-     class="nav-link {{ Request::is('admin/shops*') ? 'active' : '' }}">
+    class="nav-link {{ Request::is('admin/shops*') ? 'active' : '' }}">
       <p>Shops</p>
   </a>
-</li>
+  </li>
 
-<li class="nav-item">
+  <li class="nav-item">
     <a href="{{ route('admin.categories.index') }}"
-       class="nav-link {{ Request::is('admin/categories*') ? 'active' : '' }}">
+      class="nav-link {{ Request::is('admin/categories*') ? 'active' : '' }}">
         <p>Categories</p>
     </a>
-</li>
+  </li>
 
-<li class="nav-item">
+  <li class="nav-item">
     <a href="{{ route('admin.menufactures.index') }}"
-       class="nav-link {{ Request::is('admin/menufactures*') ? 'active' : '' }}">
+      class="nav-link {{ Request::is('admin/menufactures*') ? 'active' : '' }}">
         <p>Manufactures</p>
     </a>
-</li>
+  </li>
 
-<li class="nav-item">
+  <li class="nav-item">
   <a href="{{ route('admin.units.index') }}"
-     class="nav-link {{ Request::is('admin/units*') ? 'active' : '' }}">
+    class="nav-link {{ Request::is('admin/units*') ? 'active' : '' }}">
       <p>Units</p>
   </a>
-</li>
-<li class="nav-item">
+  </li>
+  <li class="nav-item">
     <a href="{{ route('admin.brands.index') }}"
-       class="nav-link {{ Request::is('admin/brands*') ? 'active' : '' }}">
+      class="nav-link {{ Request::is('admin/brands*') ? 'active' : '' }}">
         <p>Brands</p>
     </a>
-</li>
-<li class="nav-item">
+  </li>
+  <li class="nav-item">
     <a href="{{ route('admin.suppliers.index') }}"
-       class="nav-link {{ Request::is('admin/suppliers*') ? 'active' : '' }}">
+      class="nav-link {{ Request::is('admin/suppliers*') ? 'active' : '' }}">
         <p>Suppliers</p>
     </a>
-</li>
+  </li>
+@endif
 
-<li class="nav-item">
-  <a href="{{ route('admin.products.index') }}"
-     class="nav-link {{ Request::is('admin/products*') ? 'active' : '' }}">
-      <p>Products</p>
-  </a>
-</li>
-
-<li class="nav-item">
-    <a href="{{ route('admin.stocks.index') }}"
-       class="nav-link {{ Request::is('admin/stocks*') ? 'active' : '' }}">
-        <p>Purchase</p>
+@if (auth()->user()->role == 'staff' || auth()->user()->role == 'admin')
+  <li class="nav-item">
+    <a href="{{ route('admin.products.index') }}"
+      class="nav-link {{ Request::is('admin/products*') ? 'active' : '' }}">
+        <p>Products</p>
     </a>
-</li>
+  </li>
 
-<li class="nav-item">
-    <a href="{{ route('admin.shop_products.index') }}"
-       class="nav-link {{ Request::is('admin/shop_products*') ? 'active' : '' }}">
-        <p>Product Distribution</p>
-    </a>
-</li>
+  <li class="nav-item">
+      <a href="{{ route('admin.stocks.index') }}"
+        class="nav-link {{ Request::is('admin/stocks*') ? 'active' : '' }}">
+          <p>Purchase</p>
+      </a>
+  </li>
+@endif
 
+@if (auth()->user()->role == 'admin')
+  <li class="nav-item">
+      <a href="{{ route('admin.shop_products.index') }}"
+        class="nav-link {{ Request::is('admin/shop_products*') ? 'active' : '' }}">
+          <p>Product Distribution</p>
+      </a>
+  </li>
+@endif
+
+@if (auth()->user()->role == 'staff' || auth()->user()->role == 'admin')
 <li class="nav-item">
     <a href="#" class="nav-link">
       <p>
@@ -84,20 +91,26 @@
           <p>New Sale</p>
         </a>
       </li>
-      <li class="nav-item">
-        <a href="{{ route('admin.order.return') }}" class="nav-link {{ Request::is('admin/order/sell-return') ? 'active' : '' }}">
-          <p>Sale Return</p>
-        </a>
-      </li>
+      @if (auth()->user()->role == 'admin')
+        <li class="nav-item">
+          <a href="{{ route('admin.order.return') }}" class="nav-link {{ Request::is('admin/order/sell-return') ? 'active' : '' }}">
+            <p>Sale Return</p>
+          </a>
+        </li>
+      @endif
     </ul>
   </li>
+  @endif
 
+  @if (auth()->user()->role == 'admin')
   <li class="nav-item">
       <a href="{{ route('admin.users.index') }}"
         class="nav-link {{ Request::is('admin/users*') ? 'active' : '' }}">
           <p>Users</p>
       </a>
   </li>
+  @endif
+
   <li class="nav-item">
       <a href="{{ route('admin.customers.index') }}"
         class="nav-link {{ Request::is('admin/customers*') ? 'active' : '' }}">

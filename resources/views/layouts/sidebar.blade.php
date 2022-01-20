@@ -3,7 +3,11 @@
         <img src="{{ asset('assets/img/meditech.png') }}"
              alt="{{ config('app.name') }} Logo"
              class="brand-image img-circle elevation-3">
-        <span class="brand-text font-weight-light">{{ config('app.name') }}</span>
+        @if (auth()->user()->role == 'admin')
+            <span class="brand-text font-weight-light">{{ config('app.name') }}</span>
+        @else
+            <span class="brand-text font-weight-light"> {{(auth()->user()->shop)?auth()->user()->shop->name:'N/A'}}</span>
+        @endif
     </a>
     <div class="sidebar">
         <nav class="mt-2">

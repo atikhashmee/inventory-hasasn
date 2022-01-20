@@ -49,12 +49,7 @@ class ReportController extends Controller
             }
             $shops = Shop::get();
             $customers = Customer::get();
-            
-            if ($user->role == 'admin') {
-                return view('admin.reports.sales', compact('data', 'customers', 'shops'));
-            } else {
-                return view('user.reports.sales', compact('data', 'customers', 'shops'));
-            }
+            return view('admin.reports.sales', compact('data', 'customers', 'shops'));
 
         } catch (\Exception $e) {
             Flash::error($e->getMessage());
@@ -66,22 +61,14 @@ class ReportController extends Controller
     {
         $user = auth()->user();
         $orders = Order::whereDate('created_at', $request->date)->get();
-        if ($user->role == 'admin') {
-            return view('admin.reports.sales_detail', compact('orders'));
-        } else {
-            return view('user.reports.sales_detail', compact('orders'));
-        }
+        return view('admin.reports.sales_detail', compact('orders'));
     }
 
     public function purchaseDetail(Request $request)
     {
         $user = auth()->user();
         $stocks = Stock::whereDate('created_at', $request->date)->get();
-        if ($user->role == 'admin') {
-            return view('admin.reports.purchase_detail', compact('stocks'));
-        } else {
-            return view('user.reports.purchase_detail', compact('stocks'));
-        }
+        return view('admin.reports.purchase_detail', compact('stocks'));
     }
 
     public function purchaseReport(Request $request)
@@ -119,11 +106,7 @@ class ReportController extends Controller
             }
             $products = Product::get();
             $suppliers = Supplier::get();
-            if ($user->role == 'admin') {
-                return view('admin.reports.purchase', compact('data', 'products', 'suppliers'));
-            } else {
-                return view('user.reports.purchase', compact('data', 'products', 'suppliers'));
-            }
+            return view('admin.reports.purchase', compact('data', 'products', 'suppliers'));
         } catch (\Exception $e) {
             Flash::error($e->getMessage());
             return redirect()->back()->withErrors(['error' => $e->getMessage()]);
@@ -162,11 +145,7 @@ class ReportController extends Controller
                 // }
             }
             $customers = Customer::get();
-            if ($user->role == 'admin') {
-                return view('admin.reports.payment', compact('data', 'customers'));
-            } else {
-                return view('user.reports.payment', compact('data', 'customers'));
-            }
+            return view('admin.reports.payment', compact('data', 'customers'));
         } catch (\Exception $e) {
             Flash::error($e->getMessage());
             return redirect()->back()->withErrors(['error' => $e->getMessage()]);
@@ -204,11 +183,7 @@ class ReportController extends Controller
                 }
                 $data[intVal($dateArr[1])][intVal($dateArr[2])] = $daySUm;
             }
-            if ($user->role == 'admin') {
-                return view('admin.reports.profit_loss', compact('data'));
-            } else {
-                return view('user.reports.profit_loss', compact('data'));
-            }
+            return view('admin.reports.profit_loss', compact('data'));
         } catch (\Exception $e) {
             Flash::error($e->getMessage());
             return redirect()->back();

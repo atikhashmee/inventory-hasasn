@@ -46,21 +46,12 @@ class StockController extends AppBaseController
         $serial = pagiSerial($stocks, 50);
         $suppliers = Supplier::get();
         
-        if ($user->role == 'admin') {
-            $products = Product::get();
-            return view('admin.stocks.index')
-            ->with('stocks', $stocks)
-            ->with('suppliers', $suppliers)
-            ->with('serial', $serial)
-            ->with('products', $products);
-        } else {
-            $products = Product::where('user_id', $user->id)->get();
-            return view('user.stocks.index')
-            ->with('stocks', $stocks)
-            ->with('suppliers', $suppliers)
-            ->with('serial', $serial)
-            ->with('products', $products);
-        }
+        $products = Product::get();
+        return view('admin.stocks.index')
+        ->with('stocks', $stocks)
+        ->with('suppliers', $suppliers)
+        ->with('serial', $serial)
+        ->with('products', $products);
        
     }
 
@@ -72,11 +63,7 @@ class StockController extends AppBaseController
     public function create()
     {
         $user = auth()->user();
-        if ($user->role == 'admin') {
-            return view('admin.stocks.create');
-        } else {
-            return view('user.stocks.create');
-        }
+        return view('admin.stocks.create');
     }
 
     /**
@@ -101,11 +88,7 @@ class StockController extends AppBaseController
         }
 
         Flash::success('Stock saved successfully.');
-        if ($user->role == 'admin') {
-            return redirect(route('admin.stocks.index'));
-        } else {
-            return redirect(route('user.stocks.index'));
-        }
+        return redirect(route('admin.stocks.index'));
     }
 
     /**
@@ -118,19 +101,13 @@ class StockController extends AppBaseController
     public function show($id)
     {
         /** @var Stock $stock */
-        $user = auth()->user();
         $stock = Stock::find($id);
 
         if (empty($stock)) {
             Flash::error('Stock not found');
-
             return redirect(route('admin.stocks.index'));
         }
-        if ($user->role == 'admin') {
-            return view('admin.stocks.show')->with('stock', $stock);
-        } else {
-            return view('user.stocks.show')->with('stock', $stock);
-        }
+        return view('admin.stocks.show')->with('stock', $stock);
     }
 
     /**
@@ -144,19 +121,13 @@ class StockController extends AppBaseController
     {
         /** @var Stock $stock */
         $stock = Stock::find($id);
-        $user = auth()->user();
 
         if (empty($stock)) {
             Flash::error('Stock not found');
 
             return redirect(route('admin.stocks.index'));
         }
-        if ($user->role == 'admin') {
-            return view('admin.stocks.edit')->with('stock', $stock);
-        } else {
-            return view('user.stocks.edit')->with('stock', $stock);
-        }
-
+        return view('admin.stocks.edit')->with('stock', $stock);
     }
 
     /**
@@ -171,7 +142,6 @@ class StockController extends AppBaseController
     {
         /** @var Stock $stock */
         $stock = Stock::find($id);
-        $user = auth()->user();
 
         if (empty($stock)) {
             Flash::error('Stock not found');
@@ -184,11 +154,7 @@ class StockController extends AppBaseController
 
         Flash::success('Stock updated successfully.');
 
-        if ($user->role == 'admin') {
-            return redirect(route('admin.stocks.index'));
-        } else {
-            return redirect(route('user.stocks.index'));
-        }
+        return redirect(route('admin.stocks.index'));
     }
 
     /**
@@ -204,7 +170,6 @@ class StockController extends AppBaseController
     {
         /** @var Stock $stock */
         $stock = Stock::find($id);
-        $user = auth()->user();
 
         if (empty($stock)) {
             Flash::error('Stock not found');
@@ -215,10 +180,6 @@ class StockController extends AppBaseController
         $stock->delete();
 
         Flash::success('Stock deleted successfully.');
-        if ($user->role == 'admin') {
-            return redirect(route('admin.stocks.index'));
-        } else {
-            return redirect(route('user.stocks.index'));
-        }
+        return redirect(route('admin.stocks.index'));
     }
 }

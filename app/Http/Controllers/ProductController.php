@@ -42,7 +42,6 @@ class ProductController extends AppBaseController
        $product_sql = Product::select('products.*', 'countries.name as country_name')
         ->leftJoin('countries', 'countries.id', '=', 'products.origin');
         if ($user->role == 'admin') {
-            
             if (request()->query('warehouse_id') == '' && request()->query('shop_id') =='') {
                 $product_sql->addSelect(\DB::raw("(IFNULL(TS.total_wareHouse_in, 0) + IFNULL(TS2.total_shop_in, 0)) - IFNULL(TS3.total_sell, 0) as quantity"));
                 $product_sql->leftJoin(\DB::raw("(SELECT SUM(quantity) as total_wareHouse_in, product_id FROM stocks GROUP BY product_id) as TS"), "TS.product_id", "=", "products.id")
@@ -95,16 +94,9 @@ class ProductController extends AppBaseController
         $products =   $product_sql->orderBy('id', 'DESC')->paginate(10);
 
         $serial = pagiSerial($products, 10);
-        if ($user->role == 'admin') {
-            return view('admin.products.index')
-            ->with('products', $products)
-            ->with('serial', $serial);
-        } else {
-            return view('user.products.index')
-            ->with('products', $products)
-            ->with('serial', $serial);
-        }
-       
+        return view('admin.products.index')
+        ->with('products', $products)
+        ->with('serial', $serial);
     }
 
     /**
@@ -114,12 +106,7 @@ class ProductController extends AppBaseController
      */
     public function create()
     {
-        $user = auth()->user();
-        if ($user->role == 'admin') {
-            return view('admin.products.create');
-        } else {
-            return view('user.products.create');
-        }
+        return view('admin.products.create');
     }
 
     /**
@@ -156,7 +143,7 @@ class ProductController extends AppBaseController
 
             Flash::success('Product saved successfully.');
 
-            return $user->role == 'admin' ? redirect(route('admin.products.index')) : redirect(route('user.products.index'));
+            return redirect(route('admin.products.index'));
         } catch (\Exception $e) {
             Flash::error($e->getMessage());
             return redirect(route('admin.products.index'));
@@ -174,18 +161,13 @@ class ProductController extends AppBaseController
     public function show($id)
     {
         /** @var Product $product */
-        $user = auth()->user();
         $product = Product::find($id);
 
         if (empty($product)) {
             Flash::error('Product not found');
             return redirect(route('admin.products.index'));
         }
-        if ($user->role == 'admin') {
-            return view('admin.products.show')->with('product', $product);
-        } else {
-            return view('user.products.show')->with('product', $product);
-        }
+        return view('admin.products.show')->with('product', $product);
     
     }
 
@@ -200,7 +182,6 @@ class ProductController extends AppBaseController
     {
         /** @var Product $product */
         $product = Product::find($id);
-        $user = auth()->user();
 
         if (empty($product)) {
             Flash::error('Product not found');
@@ -208,13 +189,7 @@ class ProductController extends AppBaseController
             return redirect(route('admin.products.index'));
         }
 
-        if ($user->role == 'admin') {
-            return view('admin.products.edit')->with('product', $product);
-        } else {
-            return view('user.products.edit')->with('product', $product);
-        }
-
-       
+        return view('admin.products.edit')->with('product', $product);
     }
 
     /**
@@ -228,7 +203,6 @@ class ProductController extends AppBaseController
     public function update($id, UpdateProductRequest $request)
     {
         /** @var Product $product */
-        $user = auth()->user();
         $product = Product::find($id);
 
         if (empty($product)) {
@@ -257,11 +231,7 @@ class ProductController extends AppBaseController
         $product->save();
 
         Flash::success('Product updated successfully.');
-        if ($user->role == 'admin') {
-            return redirect(route('admin.products.index'));
-        } else {
-            return redirect(route('user.products.index'));
-        }
+        return redirect(route('admin.products.index'));
     }
 
     /**
@@ -275,7 +245,6 @@ class ProductController extends AppBaseController
      */
     public function destroy($id)
     {
-        $user = auth()->user();
         /** @var Product $product */
         $product = Product::find($id);
 
@@ -286,10 +255,6 @@ class ProductController extends AppBaseController
 
         $product->delete();
         Flash::success('Product deleted successfully.');
-        if ($user->role == 'admin') {
-            return redirect(route('admin.products.index'));
-        } else {
-            return redirect(route('user.products.index'));
-        }
+        return redirect(route('admin.products.index'));
     }
 }

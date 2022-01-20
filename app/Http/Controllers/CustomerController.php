@@ -18,21 +18,14 @@ class CustomerController extends Controller
     {
         $user = auth()->user();
         try {
-          
-            if ($user->role == 'admin') {
-                $data['customers'] = Customer::select('customers.*', \DB::raw('IFNULL(B.total_orders, 0) as totalOrdersCount'), 'B.order_ids')
-                ->leftJoin(\DB::raw('(SELECT COUNT(id) as total_orders, GROUP_CONCAT(id) as order_ids, customer_id FROM orders GROUP BY customer_id) AS B'), 'customers.id', '=', 'B.customer_id')
-                ->orderBy('totalOrdersCount', 'DESC')
-                ->paginate(100);
-                return view('admin.customers.index', $data);
-            } else {
-                $data['customers'] = Customer::select('customers.*', \DB::raw('IFNULL(B.total_orders, 0) as totalOrdersCount'), 'B.order_ids')
-                ->leftJoin(\DB::raw('(SELECT COUNT(id) as total_orders, GROUP_CONCAT(id) as order_ids, customer_id FROM orders GROUP BY customer_id) AS B'), 'customers.id', '=', 'B.customer_id')
-                ->where('shop_id', $user->shop_id)
-                ->orderBy('totalOrdersCount', 'DESC')
-                ->paginate(100);
-                return view('user.customers.index', $data);
-            }
+            $customer_sql = Customer::select('customers.*', \DB::raw('IFNULL(B.total_orders, 0) as totalOrdersCount'), 'B.order_ids')
+                ->leftJoin(\DB::raw('(SELECT COUNT(id) as total_orders, GROUP_CONCAT(id) as order_ids, customer_id FROM orders GROUP BY customer_id) AS B'), 'customers.id', '=', 'B.customer_id');
+                if ($user->role != 'admin') {
+                    $customer_sql->where('shop_id', $user->shop_id);
+                }
+                $customer_sql->orderBy('totalOrdersCount', 'DESC');
+                $data['customers'] =  $customer_sql->paginate(100);
+            return view('admin.customers.index', $data);
         } catch (\Exception $e) {
             return redirect()->back()->withError($e->getMessage());
         }
@@ -54,12 +47,7 @@ class CustomerController extends Controller
      */
     public function create()
     {
-        $user = auth()->user();
-        if ($user->role == 'admin') {
-            return view('admin.customers.create');
-        } else {
-            return view('user.customers.create');
-        }
+        return view('admin.customers.create');
     }
 
     /**
@@ -113,13 +101,8 @@ class CustomerController extends Controller
      */
     public function edit(Customer $customer)
     {
-        $user = auth()->user();
         $data['customer'] = $customer;
-        if ($user->role == 'admin') {
-            return view('admin.customers.edit', $data);
-        } else {
-            return view('user.customers.edit', $data);
-        }
+        return view('admin.customers.edit', $data);
     }
 
     /**
@@ -147,12 +130,7 @@ class CustomerController extends Controller
      */
     public function destroy(Customer $customer)
     {
-        $user = auth()->user();
         Flash::success('Deleted successfully.');
-        if ($user->role == 'admin') {
-            return redirect()->route('admin.customers.index');
-        } else {
-            return redirect()->route('user.customers.index');
-        }
+        return redirect()->route('admin.customers.index');
     }
 }
