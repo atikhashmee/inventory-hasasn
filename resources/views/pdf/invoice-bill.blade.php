@@ -52,9 +52,7 @@
 </div>
 
 <br />
-@php
-    $tnx_amount = $transaction['amount'] ?? 0;
-@endphp
+
 <table class="invoice-info">
     <tr>
         <td width="50%">
@@ -121,6 +119,12 @@
 </table>
 <br />
 <br />
+@php
+    $tnx_amount = $transaction['amount'] ?? 0;
+    $today_sales = ($subtotal - $discount_amount);
+    $current_due = ($customer['current_due'] - $today_sales) > 0 ? $customer['current_due'] : 0;
+    $net_outstanding = ($current_due + $today_sales) -  $tnx_amount;
+@endphp
 <table class="summer-table">
     <tbody>
         <tr>
@@ -128,14 +132,14 @@
                 <table class="summery-table-left">
                     <tr>
                         <td>
-                            <p>Current Due: {{number_format($customer['current_due'] - ($subtotal - $discount_amount), 2, '.', ',')}}</p>
-                            <p>Sales: {{number_format(($subtotal - $discount_amount) , 2, '.', ',')}}</p>
+                            <p>Current Due: {{number_format($current_due, 2, '.', ',')}}</p>
+                            <p>Sales: {{number_format(($today_sales) , 2, '.', ',')}}</p>
                             <p>Collected: {{$tnx_amount}}</p>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <strong>Net Outstanding: {{ number_format($customer['current_due'] - $tnx_amount, 2, '.', ',') }}</strong>
+                            <strong>Net Outstanding: {{ number_format($net_outstanding, 2, '.', ',') }}</strong>
                         </td>
                     </tr>
                 </table>

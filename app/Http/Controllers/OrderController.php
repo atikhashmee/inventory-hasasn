@@ -99,7 +99,7 @@ class OrderController extends Controller
 
     public function userOrderLists(Request $request) {
         $user = auth()->user();
-        $data['orders'] = $this->orderLists($request, $user->id);
+        $data['orders'] = $this->orderLists($request, $user);
         $data['serial'] = pagiSerial($data['orders'], 100);
         $data['shops']  = Shop::get();
         $data['customers'] = Customer::get();
