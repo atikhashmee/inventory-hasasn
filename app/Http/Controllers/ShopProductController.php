@@ -149,7 +149,6 @@ class ShopProductController extends Controller
             $warehouse_id = $request->warehouse_id;
             $products = json_decode($data['products'], true);
             $user = auth()->user();
-
             if (count($products) > 0) {
                 foreach ($products as $product) {
                    $shopProduct = ShopProduct::where('shop_id', $data['shop_id'])->where('product_id', $product['id'])->first();
@@ -162,7 +161,7 @@ class ShopProductController extends Controller
                             'price' => 0,
                         ]);
                     }
-                    if ($product['new_quantity'] > 0) {
+                    if (isset($product['new_quantity']) && $product['new_quantity'] > 0) {
                         ShopProductStock::create([
                             'warehouse_id' => $warehouse_id,
                             'user_id' => $user->id,

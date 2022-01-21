@@ -332,6 +332,7 @@ class OrderController extends Controller
 
     public function salesReturnUpdate(Request $request) {
         try {
+            $user = auth()->user();
             $validator = Validator::make($request->all(), [
                 'order_id' => ['required', 'integer', 'exists:orders,id'],
                 'detail_id' => ['required', 'integer', 'exists:order_details,id'],
@@ -356,7 +357,18 @@ class OrderController extends Controller
                 $od_detail->returned_amount = $request->returnedPrice;
                 $od_detail->final_quantity = $od_detail->final_quantity - $request->quantity;
                 $od_detail->final_amount = $od_detail->final_amount - $request->returnedPrice;
-                $od_detail->save();
+                $order_details_updated = $od_detail->save();
+                if ($order_details_updated) {
+                    ShopProductStock::create([
+                        'user_id' => $user->id,
+                        'order_detail_id' => $od_detail->id,
+                        'shop_id' => $od_detail->shop_id,
+                        'product_id' => $od_detail->product_id,
+                        'quantity' => $request->quantity,
+                        'type' => 'sale_return',
+                        'price' => $request->returnedPrice,
+                    ]);
+                }
             }
             return response()->json(['status'=> true, 'msg'=> 'Success', 'data'=> null, 'errors' => [], 'error' => ''], 200);
         } catch (\Exception $e) {

@@ -91,13 +91,11 @@
           <p>New Sale</p>
         </a>
       </li>
-      @if (auth()->user()->role == 'admin')
-        <li class="nav-item">
-          <a href="{{ route('admin.order.return') }}" class="nav-link {{ Request::is('admin/order/sell-return') ? 'active' : '' }}">
-            <p>Sale Return</p>
-          </a>
-        </li>
-      @endif
+      <li class="nav-item">
+        <a href="{{ route('admin.order.return') }}" class="nav-link {{ Request::is('admin/order/sell-return') ? 'active' : '' }}">
+          <p>Sale Return</p>
+        </a>
+      </li>
     </ul>
   </li>
   @endif
