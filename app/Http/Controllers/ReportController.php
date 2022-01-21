@@ -11,6 +11,7 @@ use App\Models\Supplier;
 use Laracasts\Flash\Flash;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use App\Models\ShopProductStock;
 
 class ReportController extends Controller
 {
@@ -32,8 +33,11 @@ class ReportController extends Controller
                     if (!empty($request->customer_id)) {
                         $q->where('customer_id', $request->customer_id);
                     }
-                })
-                ->whereYear('created_at', $year)
+                });
+                if ($user->role != 'admin') {
+                    $sql->where('shop_id', $user->shop_id);
+                }
+                $sql->whereYear('created_at', $year)
                 ->groupBy(\DB::raw('DATE(created_at)'));
            
 
@@ -47,9 +51,20 @@ class ReportController extends Controller
                     $data[intVal($dateArr[1])][intVal($dateArr[2])] = $item->countId;
                 }
             }
-            $shops = Shop::get();
-            $customers = Customer::get();
-            return view('admin.reports.sales', compact('data', 'customers', 'shops'));
+
+            if ($user->role == 'admin') {
+                $customers = Customer::get();
+                $shops = Shop::get();
+            } else {
+                $customers = Customer::where('shop_id', $user->shop_id)->get();
+                $shops = [];
+            }
+
+            $data['data'] = $data;
+            $data['customers'] = $customers;
+            $data['shops'] = $shops;
+            $data['user'] = $user;
+            return view('admin.reports.sales', $data);
 
         } catch (\Exception $e) {
             Flash::error($e->getMessage());
@@ -76,12 +91,25 @@ class ReportController extends Controller
         $user = auth()->user();
         try {
             $year = $request->year ?? date('Y');
-                $sql = Stock::select(
+
+                if ($user->role == 'admin') {
+                        $sql = Stock::select(
+                            \DB::raw('COUNT(id) AS countId'),
+                            \DB::raw('SUM(price) AS totalPrice'),
+                            \DB::raw('DATE(created_at) AS date')
+                        );
+                } else {
+                    $sql = ShopProductStock::select(
                         \DB::raw('COUNT(id) AS countId'),
                         \DB::raw('SUM(price) AS totalPrice'),
                         \DB::raw('DATE(created_at) AS date')
                     )
-                    ->where(function($q) use($request) {
+                    ->where('type', 'user_transfer')
+                    ->where('shop_id', $user->shop_id);
+                }
+               
+
+                    $sql->where(function($q) use($request) {
                         if (!empty($request->supplier_id)) {
                             $q->where('supplier_id', $request->supplier_id);
                         }

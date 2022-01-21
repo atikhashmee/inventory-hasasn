@@ -9,6 +9,7 @@ use App\Models\Transaction;
 use Illuminate\Http\Request;
 use App\Models\WarentySerial;
 use Doctrine\DBAL\Schema\View;
+use App\Models\ShopProductStock;
 
 class HomeController extends Controller
 {
@@ -31,17 +32,28 @@ class HomeController extends Controller
     {
         $start = date('Y-m-d 00:00:00');
         $end   = date('Y-m-d 23:59:59');
+        $user = auth()->user();
         $data = [];
-        $data['total_sales_today'] = Order::whereBetween('created_at', [$start, $end])->sum('total_final_amount');
-        $data['total_regular_sales'] = Order::where('order_challan_type', 'walk-in')->sum('total_final_amount');
-        $data['total_condition_sales'] = Order::where('order_challan_type', 'challan')->sum('total_final_amount');
-        $data['total_purchase_today'] = Stock::whereBetween('created_at', [$start, $end])->sum('price');
+        
         $data['total_payment_today'] = Transaction::where('type', 'in')->whereNotNull('order_id')->where('flag', 'payment')->whereBetween('created_at', [$start, $end])->sum('amount');
         $totalDeposit = Transaction::where("type", "in")->whereNotNull('order_id')->whereBetween('created_at', [$start, $end])->groupBy('customer_id')->sum('amount');
         $totalWithdraw = Transaction::where("type", "out")->whereBetween('created_at', [$start, $end])->groupBy('customer_id')->sum('amount');
         $data['total_due_today'] = abs($totalDeposit - $totalWithdraw);
-        $data['recent_sales'] = Order::orderBy('id', 'DESC')->limit(5)->get();
-        $data['recent_purchase'] = Stock::orderBy('id', 'DESC')->limit(5)->get();
+        if ($user->role == 'admin') {
+            $data['total_purchase_today'] = Stock::whereBetween('created_at', [$start, $end])->sum('price');
+            $data['recent_purchase'] = Stock::orderBy('id', 'DESC')->limit(5)->get();
+            $data['recent_sales'] = Order::orderBy('id', 'DESC')->limit(5)->get();
+            $data['total_sales_today'] = Order::whereBetween('created_at', [$start, $end])->sum('total_final_amount');
+            $data['total_regular_sales'] = Order::where('order_challan_type', 'walk-in')->sum('total_final_amount');
+            $data['total_condition_sales'] = Order::where('order_challan_type', 'challan')->sum('total_final_amount');
+        } else {
+            $data['recent_purchase'] = ShopProductStock::where('type', 'user_transfer')->orderBy('id', 'DESC')->limit(5)->get();
+            $data['recent_sales'] = Order::where('shop_id', $user->shop_id)->orderBy('id', 'DESC')->limit(5)->get();
+            $data['total_sales_today'] = Order::where('shop_id', $user->shop_id)->whereBetween('created_at', [$start, $end])->sum('total_final_amount');
+            $data['total_regular_sales'] = Order::where('shop_id', $user->shop_id)->where('order_challan_type', 'walk-in')->sum('total_final_amount');
+            $data['total_condition_sales'] = Order::where('shop_id', $user->shop_id)->where('order_challan_type', 'challan')->sum('total_final_amount');
+            $data['total_purchase_today'] = ShopProductStock::where('shop_id', $user->shop_id)->where('type', 'user_transfer')->whereBetween('created_at', [$start, $end])->sum('price');
+        }
         $data['best_selling_products'] = Product::select('products.*', \DB::raw('IFNULL(A.top_products, 0) as totalCOunt'))
         ->leftJoin(\DB::raw('(SELECT count(product_id) as top_products, product_id FROM order_details GROUP BY product_id) as A'), 'A.product_id', '=', 'products.id')
         ->where('A.top_products', '>', 0)

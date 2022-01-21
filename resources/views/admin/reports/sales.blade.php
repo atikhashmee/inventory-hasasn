@@ -17,12 +17,14 @@
                                     <option value="{{$customer->id}}" @if(Request::get('customer_id') == $customer->id) selected @endif>{{$customer->customer_name}}</option>
                                 @endforeach
                             </select>
-                            <select name="shop_id" class="form-control select2">
-                                <option value="">Select Shop</option>
-                                @foreach ($shops as $shop)
-                                    <option value="{{$shop->id}}" @if(Request::get('shop_id') == $shop->id) selected @endif>{{$shop->name}}</option>
-                                @endforeach
-                            </select>
+                            @if ($user->role == 'admin')
+                                <select name="shop_id" class="form-control select2">
+                                    <option value="">Select Shop</option>
+                                    @foreach ($shops as $shop)
+                                        <option value="{{$shop->id}}" @if(Request::get('shop_id') == $shop->id) selected @endif>{{$shop->name}}</option>
+                                    @endforeach
+                                </select>
+                            @endif
                             <select name="year" class="form-control" style="width: 20%">
                                 <option>2021</option>
                             </select>
