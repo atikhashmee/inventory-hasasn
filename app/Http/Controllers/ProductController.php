@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use Flash;
 use Response;
+use App\Models\Brand;
+use App\Models\Country;
 use App\Models\Product;
+use App\Models\Menufacture;
 use Illuminate\Http\Request;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
@@ -38,6 +41,7 @@ class ProductController extends AppBaseController
     public function index(Request $request)
     {
         $user = auth()->user();
+        $data = [];
         /** @var Product $products */
         $shop_id = request()->query('shop_id') !='' ? $request->shop_id : '';
         if ($user->role != 'admin') {
@@ -85,7 +89,6 @@ class ProductController extends AppBaseController
                 $q->on("TS2.product_id", "=", "products.id");
                 $q->where("TS2.warehouse_id", request()->query('warehouse_id'));
             });
-            
         }
         
 
@@ -95,11 +98,16 @@ class ProductController extends AppBaseController
         } 
 
         $products =   $product_sql->orderBy('id', 'DESC')->paginate(10);
-
         $serial = pagiSerial($products, 10);
-        return view('admin.products.index')
-        ->with('products', $products)
-        ->with('serial', $serial);
+        $countryItems = Country::pluck('name','id')->toArray();
+        $menufactures = Menufacture::pluck('name','id')->toArray();
+        $brands = Brand::pluck('name','id')->toArray();
+        $data['products'] = $products;
+        $data['countries'] = $countryItems;
+        $data['menufactures'] = $menufactures;
+        $data['brands'] = $brands;
+        $data['serial'] = $serial;
+        return view('admin.products.index', $data);
     }
 
     /**

@@ -105,7 +105,13 @@
             @endphp
                 <tr>
                     <td>{{++$key}}</td>
-                    <td>{{$detail['product_name']}}</td>
+                    <td>
+                        <span>{{$detail['product_name']}}</span> <br>
+                        <span>
+                                <span> <b>Origin</b> {{$detail['origin']}}<span> 
+                                <span> <b>Brand</b> {{$detail['brand_name']}}<span>
+                        </span>
+                    </td>
                     <td>
                         {{$detail['quantity_unit_id']!=null? $detail['quantity_unit_value'].' '.$detail['unit']['name']: $detail['product_quantity'].' Unit' }}
                     </td>

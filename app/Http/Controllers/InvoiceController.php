@@ -41,7 +41,12 @@ class InvoiceController extends Controller
     }
 
     public function printInvoice($order_id) {
-        $sqldata = Order::with('customer', 'orderDetail', 'orderDetail.unit', 'user', 'transaction', 'shop')->where('id', $order_id)->first();
+        $sqldata = Order::with(['customer', 'orderDetail' => function($q) {
+            $q->addSelect('order_details.*', 'countries.name as origin', 'brands.name as brand_name');
+            $q->leftJoin('products', 'products.id', '=', 'order_details.product_id');
+            $q->leftJoin('countries', 'countries.id', '=', 'products.origin');
+            $q->leftJoin('brands', 'brands.id', '=', 'products.brand_id');
+        }, 'orderDetail.unit', 'user', 'transaction', 'shop'])->where('id', $order_id)->first();
         $shop = $sqldata->shop;
         if (file_exists(public_path().'/uploads/shops/'.$shop->image)  && $shop->image) {
             $shop->image_link = asset('/uploads/shops/'.$shop->image);
