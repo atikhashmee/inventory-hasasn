@@ -7,7 +7,19 @@
                     <form action="#" method="POST" @submit.prevent="submitOrder()" autocomplete="off">
                         <div class="d-flex justify-content-between align-item-center">
                             <div class="shop-info-section">
-                                <img src="{{asset('assets/img/not-found.png')}}" id="shop_image" width="200" height="200" alt="">
+                                
+                                @if (auth()->user()->role == 'admin')
+                                    <img src="{{asset('assets/img/not-found.png')}}" id="shop_image" width="200" height="200" alt="">
+                                @else
+                                    @php
+                                        if (file_exists(public_path().'/uploads/shops/'.auth()->user()->shop->image)  && auth()->user()->shop->image) {
+                                            $shop_logo = asset('/uploads/shops/'.auth()->user()->shop->image);
+                                        } else {
+                                            $shop_logo = asset('assets/img/not-found.png');
+                                        }
+                                    @endphp
+                                        <img src="{{$shop_logo}}" id="shop_image" width="200" height="200" alt="">
+                                @endif
                             </div>
                             <div class="order-info-section">
                                 <table class="table table-bordered">

@@ -1,8 +1,16 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <a href="{{ route('admin.home') }}" class="brand-link">
+        @if (auth()->user()->role == 'admin')
         <img src="{{ asset('assets/img/meditech.png') }}"
              alt="{{ config('app.name') }} Logo"
              class="brand-image img-circle elevation-3">
+        @else
+            <img src="{{ $shop_logo }}"
+                alt="{{ config('app.name') }} Logo"
+                class="brand-image img-circle elevation-3">
+        @endif
+     
+        
         @if (auth()->user()->role == 'admin')
             <span class="brand-text font-weight-light">{{ config('app.name') }}</span>
         @else

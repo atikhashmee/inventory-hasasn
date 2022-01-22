@@ -90,13 +90,23 @@ class ViewServiceProvider extends ServiceProvider
             $countryItems = Country::pluck('name','id')->toArray();
             $view->with('countryItems', $countryItems);
         });
-        View::composer(['admin.suppliers.fields'], function ($view) {
-            $countryItems = Country::pluck('name','id')->toArray();
-            $view->with('countryItems', $countryItems);
-        });
         View::composer(['admin.categories.fields'], function ($view) {
             $categoryItems = Category::with('nested')->where('parent_id', 0)->get();
             $view->with('categoryItems', $categoryItems);
+        });
+
+        View::composer(['layouts.sidebar'], function ($view) {
+            $user = auth()->user();
+            $shop_logo = '';
+            if ($user->role != 'admin') {
+                $shop = $user->shop;
+                if (file_exists(public_path().'/uploads/shops/'.$shop->image)  && $shop->image) {
+                    $shop_logo = $shop->image_link = asset('/uploads/shops/'.$shop->image);
+                } else {
+                    $shop_logo =  $shop->image_link = asset('assets/img/not-found.png');
+                }
+            }
+            $view->with('shop_logo', $shop_logo);
         });
         
     }
