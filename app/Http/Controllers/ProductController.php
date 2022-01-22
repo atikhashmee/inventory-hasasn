@@ -7,6 +7,7 @@ use Response;
 use App\Models\Brand;
 use App\Models\Country;
 use App\Models\Product;
+use App\Models\Category;
 use App\Models\Menufacture;
 use Illuminate\Http\Request;
 use Intervention\Image\Facades\Image;
@@ -49,7 +50,27 @@ class ProductController extends AppBaseController
         }
        $product_sql = Product::select('products.*', 'countries.name as country_name')
         ->leftJoin('countries', 'countries.id', '=', 'products.origin');
-        
+
+        $product_sql->where(function($q) use($request) {
+            if ($request->category_id) {
+                $q->where('products.category_id', $request->category_id);
+            }
+            if ($request->brand_id) {
+                $q->where('products.brand_id', $request->brand_id);
+            }
+
+            if ($request->menufacture_id) {
+                $q->where('products.menufacture_id', $request->menufacture_id);
+            }
+
+            if ($request->origin_id) {
+                $q->where('products.origin', $request->origin_id);
+            }
+            if ($request->search != '') {
+                $q->where('products.name', 'LIKE', '%'.$request->search.'%');
+            }
+        });
+
         if (request()->query('warehouse_id') == '' && request()->query('shop_id') =='') {
             $product_sql->addSelect(\DB::raw("(IFNULL(TS.total_wareHouse_in, 0) + IFNULL(TS2.total_shop_in, 0)) - IFNULL(TS3.total_sell, 0) as quantity"));
             $product_sql->leftJoin(\DB::raw("(SELECT SUM(quantity) as total_wareHouse_in, product_id FROM stocks GROUP BY product_id) as TS"), "TS.product_id", "=", "products.id")
@@ -102,11 +123,13 @@ class ProductController extends AppBaseController
         $countryItems = Country::pluck('name','id')->toArray();
         $menufactures = Menufacture::pluck('name','id')->toArray();
         $brands = Brand::pluck('name','id')->toArray();
+        $categoryItems = Category::with('nested', 'nested.nested')->where('parent_id', 0)->get()->toArray();
         $data['products'] = $products;
         $data['countries'] = $countryItems;
         $data['menufactures'] = $menufactures;
         $data['brands'] = $brands;
         $data['serial'] = $serial;
+        $data['categoryItems'] = $categoryItems;
         return view('admin.products.index', $data);
     }
 
