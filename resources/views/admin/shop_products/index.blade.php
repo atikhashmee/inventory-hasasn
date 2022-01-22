@@ -36,67 +36,76 @@
                 <div class="tab-content">
                     <div class="tab-pane active" id="activity">
                         <form action="">
-                            <div class="row">
-                                <div class="col-md-6 d-flex justify-content-between align-items-center">
-                                    <div class="form-group" style="flex-basis: 40%">
-                                        <label for="">Warehouse</label>
-                                        <select name="warehouse_id" id="warehouse_id" v-model="warehosue_id" class="form-control">
-                                            <option value="">Select a Warehouse</option>
-                                            <option v-for="warehosue in warehouses" :value="warehosue.id">@{{warehosue.ware_house_name}}</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group" style="flex-basis: 40%">
-                                        <label for="">Shop</label>
-                                        <select name="shop_id" id="shop_id" v-model="shop_id" class="form-control">
-                                            <option value="">Select a shop</option>
-                                            <option v-for="shop in shops" :value="shop.id">@{{shop.name}}</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group" style="flex-basis: 8%">
-                                        <label for=""></label>
-                                        <button type="button" @click="getShopData()" class="btn btn-primary">Query</button>
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="row">
+                                        <div class="col-md-6 d-flex justify-content-between align-items-center">
+                                            <div class="form-group" style="flex-basis: 40%">
+                                                <label for="">Warehouse</label>
+                                                <select name="warehouse_id" id="warehouse_id" v-model="warehosue_id" class="form-control">
+                                                    <option value="">Select a Warehouse</option>
+                                                    <option v-for="warehosue in warehouses" :value="warehosue.id">@{{warehosue.ware_house_name}}</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group" style="flex-basis: 40%">
+                                                <label for="">Shop</label>
+                                                <select name="shop_id" id="shop_id" v-model="shop_id" class="form-control">
+                                                    <option value="">Select a shop</option>
+                                                    <option v-for="shop in shops" :value="shop.id">@{{shop.name}}</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group" style="flex-basis: 20%; margin-top: 30px">
+                                                <label for=""></label>
+                                                <button type="button" @click="getShopData()" class="btn btn-primary">Query Data</button>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <a class="btn btn-primary float-right" href="javascript:void(0)" @click="saveUpdates()">
+                                                Save Changes
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <a class="btn btn-primary float-right" href="javascript:void(0)" @click="saveUpdates()">
-                                        Update
-                                    </a>
+                                <div class="card-body">
+                                    <div class="d-flex w-50 mb-4" v-if="products.length > 0">
+                                        <input type="search" class="form-control" v-model="searchValue"  placeholder="Search by product name....">
+                                    </div>
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                    <input type="checkbox" v-model="selectAll" value="true">
+                                                </th>
+                                                <th>Product</th>
+                                                <th>Warehouse Quantity</th>
+                                                <th>@{{selectedShop!==null?selectedShop.name: '-'}} Current&nbsp;Quantity</th>
+                                                <th>@{{selectedShop!==null?selectedShop.name: '-'}} Add&nbsp;Quantity</th>
+                                                <th>@{{selectedShop!==null?selectedShop.name: '-'}} Total&nbsp;Quantity</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody v-if="searchedProducts.length > 0">
+                                            <tr v-for="(product, index) in searchedProducts" :key="index">
+                                                <td> <input type="checkbox" v-model="product_ids" name="item_id" :value="product.id"></td>
+                                                <td>@{{product.name}}</td>
+                                                <td>@{{product.final_warehouse_quantity ?? product.warehouse_quantity}}</td>
+                                                <td>@{{product.shop_quantity??0}}</td>
+                                                <td>
+                                                    <input type="number" class="form-control" @keyup="updateQuantity($event, product)" :max="product.warehouse_quantity">
+                                                </td>
+                                                <td>@{{product.total_quantity??0}}</td>
+                                            </tr>
+                                        </tbody>
+                                        <tbody v-if="products.length === 0">
+                                            <tr>
+                                                <td colspan="7" class="text-center">
+                                                    <h3>Please follow the criteria to see the data</h3>
+                                                    <small>Select warehosue and shop</small>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>
-                                            <input type="checkbox" v-model="selectAll" value="true">
-                                        </th>
-                                        <th>Product</th>
-                                        <th>Warehouse Quantity</th>
-                                        <th>@{{selectedShop!==null?selectedShop.name: '-'}} Current&nbsp;Quantity</th>
-                                        <th>@{{selectedShop!==null?selectedShop.name: '-'}} Add&nbsp;Quantity</th>
-                                        <th>@{{selectedShop!==null?selectedShop.name: '-'}} Total&nbsp;Quantity</th>
-                                    </tr>
-                                </thead>
-                                <tbody v-if="products.length > 0">
-                                    <tr v-for="(product, index) in products" :key="index">
-                                        <td> <input type="checkbox" v-model="product_ids" name="item_id" :value="product.id"></td>
-                                        <td>@{{product.name}}</td>
-                                        <td>@{{product.final_warehouse_quantity ?? product.warehouse_quantity}}</td>
-                                        <td>@{{product.shop_quantity??0}}</td>
-                                        <td>
-                                            <input type="number" class="form-control" @keyup="updateQuantity($event, product)" :max="product.warehouse_quantity">
-                                        </td>
-                                        <td>@{{product.total_quantity??0}}</td>
-                                    </tr>
-                                </tbody>
-                                <tbody v-if="products.length === 0">
-                                    <tr>
-                                        <td colspan="7" class="text-center">
-                                            <h3>Please follow the criteria to see the data</h3>
-                                            <small>Select warehosue and shop</small>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
                         </form>
                     </div>
                     <div class="tab-pane" id="timeline">
@@ -171,9 +180,24 @@
                     quantity: 0,
                 },
                 selectedProductInfo: null,
+                searchValue: '',
             },
             mounted(){
                 this.getResource()
+            },
+            computed: {
+                searchedProducts() {
+                    let tempRecipes = this.products
+                    if (this.searchValue != '' && this.searchValue) {
+                        tempRecipes = tempRecipes.filter((item) => {
+                        return item.name
+                            .toUpperCase()
+                            .includes(this.searchValue.toUpperCase())
+                        })
+                    }
+                    return tempRecipes
+                }
+                
             },
             watch: {
                 selectAll(oldval, newval) {
