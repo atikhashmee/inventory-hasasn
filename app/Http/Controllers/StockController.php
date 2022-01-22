@@ -131,7 +131,7 @@ class StockController extends AppBaseController
                 'user_id' => $user->id,
                 'shop_id' => $user->shop_id, 
                 'product_id' => $input['product_id'],
-                'supplier_id' => $input['product_id'],
+                'supplier_id' => $input['supplier_id'],
                 'quantity' => $input['quantity'],
                 'type' => 'user_transfer',
                 'price' => $input['price']
