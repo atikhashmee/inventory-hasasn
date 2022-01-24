@@ -8,6 +8,7 @@ use App\Models\Challan;
 use App\Models\Quotation;
 use Endroid\QrCode\QrCode;
 use App\Models\OrderDetail;
+use App\Models\Transaction;
 use Endroid\QrCode\Writer\PngWriter;
 use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelHigh;
 
@@ -41,6 +42,8 @@ class InvoiceController extends Controller
     }
 
     public function printInvoice($order_id) {
+        
+        
         $sqldata = Order::with(['customer', 'orderDetail' => function($q) {
             $q->addSelect('order_details.*', 'countries.name as origin', 'brands.name as brand_name');
             $q->leftJoin('products', 'products.id', '=', 'order_details.product_id');
@@ -55,8 +58,10 @@ class InvoiceController extends Controller
         }
         if ($sqldata) {
             $data = $sqldata->toArray();
+            $totalDeposit = Transaction::where("type", "in")->where('customer_id', $data['customer_id'])->where('order_id', '!=', $order_id)->groupBy('customer_id')->sum('amount');
+            $totalWithdraw = Transaction::where("type", "out")->where('customer_id', $data['customer_id'])->where('order_id', '!=', $order_id)->groupBy('customer_id')->sum('amount');
             $qrCode = null; // $this->qrCodeGenerator();
-            $data['customer']['current_due'] = $sqldata->customer->current_due;
+            $data['customer']['current_due'] = ($totalWithdraw - $totalDeposit);
             $snappy = \WPDF::loadView('pdf.invoice-bill', $data);
             $headerHtml = view()->make('pdf.wkpdf-header', compact('shop', 'qrCode'))->render();
             $footerHtml = view()->make('pdf.wkpdf-footer')->render();

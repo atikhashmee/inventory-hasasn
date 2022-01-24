@@ -128,7 +128,7 @@
 @php
     $tnx_amount = $transaction['amount'] ?? 0;
     $today_sales = ($subtotal - $discount_amount);
-    $current_due = ($customer['current_due'] - $today_sales) > 0 ? $customer['current_due'] : 0;
+    $current_due = $customer['current_due'];
     $net_outstanding = ($current_due + $today_sales) -  $tnx_amount;
 @endphp
 <table class="summer-table">
