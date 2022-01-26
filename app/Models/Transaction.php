@@ -14,7 +14,7 @@ class Transaction extends Model
 
     protected $table = 'transactions';
 
-    protected $fillable  = ['customer_id', 'order_id', 'user_id', 'status', 'type', 'flag', 'amount', 'detail', 'note', 'tnx_id'];
+    protected $fillable  = ['customer_id', 'order_id', 'user_id', 'order_detail_id', 'status', 'type', 'flag', 'amount', 'detail', 'note', 'tnx_id'];
 
 
     public function customer()

@@ -38,9 +38,14 @@
                             <label for="">Quantity</label>
                             <input type="number" class="form-control" v-model="detailObj.quantity" :max="detailObj.available_quantity" name="quantity" id="quantity">
                             <small>Returnable Quantity @{{detailObj.available_quantity}}</small> <br>
+                            <small>Amount Returnable @{{detailObj.unit_price * detailObj.available_quantity}}</small>
                             <span v-if="errors?.quantity?.length > 0" role="alert"  class="text-danger">@{{ errors.quantity[0] }}</span>
                         </div>
                         <div class="form-group">
+                            <label for="">Cash returned ?</label>
+                            <input type="checkbox" v-model="detailObj.cash_returned" name="cash_returned" id="cash_returned">
+                        </div>
+                        <div class="form-group" v-if="detailObj.cash_returned">
                             <label for="">Price</label>
                             <input type="number" class="form-control" v-model="detailObj.returnedPrice" name="price" id="price">
                             <small>Amount Returnable @{{detailObj.unit_price * detailObj.available_quantity}}</small> <br>
@@ -105,6 +110,7 @@
                     quantity: '',
                     unit_price: 0,
                     returnedPrice: '',
+                    cash_returned: false,
                 },
                 errors: {},
                 error: null,

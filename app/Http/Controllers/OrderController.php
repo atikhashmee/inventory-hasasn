@@ -15,6 +15,7 @@ use App\Models\ShopInventory;
 use App\Models\WarentySerial;
 use Illuminate\Validation\Rule;
 use App\Models\ShopProductStock;
+use Illuminate\Database\Events\TransactionBeginning;
 use PhpParser\Node\Stmt\TryCatch;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -324,6 +325,7 @@ class OrderController extends Controller
         $data['orders'] = OrderDetail::select('order_details.*', 'orders.order_number')
         ->where('returned_quantity', '>', 0)
         ->join('orders', 'orders.id', '=', 'order_details.order_id')
+        ->orderBy('order_details.id', 'DESC')
         ->paginate(100);
         return view('admin.orders_more.index', $data); 
     }
@@ -334,18 +336,21 @@ class OrderController extends Controller
 
     public function salesReturnUpdate(Request $request) {
         try {
+            DB::beginTransaction();
             $user = auth()->user();
             $validator = Validator::make($request->all(), [
                 'order_id' => ['required', 'integer', 'exists:orders,id'],
                 'detail_id' => ['required', 'integer', 'exists:order_details,id'],
                 'quantity'  => ['required'],
-                'returnedPrice'  => ['required'],
             ]);
     
+            //'returnedPrice'  => ['required'],
             if ($validator->fails()) {
                 return response()->json(['status'=> false, 'data'=> null, 'errors' => $validator->errors(), 'error' => ''], 422);
             }
-            $od_detail = OrderDetail::where('id', $request->detail_id)->first();
+            $od_detail = OrderDetail::select('order_details.*', 'orders.customer_id')
+            ->leftJoin('orders', 'orders.id', '=', 'order_details.order_id')
+            ->where('order_details.id', $request->detail_id)->first();
             if ($od_detail) {
                 if ($od_detail->final_quantity < $request->quantity) {
                     return response()->json(['status'=> false, 'data'=> null, 'errors' => [], 'error' => 'Returned quantity exceed original quanitty'], 422);
@@ -355,25 +360,63 @@ class OrderController extends Controller
                     return response()->json(['status'=> false, 'data'=> null, 'errors' => [], 'error' => 'Returned price exceed original price'], 422);
                 }
 
-                $od_detail->returned_quantity = $request->quantity;
-                $od_detail->returned_amount = $request->returnedPrice;
-                $od_detail->final_quantity = $od_detail->final_quantity - $request->quantity;
-                $od_detail->final_amount = $od_detail->final_amount - $request->returnedPrice;
-                $order_details_updated = $od_detail->save();
-                if ($order_details_updated) {
-                    ShopProductStock::create([
-                        'user_id' => $user->id,
+                $shopStock = ShopProductStock::create([
+                    'user_id' => $user->id,
+                    'order_detail_id' => $od_detail->id,
+                    'shop_id' => $od_detail->shop_id,
+                    'product_id' => $od_detail->product_id,
+                    'quantity' => $request->quantity,
+                    'type' => 'sale_return',
+                    'price' => $request->returnedPrice ?? 0,
+                ]);
+
+                if ($shopStock) {
+                    $customerIn = Transaction::create([
+                        'customer_id' => $od_detail->customer_id, 
+                        'order_id'    => $od_detail->order_id, 
                         'order_detail_id' => $od_detail->id,
-                        'shop_id' => $od_detail->shop_id,
-                        'product_id' => $od_detail->product_id,
-                        'quantity' => $request->quantity,
-                        'type' => 'sale_return',
-                        'price' => $request->returnedPrice,
+                        'user_id'     => $user->id, 
+                        'status'      => 'done', 
+                        'type'        => 'in', 
+                        'flag'        => 'sell_return', 
+                        'amount'      => ($request->quantity * $od_detail->product_unit_price)
                     ]);
+
+                    if ($customerIn && $request->cash_returned) {
+                        $customerout = Transaction::create([
+                            'customer_id' => $od_detail->customer_id, 
+                            'order_id'    => $od_detail->order_id, 
+                            'order_detail_id' => $od_detail->id,
+                            'user_id'     => $user->id, 
+                            'status'      => 'done', 
+                            'type'        => 'out', 
+                            'flag'        => 'payment', 
+                            'amount'      => $request->returnedPrice
+                        ]);
+                    }
                 }
+
+                //total quantity
+                $totalQty = ShopProductStock::where('order_detail_id', $od_detail->id)
+                ->where('product_id', $od_detail->product_id)
+                ->where('type', 'sale_return')
+                ->sum('quantity');
+
+                //total returned price
+                $totalreturnedPrice = Transaction::where('order_detail_id', $od_detail->id)
+                ->where('flag', 'sell_return')
+                ->sum('amount');
+                //dd($totalQty);
+                $od_detail->returned_quantity = $totalQty;
+                $od_detail->returned_amount = $totalreturnedPrice;
+                $od_detail->final_quantity = intval($od_detail->product_quantity) - intval($totalQty);
+                $od_detail->final_amount = $od_detail->sub_total - $totalreturnedPrice;
+                $order_details_updated = $od_detail->save();
+                DB::commit();
             }
             return response()->json(['status'=> true, 'msg'=> 'Success', 'data'=> null, 'errors' => [], 'error' => ''], 200);
         } catch (\Exception $e) {
+            DB::rollback();
             return response()->json(['status'=> false, 'data'=> null, 'errors' => [], 'error' => $e->getMessage()], 422);
         }
    
@@ -394,7 +437,17 @@ class OrderController extends Controller
             $detail->final_quantity = $detail->product_quantity;
             $detail->returned_amount = 0;
             $detail->final_amount =  $detail->product_quantity * $detail->product_unit_price;
-            $detail->save();
+            $savedDetailed = $detail->save();
+            if ($savedDetailed) {
+                Transaction::where('order_detail_id', $detail->id)
+                ->where('flag', 'sell_return')
+                ->delete();
+
+                ShopProductStock::where('order_detail_id', $detail->id)
+                ->where('product_id', $detail->product_id)
+                ->where('type', 'sale_return')
+                ->delete();
+            }
             Flash::success('Successfully rollbacked.');
             return redirect(route('admin.order.return'));
         } else {
