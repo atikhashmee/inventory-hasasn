@@ -79,10 +79,9 @@ class ProductController extends AppBaseController
         }
         
         if ($shop_id !='' ) {
-            $product_sql->join('shop_products', function($q) {
+            $product_sql->leftJoin('shop_products', function($q) {
                 $q->on('shop_products.product_id', '=', 'products.id');
             });
-            $product_sql->where('shop_products.shop_id', $shop_id);
             $product_sql->addSelect(\DB::raw('(IFNULL(spQ.shop_stock_in, 0) - IFNULL(spO.shop_stock_out, 0)) AS quantity')); 
             $product_sql->leftJoin(\DB::raw('(SELECT SUM(quantity) as shop_stock_in, product_id, shop_id FROM shop_product_stocks GROUP BY shop_id, product_id) as spQ'), function($q) use($shop_id) {
                 $q->on('spQ.product_id', '=', 'products.id');
@@ -119,7 +118,7 @@ class ProductController extends AppBaseController
         } 
 
         $products =   $product_sql->orderBy('id', 'DESC')->paginate(10);
-        $serial = pagiSerial($products, 10);
+        $serial   = pagiSerial($products, 10);
         $countryItems = Country::pluck('name','id')->toArray();
         $menufactures = Menufacture::pluck('name','id')->toArray();
         $brands = Brand::pluck('name','id')->toArray();
