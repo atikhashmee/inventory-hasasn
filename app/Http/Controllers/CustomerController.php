@@ -67,14 +67,13 @@ class CustomerController extends Controller
             return redirect()->back()->withErrors($validator);
         }
         $user = auth()->user();
-        $customer = Customer::create([
-            'shop_id' => $user->shop_id,
-            'user_id' => $user->id,
-            'customer_name' => $data['customer_name'],
-            'customer_email' => $data['customer_email'],
-            'customer_phone' => $data['customer_phone'],
-            'customer_address' => $data['customer_address'],
-        ]);
+        if ($user->role != 'admin') {
+            $data['shop_id'] = $user->shop_id;
+        } else {
+            $data['shop_id'] = 0;
+        }
+        $data['user_id'] = $user->id;
+        $customer = Customer::create($data);
         
         if ($customer) {
             Flash::success('Saved successfully.');
