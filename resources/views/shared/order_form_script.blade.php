@@ -260,7 +260,18 @@
                     },
                     success: function( res ) {
                         if (res.status) {
-                          response(res.data.customers);
+                            if(res.data.customers.length === 0) {
+                                var result = [
+                                    {
+                                        customer_name: request.term, 
+                                        customer_address: "Sorry nothing found, We will save it as a new contact"
+                                    }
+                                ];
+                                response(result);
+                            }
+                            else{
+                                response(res.data.customers);
+                            }
                         }
                     }
                 });

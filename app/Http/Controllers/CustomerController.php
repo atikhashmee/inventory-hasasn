@@ -33,7 +33,7 @@ class CustomerController extends Controller
 
     public function getAllCustomerJson(Request $request) {
         try {
-            $data['customers'] = Customer::get();
+            $data['customers'] = Customer::where('customer_name', 'LIKE', '%'.$request->term.'%')->get();
             return response()->json(['status'=> true, 'data'=>$data]);
         } catch (\Exception $e) {
             return response()->json(['status'=> false, 'data'=>$e->getMessage()]);
