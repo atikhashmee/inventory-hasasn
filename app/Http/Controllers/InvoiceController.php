@@ -43,7 +43,7 @@ class InvoiceController extends Controller
 
     public function printInvoice($order_id) {
         
-        
+
         $sqldata = Order::with(['customer', 'orderDetail' => function($q) {
             $q->addSelect('order_details.*', 'countries.name as origin', 'brands.name as brand_name');
             $q->leftJoin('products', 'products.id', '=', 'order_details.product_id');
@@ -66,7 +66,9 @@ class InvoiceController extends Controller
             $headerHtml = view()->make('pdf.wkpdf-header', compact('shop', 'qrCode'))->render();
             $footerHtml = view()->make('pdf.wkpdf-footer')->render();
             $snappy->setOption('header-html', $headerHtml);
-            $snappy->setOption('footer-html', $footerHtml);
+            if (env('DEMO_SHOW') != true) {
+                $snappy->setOption('footer-html', $footerHtml);
+            }
             return $snappy->inline(date('Y-m-d-h:i:-a').'-invoice-bill.pdf');
         } else {
             return redirect()->back()->withError('Nothing found');
@@ -90,7 +92,9 @@ class InvoiceController extends Controller
             $headerHtml = view()->make('pdf.wkpdf-header', compact('shop', 'qrCode'))->render();
             $footerHtml = view()->make('pdf.wkpdf-footer', compact('footer_precuation'))->render();
             $snappy->setOption('header-html', $headerHtml);
-            $snappy->setOption('footer-html', $footerHtml);
+            if (env('DEMO_SHOW') != true) {
+                $snappy->setOption('footer-html', $footerHtml);
+            }
             return $snappy->inline(date('Y-m-d-h:i:-a').'-challan.pdf');
         } else {
             return redirect()->back()->withError('Nothing found');
@@ -114,7 +118,9 @@ class InvoiceController extends Controller
             $headerHtml = view()->make('pdf.wkpdf-header', compact('shop', 'qrCode'))->render();
             $footerHtml = view()->make('pdf.wkpdf-footer', compact('footer_precuation'))->render();
             $snappy->setOption('header-html', $headerHtml);
-            $snappy->setOption('footer-html', $footerHtml);
+            if (env('DEMO_SHOW') != true) {
+                $snappy->setOption('footer-html', $footerHtml);
+            }
             return $snappy->inline(date('Y-m-d-h:i:-a').'-challan-conditioned.pdf');
         } else {
             return redirect()->back()->withError('Nothing found');
@@ -140,7 +146,10 @@ class InvoiceController extends Controller
             $headerHtml = view()->make('pdf.wkpdf-header', compact('shop', 'qrCode'))->render();
             $footerHtml = view()->make('pdf.wkpdf-footer', compact('footer_precuation'))->render();
             $snappy->setOption('header-html', $headerHtml);
-            $snappy->setOption('footer-html', $footerHtml);
+            
+            if (env('DEMO_SHOW') != true) {
+                $snappy->setOption('footer-html', $footerHtml);
+            }
             return $snappy->inline(date('Y-m-d-h:i:-a').'-quotation.pdf');
         } else {
             return redirect()->back()->withError('Nothing found');
@@ -189,7 +198,9 @@ class InvoiceController extends Controller
             $headerHtml = view()->make('pdf.wkpdf-header', compact('shop', 'qrCode'))->render();
             $footerHtml = view()->make('pdf.wkpdf-footer', compact('footer_precuation'))->render();
             $snappy->setOption('header-html', $headerHtml);
-            $snappy->setOption('footer-html', $footerHtml);
+            if (env('DEMO_SHOW') != true) {
+                $snappy->setOption('footer-html', $footerHtml);
+            }
             return $snappy->inline(date('Y-m-d-h:i:-a').'-warenty-card.pdf');
         } else {
             return redirect()->back()->withError('Nothing found');
