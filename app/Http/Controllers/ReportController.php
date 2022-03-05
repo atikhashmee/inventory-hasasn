@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\Stock;
 use App\Models\Product;
 use App\Models\Customer;
+use App\Models\OrderDetail;
 use App\Models\Supplier;
 use Laracasts\Flash\Flash;
 use App\Models\Transaction;
@@ -216,5 +217,53 @@ class ReportController extends Controller
             Flash::error($e->getMessage());
             return redirect()->back();
         }
+    }
+
+    public function productWiseSaleHistory(Request $request) {
+        $user = auth()->user();
+        $data['orders'] = OrderDetail::select('order_details.*')
+        ->with(['order', 'shop', 'order.customer'])
+        ->where(function($q) {
+
+            if (request()->query('start')!='' && request()->query('end')!='') {
+                $q->whereBetween(\DB::raw('DATE(created_at)'), [request()->query('start'),  request()->query('end')]);
+            }
+
+            if (request()->query('search')!='') {
+                $q->orWhereHas('order', function($r) {
+                    $r->where('order_number', 'LIKE', '%'.request()->query('search').'%');
+                });
+
+                $q->orWhereHas('order.customer', function($r) {
+                    $r->where('customer_name', 'LIKE', '%'.request()->query('search').'%');
+                });
+            }
+
+            if (request()->query('product_id')!='') {
+                $q->where('product_id', request()->query('product_id'));
+            }
+
+            if (request()->query('shop_id')!='') {
+                $q->where('shop_id', request()->query('shop_id'));
+            }
+
+            if (request()->query('customer_id')!='') {
+                $q->orWhereHas('order', function($r) {
+                    $r->where('customer_id', request()->query('customer_id'));
+                });
+               
+            }
+        })
+        ->paginate(100);
+        $data['serial'] = pagiSerial($data['orders'], 100);
+        if ($user->role == 'admin') {
+            $data['shops']  = Shop::get();
+            $data['customers'] = Customer::get();
+        } else {
+            $data['customers'] = Customer::where('user_id', $user->id)->get();
+        }
+        $data['user'] = $user;
+        $data['products'] = Product::get();
+        return view('admin.reports.product-sale-history', $data);
     }
 }

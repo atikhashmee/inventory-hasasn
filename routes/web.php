@@ -78,5 +78,6 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin', 'as' => 'admin.'], fu
         Route::get('purchase', [App\Http\Controllers\ReportController::class, 'purchaseReport'])->name('purchase');
         Route::get('payment', [App\Http\Controllers\ReportController::class, 'paymentReport'])->name('payment');
         Route::get('profit-loss', [App\Http\Controllers\ReportController::class, 'profitLoss'])->name('profitloss');
+        Route::get('product-sale-history', [App\Http\Controllers\ReportController::class, 'productWiseSaleHistory'])->name('productWiseSaleHistory');
     });
 });

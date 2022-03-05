@@ -72,8 +72,9 @@ class ProductController extends AppBaseController
         });
 
         if (request()->query('warehouse_id') == '' && request()->query('shop_id') =='') {
-            $product_sql->addSelect(\DB::raw("(IFNULL(TS.total_wareHouse_in, 0) + IFNULL(TS2.total_shop_in, 0)) - IFNULL(TS3.total_sell, 0) as quantity"));
+            $product_sql->addSelect(\DB::raw("(IFNULL(TS.total_wareHouse_in, 0) + IFNULL(TS2.total_shop_in, 0)) - (IFNULL(TS3.total_sell, 0) + IFNULL(TS4.total_warehouse_out, 0)) as quantity"));
             $product_sql->leftJoin(\DB::raw("(SELECT SUM(quantity) as total_wareHouse_in, product_id FROM stocks GROUP BY product_id) as TS"), "TS.product_id", "=", "products.id")
+            ->leftJoin(\DB::raw("(SELECT SUM(quantity) as total_warehouse_out, product_id FROM shop_product_stocks GROUP BY product_id) as TS4"), "TS4.product_id", "=", "products.id")
             ->leftJoin(\DB::raw("(SELECT SUM(quantity) as total_shop_in, product_id FROM shop_product_stocks GROUP BY product_id) as TS2"), "TS2.product_id", "=", "products.id")
             ->leftJoin(\DB::raw("(SELECT SUM(final_quantity) as total_sell, product_id FROM order_details GROUP BY product_id) as TS3"), "TS3.product_id", "=", "products.id");
         }

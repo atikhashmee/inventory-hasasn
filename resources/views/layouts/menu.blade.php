@@ -96,6 +96,13 @@
           <p>Sale Return</p>
         </a>
       </li>
+      @if (env('DEMO_SHOW'))
+      <li class="nav-item">
+        <a href="{{ route('admin.report.productWiseSaleHistory') }}" class="nav-link {{ Request::is('admin/report/product-sale-history') ? 'active' : '' }}">
+          <p>Product Wise Sale history</p>
+        </a>
+      </li>
+      @endif
     </ul>
   </li>
   @endif

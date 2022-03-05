@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Unit;
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\WarentySerial;
 use Illuminate\Database\Eloquent\Model;
@@ -40,6 +41,16 @@ class OrderDetail extends Model
     public function unit()
     {
         return $this->belongsTo(Unit::class, 'quantity_unit_id');
+    }
+    
+    public function order()
+    {
+        return $this->belongsTo(Order::class, 'order_id');
+    }
+
+    public function shop()
+    {
+        return $this->belongsTo(Shop::class, 'shop_id');
     }
 
 
