@@ -33,10 +33,10 @@
                     @endif
                 </td>
                 <td>{{ $product->quantity }}</td>
-                <td>{{ $product->category->name }}</td>
+                <td>{{ isset($product->category) ? $product->category->name: "N/A" }}</td>
                 <td>{{ $product->country_name ?? 'N/A' }}</td>
-                <td>{{ $product->brand->name }}</td>
-                <td>{{ $product->menufacture->name }}</td>
+                <td>{{ isset($product->brand)? $product->brand->name: "N/A" }}</td>
+                <td>{{ isset($product->menufacture)? $product->menufacture->name: "N/A" }}</td>
                 <td>{{ $product->selling_price }}</td>
                 <td>{{ $product->user ?  $product->user->name : 'Admin' }}</td>
                 <td width="120">
