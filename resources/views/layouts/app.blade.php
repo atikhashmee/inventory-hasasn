@@ -106,7 +106,7 @@
             <b>Version</b> 3.1.0
         </div>
         <strong>
-           Copyright &copy; 2021 <a href="javascript:void(0)">Meditech</a>.
+           Copyright &copy; {{date('Y')}} @if(env('DEMO_SHOW') != true) <a href="javascript:void(0)">Meditech</a>@endif.
         </strong>
         All rights reserved.
     </footer>
