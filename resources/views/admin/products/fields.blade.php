@@ -75,7 +75,7 @@
 
 <!-- Menufacture Id Field -->
 <div class="form-group col-sm-6">
-    {!! Form::label('menufacture_id', 'Menufacture:') !!}
+    {!! Form::label('menufacture_id', 'Manufacture:') !!}
     {!! Form::select('menufacture_id', $menufactureItems, null, ['class' => 'form-control custom-select']) !!}
 </div>
 

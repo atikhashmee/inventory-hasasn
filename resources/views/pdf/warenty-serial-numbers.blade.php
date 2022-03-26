@@ -128,4 +128,7 @@
 <br />
 <br />
 <br />
-<p style="text-align: center; text-transform: uppercase"> 1. Warenty Void : Sticker removed items, Burn case, Water case & physically damage products</p>
+<p style="text-align: center; text-transform: uppercase;  text-align: justify"> 1. Warenty Void : Sticker removed items, Burn case, Water case & physically damage products <br>
+    2. Warranty period: One year service warranty <br>
+    3. Warranty coverage: Warranty does not include the price of spare parts<br>
+</p>

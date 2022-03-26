@@ -89,8 +89,8 @@
         <tr>
             <th>SL</th>
             <th>Item Name</th>
-            <th>Quantity</th>
             <th>Unit Price(Taka)</th>
+            <th>Quantity</th>
             <th>Total(Taka)</th>
         </tr>
     </thead>
@@ -108,19 +108,18 @@
                     <td>
                         <span>{{$detail['product_name']}}</span> <br>
                         <span>
-                                <span> <b>Origin</b> {{$detail['origin']}}<span> 
-                                <span> <b>Brand</b> {{$detail['brand_name']}}<span>
+                            <span> <b>Origin</b> {{$detail['origin']}}<span> 
+                            <span> <b>Brand</b> {{$detail['brand_name']}}<span>
                         </span>
                     </td>
+                    <td>{{$detail['product_unit_price']}}</td>
                     <td>
                         {{$detail['quantity_unit_id']!=null? $detail['quantity_unit_value'].' '.$detail['unit']['name']: $detail['product_quantity'].' Unit' }}
                     </td>
-                    <td>{{$detail['product_unit_price']}}</td>
                     <td>{{$detail['product_unit_price'] * $detail['product_quantity']}}</td>
                 </tr>
             @endforeach
         @endif
-        
     </tbody>
 </table>
 <br />
