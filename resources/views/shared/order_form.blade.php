@@ -74,7 +74,7 @@
                             </div>
                             <div class="card-body">
                                 <div class="row">
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <div class="form-group">
                                             <label for="">Customer Name <span class="text-danger">*</span> </label>
                                             <input type="text" 
@@ -87,7 +87,7 @@
                                             <small>(Type at list two character two get the lists, I:e, ae, ab. )</small>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <div class="form-group">
                                             <label for="">Customer Email</label>
                                             <input type="text" 
@@ -97,7 +97,7 @@
                                             placeholder="Enter Customer Email" /> 
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <div class="form-group">
                                             <label for="">Customer Phone</label>
                                             <input type="text" 
@@ -106,6 +106,16 @@
                                             class="form-control" 
                                             placeholder="Enter Customer Phone" /> 
                                         </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="">Customer type</label>
+                                        <select name="customer_type" id="customer_type" class="form-control"  v-model="customer.customer_type" >
+                                            <option value="">Select a type</option>
+                                            <option>Vendors</option>
+                                            <option>Hospitals</option>
+                                            <option>Doctors</option>
+                                            <option>District</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="row">
