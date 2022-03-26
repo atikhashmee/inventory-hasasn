@@ -43,7 +43,7 @@
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label for="">Customer Email <span class="text-danger">*</span></label>
+                                            <label for="">Customer Email</label>
                                             <input type="text" 
                                             name="customer_email" 
                                             class="form-control" 
@@ -56,7 +56,7 @@
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label for="">Customer Phone</label>
+                                            <label for="">Customer Phone <span class="text-danger">*</span></label>
                                             <input type="text" 
                                             name="customer_phone" 
                                             class="form-control" 
@@ -76,6 +76,23 @@
                                                 {{old('customer_address')}}
                                             </textarea>
                                             @error('customer_address')
+                                                <strong class="text-danger">{{$message}}</strong>
+                                            @enderror
+                                        </div>
+                                   </div>
+                               </div>
+                               <div class="row">
+                                   <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="">Customer Type</label>
+                                            <select name="customer_type" id="customer_type" class="form-control">
+                                                <option value="">Select a type</option>
+                                                <option @if(old('customer_type') == "Vendors") selected @endif>Vendors</option>
+                                                <option @if(old('customer_type') == "Hospitals") selected @endif>Hospitals</option>
+                                                <option @if(old('customer_type') == "Doctors") selected @endif>Doctors</option>
+                                                <option @if(old('customer_type') == "District") selected @endif>District</option>
+                                            </select>
+                                            @error('customer_type')
                                                 <strong class="text-danger">{{$message}}</strong>
                                             @enderror
                                         </div>

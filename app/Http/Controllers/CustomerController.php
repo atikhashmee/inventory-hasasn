@@ -14,7 +14,13 @@ class CustomerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    private $customer_types = [
+        "Vendors",
+        "Hospitals",
+        "Doctors",
+        "District",
+    ];
+    public function index(Request $request)
     {
         $user = auth()->user();
         try {
@@ -23,6 +29,16 @@ class CustomerController extends Controller
                 if ($user->role != 'admin') {
                     $customer_sql->where('shop_id', $user->shop_id);
                 }
+                $customer_sql->where(function($q) use($request) {
+                    if ($request->customer_type) {
+                        $q->where('customer_type', $request->customer_type);
+                    }
+
+                    if ($request->search) {
+                        $q->where('customer_name', 'LIKE', '%'.$request->search.'%');
+                        $q->orWhere('customer_email', 'LIKE', '%'.$request->search.'%');
+                    }
+                });
                 $customer_sql->orderBy('totalOrdersCount', 'DESC');
                 $data['customers'] =  $customer_sql->paginate(100);
             return view('admin.customers.index', $data);
@@ -61,7 +77,9 @@ class CustomerController extends Controller
         $data = $request->all();
         $validator = Validator::make($data, [
             'customer_name' => 'required|max:200',
-            'customer_email' => 'required|max:200|email|unique:customers,customer_email',
+            'customer_email' => 'nullable|max:200|email|unique:customers,customer_email',
+            'customer_type' => 'required|in:'.implode(',', $this->customer_types),
+            'customer_phone' => 'required',
         ]);
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator);

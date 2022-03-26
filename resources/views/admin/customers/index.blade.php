@@ -8,10 +8,6 @@
                     <h1>Customers</h1>
                 </div>
                 <div class="col-sm-6">
-                    <div class="form-group d-flex">
-                        <input type="search" name="search" class="form-control" placeholder="Customer Name" >
-                        <button class="btn btn-primary"><i class="fa fa-search"></i></button>
-                    </div>
                 </div>
             </div>
         </div>
@@ -30,6 +26,27 @@
                     <div class="d-flex">
                         <a href="{{route('admin.customers.create')}}" class="btn btn-primary">Add new <i class="fa fa-plus"></i></a>
                     </div>
+                </div>
+                <div class="card-header">
+                    <form action="{{ route('admin.customers.index') }}" method="get">
+                        <div class="d-flex flex-wrap">
+                            <div class="form-group input-form-group">
+                                <select name="customer_type" class="form-control select2" style="width:100%;">
+                                    <option value="">Customer Types</option>
+                                    <option>Vendors</option>
+                                    <option>Hospitals</option>
+                                    <option>Doctors</option>
+                                    <option>District</option>
+                                </select>
+                            </div>
+                            <div class="form-group input-form-group">
+                                <input type="text"  class="form-control" name="search" style="width:100%;" placeholder="Search....">
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary"> <i class="fa fa-filter">Filter</i> </button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
                 @include('admin.customers.table')
 

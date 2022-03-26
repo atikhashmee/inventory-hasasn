@@ -6,6 +6,7 @@
             <th>Customer&nbsp;Phone</th>
             <th>Customer&nbsp;E-mail</th>
             <th>Customer&nbsp;Addresss</th>
+            <th>Customer&nbsp;Type</th>
             <th>Total&nbsp;Orders</th>
             <th>Action</th>
         </tr>
@@ -19,6 +20,7 @@
                     <td>{{$customer->customer_phone}}</td>
                     <td>{{$customer->customer_email}}</td>
                     <td>{{$customer->customer_address}}</td>
+                    <td>{{$customer->customer_type ?? "N/A"}}</td>
                     <td>
                         <a href="{{route('admin.orders.index', ['order_ids'=>$customer->order_ids])}}">{{$customer->totalOrdersCount}}</a>
                     </td>
