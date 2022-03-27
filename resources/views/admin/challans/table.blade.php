@@ -17,9 +17,9 @@
             <tr>
                 <td>{{ $serial-- }}</td>
                 <td>{{$challan->shop->name }}</td>
-            <td>{{ $challan->customer->customer_name }}</td>
+            <td>{{ isset($challan->customer)? $challan->customer->customer_name: "N/A" }} </td>
             <td>{{ $challan->product_type }}</td>
-            <td>{{ $challan->quantity }} {{ $challan->unit->name }}</td>
+            <td>{{ $challan->quantity }} {{ isset($challan->unit)? $challan->unit->name: "N/A" }} </td>
             <td>{{ $challan->total_payable }}</td>
             <td>{{ $challan->challan_note }}</td>
                 <td width="120">
