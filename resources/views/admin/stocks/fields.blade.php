@@ -26,7 +26,7 @@
     </div>
 @endif
 
-<input type="hidden" name="sku" id="sku">
+<input type="hidden" name="sku" id="sku" value="{{ old('sku', isset($stock) ? $stock->sku : '') }}">
 <input type="hidden" name="selling_price" id="selling_price" value="0">
 <!-- Sku Field -->
 {{-- <div class="form-group col-sm-6">

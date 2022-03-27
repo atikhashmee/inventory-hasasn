@@ -28,7 +28,7 @@
             </div>
 
             <div class="card-footer">
-                {!! Form::submit('Save', ['class' => 'btn btn-primary']) !!}
+                {!! Form::button('Save', ['class' => 'btn btn-primary', 'id' => 'submit_button']) !!}
                 <a href="{{ route('admin.stocks.index') }}" class="btn btn-default">Cancel</a>
             </div>
 
@@ -82,5 +82,24 @@
             stock_app.getResource(e.currentTarget.value)
         }
     });
+
+    $("#submit_button").on('click', evt => {
+        $.showConfirm({
+            modalClass: 'mt-50',
+            title: "Are you sure?", 
+            body: "Please Recheck if all the information is correct before submit, once you submit, you can not modify or delete it", 
+            modalDialogClass: "modal-dialog-centered",
+            textTrue: "Confirm", 
+            textFalse: "Discard",
+            onSubmit: function (result) {
+                if (result) {
+                    $(evt.currentTarget).closest('form').submit()
+                }
+            },
+            onDispose: function () {
+                console.log("The confirm dialog vanished",  )
+            }
+        })
+    })
 </script>
 @endpush

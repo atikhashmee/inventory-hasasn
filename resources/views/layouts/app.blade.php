@@ -127,6 +127,7 @@
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 <script src="//cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://unpkg.com/bootstrap-show-modal@1.4.3/src/bootstrap-show-modal.js"></script>
 
 @stack('third_party_scripts')
 <script>

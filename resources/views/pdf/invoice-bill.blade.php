@@ -108,7 +108,7 @@
                     <td>
                         <span>{{$detail['product_name']}}</span> <br>
                         <span>
-                            <span> <b>Origin</b> {{$detail['origin']}}<span> 
+                            {{-- <span> <b>Origin</b> {{$detail['origin']}}<span>  --}}
                             <span> <b>Brand</b> {{$detail['brand_name']}}<span>
                         </span>
                     </td>
