@@ -172,7 +172,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <input type="number" class="form-control" v-model="pl.price" @blur="fieldUpdate($event, pl, 'price')" name="price">
+                                                    <input type="text" class="form-control" v-model="pl.price" @blur="fieldUpdate($event, pl, 'price')" name="price">
                                                 </td>
                                                 <td>@{{pl.totalPrice}}</td>
                                             </tr>
