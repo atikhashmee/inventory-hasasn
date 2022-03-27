@@ -93,7 +93,7 @@
     <tbody>
         <tr>
             <td>1</td>
-            <td>{{$quantity}} {{$unit['name']}}</td>
+            <td>{{$quantity}} {{$unit['name'] ?? ''}}</td>
             <td>{{$product_type}}</td>
         </tr>
     </tbody>
