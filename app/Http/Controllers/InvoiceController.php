@@ -58,7 +58,10 @@ class InvoiceController extends Controller
         }
         if ($sqldata) {
             $data = $sqldata->toArray();
-            $totalDeposit = Transaction::where("type", "in")->where('customer_id', $data['customer_id'])->where('order_id', '!=', $order_id)->groupBy('customer_id')->sum('amount');
+            $totalDeposit = Transaction::where("type", "in")->where('customer_id', $data['customer_id'])->where(function($q) use($order_id) {
+                $q->where('order_id', '!=', $order_id);
+                $q->orWhereNull('order_id');
+            })->groupBy('customer_id')->sum('amount');
             $totalWithdraw = Transaction::where("type", "out")->where('customer_id', $data['customer_id'])->where('order_id', '!=', $order_id)->groupBy('customer_id')->sum('amount');
             $qrCode = null; // $this->qrCodeGenerator();
             $data['customer']['current_due'] = ($totalWithdraw - $totalDeposit);
