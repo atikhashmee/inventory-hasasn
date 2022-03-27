@@ -300,6 +300,10 @@ class OrderController extends Controller
                     $q->where('products.user_id', $user->id);
                     $q->orWhere('shop_products.shop_id', $user->shop_id);
                 });
+            } else {
+                $product_sql->where(function($q) use($shop_id) {
+                    $q->where('shop_products.shop_id', $shop_id);
+                });
             }
             $data['products'] = $product_sql->get();
             return response()->json(['status'=>true, 'data'=> $data]);
