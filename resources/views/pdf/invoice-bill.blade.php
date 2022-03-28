@@ -89,9 +89,9 @@
         <tr>
             <th>SL</th>
             <th>Item Name</th>
-            <th>Unit Price(Taka)</th>
+            <th>Unit Price (Taka)</th>
             <th>Quantity</th>
-            <th>Total(Taka)</th>
+            <th>Total Amount (Taka)</th>
         </tr>
     </thead>
     <tbody>
@@ -116,7 +116,7 @@
                     <td>
                         {{$detail['quantity_unit_id']!=null? $detail['quantity_unit_value'].' '.$detail['unit']['name']: $detail['product_quantity'].' Unit' }}
                     </td>
-                    <td>{{$detail['product_unit_price'] * $detail['product_quantity']}}</td>
+                    <td>{{ number_format(($detail['product_unit_price'] * $detail['product_quantity']), 2, '.', ',') }}</td>
                 </tr>
             @endforeach
         @endif
@@ -154,7 +154,7 @@
                 <table class="sum-total">
                     <tr>
                         <td>Subtotal(Taka)</td>
-                        <td>{{$subtotal}}</td>
+                        <td>{{number_format($subtotal, 2, '.', ',')}}</td>
                     </tr>
                     <tr>
                         <td>Discount(Taka)</td>

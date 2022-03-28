@@ -42,14 +42,14 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="form-group input-form-group">
+                        {{-- <div class="form-group input-form-group">
                             <select name="menufacture_id" class="form-control select2" style="width:100%;">
                                 <option value="">Select Manufacture</option>
                                 @foreach ($menufactures as $menufacture_id => $menufacture)
                                     <option value="{{$menufacture_id}}" @if(Request::get('menufacture_id') == $menufacture_id) selected @endif>{{$menufacture}}</option>
                                 @endforeach
                             </select>
-                        </div>
+                        </div> --}}
                         <div class="form-group input-form-group">
                             <select name="brand_id" class="form-control select2" style="width:100%;">
                                 <option value="">Select Brand</option>
