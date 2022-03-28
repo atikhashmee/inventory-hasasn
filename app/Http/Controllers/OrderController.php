@@ -8,6 +8,7 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Http\Extra\Util;
 use App\Models\Customer;
+use App\Models\Supplier;
 use Laracasts\Flash\Flash;
 use App\Models\OrderDetail;
 use App\Models\Transaction;
@@ -18,8 +19,8 @@ use Illuminate\Validation\Rule;
 use App\Models\ShopProductStock;
 use PhpParser\Node\Stmt\TryCatch;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
 
+use Illuminate\Support\Facades\Validator;
 use function PHPUnit\Framework\throwException;
 use Illuminate\Database\Events\TransactionBeginning;
 
@@ -37,6 +38,7 @@ class OrderController extends Controller
             $data['customers'] = Customer::where('user_id', $user->id)->get();
         }
         $data['user'] = $user;
+        $data['suppliers'] = Supplier::get();
         return view('admin.orders.index', $data);
     }
 
@@ -64,6 +66,9 @@ class OrderController extends Controller
             if (request()->query('customer_id')!='') {
                 $q->where('customer_id', request()->query('customer_id'));
             }
+            // if (request()->query('supplier_id')!='') {
+            //     $q->where('customer_id', request()->query('customer_id'));
+            // }
             if (request()->query('order_challan_type')!='') {
                 $q->where('order_challan_type', request()->query('order_challan_type'));
             }
