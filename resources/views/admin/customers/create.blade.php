@@ -87,10 +87,9 @@
                                             <label for="">Customer Type</label>
                                             <select name="customer_type" id="customer_type" class="form-control">
                                                 <option value="">Select a type</option>
-                                                <option @if(old('customer_type') == "Vendors") selected @endif>Vendors</option>
-                                                <option @if(old('customer_type') == "Hospitals") selected @endif>Hospitals</option>
-                                                <option @if(old('customer_type') == "Doctors") selected @endif>Doctors</option>
-                                                <option @if(old('customer_type') == "District") selected @endif>District</option>
+                                                @foreach ($customer_types as $c_type)
+                                                    <option @if(old('customer_type') == $c_type) selected @endif>{{$c_type}}</option>
+                                                @endforeach
                                             </select>
                                             @error('customer_type')
                                                 <strong class="text-danger">{{$message}}</strong>

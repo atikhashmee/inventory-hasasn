@@ -6,6 +6,7 @@ use App\Models\Shop;
 use App\Models\Unit;
 use App\Models\Order;
 use App\Models\Product;
+use App\Http\Extra\Util;
 use App\Models\Customer;
 use Laracasts\Flash\Flash;
 use App\Models\OrderDetail;
@@ -15,15 +16,16 @@ use App\Models\ShopInventory;
 use App\Models\WarentySerial;
 use Illuminate\Validation\Rule;
 use App\Models\ShopProductStock;
-use Illuminate\Database\Events\TransactionBeginning;
 use PhpParser\Node\Stmt\TryCatch;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 use function PHPUnit\Framework\throwException;
+use Illuminate\Database\Events\TransactionBeginning;
 
 class OrderController extends Controller
 {
+    use Util;
     public function index(Request $request) {
         $user = auth()->user();
         $data['orders'] = $this->orderLists($request, $user);
@@ -91,6 +93,7 @@ class OrderController extends Controller
         $data['units'] = Unit::select('id', 'name', 'quantity_base')->where('status', 'active')->get();
         $data['user'] = $user;
         $data['role'] = $user->role;
+        $data['customer_types'] = $this->customer_types;
         return view('admin.orders.create', $data);
     }
 

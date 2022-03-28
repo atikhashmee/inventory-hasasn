@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Extra\Util;
 use App\Models\Customer;
 use Laracasts\Flash\Flash;
 use Illuminate\Http\Request;
@@ -9,17 +10,13 @@ use Illuminate\Support\Facades\Validator;
 
 class CustomerController extends Controller
 {
+    use Util;
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    private $customer_types = [
-        "Vendors",
-        "Hospitals",
-        "Doctors",
-        "District",
-    ];
+   
     public function index(Request $request)
     {
         $user = auth()->user();
@@ -41,6 +38,7 @@ class CustomerController extends Controller
                 });
                 $customer_sql->orderBy('totalOrdersCount', 'DESC');
                 $data['customers'] =  $customer_sql->paginate(100);
+                $data['customer_types'] = $this->customer_types;
             return view('admin.customers.index', $data);
         } catch (\Exception $e) {
             return redirect()->back()->withError($e->getMessage());
@@ -63,7 +61,7 @@ class CustomerController extends Controller
      */
     public function create()
     {
-        return view('admin.customers.create');
+        return view('admin.customers.create', ['customer_types' => $this->customer_types]);
     }
 
     /**
@@ -119,6 +117,7 @@ class CustomerController extends Controller
     public function edit(Customer $customer)
     {
         $data['customer'] = $customer;
+        $data['customer_types'] = $this->customer_types;
         return view('admin.customers.edit', $data);
     }
 

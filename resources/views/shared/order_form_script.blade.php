@@ -77,7 +77,7 @@
                 customer_email: null,
                 customer_phone: null,
                 customer_address: null,
-                customer_type: null,
+                customer_type: "",
             },
             user_role: null,
             error: '',

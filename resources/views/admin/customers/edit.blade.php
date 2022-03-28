@@ -69,13 +69,28 @@
                                         </div>
                                     </div>
                                 </div>
+                                
+                               <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="">Customer Type</label>
+                                            <select name="customer_type" id="customer_type" class="form-control">
+                                                <option value="">Select a type</option>
+                                                @foreach ($customer_types as $c_type)
+                                                    <option @if($customer->customer_type == $c_type) selected @endif>{{$c_type}}</option>
+                                                @endforeach
+                                            </select>
+                                            @error('customer_type')
+                                                <strong class="text-danger">{{$message}}</strong>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
                                <div class="row">
                                    <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="">Customer Address</label>
-                                            <textarea name="customer_address" id="customer_address" class="form-control" cols="30">
-                                                {{old('customer_address', $customer->customer_address)}}
-                                            </textarea>
+                                            <textarea name="customer_address" id="customer_address" class="form-control" cols="30">{{old('customer_address', $customer->customer_address)}}</textarea>
                                             @error('customer_address')
                                                 <strong class="text-danger">{{$message}}</strong>
                                             @enderror

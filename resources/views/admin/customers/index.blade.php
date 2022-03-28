@@ -33,10 +33,9 @@
                             <div class="form-group input-form-group">
                                 <select name="customer_type" class="form-control select2" style="width:100%;">
                                     <option value="">Customer Types</option>
-                                    <option>Vendors</option>
-                                    <option>Hospitals</option>
-                                    <option>Doctors</option>
-                                    <option>District</option>
+                                    @foreach ($customer_types as $c_type)
+                                        <option @if(Request::get('customer_type') == $c_type) selected @endif>{{$c_type}}</option>
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="form-group input-form-group">

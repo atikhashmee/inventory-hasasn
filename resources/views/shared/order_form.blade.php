@@ -111,10 +111,9 @@
                                         <label for="">Customer type</label>
                                         <select name="customer_type" id="customer_type" class="form-control"  v-model="customer.customer_type" >
                                             <option value="">Select a type</option>
-                                            <option>Vendors</option>
-                                            <option>Hospitals</option>
-                                            <option>Doctors</option>
-                                            <option>District</option>
+                                            @foreach ($customer_types as $c_type)
+                                                <option>{{$c_type}}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
