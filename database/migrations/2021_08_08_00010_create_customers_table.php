@@ -22,6 +22,7 @@ class CreateCustomersTable extends Migration
             $table->string('customer_phone', 200)->nullable();
             $table->string('customer_address', 200)->nullable();
             $table->string('customer_type', 200)->nullable();
+            $table->string('district', 200)->nullable();
             $table->timestamp('delivered_at')->nullable();
             $table->timestamps();
         });

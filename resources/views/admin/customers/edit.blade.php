@@ -71,7 +71,7 @@
                                 </div>
                                 
                                <div class="row">
-                                    <div class="col-md-12">
+                                    <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="">Customer Type</label>
                                             <select name="customer_type" id="customer_type" class="form-control">
@@ -85,6 +85,18 @@
                                             @enderror
                                         </div>
                                     </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="">District</label>
+                                            <input type="text" name="district" 
+                                            class="form-control" 
+                                            value="{{old('district', $customer->district)}}" 
+                                            placeholder="District" /> 
+                                            @error('district')
+                                                <strong class="text-danger">{{$message}}</strong>
+                                            @enderror
+                                        </div>
+                                   </div>
                                 </div>
                                <div class="row">
                                    <div class="col-md-12">

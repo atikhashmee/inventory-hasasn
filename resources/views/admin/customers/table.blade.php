@@ -2,11 +2,12 @@
     <thead>
         <tr>
             <th>ID</th>
-            <th>Customer&nbsp;Name</th>
-            <th>Customer&nbsp;Phone</th>
-            <th>Customer&nbsp;E-mail</th>
-            <th>Customer&nbsp;Addresss</th>
-            <th>Customer&nbsp;Type</th>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>E-mail</th>
+            <th>Addresss</th>
+            <th>Type</th>
+            <th>District</th>
             <th>Total&nbsp;Orders</th>
             <th>Action</th>
         </tr>
@@ -21,6 +22,7 @@
                     <td>{{$customer->customer_email}}</td>
                     <td>{{$customer->customer_address}}</td>
                     <td>{{$customer->customer_type ?? "N/A"}}</td>
+                    <td>{{$customer->district ?? "N/A"}}</td>
                     <td>
                         <a href="{{route('admin.orders.index', ['order_ids'=>$customer->order_ids])}}">{{$customer->totalOrdersCount}}</a>
                     </td>

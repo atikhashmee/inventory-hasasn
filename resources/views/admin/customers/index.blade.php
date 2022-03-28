@@ -39,7 +39,7 @@
                                 </select>
                             </div>
                             <div class="form-group input-form-group">
-                                <input type="text"  class="form-control" name="search" style="width:100%;" placeholder="Search....">
+                                <input type="text"  class="form-control" name="search" style="width:100%;" placeholder="Customer Name / District">
                             </div>
                             <div class="form-group">
                                 <button type="submit" class="btn btn-primary"> <i class="fa fa-filter">Filter</i> </button>

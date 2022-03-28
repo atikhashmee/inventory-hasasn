@@ -78,6 +78,7 @@
                 customer_phone: null,
                 customer_address: null,
                 customer_type: "",
+                district: null,
             },
             user_role: null,
             error: '',
@@ -202,6 +203,7 @@
                 orderObj.customer_phone = this.customer.customer_phone;
                 orderObj.customer_email = this.customer.customer_email;
                 orderObj.customer_type = this.customer.customer_type;
+                orderObj.district = this.customer.district;
                 orderObj.subtotal = this.subtotal;
                 orderObj.discount = this.discount;
                 orderObj.shop_id = this.shop_id;

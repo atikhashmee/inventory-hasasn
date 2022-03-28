@@ -34,6 +34,7 @@ class CustomerController extends Controller
                     if ($request->search) {
                         $q->where('customer_name', 'LIKE', '%'.$request->search.'%');
                         $q->orWhere('customer_email', 'LIKE', '%'.$request->search.'%');
+                        $q->orWhere('district', 'LIKE', '%'.$request->search.'%');
                     }
                 });
                 $customer_sql->orderBy('totalOrdersCount', 'DESC');

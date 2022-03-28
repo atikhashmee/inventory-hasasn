@@ -162,6 +162,7 @@ class OrderController extends Controller
                 'customer_phone' => $data['customer_phone'],
                 'customer_address' => $data['customer_address'],
                 'customer_type' => $data['customer_type'],
+                'district' => $data['district'],
             ]);
 
             if ($customer) {
