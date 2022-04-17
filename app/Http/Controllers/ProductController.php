@@ -54,6 +54,7 @@ class ProductController extends AppBaseController
         $product_sql->where(function($q) use($request) {
             if ($request->category_id) {
                 $q->where('products.category_id', $request->category_id);
+                
             }
             if ($request->brand_id) {
                 $q->where('products.brand_id', $request->brand_id);
@@ -80,8 +81,9 @@ class ProductController extends AppBaseController
         }
         
         if ($shop_id !='' ) {
-            $product_sql->leftJoin('shop_products', function($q) {
+            $product_sql->join('shop_products', function($q) use($shop_id) {
                 $q->on('shop_products.product_id', '=', 'products.id');
+                $q->where('shop_products.shop_id', $shop_id);
             });
             $product_sql->addSelect(\DB::raw('(IFNULL(spQ.shop_stock_in, 0) - IFNULL(spO.shop_stock_out, 0)) AS quantity')); 
             $product_sql->leftJoin(\DB::raw('(SELECT SUM(quantity) as shop_stock_in, product_id, shop_id FROM shop_product_stocks GROUP BY shop_id, product_id) as spQ'), function($q) use($shop_id) {
@@ -114,12 +116,13 @@ class ProductController extends AppBaseController
         
 
         if ($user->role != 'admin') {
-            $product_sql->where('products.user_id', $user->id);
-            $product_sql->orWhere('shop_products.shop_id', $user->shop_id);
+            $product_sql->where(function($qq) use($user) {
+                $qq->where('products.user_id', $user->id);
+                $qq->orWhere('shop_products.shop_id', $user->shop_id);
+            });
         } 
-
-        $products =   $product_sql->orderBy('id', 'DESC')->paginate(10);
-        $serial   = pagiSerial($products, 10);
+        $products =   $product_sql->orderBy('id', 'DESC')->paginate(100);
+        $serial   = pagiSerial($products, 100);
         $countryItems = Country::pluck('name','id')->toArray();
         $menufactures = Menufacture::pluck('name','id')->toArray();
         $brands = Brand::pluck('name','id')->toArray();
