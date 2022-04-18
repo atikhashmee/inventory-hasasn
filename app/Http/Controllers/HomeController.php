@@ -32,6 +32,8 @@ class HomeController extends Controller
     {
         $start = date('Y-m-d 00:00:00');
         $end   = date('Y-m-d 23:59:59');
+        $first_day_this_month = date('m-01-Y 00:00:00'); // hard-coded '01' for first day
+        $last_day_this_month  = date('m-t-Y 23:59:59');
         $user = auth()->user();
         $data = [];
         
@@ -44,8 +46,8 @@ class HomeController extends Controller
             $data['recent_purchase'] = Stock::orderBy('id', 'DESC')->limit(5)->get();
             $data['recent_sales'] = Order::orderBy('id', 'DESC')->limit(5)->get();
             $data['total_sales_today'] = Order::whereBetween('created_at', [$start, $end])->sum('total_final_amount');
-            $data['total_regular_sales'] = Order::where('order_challan_type', 'walk-in')->sum('total_final_amount');
-            $data['total_condition_sales'] = Order::where('order_challan_type', 'challan')->sum('total_final_amount');
+            $data['total_regular_sales'] = Order::where('order_challan_type', 'walk-in')->whereBetween('created_at', [$first_day_this_month, $last_day_this_month])->sum('total_final_amount');
+            $data['total_condition_sales'] = Order::where('order_challan_type', 'challan')->whereBetween('created_at', [$first_day_this_month, $last_day_this_month])->sum('total_final_amount');
         } else {
             $data['recent_purchase'] = ShopProductStock::where('type', 'user_transfer')->orderBy('id', 'DESC')->limit(5)->get();
             $data['recent_sales'] = Order::where('shop_id', $user->shop_id)->orderBy('id', 'DESC')->limit(5)->get();

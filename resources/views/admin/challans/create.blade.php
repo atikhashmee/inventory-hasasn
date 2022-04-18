@@ -20,10 +20,10 @@
             {!! Form::open(['route' => 'admin.challans.store']) !!}
 
             <div class="card-body">
-
                 <div class="row">
                     @include('admin.challans.fields')
                 </div>
+
 
             </div>
 
@@ -37,3 +37,13 @@
         </div>
     </div>
 @endsection
+@push('page_scripts')
+   <script>
+      $('#challan_type').on('change', function(evt) {
+        $select = evt.currentTarget;
+
+        console.log($select.val());
+        $('#total_payable_wrapper').show()
+      }) 
+   </script> 
+@endpush

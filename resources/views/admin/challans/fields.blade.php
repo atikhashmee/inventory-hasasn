@@ -8,7 +8,7 @@
 <!-- Customer Id Field -->
 <div class="form-group col-sm-6">
     {!! Form::label('customer_id', 'Customer:') !!}
-    {!! Form::select('customer_id', $customerItems, null, ['class' => 'form-control custom-select']) !!}
+    {!! Form::select('customer_id', $customerItems, null, ['class' => 'form-control custom-select select2']) !!}
 </div>
 
 <!-- Challan Type -->
@@ -38,7 +38,7 @@
 
 
 <!-- Total Payable Field -->
-<div class="form-group col-sm-6">
+<div class="form-group col-sm-6" id="total_payable_wrapper">
     {!! Form::label('total_payable', 'Total Payable:') !!}
     {!! Form::text('total_payable', null, ['class' => 'form-control']) !!}
 </div>
