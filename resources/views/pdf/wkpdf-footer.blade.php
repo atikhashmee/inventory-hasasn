@@ -6,6 +6,9 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Footer</title>
     <style>
+        body{
+            font-size: 18px;
+        }
         table{
             width: 100%;
         }

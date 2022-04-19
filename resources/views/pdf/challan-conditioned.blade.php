@@ -3,6 +3,7 @@
         padding: 0;
         margin: 0;
         box-sizing: border-box;
+        font-size: 18px;
     }
     .doc-type{
         background: #6d5e5e;
