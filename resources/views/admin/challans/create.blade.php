@@ -40,10 +40,17 @@
 @push('page_scripts')
    <script>
       $('#challan_type').on('change', function(evt) {
-        $select = evt.currentTarget;
-
-        console.log($select.val());
-        $('#total_payable_wrapper').show()
+        let select = evt.currentTarget;
+         challanTypeHideShow(select);
       }) 
+      function challanTypeHideShow(dom = null) {
+        let select = dom ===null ? $('#challan_type') : dom; 
+        if ($(select).val() == 'normal') {
+            $('#total_payable_wrapper').hide()
+        } else {
+            $('#total_payable_wrapper').show()
+        }
+      }
+    challanTypeHideShow()
    </script> 
 @endpush

@@ -67,16 +67,23 @@ class ChallanController extends AppBaseController
      */
     public function store(CreateChallanRequest $request)
     {
-        $input = $request->all();
-        $user = auth()->user();
+        try {
+            //code...
+            $input = $request->all();
+            $user = auth()->user();
 
-        /** @var Challan $challan */
-        $input['user_id'] = $user->id;
-        $challan = Challan::create($input);
+            /** @var Challan $challan */
+            $input['user_id'] = $user->id;
+            $challan = Challan::create($input);
 
-        Flash::success('Challan saved successfully.');
-        
-        return redirect(route('admin.challans.index'));
+            Flash::success('Challan saved successfully.');
+            
+            return redirect(route('admin.challans.index'));
+        } catch (\Exception $e) {
+            Flash::error($e->getMessage());
+            return redirect()->back()->withErrors($request->all())->withInput();
+            //throw $th;
+        }
     }
 
     /**

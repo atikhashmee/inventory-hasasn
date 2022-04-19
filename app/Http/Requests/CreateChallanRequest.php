@@ -25,6 +25,10 @@ class CreateChallanRequest extends FormRequest
      */
     public function rules()
     {
-        return Challan::$rules;
+        return [
+            'product_type' => 'required',
+            'quantity' => 'required',
+            'total_payable' => request()->challan_type != 'normal' ? 'required' : 'nullable'
+        ];
     }
 }

@@ -69,11 +69,7 @@ class Challan extends Model
      *
      * @var array
      */
-    public static $rules = [
-        'product_type' => 'required',
-        'quantity' => 'required',
-        'total_payable' => 'required'
-    ];
+    
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
