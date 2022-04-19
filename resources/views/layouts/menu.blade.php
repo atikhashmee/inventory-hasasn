@@ -144,12 +144,13 @@
           <p>Quotations</p>
       </a>
   </li>
-
-  <li class="nav-item">
-      <a href="{{ route('admin.report.sells') }}"
-        class="nav-link">
-          <p>Reports</p>
-      </a>
-  </li>
+  @if (auth()->user()->role == 'admin')
+    <li class="nav-item">
+        <a href="{{ route('admin.report.sells') }}"
+          class="nav-link">
+            <p>Reports</p>
+        </a>
+    </li>
+  @endif
 
 

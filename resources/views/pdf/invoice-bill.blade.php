@@ -60,7 +60,7 @@
             <p><strong>Customer Name:</strong> {{$customer['customer_name']}}</p>
             <p><strong>Phone No:</strong> {{$customer['customer_phone']}}</p>
             <p><strong>E-mail:</strong> {{$customer['customer_email']}}</p>
-            <p><strong>Address:</strong>{{$customer['customer_address']}} </p>
+            <p><strong>Address:</strong> {{$customer['customer_address']}} </p>
         </td>
         <td width="20%">&nbsp;</td>
         <td width="30%">

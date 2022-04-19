@@ -62,7 +62,7 @@
             <p><strong>Customer Name:</strong> {{$customer['customer_name']}}</p>
             <p><strong>Phone No:</strong> {{$customer['customer_phone']}}</p>
             <p><strong>E-mail:</strong> {{$customer['customer_email']}}</p>
-            <p><strong>Address:</strong>{{$customer['customer_address']}} </p>
+            <p><strong>Address:</strong> {{$customer['customer_address']}} </p>
         </td>
         <td width="20%">&nbsp;</td>
         <td width="30%">
@@ -98,30 +98,32 @@
         </tr>
     </tbody>
 </table>
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<table class="summer-table">
-    <tbody>
-        <tr>
-            <td width="40%">&nbsp;</td>
-            <td width="20%">&nbsp;</td>
-            <td width="30%">
-                <table class="sum-total">
-                    <tr>
-                        <td><strong>Total Payable(Taka)</strong></td>
-                        <td>{{number_format(intval($total_payable), 2, '.', ',')}}</td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-    </tbody>
-</table>
+@if ($total_payable)
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <table class="summer-table">
+        <tbody>
+            <tr>
+                <td width="40%">&nbsp;</td>
+                <td width="20%">&nbsp;</td>
+                <td width="30%">
+                    <table class="sum-total">
+                        <tr>
+                            <td><strong>Total Payable(Taka)</strong></td>
+                            <td>{{number_format(intval($total_payable), 2, '.', ',')}}</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+@endif
 <br />
 <p style="text-align: center; text-transform: uppercase"> <strong>In Word(Taka):</strong> {{numberToWord(($total_payable))}}</p>
 <br />
