@@ -43,11 +43,12 @@ class OrderController extends Controller
     }
 
     public function orderLists(Request $request, $user) {
-        $order_sql =  Order::select('orders.*', \DB::raw("IFNULL(OD.total_warenty_items, 0) as wr_order_details"))
-        ->leftJoin(\DB::raw("(SELECT COUNT(order_details.id) as total_warenty_items, order_details.order_id FROM order_details INNER JOIN products ON products.id = order_details.product_id WHERE products.warenty_duration IS NOT NULL GROUP BY order_details.order_id) AS OD"), 'OD.order_id', '=', 'orders.id')
+        $order_sql =  Order::select('orders.*', \DB::raw("IFNULL(OD.total_warenty_items, 0) as wr_order_details"), \DB::raw("IFNULL(A.order_total_payemnt, 0) as order_total_payemnt" ))
+        ->leftjoin(\DB::raw("(select count(order_details.id) as total_warenty_items, order_details.order_id from order_details inner join products on products.id = order_details.product_id where products.warenty_duration is not null group by order_details.order_id) as od"), 'od.order_id', '=', 'orders.id')
+        ->leftjoin(\DB::raw("(select sum(amount) as order_total_payemnt, order_id from transactions group by order_id) as a"), 'a.order_id', '=', 'orders.id')
         ->where(function($q) {
             if (request()->query('start')!='' && request()->query('end')!='') {
-                $q->whereBetween(\DB::raw('DATE(created_at)'), [request()->query('start'),  request()->query('end')]);
+                $q->wherebetween(\DB::raw('date(created_at)'), [request()->query('start'),  request()->query('end')]);
             }
 
             if (request()->query('search')!='') {

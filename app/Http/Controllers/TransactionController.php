@@ -18,17 +18,18 @@ class TransactionController extends Controller
     public function index()
     {
         $user = auth()->user();
-        $transSql  = Transaction::select('transactions.*')
-        ->where(function($q) {
+        $transSql  = Transaction::select('transactions.*');
+        $transSql->where(function($q) {
             if (request()->query('start')!='' && request()->query('end')!='') {
-                $q->whereBetween('created_at', [request()->query('start'),  request()->query('end')]);
+                $q->whereBetween('created_at', [date(request()->query('start'). ' 00:00:00'),  date(request()->query('end'). ' 23:59:59')]);
+
             }
 
             if (request()->query('customer_id')!='') {
                 $q->where('customer_id', request()->query('customer_id'));
             }
         });
-        
+         
         if ($user->role != 'admin') {
             $transSql->where('user_id', $user->id);
         }

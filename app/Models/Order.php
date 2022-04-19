@@ -26,7 +26,6 @@ class Order extends Model
         'total_returned_amount',
         'total_final_amount',
         'returned_amount',
-        'total_final_amount',
         'status',
         'notes',
         'challan_note',

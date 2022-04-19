@@ -7,6 +7,7 @@
             <th>Customer&nbsp;Name</th>
             <th>Order&nbsp;Amount</th>
             <th>Order&nbsp;Date</th>
+            <th>Payment&nbsp;Status</th>
             <th>Sold&nbsp;By</th>
             <th>Action</th>
         </tr>
@@ -21,6 +22,17 @@
                     <td>{{$order->customer->customer_name ?? 'N/A'}}</td>
                     <td>{{$order->total_amount}}</td>
                     <td>{{$order->created_at}}</td>
+                    <td>
+                        @if ($order->order_total_payemnt == $order->total_final_amount)
+                            Paid
+                        @else    
+                            @if ($order->order_total_payemnt == 0)
+                               Not Paid 
+                            @else
+                                Partial
+                            @endif
+                        @endif
+                    </td>
                     <td>{{$order->user? $order->user->name : 'N/A'}}</td>
                     <td>
                         <div class="btn-group">
