@@ -47,12 +47,13 @@
                         </select>
                     </div>
                     <div class="form-group mr-2">
-                        <select name="challan_type" id="challan_type" class="form-control">
+                        {!! Form::select('challan_type', App\Models\Challan::$challan_types, null, ['class' => 'form-control']) !!}
+                        {{-- <select name="challan_type" id="challan_type" class="form-control">
                             <option value="">Challan Type</option>
                             <option>Condition With Charge</option>
                             <option>Condition Only</option>
                             <option>Charge Only</option>
-                        </select>
+                        </select> --}}
                 </form>
                 </div>
             </div>

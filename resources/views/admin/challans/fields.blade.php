@@ -14,7 +14,7 @@
 <!-- Challan Type -->
 <div class="form-group col-sm-6">
     {!! Form::label('challan_type', 'Challan Type:') !!}
-    {!! Form::select('challan_type', $challan_types, null, ['class' => 'form-control custom-select']) !!}
+    {!! Form::select('challan_type', App\Models\Challan::$challan_types, null, ['class' => 'form-control custom-select']) !!}
 </div>
 
 

@@ -70,6 +70,10 @@ class Challan extends Model
      * @var array
      */
     
+    public static $challan_types = [
+        'Condition With Charge' => 'Condition With Charge', 
+        'normal' => 'Normal'
+    ];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
