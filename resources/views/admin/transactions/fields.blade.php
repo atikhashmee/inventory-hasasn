@@ -33,6 +33,15 @@
         <input type="number" class="form-control" name="amount">
     </div>
     <div class="form-group">
+        <label for="">Payment Type </label>
+        <select name="payment_type" id="payment_type" class="form-control">
+            <option value="">Select a Payment Type</option>
+            @foreach (App\Models\Transaction::$paymentType as $paymentType)
+                <option>{{$paymentType}}</option>   
+            @endforeach
+        </select>
+    </div>
+    <div class="form-group">
         <label for="customers">Note (Optional)</label>
         <textarea name="note" class="form-control" id="note"></textarea>
     </div>

@@ -29,6 +29,10 @@ class TransactionController extends Controller
             if (request()->query('customer_id')!='') {
                 $q->where('transactions.customer_id', request()->query('customer_id'));
             }
+            
+            if (request()->query('payment_type')!='') {
+                $q->where('transactions.payment_type', request()->query('payment_type'));
+            }
         });
          
         if ($user->role != 'admin') {

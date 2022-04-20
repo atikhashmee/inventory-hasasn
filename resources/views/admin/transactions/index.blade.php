@@ -36,6 +36,12 @@
                             <input type="text" class="form-control mr-2" id="rangePicker">
                             <input type="hidden" name="start" id="start">
                             <input type="hidden" name="end" id="end">
+                            <select name="payment_type" id="payment_type" class="form-control select2">
+                                <option value="">Select a Payment Type</option>
+                                @foreach (App\Models\Transaction::$paymentType as $paymentType)
+                                    <option>{{$paymentType}}</option>   
+                                @endforeach
+                            </select>
                             <select name="customer_id" id="customer_id" class="form-control select2">
                                 <option value="">Select Customer</option>
                                 @foreach ($customers as $customer)

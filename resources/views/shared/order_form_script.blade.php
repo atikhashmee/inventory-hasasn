@@ -72,6 +72,7 @@
             challan_note: "",
             order_date: `{{date('Y-m-d')}}`,
             payment_amount: 0,
+            payment_type: '',
             customer: {
                 customer_name: null,
                 customer_email: null,
@@ -210,6 +211,7 @@
                 orderObj.note = this.note;
                 orderObj.challan_note = this.challan_note;
                 orderObj.payment_amount = this.payment_amount;
+                orderObj.payment_type = this.payment_type;
                 fetch(`{{route('admin.orders.store')}}`, {
                     method: 'POST',
                     headers: {

@@ -43,9 +43,17 @@ class OrderController extends Controller
     }
 
     public function orderLists(Request $request, $user) {
-        $order_sql =  Order::select('orders.*', \DB::raw("IFNULL(OD.total_warenty_items, 0) as wr_order_details"), \DB::raw("IFNULL(A.order_total_payemnt, 0) as order_total_payemnt" ))
+        $order_sql =  Order::select('orders.*',
+         \DB::raw("IFNULL(OD.total_warenty_items, 0) as wr_order_details"),
+         \DB::raw("IFNULL(A.order_total_payemnt, 0) as order_total_payemnt"),
+    //'transactions.payemnt_type'
+           )
         ->leftjoin(\DB::raw("(SELECT COUNT(order_details.id) AS total_warenty_items, order_details.order_id FROM order_details INNER JOIN products ON products.id = order_details.product_id WHERE products.warenty_duration IS NOT NULL GROUP BY order_details.order_id) AS OD"), 'OD.order_id', '=', 'orders.id')
         ->leftjoin(\DB::raw("(SELECT SUM(amount) AS order_total_payemnt, order_id FROM transactions GROUP BY order_id) AS A"), 'A.order_id', '=', 'orders.id')
+        // ->leftJoin('transactions', function($q) {
+        //     $q->on('transactions.order_id', '=', 'orders.id');
+        //     $q->having('transactions.payment_type', 'payment');
+        // })
         ->where(function($q) {
             if (request()->query('start')!='' && request()->query('end')!='') {
                 $q->wherebetween(\DB::raw('date(created_at)'), [request()->query('start'),  request()->query('end')]);
@@ -156,6 +164,15 @@ class OrderController extends Controller
             if ($user->role == 'admin') {
                 $shop_id = $data['shop_id'];
             }
+            /**
+             * manual validation code 
+             */
+            if (isset($data['payment_amount']) && $data['payment_amount'] > 0) {
+                   if ($data['payment_type'] == null) {
+                       throw new \Exception("Please select a payment type", 1);
+                   }
+            }
+            
             $customer = Customer::updateOrCreate([
                 'customer_name' => $data['customer_name'],
                 'customer_email' => $data['customer_email'],
@@ -272,6 +289,7 @@ class OrderController extends Controller
                             'status'      => 'done', 
                             'type'        => 'in', 
                             'flag'        => 'payment', 
+                            'payment_type'=> $data['payment_type'], 
                             'amount'      => $data['payment_amount']
                         ]);
                     }

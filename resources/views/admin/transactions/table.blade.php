@@ -5,6 +5,7 @@
             <th>Customer&nbsp;Name</th>
             <th>Transaction&nbsp;type</th>
             <th>Amount</th>
+            <th>Payment Type</th>
             <th>Date</th>
             <th>&nbsp;</th>
         </tr>
@@ -39,6 +40,7 @@
                     </td>
                     <td>
                         {{ ($transaction->type == 'in' ? '+' : '-').$transaction->amount}}</td>
+                    <td>{{$transaction->payment_type ?? 'N/A'}}</td>
                     <td>{{$transaction->created_at}}</td>
                     <td>
                         <form action="{{route('admin.transactions.destroy', ['transaction'=>$transaction])}}" method="POST">

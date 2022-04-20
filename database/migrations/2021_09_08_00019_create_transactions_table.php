@@ -23,6 +23,7 @@ class CreateTransactionsTable extends Migration
             $table->enum('status', ['hold', 'done']);
             $table->enum('type', ['in', 'out']);
             $table->enum('flag', ['order_placed', 'payment', 'sell_return', 'refund']);
+            $table->enum('payment_type', App\Models\Transaction::$paymentType)->nullable();
             $table->decimal('amount', 10, 2)->default(0.00);
             $table->text('detail')->nullable();
             $table->text('note')->nullable();

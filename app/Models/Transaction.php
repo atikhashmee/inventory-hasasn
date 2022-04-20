@@ -14,11 +14,18 @@ class Transaction extends Model
 
     protected $table = 'transactions';
 
-    protected $fillable  = ['customer_id', 'order_id', 'user_id', 'order_detail_id', 'status', 'type', 'flag', 'amount', 'detail', 'note', 'tnx_id'];
+    protected $fillable  = ['customer_id', 'order_id', 'user_id', 'order_detail_id', 'status', 'type', 'flag', 'payment_type', 'amount', 'detail', 'note', 'tnx_id'];
     protected $enums = [
         'transaction_flags' => [
             'order_placed','payment','sell_return','refund'
         ], 
+    ];
+    public static $paymentType = [
+        'Cash',
+        'Bkash',
+        'Nagad',
+        'Bank',
+        'Other'
     ];
 
 

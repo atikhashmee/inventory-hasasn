@@ -234,6 +234,15 @@
                                     <input type="text" readonly class="form-control" :value="subTotalValue - discount">
                                 </div>
                                 <div class="form-group">
+                                    <label for="">Payment Type @{{payment_type}}</label>
+                                    <select name="payment_type" id="payment_type" v-model="payment_type" class="form-control">
+                                        <option value="">Select a Payment Type</option>
+                                        @foreach (App\Models\Transaction::$paymentType as $paymentType)
+                                            <option>{{$paymentType}}</option>   
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group">
                                     <label for="">Pay Now</label>
                                     <input type="number" name="payment_amount" v-model.number="payment_amount" class="form-control">
                                 </div>
