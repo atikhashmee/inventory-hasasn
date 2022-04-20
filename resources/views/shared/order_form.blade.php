@@ -174,7 +174,7 @@
                                                             <option :value="unit.id" v-for="unit in allUnits">@{{unit.name}} X @{{unit.quantity_base}}</option>
                                                         </select>
                                                         <div>
-                                                            <input type="number" class="form-control" v-model="pl.input_quantity" :max="pl.available_quantity" @blur="fieldUpdate($event, pl, 'quantity')" name="quantity">
+                                                            <input type="number" step="any" class="form-control" v-model="pl.input_quantity" :max="pl.available_quantity" @blur="fieldUpdate($event, pl, 'quantity')" name="quantity">
                                                             <small>Available Quantity @{{pl.available_quantity}}</small>
                                                             <small>Quantity @{{pl.quantity}}</small>
                                                         </div>

@@ -24,8 +24,8 @@
         .right-menus .nav-link {
             color: #fff !important;
         }
-        .table td, .table th {
-            padding: 0 10px !important;
+        .table td {
+            padding: 5px 10px !important;
         }
     </style>
 

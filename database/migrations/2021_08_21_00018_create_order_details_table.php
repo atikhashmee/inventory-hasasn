@@ -23,9 +23,9 @@ class CreateOrderDetailsTable extends Migration
             $table->decimal('product_original_unit_price', 10, 2);
             $table->decimal('product_unit_price', 10, 2);
             $table->unsignedInteger('quantity_unit_value')->nullable();
-            $table->unsignedInteger('product_quantity')->default(1);
-            $table->unsignedInteger('returned_quantity')->default(0)->comment('if admin return');
-            $table->unsignedInteger('final_quantity');
+            $table->string('product_quantity')->default(1);
+            $table->string('returned_quantity')->default(0)->comment('if admin return');
+            $table->string('final_quantity');
             $table->decimal('sub_total', 10, 2)->default(0)->comment('product_unit_price * quantity');
             $table->decimal('total', 10, 2)->default(0)->comment('(sub_total + additional_delivery_charge) - discount_amount');
             $table->decimal('returned_amount', 10, 2)->default(0)->comment('if admin return');
