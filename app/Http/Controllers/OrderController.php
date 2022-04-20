@@ -168,14 +168,19 @@ class OrderController extends Controller
              * manual validation code 
              */
             if (isset($data['payment_amount']) && $data['payment_amount'] > 0) {
-                   if ($data['payment_type'] == null) {
-                       throw new \Exception("Please select a payment type", 1);
-                   }
+                if ($data['payment_type'] == null) {
+                    throw new \Exception("Please select a payment type", 1);
+                }
+            }
+            if (!isset($data['customer_phone']) || $data['customer_phone'] == null) {
+                throw new \Exception("Customer Phone is required", 1);
+            }
+            
+            if (!isset($data['customer_name']) || $data['customer_name'] == null) {
+                throw new \Exception("Customer Name is required", 1);
             }
             
             $customer = Customer::updateOrCreate([
-                'customer_name' => $data['customer_name'],
-                'customer_email' => $data['customer_email'],
                 'customer_phone' => $data['customer_phone'],
             ], [
                 'shop_id' => $shop_id,

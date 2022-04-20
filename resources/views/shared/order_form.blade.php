@@ -99,7 +99,7 @@
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label for="">Customer Phone</label>
+                                            <label for="">Customer Phone<span class="text-danger">*</span></label>
                                             <input type="text" 
                                             name="customer_phone" 
                                             v-model="customer.customer_phone" 
