@@ -24,6 +24,9 @@
         .right-menus .nav-link {
             color: #fff !important;
         }
+        .table td, .table th {
+            padding: 0 10px !important;
+        }
     </style>
 
     @stack('third_party_stylesheets')

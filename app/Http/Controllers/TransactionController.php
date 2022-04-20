@@ -18,23 +18,24 @@ class TransactionController extends Controller
     public function index()
     {
         $user = auth()->user();
-        $transSql  = Transaction::select('transactions.*');
+        $transSql  = Transaction::select('transactions.*', 'orders.order_number');
+        $transSql->leftJoin('orders', 'orders.id', '=', 'transactions.order_id');
         $transSql->where(function($q) {
             if (request()->query('start')!='' && request()->query('end')!='') {
-                $q->whereBetween('created_at', [date(request()->query('start'). ' 00:00:00'),  date(request()->query('end'). ' 23:59:59')]);
+                $q->whereBetween('transactions.created_at', [date(request()->query('start'). ' 00:00:00'),  date(request()->query('end'). ' 23:59:59')]);
 
             }
 
             if (request()->query('customer_id')!='') {
-                $q->where('customer_id', request()->query('customer_id'));
+                $q->where('transactions.customer_id', request()->query('customer_id'));
             }
         });
          
         if ($user->role != 'admin') {
-            $transSql->where('user_id', $user->id);
+            $transSql->where('transactions.user_id', $user->id);
         }
 
-        $data['transactions'] = $transSql->orderBy('id', 'DESC')->paginate(100);
+        $data['transactions'] = $transSql->orderBy('transactions.id', 'DESC')->paginate(100);
         $data['totalDiposit'] = $data['transactions']->getCollection()->reduce(function($total, $item){
             if ($item->type == 'in') {
                 return $total + $item->amount;

@@ -29,7 +29,9 @@
             <div class="card-body">
                 <form action="{{route('admin.transactions.index')}}" method="GET">
                     <div class="d-flex justify-content-between align-items-center mb-2">
-                        <div></div>
+                        <div>
+                            <span>{{count($transactions)}} Records showing</span>
+                        </div>
                         <div class="d-flex justify-content-around align-items-center">
                             <input type="text" class="form-control mr-2" id="rangePicker">
                             <input type="hidden" name="start" id="start">
@@ -56,11 +58,11 @@
                 <table border="1" class="table">
                     <tr>
                         <td colspan="5">Total Payment</td>
-                        <td class="text-right">{{$totalDiposit}}</td>
+                        <td class="text-right">{{'+'.$totalDiposit}}</td>
                     </tr>
                     <tr>
                         <td colspan="5">Total Sales</td>
-                        <td class="text-right">{{$totalWithdraw}}</td>
+                        <td class="text-right">{{'-'.$totalWithdraw}}</td>
                     </tr>
                     <tr>
                         <td colspan="5">Due</td>
