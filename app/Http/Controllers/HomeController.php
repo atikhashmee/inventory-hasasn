@@ -46,12 +46,16 @@ class HomeController extends Controller
             $data['recent_purchase'] = Stock::orderBy('id', 'DESC')->limit(5)->get();
             $data['recent_sales'] = Order::orderBy('id', 'DESC')->limit(5)->get();
             $data['total_sales_today'] = Order::whereBetween('created_at', [$start, $end])->sum('total_final_amount');
+            $data['total_refunds_today'] = Transaction::where('type', 'out')->whereNotNull('order_id')->where('flag', 'refund')->whereBetween('created_at', [$start, $end])->sum('amount');
             $data['total_regular_sales'] = Order::where('order_challan_type', 'walk-in')->whereBetween('created_at', [$first_day_this_month, $last_day_this_month])->sum('total_final_amount');
             $data['total_condition_sales'] = Order::where('order_challan_type', 'challan')->whereBetween('created_at', [$first_day_this_month, $last_day_this_month])->sum('total_final_amount');
         } else {
             $data['recent_purchase'] = ShopProductStock::where('type', 'user_transfer')->orderBy('id', 'DESC')->limit(5)->get();
             $data['recent_sales'] = Order::where('shop_id', $user->shop_id)->orderBy('id', 'DESC')->limit(5)->get();
             $data['total_sales_today'] = Order::where('shop_id', $user->shop_id)->whereBetween('created_at', [$start, $end])->sum('total_final_amount');
+            $data['total_refunds_today'] = Transaction::where('transactions.type', 'out')
+            ->join('users', 'users.id', '=', 'transactions.user_id') 
+            ->where('users.shop_id', $user->shop_id)->whereNotNull('transactions.order_id')->where('transactions.flag', 'refund')->whereBetween('transactions.created_at', [$start, $end])->sum('amount');
             $data['total_regular_sales'] = Order::where('shop_id', $user->shop_id)->where('order_challan_type', 'walk-in')->sum('total_final_amount');
             $data['total_condition_sales'] = Order::where('shop_id', $user->shop_id)->where('order_challan_type', 'challan')->sum('total_final_amount');
             $data['total_purchase_today'] = ShopProductStock::where('shop_id', $user->shop_id)->where('type', 'user_transfer')->whereBetween('created_at', [$start, $end])->sum('price');

@@ -29,7 +29,18 @@
                         <div class="icon">
                             <i class="ion ion-bag"></i>
                         </div>
-                        {{-- <a href="javascript:void(0)" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a> --}}
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-6">
+                    <div class="small-box bg-warning">
+                        <div class="inner">
+                            <h3>{{ $total_refunds_today }}</h3>
+                            <p>Today Refunds</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-bag"></i>
+                        </div>
                     </div>
                 </div>
 				@if (auth()->user()->role == 'admin')
