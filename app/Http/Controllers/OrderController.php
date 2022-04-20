@@ -407,7 +407,7 @@ class OrderController extends Controller
                             'user_id'     => $user->id, 
                             'status'      => 'done', 
                             'type'        => 'out', 
-                            'flag'        => 'payment', 
+                            'flag'        => 'refund', 
                             'amount'      => $request->returnedPrice
                         ]);
                     }
