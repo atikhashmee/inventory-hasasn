@@ -22,9 +22,9 @@
             <th>S/N</th>
             <th>Description of Items</th>
             <th>Origin</th>
-            <th>Quantity</th>
             <th>Unit Price</th>
-            <th>Total Price</th>
+            <th>Quantity</th>
+            <th>Total Amount</th>
         </tr>
     </thead>
     <tbody>
@@ -34,8 +34,8 @@
                     <td>{{++$k}}</td>
                     <td>{{$item->item_name}}</td>
                     <td>{{$item->origin}}</td>
-                    <td>{{$item->quantity}}</td>
                     <td>{{$item->unit_price}}</td>
+                    <td>{{$item->quantity}}</td>
                     <td>{{$item->total_price}}</td>
                 </tr>
             @endforeach

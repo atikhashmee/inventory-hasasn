@@ -140,7 +140,7 @@
                         <td>
                             <p>Current Due: {{number_format($current_due, 2, '.', ',')}}</p>
                             <p>Sales: {{number_format(($today_sales) , 2, '.', ',')}}</p>
-                            <p>Collected: {{$tnx_amount}}</p>
+                            <p>Collected: {{number_format(($tnx_amount) , 2, '.', ',')}}</p>
                         </td>
                     </tr>
                     <tr>
@@ -159,7 +159,7 @@
                     </tr>
                     <tr>
                         <td>Discount(Taka)</td>
-                        <td>{{$discount_amount}}</td>
+                        <td>{{number_format($discount_amount, 2, '.', ',')}}</td>
                     </tr>
                     <tr>
                         <td><strong>Grand Total</strong>(Taka)</td>

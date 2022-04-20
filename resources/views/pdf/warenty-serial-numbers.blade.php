@@ -49,7 +49,7 @@
 <br />
 <br />
 <div class="doc-type">
-    <h2>Warenty Card</h2>
+    <h2>Warranty Card</h2>
 </div>
 <br />
 <table class="invoice-info">
@@ -92,7 +92,7 @@
                     <th>SL #{{++$sl}}</th>
                     <th>Item Name</th>
                     <th>Serial Number</th>
-                    <th>Warenty Period (End date)</th>
+                    <th>Warranty Period (End date)</th>
                 </tr>
             </thead>
             <tbody>
@@ -112,6 +112,9 @@
 @endif
 <br />
 <br />
+<br />
+<br />
+<br />
 <table class="signature-table">
     <tbody>
         <tr>
@@ -129,7 +132,8 @@
 <br />
 <br />
 <br />
-<p style="text-align: center; text-transform: uppercase;  text-align: justify"> 1. Warenty Void : Sticker removed items, Burn case, Water case & physically damage products <br>
+<p style="text-align: center; text-transform: uppercase;  text-align: justify"> 
+    1. Warranty Void : Sticker removed items, Burn case, Water case & physically damage products <br>
     2. Warranty period: One year service warranty <br>
     3. Warranty coverage: Warranty does not include the price of spare parts<br>
 </p>

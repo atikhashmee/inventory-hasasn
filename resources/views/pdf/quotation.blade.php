@@ -52,9 +52,9 @@
             <th>S/N</th>
             <th>Description of Items</th>
             <th>Origin</th>
-            <th>Quantity</th>
             <th>Unit Price(Taka)</th>
-            <th>Total Price(Taka)</th>
+            <th>Quantity</th>
+            <th>Total Amount(Taka)</th>
         </tr>
     </thead>
     <tbody>
@@ -105,10 +105,10 @@
         <td>
             <strong>Terms & Condition</strong>
             <p>1. Delivery: From ready stock</p>
-            <p>2. Payment: By cash, cheque or Pay Order</p>
+            <p>2. Payment: By cash, cheque</p>
             <p>3. Validity: Our Quotation is valid for 1 month</p>
-            <p>4. Vat & Tax: Our price <b>does not include</b> local vat or tax</p>
-            <p>5. Warenty: 1 year free service warenty will be provided</p>
+            <p>4. Vat & Tax: Our price <b>does not include</b> local vat or taxes</p>
+            <p>5. Warranty: 1 year free service warranty will be provided</p>
         </td>
     </tr>
 </table>
@@ -136,7 +136,6 @@
             <td width="40%">&nbsp;</td>
             <td width="25%">
                     <p>Thanks & Regards,</p>
-                    <p>Yours faithfully,</p>
                     <br>
                     <br>
                     <br>

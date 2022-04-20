@@ -78,7 +78,7 @@ class CustomerController extends Controller
             'customer_name' => 'required|max:200',
             'customer_email' => 'nullable|max:200|email|unique:customers,customer_email',
             'customer_type' => 'required|in:'.implode(',', $this->customer_types),
-            'customer_phone' => 'required',
+            'customer_phone' => 'required|unique:customers,customer_phone',
         ]);
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator);
