@@ -44,6 +44,7 @@ class Challan extends Model
         'unit_id',
         'challan_type',
         'total_payable',
+        'status',
         'challan_note'
     ];
 
@@ -73,6 +74,11 @@ class Challan extends Model
     public static $challan_types = [
         'Condition With Charge' => 'Condition With Charge', 
         'normal' => 'Normal'
+    ];
+    public static $challan_status = [
+        '' => 'Select a status', 
+        'Collected' => 'Collected', 
+        'Not Collected' => 'Not Collected'
     ];
 
     /**

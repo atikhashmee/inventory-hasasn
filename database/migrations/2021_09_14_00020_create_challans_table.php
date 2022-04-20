@@ -24,6 +24,7 @@ class CreateChallansTable extends Migration
             $table->integer('quantity');
             $table->unsignedBigInteger('unit_id')->nullable();
             $table->decimal('total_payable', 10, 2)->nullable();
+            $table->enum('status', ['Collected', 'Not Collected'])->default('Not Collected');
             $table->text('challan_note')->nullable();
             $table->timestamps();
             $table->softDeletes();

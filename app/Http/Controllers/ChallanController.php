@@ -35,6 +35,10 @@ class ChallanController extends AppBaseController
             if (request()->query('shop_id')!='') {
                 $q->where('shop_id', request()->query('shop_id'));
             }
+            if (request()->query('status')!='') {
+                $q->where('status', request()->query('status'));
+            }
+
         });
         if ($user->role != 'admin') {
             $challanSql->where('user_id', $user->id);
