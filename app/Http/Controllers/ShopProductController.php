@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Shop;
+use App\Models\Stock;
 use App\Models\Product;
 use App\Models\WareHouse;
 use App\Models\ShopProduct;
@@ -10,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Models\ShopInventory;
 use App\Models\ShopProductStock;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Events\TransactionBeginning;
 
 class ShopProductController extends Controller
 {
@@ -76,47 +78,50 @@ class ShopProductController extends Controller
                 'price' => 0,
             ]);
 
-            $shop_stock = ShopProductStock::create([
-                'user_id' => $user->id,
-                'shop_id' => $data['shop_to'], 
-                'product_id' => $data['product_id'],
-                'quantity' => $data['quantity'],
-                'type' => 'shop_transfer',
-                'price' => 0,
-            ]);
 
-            if ($shop_stock) {
-                $settle_quantity = $shop_stock->quantity;
-                $stocks = ShopProductStock::select('shop_product_stocks.*', 'ST.total_stock_out', DB::raw('(shop_product_stocks.quantity - IFNULL(ST.total_stock_out, 0)) AS stockQty'))
-                ->leftJoin(DB::raw("(SELECT SUM(quantity) as total_stock_out, stock_id FROM shop_inventories GROUP BY stock_id) as ST"), 'shop_product_stocks.id', '=', 'ST.stock_id')
-                ->where('shop_id', $data['shop_from'])
-                ->where('product_id', $shop_stock->product_id)
-                ->having('stockQty', '>', 0)
-                ->get();
+            $settle_quantity = $data['quantity'];
+            $stocks = ShopProductStock::select('shop_product_stocks.*', 'ST.total_stock_out', DB::raw('(shop_product_stocks.quantity - IFNULL(ST.total_stock_out, 0)) AS stockQty'))
+            ->leftJoin(DB::raw("(SELECT SUM(quantity) as total_stock_out, stock_id FROM shop_inventories GROUP BY stock_id) as ST"), 'shop_product_stocks.id', '=', 'ST.stock_id')
+            ->where('shop_id', $data['shop_from'])
+            ->where('product_id', $data['product_id'])
+            ->having('stockQty', '>', 0)
+            ->get();
 
-                foreach ($stocks as $key => $st) {
-                    $checkQty = ($settle_quantity - $st->stockQty);
-                    if ($checkQty > 0) {
-                        $stQty = $st->stockQty;
-                     } else {
-                         $stQty = $settle_quantity;
-                     }
-                     $stOut =  ShopInventory::create([
-                         'type' => 'shop_transfer',
-                         'transfer_id' => $shop_stock->id,
-                         'stock_id' => $st->id,
-                         'product_id' => $st->product_id,
-                         'shop_id' =>  $st->shop_id,
-                         'quantity' =>  $stQty
-                     ]);
+            foreach ($stocks as $key => $st) {
+                $checkQty = ($settle_quantity - $st->stockQty);
+                if ($checkQty > 0) {
+                    $stQty = $st->stockQty;
+                } else {
+                    $stQty = $settle_quantity;
+                }
 
-                     if ($stOut) {
-                         $settle_quantity = $settle_quantity-$stOut->quantity;
-                     }
+                $shop_stock = ShopProductStock::create([
+                    'user_id' => $user->id,
+                    'shop_id' => $data['shop_to'], 
+                    'product_id' => $data['product_id'],
+                    'supplier_id' => $st->supplier_id,
+                    'quantity' => $stQty,
+                    'type' => 'shop_transfer',
+                    'price' => 0,
+                ]);
 
-                     if ($settle_quantity == 0) {
-                         break;
-                     }
+                if ($shop_stock) {
+                    $stOut =  ShopInventory::create([
+                        'type' => 'shop_transfer',
+                        'transfer_id' => $shop_stock->id,
+                        'stock_id' => $st->id,
+                        'product_id' => $st->product_id,
+                        'shop_id' =>  $st->shop_id,
+                        'quantity' =>  $stQty
+                    ]);
+                }
+
+                if ($stOut) {
+                    $settle_quantity = $settle_quantity-$stOut->quantity;
+                }
+
+                if ($settle_quantity == 0) {
+                    break;
                 }
             }
         
@@ -145,6 +150,7 @@ class ShopProductController extends Controller
     public function store(Request $request)
     {
         try {
+            \DB::beginTransaction();
             $data = $request->all();
             $warehouse_id = $request->warehouse_id;
             $products = json_decode($data['products'], true);
@@ -162,20 +168,53 @@ class ShopProductController extends Controller
                         ]);
                     }
                     if (isset($product['new_quantity']) && $product['new_quantity'] > 0) {
-                        ShopProductStock::create([
-                            'warehouse_id' => $warehouse_id,
-                            'user_id' => $user->id,
-                            'shop_id' => $data['shop_id'],
-                            'product_id' => $product['id'],
-                            'quantity' => $product['new_quantity'],
-                            'type' => 'warehouse_transfer',
-                            'price' => 0,
-                        ]);
+                        $settle_quantity = $product['new_quantity']; 
+                        $stocks = Stock::select('stocks.*', 'ST.total_stock_out', DB::raw('(stocks.quantity - IFNULL(ST.total_stock_out, 0)) AS stockQty'))                  
+                        ->leftJoin(DB::raw("(SELECT SUM(quantity) as total_stock_out, supplier_id FROM shop_product_stocks GROUP BY supplier_id) as ST"), 'stocks.supplier_id', '=', 'ST.supplier_id')
+                        ->where('warehouse_id', $warehouse_id)
+                        ->where('product_id', $product['id'])
+                        ->having('stockQty', '>', 0)
+                        ->get();
+                        // if ($product['id'] == 619) {
+                        //     dd($stocks->toArray(), 'stocksss..');
+                        // }
+                        foreach ($stocks as $key => $st) {
+                            $checkQty = ($settle_quantity - $st->stockQty);
+                            if ($checkQty > 0) {
+                                $stQty = $st->stockQty;
+                            } else {
+                                $stQty = $settle_quantity;
+                            }
+                            $stOut = ShopProductStock::create([
+                                'warehouse_id' => $warehouse_id,
+                                'user_id' => $user->id,
+                                'shop_id' => $data['shop_id'],
+                                'supplier_id' => $st->supplier_id,
+                                'product_id' => $product['id'],
+                                'quantity' => $stQty,
+                                'type' => 'warehouse_transfer',
+                                'price' => 0,
+                            ]);
+
+                            if ($stOut) {
+                                $settle_quantity = $settle_quantity-$stOut->quantity;
+                            }
+
+                            if ($settle_quantity == 0) {
+                                break;
+                            }
+                        }
+                        if ($settle_quantity != 0) {
+                            throw new \Exception($product['name']." Given Quantity exceeds stock", 1);
+                        }
+                        
                     }
                 }
             }
+            \DB::commit();
             return response()->json(['status'=>true, 'data'=>null]);
         } catch (\Exception $e) {
+            \DB::rollback();
             return response()->json(['status'=>false, 'data'=>$e->getMessage()]);
         }
     }
