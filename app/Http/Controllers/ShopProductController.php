@@ -170,12 +170,12 @@ class ShopProductController extends Controller
                     if (isset($product['new_quantity']) && $product['new_quantity'] > 0) {
                         $settle_quantity = $product['new_quantity']; 
                         $stocks = Stock::select('stocks.*', 'ST.total_stock_out', DB::raw('(stocks.quantity - IFNULL(ST.total_stock_out, 0)) AS stockQty'))                  
-                        ->leftJoin(DB::raw("(SELECT SUM(quantity) as total_stock_out, supplier_id FROM shop_product_stocks GROUP BY supplier_id) as ST"), 'stocks.supplier_id', '=', 'ST.supplier_id')
+                        ->leftJoin(DB::raw("(SELECT SUM(quantity) as total_stock_out, stock_id FROM shop_product_stocks GROUP BY stock_id) as ST"), 'stocks.id', '=', 'ST.stock_id')
                         ->where('warehouse_id', $warehouse_id)
                         ->where('product_id', $product['id'])
                         ->having('stockQty', '>', 0)
                         ->get();
-                        // if ($product['id'] == 619) {
+                        // if ($product['id'] == 150) {
                         //     dd($stocks->toArray(), 'stocksss..');
                         // }
                         foreach ($stocks as $key => $st) {

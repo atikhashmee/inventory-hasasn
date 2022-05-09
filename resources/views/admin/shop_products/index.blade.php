@@ -328,6 +328,8 @@
                         .then(res=>{
                             if (res.status) {
                                 window.location.reload()
+                            } else {
+                                alert(res.data)
                             }
                         })
                     }
