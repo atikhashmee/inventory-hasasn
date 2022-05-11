@@ -185,7 +185,8 @@ class ShopProductController extends Controller
                             } else {
                                 $stQty = $settle_quantity;
                             }
-                            $stOut = ShopProductStock::create([
+                            $stOut = ShopProductStock::create([ 
+                                'stock_id' => $st->id,
                                 'warehouse_id' => $warehouse_id,
                                 'user_id' => $user->id,
                                 'shop_id' => $data['shop_id'],
