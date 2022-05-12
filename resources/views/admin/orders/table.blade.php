@@ -45,7 +45,7 @@
                                 <a class="dropdown-item" href="{{url('print-invoice/'.$order->id)}}" target="_blank">Print Invoice</a>
                                 <a class="dropdown-item" href="{{url('print-challan/'.$order->id)}}" target="_blank">Print Challan</a>
                                 @if (intval($order->wr_order_details) > 0)
-                                    <a class="dropdown-item" href="{{url('print-warenty-serials/'.$order->id)}}" target="_blank"></i>Print Warenty Serial</a>
+                                    <a class="dropdown-item" href="{{url('print-warenty-serials/'.$order->id)}}" target="_blank"></i>Print Warranty Serial</a>
                                 @endif
                             </div>
                         </div>

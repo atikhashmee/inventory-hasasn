@@ -100,10 +100,10 @@
                     <div class="float-right d-flex">
                         @if (count($wr_order_details) > 0)
                             <a href="{{url('admin/set-warenty-serial-number/'.$order->id)}}" type="button"  class="btn bg-gradient-success mr-1">
-                                Warenty Serial
+                                Warranty Serial
                             </a>
                             <a href="{{url('print-warenty-serials/'.$order->id)}}" target="_blank" type="button"  class="btn bg-gradient-success mr-1">
-                                <i class="fas fa-print"></i>Print Warenty Serial
+                                <i class="fas fa-print"></i>Print Warranty Serial
                             </a>
                         @endif
                         <a href="{{url('print-invoice/'.$order->id)}}" target="_blank" type="button"  class="btn bg-gradient-success mr-1">

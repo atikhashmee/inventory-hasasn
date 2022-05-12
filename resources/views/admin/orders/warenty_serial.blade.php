@@ -13,7 +13,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Set Warenty Serial Number</h1>
+                    <h1>Set Warranty Serial Number</h1>
                 </div>
                 <div class="col-sm-6">
                 </div>

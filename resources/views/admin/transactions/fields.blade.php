@@ -12,7 +12,7 @@
         <label for="customers">Transaction Type <span class="text-danger">*</span></label>
         <select name="type" id="type" class="form-control">
             <option value="">Select Transaction Type</option>
-            <option value="in">Disposite</option>
+            <option value="in">Deposit</option>
             <option value="out">Withdraw</option>
         </select>
     </div>

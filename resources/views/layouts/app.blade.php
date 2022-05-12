@@ -46,7 +46,7 @@
                 <a href="{{ route('admin.home') }}" class="nav-link btn btn-default">Dashboard</a>
             </li>
             <li class="nav-item">
-                <a href="{{ route('admin.warenty.check') }}" class="nav-link btn btn-default">Warenty Check</a>
+                <a href="{{ route('admin.warenty.check') }}" class="nav-link btn btn-default">Warranty Check</a>
             </li>
         </ul>
 

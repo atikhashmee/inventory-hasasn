@@ -5,7 +5,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-12">
-                    <h1>Warenty Check</h1>
+                    <h1>Warranty Check</h1>
                 </div>
             </div>
         </div>
@@ -46,7 +46,7 @@
                             <tr>
                                 <th>SL</th>
                                 <th>Product Name</th>
-                                <th>Warenty Status</th>
+                                <th>Warranty Status</th>
                             </tr>
                         </thead>
                         <tbody>

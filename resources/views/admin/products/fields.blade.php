@@ -81,7 +81,7 @@
 
 <!-- product warenty duration Field -->
 <div class="form-group col-sm-6">
-    {!! Form::label('warenty_duration', 'Warenty: (in month)') !!}
+    {!! Form::label('warenty_duration', 'Warranty: (in month)') !!}
     {!! Form::text('warenty_duration', null, ['class' => 'form-control']) !!}
 </div>
 
