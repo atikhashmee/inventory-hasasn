@@ -35,9 +35,9 @@ class TransactionController extends Controller
             }
         });
          
-        if ($user->role != 'admin') {
-            $transSql->where('transactions.user_id', $user->id);
-        }
+        // if ($user->role != 'admin') {
+        //     $transSql->where('transactions.user_id', $user->id);
+        // }
 
         $data['transactions'] = $transSql->orderBy('transactions.id', 'DESC')->paginate(100);
         $data['totalDiposit'] = $data['transactions']->getCollection()->reduce(function($total, $item){
@@ -53,11 +53,12 @@ class TransactionController extends Controller
             return $total;
         }, 0);
 
-        if ($user->role == 'admin') {
-            $data['customers'] = Customer::get();
-        } else {
-            $data['customers'] = Customer::where('shop_id', $user->shop_id)->get();
-        }
+        // if ($user->role == 'admin') {
+        //     $data['customers'] = Customer::get();
+        // } else {
+        //     $data['customers'] = Customer::where('shop_id', $user->shop_id)->get();
+        // }
+        $data['customers'] = Customer::get();
 
         return view('admin.transactions.index', $data);
     }
@@ -73,9 +74,9 @@ class TransactionController extends Controller
         $customer_sql = Customer::select('customers.id', 'customers.customer_name', \DB::raw('IFNULL(TD.total_deposit, 0) as total_deposit'), \DB::raw('IFNULL(TW.total_withdraw, 0) as total_withdraw'))
         ->leftJoin(\DB::raw('(SELECT SUM(amount) as total_deposit, customer_id FROM transactions WHERE type="in" GROUP BY customer_id) AS TD'), 'TD.customer_id', '=', 'customers.id')
         ->leftJoin(\DB::raw('(SELECT SUM(amount) as total_withdraw, customer_id FROM transactions WHERE type="out" GROUP BY customer_id) AS TW'), 'TW.customer_id', '=', 'customers.id');
-        if ($user->role != 'admin') {
-            $customer_sql->where("shop_id", $user->shop_id);
-        } 
+        // if ($user->role != 'admin') {
+        //     $customer_sql->where("shop_id", $user->shop_id);
+        // } 
         $data['customers'] = $customer_sql->get();
 
         
