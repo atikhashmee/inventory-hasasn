@@ -194,7 +194,9 @@ class OrderController extends Controller
             ]);
 
             if ($customer) {
-                $order  = Order::create([
+                $order  = Order::updateOrCreate([
+                    'order_number' =>  $data['order_number'],
+                ], [
                     'order_number' =>  $data['order_number'],
                     'sub_total'    =>  $data['subtotal'],
                     'shop_id'  =>  $data['shop_id'],
@@ -215,7 +217,9 @@ class OrderController extends Controller
                                 throw new \Exception($pro_item['product_name']." Quantity has to be at least 1", 1);
                             }
 
-                            $order_detail =  OrderDetail::create([
+                            $order_detail =  OrderDetail::updateOrCreate([
+                                'order_id' => $order->id
+                            ], [
                             'order_id' => $order->id,
                             'product_id' => $pro_item['product_id'],
                             'shop_id' =>  $order->shop_id,
