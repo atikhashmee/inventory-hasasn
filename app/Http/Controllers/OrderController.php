@@ -218,7 +218,8 @@ class OrderController extends Controller
                             }
 
                             $order_detail =  OrderDetail::updateOrCreate([
-                                'order_id' => $order->id
+                                'order_id' => $order->id,
+                                'product_id' => $pro_item['product_id'],
                             ], [
                             'order_id' => $order->id,
                             'product_id' => $pro_item['product_id'],
