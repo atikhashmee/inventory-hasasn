@@ -58,6 +58,7 @@
     let order_app = new Vue({
         el: '#order_new',
         data: {
+            loader: false,
             product_lists: [],
             products: [],
             product_items: [],
@@ -194,6 +195,7 @@
                 })
             },
             submitOrder() {
+                this.loader = true;
                 let orderObj = {};
                 orderObj.items = {...this.product_lists}
                 orderObj.order_number = this.order_id;
@@ -222,6 +224,7 @@
                 })
                 .then(res=>res.json())
                 .then(res=>{
+                    this.loader = false;
                     if (res.status) {
                         window.location.href= `{{url('admin/orders/')}}/${res.data.id}`;
                     } else {
