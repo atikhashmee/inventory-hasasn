@@ -281,7 +281,8 @@ class OrderController extends Controller
 
                     /* create customer transaction */
                     Transaction::updateOrCreate([
-                        'order_id' => $order->id
+                        'order_id' => $order->id,
+                        'flag' => 'order_placed', 
                     ], [
                         'customer_id' => $customer->id, 
                         'order_id' => $order->id, 
@@ -295,7 +296,8 @@ class OrderController extends Controller
                     /* if customer make any instant payment */
                     if (isset($data['payment_amount']) && $data['payment_amount'] > 0) {
                         Transaction::updateOrCreate([
-                            'order_id' => $order->id
+                            'order_id' => $order->id,
+                            'flag'     => 'payment', 
                         ], [
                             'customer_id' => $customer->id, 
                             'order_id'    => $order->id, 
