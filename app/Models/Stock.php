@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Eloquent as Model;
+use App\Models\ShopProductStock;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -96,5 +97,15 @@ class Stock extends Model
     public function warehouse()
     {
         return $this->belongsTo(\App\Models\WareHouse::class, 'warehouse_id', 'id');
+    }
+    
+    /**
+     * Get all of the comments for the Stock
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function shopProductStock()
+    {
+        return $this->hasMany(ShopProductStock::class);
     }
 }

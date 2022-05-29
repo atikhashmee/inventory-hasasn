@@ -24,13 +24,13 @@
                     @endif
                     <td>{{ $stock->price }}</td>
                     <td>{{ $stock->quantity }}</td>
-                    {{-- <td width="120">
+                    <td width="120">
                         {!! Form::open(['route' => ['admin.stocks.destroy', $stock->id], 'method' => 'delete']) !!}
                         <div class='btn-group'>
-                            <a href="{{ route('admin.stocks.show', [$stock->id]) }}"
+                            {{-- <a href="{{ route('admin.stocks.show', [$stock->id]) }}"
                             class='btn btn-default btn-xs'>
                                 <i class="far fa-eye"></i>
-                            </a>
+                            </a> --}}
                             <a href="{{ route('admin.stocks.edit', [$stock->id]) }}"
                             class='btn btn-default btn-xs'>
                                 <i class="far fa-edit"></i>
@@ -38,7 +38,7 @@
                             {!! Form::button('<i class="far fa-trash-alt"></i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs', 'onclick' => "return confirm('Are you sure?')"]) !!}
                         </div>
                         {!! Form::close() !!}
-                    </td> --}}
+                    </td>
                 </tr>
             @endforeach
         </tbody>

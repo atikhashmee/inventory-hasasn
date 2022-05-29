@@ -193,12 +193,18 @@ class StockController extends AppBaseController
      */
     public function update($id, UpdateStockRequest $request)
     {
-        /** @var Stock $stock */
-        $stock = Stock::find($id);
-
+        $user = auth()->user();
+        if ($user->role != 'admin') {
+            Flash::error('Stock Update can not be done for non admin user');
+            return redirect(route('admin.stocks.index'));
+        }
+        $stock = Stock::with('shopProductStock')->where('id', $id)->where('user_id', $user->id)->first();
         if (empty($stock)) {
             Flash::error('Stock not found');
-
+            return redirect(route('admin.stocks.index'));
+        }
+        if (count($stock->shopProductStock) > 0 ) {
+            Flash::error('Stock Quantity can not be updated');
             return redirect(route('admin.stocks.index'));
         }
 
@@ -206,7 +212,6 @@ class StockController extends AppBaseController
         $stock->save();
 
         Flash::success('Stock updated successfully.');
-
         return redirect(route('admin.stocks.index'));
     }
 
@@ -221,15 +226,22 @@ class StockController extends AppBaseController
      */
     public function destroy($id)
     {
+        $user = auth()->user();
         /** @var Stock $stock */
-        $stock = Stock::find($id);
-
-        if (empty($stock)) {
-            Flash::error('Stock not found');
-
+        if ($user->role != 'admin') {
+        Flash::error('Stock Delete can not be done for non admin user');
             return redirect(route('admin.stocks.index'));
         }
-
+        $stock = Stock::with('shopProductStock')->where('id', $id)->where('user_id', $user->id)->first();
+        if (empty($stock)) {
+            Flash::error('Stock not found');
+            return redirect(route('admin.stocks.index'));
+        }
+        
+        if (count($stock->shopProductStock) > 0 ) {
+            Flash::error('Stock Quantity can not be Deleted');
+            return redirect(route('admin.stocks.index'));
+        }
         $stock->delete();
 
         Flash::success('Stock deleted successfully.');
