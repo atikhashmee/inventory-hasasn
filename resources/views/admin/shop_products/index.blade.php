@@ -2,7 +2,12 @@
 
 @push('page_css')
     <style>
-        
+        .shop-product-box  label {
+            display: block;
+        }
+        .shop-product-box .select2-container {
+            width: 100% !important;
+        }
     </style>
 @endpush
 
@@ -125,11 +130,11 @@
                                         <option v-for="shop in shop_to" :value="shop.id">@{{shop.name}}</option>
                                     </select>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group shop-product-box">
                                     <label for="product_id">Product</label>
-                                    <select class="form-control" name="product_id" id="product_id" v-model="shopToShop.product_id" required>
+                                    <select class="form-control select2 product_id_custom_select" name="product_id" id="product_id" required>
                                         <option value="">Select a Product</option>
-                                        <option v-for="product in shop_from_products" :value="product.id">@{{product.name}}</option>
+                                        <option v-for="s_product in shop_from_products"  :value="s_product.id"><span>@{{s_product.id}}--</span>@{{s_product.name}} <span>--@{{s_product.available_quanity}}</span></option>
                                     </select>
                                 </div>
                                 <div class="form-group" v-if="selectedProductInfo!==null">
@@ -183,7 +188,15 @@
                 searchValue: '',
             },
             mounted(){
-                this.getResource()
+                this.getResource();
+                let that = this
+
+                setTimeout(function () {
+                    this.initSelect2()
+                    $('.product_id_custom_select').on('select2:select', function (e) {
+                        that.shopToShop.product_id = $(e.currentTarget).val();
+                    });
+                }, 100);
             },
             computed: {
                 searchedProducts() {
@@ -196,8 +209,7 @@
                         })
                     }
                     return tempRecipes
-                }
-                
+                }, 
             },
             watch: {
                 selectAll(oldval, newval) {
@@ -229,6 +241,12 @@
                 }
             },
             methods: {
+                initSelect2() {
+                    $('.select2').select2({
+                        width: '100%',
+                        placeholder: 'Select',
+                    });
+                },
                 getResource() {
                     this.products = []
                     this.product_ids = []
@@ -336,7 +354,7 @@
                 },
                 getProductQuantity(product_id) {
                     if (this.shop_from_products.length > 0) {
-                        let selectedProduct = this.shop_from_products.find(it=>it.id===product_id)
+                        let selectedProduct = this.shop_from_products.find(it=>Number(it.id)===Number(product_id))
                         if (selectedProduct) {
                             this.selectedProductInfo = selectedProduct
                         }
@@ -370,6 +388,7 @@
                         .then(res=>{
                             if (res.status) {
                                 this.shop_from_products = [...res.data.products]
+                                this.initSelect2()
                             }
                         })
                     }

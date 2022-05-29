@@ -63,6 +63,7 @@ class ShopProductController extends Controller
 
 
     public function updateShopToShopProduct(Request $request) {
+        dd($request->all());
        try {
             $user = auth()->user();
             $data = $request->all();
