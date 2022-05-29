@@ -75,13 +75,19 @@ class OrderController extends Controller
             if (request()->query('customer_id')!='') {
                 $q->where('customer_id', request()->query('customer_id'));
             }
-            // if (request()->query('supplier_id')!='') {
-            //     $q->where('customer_id', request()->query('customer_id'));
-            // }
+            
             if (request()->query('order_challan_type')!='') {
                 $q->where('order_challan_type', request()->query('order_challan_type'));
             }
         });
+
+        if (request()->query('supplier_id')!='') {
+            $order_sql->join(\DB::raw('(SELECT order_id, shop_product_stocks.supplier_id FROM order_details
+             INNER JOIN shop_inventories ON shop_inventories.order_detail_id = order_details.id
+             INNER JOIN shop_product_stocks ON shop_product_stocks.id = shop_inventories.stock_id
+             WHERE shop_product_stocks.supplier_id = "'.request()->query('supplier_id').'"
+             ) AS SO'), 'SO.order_id', '=', 'orders.id');
+        }
         if ($user->role != 'admin') {
             $order_sql->where('user_id', $user->id);
         }
