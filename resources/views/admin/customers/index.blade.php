@@ -47,7 +47,9 @@
                         </div>
                     </form>
                 </div>
-                @include('admin.customers.table')
+                <div class="table-responsive">
+                    @include('admin.customers.table')
+                </div>
 
                 <div class="card-footer clearfix">
                     <div class="float-right">
