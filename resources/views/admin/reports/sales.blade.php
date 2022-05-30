@@ -25,8 +25,16 @@
                                     @endforeach
                                 </select>
                             @endif
+                            @php
+                                $selectedYear = date('Y');
+                                if (Request::get('year')) {
+                                    $selectedYear = Request::get('year');
+                                }
+                            @endphp
                             <select name="year" class="form-control" style="width: 20%">
-                                <option>2021</option>
+                                @foreach (range(2021, 2030) as $year )
+                                    <option @if($selectedYear == $year ) selected @endif >{{$year}}</option>
+                                @endforeach
                             </select>
                         </div>
                     </form>

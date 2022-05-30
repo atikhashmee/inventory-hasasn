@@ -11,8 +11,16 @@
                     <form action="{{route('admin.report.profitloss')}}">
                         <div class="d-flex flex-row-reverse">
                             <button class="btn btn-default" type="submit"><i class="fa fa-filter">Filter</i></button>
-                            <select name="shop_id" class="form-control select2">
-                                <option value="">2021</option>
+                            @php
+                                $selectedYear = date('Y');
+                                if (Request::get('year')) {
+                                    $selectedYear = Request::get('year');
+                                }
+                            @endphp
+                            <select name="year" class="form-control select2">
+                                @foreach (range(2021, 2030) as $year )
+                                    <option @if($selectedYear == $year ) selected @endif>{{$year}}</option>
+                                @endforeach
                             </select>
                         </div>
                     </form>
