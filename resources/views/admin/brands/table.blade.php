@@ -1,17 +1,17 @@
 <div class="table-responsive">
-    <table class="table" id="brands-table">
+    <table class="table data-table-lib" id="brands-table">
         <thead>
         <tr>
             <th>Name</th>
-        <th>Description</th>
-            <th colspan="3">Action</th>
+            <th>Description</th>
+            <th>Action</th>
         </tr>
         </thead>
         <tbody>
         @foreach($brands as $brand)
             <tr>
                 <td>{{ $brand->name }}</td>
-            <td>{{ $brand->description }}</td>
+                <td>{{ $brand->description }}</td>
                 <td width="120">
                     {!! Form::open(['route' => ['admin.brands.destroy', $brand->id], 'method' => 'delete']) !!}
                     <div class='btn-group'>
