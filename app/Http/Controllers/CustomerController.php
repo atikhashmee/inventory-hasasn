@@ -31,6 +31,10 @@ class CustomerController extends Controller
                         $q->where('customer_type', $request->customer_type);
                     }
 
+                    if ($request->phone_number) {
+                        $q->where('customer_phone', 'LIKE', '%'.$request->phone_number.'%');
+                    }
+
                     if ($request->search) {
                         $q->where('customer_name', 'LIKE', '%'.$request->search.'%');
                         $q->orWhere('customer_email', 'LIKE', '%'.$request->search.'%');

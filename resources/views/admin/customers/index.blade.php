@@ -38,11 +38,15 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="form-group input-form-group">
-                                <input type="text"  class="form-control" name="search" style="width:100%;" placeholder="Customer Name / District">
+                            <div class="form-group input-form-group ml-2">
+                                <input type="text" class="form-control" name="phone_number" style="width:100%;" placeholder="017XXXXXXXX">
                             </div>
-                            <div class="form-group">
+                            <div class="form-group input-form-group ml-2">
+                                <input type="text" class="form-control" name="search" style="width:100%;" placeholder="Customer Name / District">
+                            </div>
+                            <div class="form-group ml-2">
                                 <button type="submit" class="btn btn-primary"> <i class="fa fa-filter">Filter</i> </button>
+                                <a href="{{ route('admin.customers.index') }}" class="btn btn-danger"> <i class="fa fa-times">Clear</i> </a>
                             </div>
                         </div>
                     </form>
