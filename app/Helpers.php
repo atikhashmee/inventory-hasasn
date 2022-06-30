@@ -38,8 +38,9 @@ if ( ! function_exists('numberToWord')) {
         }
         $str = array_reverse($str);
         $result = implode('', $str);
-        $points = ($point) ? "." . $words[$point / 10] . " " . $words[$point = $point % 10] : '';
-
+        $point1 = isset($words[$point / 10]) ? $words[$point / 10] : "-";
+        $point2 = isset($words[$point = $point % 10]) ? $words[$point = $point % 10] : "-";
+        $points = ($point) ? "." . $point1 . " " . $point2 : '';
         return ucfirst($result.$points);
     }
 }
