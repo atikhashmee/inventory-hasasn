@@ -205,7 +205,7 @@
                             </h3>
 
                             <div class="card-tools">
-
+                                <a href="{{ route("admin.topSellingProducts") }}">See All</a>
                             </div>
                         </div>
                         <!-- /.card-header -->

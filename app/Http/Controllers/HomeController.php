@@ -138,4 +138,14 @@ class HomeController extends Controller
         }
         
     }
+
+
+    public function getTopSellingProducts(Request $request) {
+        $data['best_selling_products'] = Product::select('products.*', \DB::raw('IFNULL(A.top_products, 0) as totalCOunt'))
+        ->leftJoin(\DB::raw('(SELECT count(product_id) as top_products, product_id FROM order_details GROUP BY product_id) as A'), 'A.product_id', '=', 'products.id')
+        ->where('A.top_products', '>', 0)
+        ->orderBy('totalCOunt', "DESC")
+        ->paginate(100);
+        return view('top-selling-products', $data);
+    }
 }

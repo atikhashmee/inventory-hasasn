@@ -219,6 +219,7 @@ Route::get('shop_stock_products/{shop_id}', [App\Http\Controllers\OrderControlle
 Route::get('get-customers', [App\Http\Controllers\CustomerController::class, 'getAllCustomerJson'])->name('getCustomers');
 
 Route::group(['middleware' => 'auth', 'prefix' => 'admin', 'as' => 'admin.'], function () {
+    Route::get('/top-selling-products', [App\Http\Controllers\HomeController::class, 'getTopSellingProducts'])->name('topSellingProducts');
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::resource('users', App\Http\Controllers\UserController::class)->middleware('auth');
     Route::resource('wareHouses', App\Http\Controllers\WareHouseController::class);

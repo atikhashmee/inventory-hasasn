@@ -49,7 +49,7 @@ class OrderController extends Controller
     //'transactions.payemnt_type'
            )
         ->leftjoin(\DB::raw("(SELECT COUNT(order_details.id) AS total_warenty_items, order_details.order_id FROM order_details INNER JOIN products ON products.id = order_details.product_id WHERE products.warenty_duration IS NOT NULL GROUP BY order_details.order_id) AS OD"), 'OD.order_id', '=', 'orders.id')
-        ->leftjoin(\DB::raw("(SELECT SUM(amount) AS order_total_payemnt, order_id FROM transactions GROUP BY order_id) AS A"), 'A.order_id', '=', 'orders.id')
+        ->leftjoin(\DB::raw("(SELECT SUM(amount) AS order_total_payemnt, order_id FROM transactions WHERE flag='payment' GROUP BY order_id) AS A"), 'A.order_id', '=', 'orders.id')
         // ->leftJoin('transactions', function($q) {
         //     $q->on('transactions.order_id', '=', 'orders.id');
         //     $q->having('transactions.payment_type', 'payment');
