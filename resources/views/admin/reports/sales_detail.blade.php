@@ -22,6 +22,9 @@
 
         <div class="card">
             <div class="card-body p-0">
+                @php
+                    $total_sum = 0;
+                @endphp
                 <div class="table-responsive h-70">
                     <table class="table table-bordered">
                         <thead>
@@ -36,6 +39,9 @@
                         <tbody>
                             @if (count($orders) > 0)
                                 @foreach ($orders as $order)
+                                @php
+                                    $total_sum += $order->total_amount; 
+                                @endphp
                                     <tr>
                                         <td>{{$order->order_number}}</td>
                                         <td>{{$order->shop->name ?? 'N/A'}}</td>
@@ -57,7 +63,7 @@
 
                 <div class="card-footer clearfix">
                     <div class="float-right">
-                        
+                       Total = {{$total_sum}} 
                     </div>
                 </div>
             </div>

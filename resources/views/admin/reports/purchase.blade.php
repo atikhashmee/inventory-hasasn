@@ -7,6 +7,12 @@
                 <div class="col-sm-6">
                     @component('admin.reports.nav')@endcomponent
                 </div>
+                @php
+                    $selectedYear = date('Y');
+                    if (Request::get('year')) {
+                        $selectedYear = Request::get('year');
+                    }
+                @endphp
                 <div class="col-sm-6">
                     <form action="{{route('admin.report.purchase')}}">
                         <div class="d-flex flex-row-reverse">
@@ -64,7 +70,7 @@
                                 @for ($j = 1; $j < 13; $j++)
                                     <td>
                                         @if (isset($data[$j][$i]))
-                                            <a href="{{route('admin.report.purchase_detail')}}?date=2021-{{$j}}-{{$i}}">{{ $data[$j][$i]}}</a>
+                                            <a href="{{route('admin.report.purchase_detail')}}?date={{$selectedYear}}-{{$j}}-{{$i}}">{{ $data[$j][$i]}}</a>
                                         @else 0
                                         @endif
                                     </td>

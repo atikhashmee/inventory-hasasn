@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Models\WarentySerial;
 use Doctrine\DBAL\Schema\View;
 use App\Models\ShopProductStock;
+use App\Models\Brand;
 
 class HomeController extends Controller
 {
@@ -141,11 +142,23 @@ class HomeController extends Controller
 
 
     public function getTopSellingProducts(Request $request) {
-        $data['best_selling_products'] = Product::select('products.*', \DB::raw('IFNULL(A.top_products, 0) as totalCOunt'))
-        ->leftJoin(\DB::raw('(SELECT count(product_id) as top_products, product_id FROM order_details GROUP BY product_id) as A'), 'A.product_id', '=', 'products.id')
+        $data["brands"] = Brand::get();
+        $best_selling_products_sql = Product::select('products.*', \DB::raw('IFNULL(A.top_products, 0) as totalCOunt'));
+        if ($request->start !='' && $request->end !='') {
+            $startDate = date($request->start. ' 00:00:00');
+            $endDate = date($request->end. ' 23:59:59');
+            $best_selling_products_sql->leftJoin(\DB::raw('(SELECT count(product_id) as top_products, product_id FROM order_details WHERE created_at BETWEEN "'.$startDate.'" AND "'.$endDate.'" GROUP BY product_id) as A'), 'A.product_id', '=', 'products.id');
+        } else {
+            $best_selling_products_sql->leftJoin(\DB::raw('(SELECT count(product_id) as top_products, product_id FROM order_details GROUP BY product_id) as A'), 'A.product_id', '=', 'products.id');
+        }
+        $best_selling_products_sql->where(function($q) use($request) {
+            if ($request->brand_id) {
+                $q->where('brand_id', $request->brand_id);
+            } 
+        })
         ->where('A.top_products', '>', 0)
-        ->orderBy('totalCOunt', "DESC")
-        ->paginate(100);
+        ->orderBy('totalCOunt', "DESC");
+        $data['best_selling_products'] = $best_selling_products_sql->paginate(100);
         return view('top-selling-products', $data);
     }
 }

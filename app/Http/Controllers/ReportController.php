@@ -46,10 +46,12 @@ class ReportController extends Controller
             $data = [];
             foreach ($items as $item) {
                 $dateArr = explode('-', $item->date);
+                $month = date("m", strtotime($item->date));
+                $day = date("d", strtotime($item->date));
                 if (!$request->query('show') || $request->query('show') == 'charge') {
-                    $data[intVal($dateArr[1])][intVal($dateArr[2])] = $item->charges;
+                    $data[$month][$day] = $item->charges;
                 } else {
-                    $data[intVal($dateArr[1])][intVal($dateArr[2])] = $item->countId;
+                    $data[$month][$day] = $item->countId;
                 }
             }
 
@@ -126,7 +128,9 @@ class ReportController extends Controller
             $data = [];
             foreach ($items as $item) {
                 $dateArr = explode('-', $item->date);
-                $data[intVal($dateArr[1])][intVal($dateArr[2])] = $item->totalPrice;
+                $month = date("m", strtotime($item->date));
+                $day = date("d", strtotime($item->date));
+                $data[intVal($month)][intVal($day)] = $item->totalPrice;
                 // if (!$request->query('show') || $request->query('show') == 'charge') {
                     //     $data[intVal($dateArr[1])][intVal($dateArr[2])] = $item->charges;
                 // } else {
@@ -200,6 +204,8 @@ class ReportController extends Controller
             $data = [];
             foreach ($sells as $item) {
                 $dateArr = explode('-', $item->date);
+                $month = date("m", strtotime($item->date));
+                $day = date("d", strtotime($item->date));
                 $daySUm = 0;
                 $allData = explode(',', $item->amount_final);
                 if (count($allData) > 0) {
@@ -210,7 +216,7 @@ class ReportController extends Controller
                         }
                     }
                 }
-                $data[intVal($dateArr[1])][intVal($dateArr[2])] = $daySUm;
+                $data[intVal($month)][intVal($day)] = $daySUm;
             }
             return view('admin.reports.profit_loss', compact('data'));
         } catch (\Exception $e) {

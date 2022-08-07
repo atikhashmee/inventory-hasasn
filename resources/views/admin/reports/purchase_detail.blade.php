@@ -22,8 +22,12 @@
 
         <div class="card">
             <div class="card-body p-0">
+                @php
+                    $totalAmount = 0; 
+                    $totalQuantity = 0; 
+                @endphp
                 <div class="table-responsive h-70">
-                    <table class="table data-table-lib text-center" id="stocks-table">
+                    <table class="table text-center">
                         <thead>
                         <tr>
                             <th>S/N</th>
@@ -36,6 +40,10 @@
                         </thead>
                         <tbody>
                         @foreach($stocks as $key =>  $stock)
+                        @php
+                            $totalAmount += $stock->price; 
+                            $totalQuantity += $stock->quantity; 
+                        @endphp
                             <tr>
                                 <td>{{++$key}}</td>
                                 <td class="text-left"> <span class="p-1" style="border: 1px solid #d3d3d3; font-size:14px">{{ ($stock->product)?$stock->product->code:'N' }}</span> {{ ($stock->product)?$stock->product->name:'N/A' }}</td>
@@ -51,7 +59,8 @@
 
                 <div class="card-footer clearfix">
                     <div class="float-right">
-                        
+                       Total Amount = {{$totalAmount}} <br>
+                       Total Quantity = {{$totalQuantity}} 
                     </div>
                 </div>
             </div>

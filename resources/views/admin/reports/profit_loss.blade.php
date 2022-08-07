@@ -63,7 +63,7 @@
                                 @for ($j = 1; $j < 13; $j++)
                                     <td>
                                         @if (isset($data[$j][$i]))
-                                            <a  href="{{route('admin.report.sells_detail')}}?date=2021-{{$j}}-{{$i}}">{{$data[$j][$i]}}</a>
+                                            <a  href="{{route('admin.report.sells_detail')}}?date={{$selectedYear}}-{{$j}}-{{$i}}">{{$data[$j][$i]}}</a>
                                         @else
                                             --
                                         @endif

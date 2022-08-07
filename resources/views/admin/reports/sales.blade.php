@@ -75,15 +75,19 @@
                             <tr>
                                 <td>{{ $i }}</td>
                                 @for ($j = 1; $j < 13; $j++)
+                                    @php
+                                        $day = ($i < 10) ? str_pad($i, 2, 0, STR_PAD_LEFT) : intval($i);
+                                        $month = ($j < 10) ? str_pad($j, 2, 0, STR_PAD_LEFT) : intval($j);
+                                    @endphp
                                     <td>
-                                        @if (isset($data[$j][$i]))
-                                        <a href="{{route('admin.report.sells_detail')}}?date=2021-{{$j}}-{{$i}}">{{$data[$j][$i]}}</a>
+                                        @if (isset($data[$month][$day]))
+                                        <a href="{{route('admin.report.sells_detail')}}?date={{$selectedYear}}-{{$month}}-{{$day}}">{{$data[$month][$day]}}</a>
                                         @else
                                         0
                                         @endif
                                     </td>
                                     @php
-                                        $monthData[$j][] = isset($data[$j][$i]) ? $data[$j][$i] : 0;
+                                        $monthData[$month][] = isset($data[$month][$day]) ? $data[$month][$day] : 0;
                                     @endphp
                                 @endfor
                             </tr>
