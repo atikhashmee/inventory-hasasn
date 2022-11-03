@@ -193,8 +193,8 @@ class InvoiceController extends Controller
                             }
                         }
                     }
+                    $serials[] = $eachItem;
                 }
-                $serials[] = $eachItem;
             }
             $qrCode = null; // $this->qrCodeGenerator();
             $data['customer']['current_due'] = $sqldata->customer->current_due;
