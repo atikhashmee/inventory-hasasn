@@ -176,6 +176,11 @@ class ProductController extends AppBaseController
 
             $input['user_id'] = $user->id;
             $product = Product::create($input);
+            if ($product) {
+                if ($input[""]) {
+                    # code...
+                }
+            }
 
             Flash::success('Product saved successfully.');
 

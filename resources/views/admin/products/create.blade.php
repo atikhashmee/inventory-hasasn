@@ -20,11 +20,70 @@
             {!! Form::open(['route' => 'admin.products.store', 'files' => true]) !!}
 
             <div class="card-body">
-
                 <div class="row">
                     @include('admin.products.fields')
                 </div>
-
+                <div class="row">
+                    <div class="col-md-12">
+                            <a  data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                              Advance Options
+                            </a>
+                            <input type="hidden" name="distribution_required" id="distribution_required" value="0">
+                          <div class="collapse" id="collapseExample">
+                            <div class="card card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="">Suppliers</label>
+                                            <select class="form-control" name="" id="">
+                                                <option value="">Select Supplier</option>
+                                                @foreach ($supplierItems as $sup_id => $sup_name)
+                                                    <option value="{{$sup_id}}">{{$sup_name}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="">Ware House</label>
+                                            <select class="form-control" name="" id="">
+                                                <option value="">Select warehouse</option>
+                                                @foreach ($ware_houseItems as $ware_id => $ware_name)
+                                                    <option value="{{$ware_id}}">{{$ware_name}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                               
+                            
+                                <div class="form-group">
+                                    <label for="">Purchase Quantity</label>
+                                    <input type="text" class="form-control">
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="">Select a shop</label>
+                                            <select class="form-control" name="" id="">
+                                                <option value="">Select Shop</option>
+                                                @foreach ($shopItems as $shp_id => $shp_name)
+                                                    <option value="{{$shp_id}}">{{$shp_name}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="">Distribute Quantity</label>
+                                            <input type="text" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                          </div>
+                    </div>
+                </div>
             </div>
 
             <div class="card-footer">
@@ -36,4 +95,16 @@
 
         </div>
     </div>
+  
 @endsection
+@push('page_scripts')
+    <script>
+        $('#collapseExample').on('shown.bs.collapse', function () {
+            $("#distribution_required").val(1)
+        })
+        
+        $('#collapseExample').on('hidden.bs.collapse', function () {
+            $("#distribution_required").val(0)
+        })
+    </script>
+@endpush
