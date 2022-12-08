@@ -5,11 +5,15 @@ namespace App\Http\Controllers;
 use Flash;
 use Response;
 use App\Models\Brand;
+use App\Models\Stock;
 use App\Models\Country;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Menufacture;
+use App\Models\ShopProduct;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\ShopProductStock;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\AppBaseController;
@@ -155,6 +159,7 @@ class ProductController extends AppBaseController
     public function store(CreateProductRequest $request)
     {
         try {
+            \DB::beginTransaction();
             $input = $request->all();
             $user = auth()->user();
 
@@ -177,15 +182,55 @@ class ProductController extends AppBaseController
             $input['user_id'] = $user->id;
             $product = Product::create($input);
             if ($product) {
-                if ($input[""]) {
-                    # code...
+                if (isset($input["distribution_required"]) && $input["distribution_required"] == 1) {
+                    $input = $request->all();
+                    $input['user_id'] = $user->id;
+                    if ($user->role == 'admin') {
+                        $stock = Stock::create([
+                            "product_id" => $product->id,
+                            "supplier_id" => $input["supplier_id"],
+                            "warehouse_id" => $input["warehouse_id"],
+                            "sku" => Str::random(6),
+                            "selling_price" => 0,
+                            "old_price" => 0,
+                            "price" => $input["purchase_price"],
+                            "quantity" => $input["purchase_quantity"],
+                        ]); 
+                    } else {
+                        ShopProduct::updateOrCreate(
+                            [
+                                'product_id' => $product->id,
+                                'shop_id' => $input["shop_id"],
+                            ],
+                            [
+                            'shop_id' => $input["shop_id"],
+                            'product_id' => $product->id,
+                            'quantity' => 0,
+                            'price' => 0,
+                        ]);
+                        $stock = ShopProductStock::create([
+                            'user_id' => $user->id,
+                            'shop_id' => $user->shop_id, 
+                            'product_id' =>  $product->id,
+                            'supplier_id' =>  $input["supplier_id"],
+                            'quantity' => $input['stock_quantity'],
+                            'type' => 'user_transfer',
+                            'price' => $input['selling_price']
+                        ]);
+                    }
+                    
+                    if ($stock) {
+                        Product::where('id', $stock->product_id)->update(['product_cost' => $stock->price]);
+                    }
                 }
             }
 
+            \DB::commit();
             Flash::success('Product saved successfully.');
 
             return redirect(route('admin.products.index'));
         } catch (\Exception $e) {
+            \DB::rollback();
             Flash::error($e->getMessage());
             return redirect(route('admin.products.index'));
         }

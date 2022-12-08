@@ -25,6 +25,28 @@ class CreateProductRequest extends FormRequest
      */
     public function rules()
     {
-        return Product::$rules;
+        $productRules = Product::$rules;
+        $advanceRules = []; 
+        if (isset($this->distribution_required) && $this->distribution_required == 1) {
+            $advanceRules = [
+                'supplier_id' => "required",
+                'warehouse_id' => "required",
+                'purchase_quantity' => "required",
+                'purchase_price' => "required",
+                'shop_id' => "required",
+                'stock_quantity' => "required",
+                'selling_price' => "required",
+            ];
+        }
+        return array_merge($productRules, $advanceRules);
+    }
+
+    public function messages()
+    {
+        return [
+            "supplier_id.required" => "Supplier is required for advance option",
+            "warehouse_id.required" => "Warehouse is required for advance option",
+            "shop_id.required" => "shop is required for advance option",
+        ];
     }
 }

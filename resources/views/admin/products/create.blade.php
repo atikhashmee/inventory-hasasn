@@ -35,7 +35,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="">Suppliers</label>
-                                            <select class="form-control" name="" id="">
+                                            <select class="form-control" name="supplier_id" id="supplier_id">
                                                 <option value="">Select Supplier</option>
                                                 @foreach ($supplierItems as $sup_id => $sup_name)
                                                     <option value="{{$sup_id}}">{{$sup_name}}</option>
@@ -46,7 +46,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="">Ware House</label>
-                                            <select class="form-control" name="" id="">
+                                            <select class="form-control" name="warehouse_id" id="warehouse_id">
                                                 <option value="">Select warehouse</option>
                                                 @foreach ($ware_houseItems as $ware_id => $ware_name)
                                                     <option value="{{$ware_id}}">{{$ware_name}}</option>
@@ -56,16 +56,32 @@
                                     </div>
                                 </div>
                                
-                            
-                                <div class="form-group">
-                                    <label for="">Purchase Quantity</label>
-                                    <input type="text" class="form-control">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="">Purchase Quantity</label>
+                                            <input type="text" class="form-control" name="purchase_quantity">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="">Purchase Price</label>
+                                            <input type="text" class="form-control" name="purchase_price" >
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="">Selling Price</label>
+                                            <input type="text" class="form-control" name="selling_price" >
+                                        </div>
+                                    </div>
                                 </div>
+                            
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="">Select a shop</label>
-                                            <select class="form-control" name="" id="">
+                                            <select class="form-control" name="shop_id" id="shop_id">
                                                 <option value="">Select Shop</option>
                                                 @foreach ($shopItems as $shp_id => $shp_name)
                                                     <option value="{{$shp_id}}">{{$shp_name}}</option>
@@ -76,7 +92,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="">Distribute Quantity</label>
-                                            <input type="text" class="form-control">
+                                            <input type="text" class="form-control" name="stock_quantity">
                                         </div>
                                     </div>
                                 </div>
