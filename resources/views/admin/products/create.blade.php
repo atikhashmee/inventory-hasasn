@@ -72,7 +72,7 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="">Selling Price</label>
-                                            <input type="text" class="form-control" name="selling_price" >
+                                            <input type="text" class="form-control" name="ad_selling_price" >
                                         </div>
                                     </div>
                                 </div>

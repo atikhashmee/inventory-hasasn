@@ -190,12 +190,33 @@ class ProductController extends AppBaseController
                             "product_id" => $product->id,
                             "supplier_id" => $input["supplier_id"],
                             "warehouse_id" => $input["warehouse_id"],
+                            "user_id" => $input["user_id"],
                             "sku" => Str::random(6),
                             "selling_price" => 0,
                             "old_price" => 0,
                             "price" => $input["purchase_price"],
                             "quantity" => $input["purchase_quantity"],
                         ]); 
+                        ShopProduct::updateOrCreate(
+                            [
+                                'product_id' => $product->id,
+                                'shop_id' => $input["shop_id"],
+                            ],
+                            [
+                            'shop_id' => $input["shop_id"],
+                            'product_id' => $product->id,
+                            'quantity' => 0,
+                            'price' => 0,
+                        ]);
+                        $stock = ShopProductStock::create([
+                            'user_id' => $user->id,
+                            'shop_id' => $input["shop_id"], 
+                            'product_id' =>  $product->id,
+                            'supplier_id' =>  $input["supplier_id"],
+                            'quantity' => $input['stock_quantity'],
+                            'type' => 'user_transfer',
+                            'price' => $input['ad_selling_price']
+                        ]);
                     } else {
                         ShopProduct::updateOrCreate(
                             [

@@ -35,7 +35,7 @@ class CreateProductRequest extends FormRequest
                 'purchase_price' => "required",
                 'shop_id' => "required",
                 'stock_quantity' => "required",
-                'selling_price' => "required",
+                'ad_selling_price' => "required",
             ];
         }
         return array_merge($productRules, $advanceRules);
