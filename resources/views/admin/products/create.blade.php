@@ -43,17 +43,19 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="">Ware House</label>
-                                            <select class="form-control" name="warehouse_id" id="warehouse_id">
-                                                <option value="">Select warehouse</option>
-                                                @foreach ($ware_houseItems as $ware_id => $ware_name)
-                                                    <option value="{{$ware_id}}">{{$ware_name}}</option>
-                                                @endforeach
-                                            </select>
+                                    @if (auth()->user()->role == "admin")
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="">Ware House</label>
+                                                <select class="form-control" name="warehouse_id" id="warehouse_id">
+                                                    <option value="">Select warehouse</option>
+                                                    @foreach ($ware_houseItems as $ware_id => $ware_name)
+                                                        <option value="{{$ware_id}}">{{$ware_name}}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
                                         </div>
-                                    </div>
+                                    @endif
                                 </div>
                                
                                 <div class="row">

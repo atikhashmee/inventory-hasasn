@@ -209,13 +209,15 @@ class ProductController extends AppBaseController
                             'price' => 0,
                         ]);
                         $stock = ShopProductStock::create([
+                            'stock_id' => $stock->id, 
+                            'warehouse_id' => $input["warehouse_id"], 
                             'user_id' => $user->id,
+                            'supplier_id' =>  $input["supplier_id"],
                             'shop_id' => $input["shop_id"], 
                             'product_id' =>  $product->id,
-                            'supplier_id' =>  $input["supplier_id"],
                             'quantity' => $input['stock_quantity'],
-                            'type' => 'user_transfer',
-                            'price' => $input['ad_selling_price']
+                            'price' => $input['ad_selling_price'],
+                            'type' => 'warehouse_transfer',
                         ]);
                     } else {
                         ShopProduct::updateOrCreate(

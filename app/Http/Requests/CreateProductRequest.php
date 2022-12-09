@@ -26,11 +26,15 @@ class CreateProductRequest extends FormRequest
     public function rules()
     {
         $productRules = Product::$rules;
+        $wareHouseIdRule = "nullable";
+        if (auth()->user()->role == "admin") {
+            $wareHouseIdRule = "required";
+        }
         $advanceRules = []; 
         if (isset($this->distribution_required) && $this->distribution_required == 1) {
             $advanceRules = [
                 'supplier_id' => "required",
-                'warehouse_id' => "required",
+                'warehouse_id' => $wareHouseIdRule,
                 'purchase_quantity' => "required",
                 'purchase_price' => "required",
                 'shop_id' => "required",
