@@ -36,6 +36,15 @@ class ProductController extends AppBaseController
             return response()->json(['status'=>false, 'data'=>$e->getMessage()]);
         }
     }
+
+    public function getAllProductsSearchJson(Request $request) {
+        try {
+            $data['products'] = Product::where('name', 'LIKE', '%'.$request->term.'%')->get();
+            return response()->json(['status'=> true, 'data'=>$data]);
+        } catch (\Exception $e) {
+            return response()->json(['status'=> false, 'data'=>$e->getMessage()]);
+        }
+    }
     /**
      * Display a listing of the Product.
      *

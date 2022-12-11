@@ -124,5 +124,47 @@
         $('#collapseExample').on('hidden.bs.collapse', function () {
             $("#distribution_required").val(0)
         })
+        function updateUi(item) {
+            console.log(item);
+            // $(this).val(ui.item.name);
+            document.querySelector("#name").value = item.name; 
+        }
+        $(function(){
+                $( "#name").autocomplete({
+                    source: function(request, response) {
+                        $.ajax({
+                            url: `{{route('getProducts')}}`,
+                            data: {
+                                term: request.term
+                            },
+                            success: function( res ) {
+                                if (res.status) {
+                                    if(res.data.products.length === 0) {
+                                        var result = [
+                                            {
+                                                name: request.term,
+                                            }
+                                        ];
+                                        response(result);
+                                    }
+                                    else{
+                                        response(res.data.products);
+                                    }
+                                }
+                            }
+                        });
+                    },
+                    minLength: 2,
+                    select: function( event, ui ) {
+                        updateUi(ui.item);
+                
+                    }
+                })
+                .autocomplete( "instance" )._renderItem = function( ul, item ) {
+            return $( "<li>" )
+                .append( `<div>${item.name}</div>` )
+                .appendTo( ul );
+            };
+        });
     </script>
 @endpush
