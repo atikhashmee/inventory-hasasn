@@ -170,6 +170,8 @@ class OrderController extends Controller
             if ($user->role == 'admin') {
                 $shop_id = $data['shop_id'];
             }
+
+            //dd($request->all());
             /**
              * manual validation code 
              */

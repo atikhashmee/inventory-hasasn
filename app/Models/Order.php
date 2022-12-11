@@ -34,6 +34,8 @@ class Order extends Model
         'delivered_at'
     ];
 
+    public $statuses = ['Awaiting', 'Pending', 'In Progress', 'Ready to Ship', 'Shipped', 'Returned', 'Canceled', 'Delivered', 'Failed', 'Drafted'];
+
 
     /**
      * Get the user associated with the Order

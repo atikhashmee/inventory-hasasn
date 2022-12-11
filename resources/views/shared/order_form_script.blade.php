@@ -59,6 +59,7 @@
         el: '#order_new',
         data: {
             loader: false,
+            isDrafted: false,
             product_lists: [],
             products: [],
             product_items: [],
@@ -194,7 +195,18 @@
                     return item;
                 })
             },
+            draftOrder() {
+                if (confirm("Are you sure?")) {
+                    this.isDrafted  = true;
+                    document.querySelector("#order_form").submit();
+                    //console.log(this.$refs, 'ad');
+                    //this.$refs.form.$el.submit()
+                    //$("#order_form").submit();
+                }
+            },
             submitOrder() {
+                console.log("inside this function.............");
+                debugger;
                 this.loader = true;
                 let orderObj = {};
                 orderObj.items = {...this.product_lists}
@@ -214,6 +226,7 @@
                 orderObj.challan_note = this.challan_note;
                 orderObj.payment_amount = this.payment_amount;
                 orderObj.payment_type = this.payment_type;
+                orderObj.order_status = this.isDrafted;
                 fetch(`{{route('admin.orders.store')}}`, {
                     method: 'POST',
                     headers: {

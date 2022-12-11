@@ -4,7 +4,7 @@
         <div class="container mt-5" id="order_new">
             <div class="row">
                 <div class="col-md-12">
-                    <form action="#" method="POST" @submit.prevent="submitOrder()" autocomplete="off">
+                    <form method="POST" @submit.prevent="submitOrder()" ref="order_form" id="order_form" autocomplete="off">
                         <div class="d-flex justify-content-between align-item-center">
                             <div class="shop-info-section">
                                 
@@ -248,7 +248,8 @@
                                 </div>
                             </div>
                         </div>
-                        <button class="btn btn-primary float-right" :disabled="loader" type="submit">Create New Sale</button>
+                        <button class="btn btn-lg btn-success float-right ml-2" :disabled="loader" @click="draftOrder" type="button">Draft</button>
+                        <button class="btn btn-lg btn-primary float-right" :disabled="loader" type="submit">Create New Sale</button>
                         <span v-if="error" class="text-danger">@{{error}}</span>
                     </form>
                 </div>
