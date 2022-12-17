@@ -140,7 +140,7 @@
                         
                        {{-- order item --}}
                         <div class="card">
-                            <div class="card-header">Sell Items</div>
+                            <div class="card-header">Sell Items @{{product_lists}}</div>
                             <div class="card-body">
                                 <div class="table-area">
                                     <table class="table table-bordered">

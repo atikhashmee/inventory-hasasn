@@ -8,6 +8,7 @@
             <th>Order&nbsp;Amount</th>
             <th>Order&nbsp;Date</th>
             <th>Payment&nbsp;Status</th>
+            <th>Order&nbsp;Status</th>
             <th>Sold&nbsp;By</th>
             <th>Action</th>
         </tr>
@@ -33,6 +34,13 @@
                             @endif
                         @endif
                     </td>
+                    <td>
+                        @if ($order->status == "Drafted")
+                            Drafted
+                        @else    
+                            Sold
+                        @endif
+                    </td>
                     <td>{{$order->user? $order->user->name : 'N/A'}}</td>
                     <td>
                         <div class="btn-group">
@@ -41,6 +49,9 @@
                               <span class="sr-only">Toggle Dropdown</span>
                             </button>
                             <div class="dropdown-menu" role="menu" style="">
+                                @if ($order->status == "Drafted")
+                                    <a class="dropdown-item" href="{{ route('admin.orders.create') }}?order_id={{$order->id}}">Edit & Sale</a>
+                                @endif
                                 <a class="dropdown-item" href="{{route('admin.orders.show', ['order'=>$order])}}">Detail</a>
                                 <a class="dropdown-item" href="{{url('print-invoice/'.$order->id)}}" target="_blank">Print Invoice</a>
                                 <a class="dropdown-item" href="{{url('print-challan/'.$order->id)}}" target="_blank">Print Challan</a>

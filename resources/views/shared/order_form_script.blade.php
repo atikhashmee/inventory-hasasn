@@ -51,6 +51,15 @@
                 });
             }, 10);
         }
+        function initLibs2() {
+            setTimeout(function () {
+                $('.select2').select2({
+                    width: '100%',
+                    placeholder: 'Select',
+                });
+               
+            }, 10);
+        }
     </script>
 @endpush
 @push('page_scripts')
@@ -85,14 +94,18 @@
             },
             user_role: null,
             error: '',
+            draftedOrder: null,
         },
         mounted() {
-            this.order_id  = this.salesIdDateFormat()
+            this.populateDraftedOrder();
             this.user_role = document.querySelector('#user_role').value;
             if (this.user_role !== 'admin') {
                 this.shop_id = document.querySelector('#shop_id').value;
                 this.shopDataFetch(this.shop_id)
             }
+        },
+        updated() {
+            console.log(this.product_lists, 'asf');
         },
         computed: {
             subTotalValue() {
@@ -125,6 +138,23 @@
                 newitem.warenty_duration = null
                 this.product_lists.push(newitem)
                 initLibs()
+            },
+            draftedAddCart(obj) {
+                let newitem = {}
+                newitem.item_id = Date.now() + 1
+                newitem.product_id = obj.product_id,
+                newitem.product_name = null,
+                newitem.input_quantity = 0,
+                newitem.quantity = 0
+                newitem.available_quantity = 0
+                newitem.quantity_unit_id=''
+                newitem.quantity_unit=null
+                newitem.product_purchase_price=0
+                newitem.product_selling_price=0
+                newitem.price = 0
+                newitem.totalPrice = 0
+                newitem.warenty_duration = null
+                this.product_lists.push(newitem)
             },
             delete_item(obj) {
                 this.product_lists.splice(this.product_lists.indexOf(obj), 1)
@@ -198,15 +228,10 @@
             draftOrder() {
                 if (confirm("Are you sure?")) {
                     this.isDrafted  = true;
-                    document.querySelector("#order_form").submit();
-                    //console.log(this.$refs, 'ad');
-                    //this.$refs.form.$el.submit()
-                    //$("#order_form").submit();
+                    this.submitOrder();
                 }
             },
             submitOrder() {
-                console.log("inside this function.............");
-                debugger;
                 this.loader = true;
                 let orderObj = {};
                 orderObj.items = {...this.product_lists}
@@ -268,6 +293,27 @@
                 let d = new Date();
                 let str = `${d.getFullYear()}${d.getMonth()+1}${d.getDate()}-${String(Date.now()).substring(6)}`;
                 return str;
+            },
+            populateDraftedOrder() {
+                this.draftedOrder = {!! json_encode(!is_null($order) ? $order->toArray() : [], JSON_HEX_TAG) !!};
+                console.log(
+                    this.draftedOrder
+                );
+                if (typeof this.draftedOrder === "object" && ("id" in this.draftedOrder)) {
+                    this.customer = this.draftedOrder.customer;
+                    this.shop_id = this.draftedOrder.shop_id;
+                    this.order_id = this.draftedOrder.order_number;
+                    if ("order_detail" in this.draftedOrder) {
+                        console.log();
+                        if (this.draftedOrder.order_detail.length > 0) {
+                            this.draftedOrder.order_detail.forEach(item => {
+                                this.draftedAddCart(item);
+                            });
+                        }
+                    }
+                } else {
+                    this.order_id  = this.salesIdDateFormat()
+                }
             }
         }
     })

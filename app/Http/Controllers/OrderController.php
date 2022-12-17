@@ -79,6 +79,13 @@ class OrderController extends Controller
             if (request()->query('order_challan_type')!='') {
                 $q->where('order_challan_type', request()->query('order_challan_type'));
             }
+            if (!is_null(request()->query('order_status')) && request()->query('order_status') != 'All') {
+                if (request()->query('order_status') == "Drafted") {
+                    $q->where('status', 'Drafted');
+                } else {
+                    $q->where('status', '!=', 'Drafted');
+                }
+            }
         });
 
         if (request()->query('supplier_id')!='') {
@@ -96,7 +103,7 @@ class OrderController extends Controller
         ->paginate(100);
     }
 
-    public function create() {
+    public function create(Request $request) {
         $user =  auth()->user();
         $data['user'] = $user;
         $data['role'] = $user->role;
@@ -114,6 +121,16 @@ class OrderController extends Controller
         $data['user'] = $user;
         $data['role'] = $user->role;
         $data['customer_types'] = $this->customer_types;
+        if (isset($request->order_id) && !empty($request->order_id)) {
+            $order = Order::with('orderDetail', 'customer')->where('id', $request->order_id)->where("status", "Drafted")->first();
+            if (!$order) {
+                Flash::error('Order Not');
+                $data["order"] = null;
+            } else {
+                Flash::success('Order Found.');
+                $data["order"] = $order;
+            }
+        }
         return view('admin.orders.create', $data);
     }
 
@@ -171,7 +188,19 @@ class OrderController extends Controller
                 $shop_id = $data['shop_id'];
             }
 
-            //dd($request->all());
+            $data['shop_id'] = $shop_id;
+
+            $validator = Validator::make($data, [
+                "customer_name" => "required",
+                "customer_phone" => "required",
+                "shop_id" => ["required", "exists:shops,id"],
+                "order_status" => ["required", "boolean"],
+            ]); 
+
+            if ($validator->fails()) {
+                throw new \Exception(json_encode($validator->getMessageBag()->all()), 1);
+            }
+
             /**
              * manual validation code 
              */
@@ -210,6 +239,7 @@ class OrderController extends Controller
                     'shop_id'  =>  $data['shop_id'],
                     'order_challan_type'  =>  strtolower($data['sale_type']),
                     'notes'  =>  $data['note'],
+                    'status'  =>  $data['order_status'] ==  true ? "Drafted" : "Pending" ,
                     'challan_note'  =>  $data['challan_note'],
                     'user_id'  =>  $user->id,
                     'customer_id'  =>  $customer->id,

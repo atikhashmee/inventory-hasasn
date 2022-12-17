@@ -36,6 +36,13 @@
                                 </select>
                             </div>
                             <div class="form-group mr-2">
+                                <select name="order_status" id="order_status" class="form-control">
+                                    <option value="All">All</option>
+                                    <option value="Drafted">Drafted</option>
+                                    <option value="Sold">Sold</option>
+                                </select>
+                            </div>
+                            <div class="form-group mr-2">
                                 <select name="customer_id" id="customer_id" class="form-control select2">
                                     <option value="">Select Customer</option>
                                     @foreach ($customers as $customer)
