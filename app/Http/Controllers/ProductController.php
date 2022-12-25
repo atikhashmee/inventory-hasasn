@@ -133,7 +133,7 @@ class ProductController extends AppBaseController
                 $qq->orWhere('shop_products.shop_id', $user->shop_id);
             });
         } 
-        $products =   $product_sql->orderBy('id', 'DESC')->paginate(100);
+        $products =   $product_sql->orderBy('name', 'ASC')->paginate(100);
         $serial   = pagiSerial($products, 100);
         $countryItems = Country::pluck('name','id')->toArray();
         $menufactures = Menufacture::pluck('name','id')->toArray();

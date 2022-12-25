@@ -125,9 +125,7 @@
             $("#distribution_required").val(0)
         })
         function updateUi(item) {
-            console.log(item);
-            // $(this).val(ui.item.name);
-            document.querySelector("#name").value = item.name; 
+            $("#name").val(item.name)
         }
         $(function(){
                 $( "#name").autocomplete({

@@ -273,7 +273,8 @@ class OrderController extends Controller
                             'final_amount' => $pro_item['totalPrice'],
                             'warenty_duration' => $pro_item['warenty_duration'],
                         ]);
-                        
+                        //update product selling price with the latest one
+                        Product::where("id", $pro_item['product_id'])->update(["selling_price" => $pro_item['price']]);
                         $settle_quantity = $order_detail->final_quantity;
                         if ($order_detail) {
                             $stocks = ShopProductStock::select('shop_product_stocks.*', 'ST.total_stock_out', DB::raw('(shop_product_stocks.quantity - IFNULL(ST.total_stock_out, 0)) AS stockQty'))
@@ -361,7 +362,7 @@ class OrderController extends Controller
         try {
             $data = [];
             $user = auth()->user();
-            $product_sql =  Product::select('products.*',  \DB::raw('(IFNULL(spQ.shop_stock_in, 0) - IFNULL(spO.shop_stock_out, 0)) AS shop_quantity'))
+            $product_sql =  Product::with('brand')->select('products.*',  \DB::raw('(IFNULL(spQ.shop_stock_in, 0) - IFNULL(spO.shop_stock_out, 0)) AS shop_quantity'))
             ->leftJoin('shop_products', 'shop_products.product_id', '=', 'products.id')
             ->leftJoin(\DB::raw('(SELECT SUM(quantity) as shop_stock_in, product_id, shop_id FROM shop_product_stocks GROUP BY shop_id, product_id) as spQ'), function($q) use($shop_id) {
                 $q->on('spQ.product_id', '=', 'products.id');

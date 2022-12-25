@@ -19,6 +19,9 @@
                 $('.select2').select2({
                     width: '100%',
                     placeholder: 'Select',
+                    minimumInputLength: 3,
+                    maximumInputLength: 20,
+                    //minimumResultsForSearch: 10
                 });
                 $('.product_id_custom_select').on('select2:select', function (e) {
                     let item_id = $(e.currentTarget).closest('.rowclass').data('id');
