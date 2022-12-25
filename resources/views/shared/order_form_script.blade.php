@@ -99,13 +99,13 @@
         mounted() {
             this.populateDraftedOrder();
             this.user_role = document.querySelector('#user_role').value;
-            if (this.user_role !== 'admin') {
+            if (this.user_role !== 'admin' && !('user_id' in this.draftedOrder)) {
                 this.shop_id = document.querySelector('#shop_id').value;
                 this.shopDataFetch(this.shop_id)
             }
         },
         updated() {
-            console.log(this.product_lists, 'asf');
+            // console.log(this.product_lists, 'asf');
         },
         computed: {
             subTotalValue() {
@@ -115,9 +115,7 @@
         },
         watch: {
             shop_id(oldval, newval) {
-               if (oldval) {
-                   this.product_lists = []
-               } 
+              //
             }
         },
         methods: {
@@ -140,21 +138,23 @@
                 initLibs()
             },
             draftedAddCart(obj) {
+                let product_item = this.products.find(it => it.id == obj.product_id)
                 let newitem = {}
-                newitem.item_id = Date.now() + 1
+                newitem.item_id = obj.item_id
                 newitem.product_id = obj.product_id,
-                newitem.product_name = null,
-                newitem.input_quantity = 0,
-                newitem.quantity = 0
-                newitem.available_quantity = 0
+                newitem.product_name = obj.product_name,
+                newitem.input_quantity =  obj.product_quantity,
+                newitem.quantity = obj.product_quantity,
+                newitem.available_quantity =  product_item.shop_quantity
                 newitem.quantity_unit_id=''
                 newitem.quantity_unit=null
-                newitem.product_purchase_price=0
-                newitem.product_selling_price=0
-                newitem.price = 0
-                newitem.totalPrice = 0
-                newitem.warenty_duration = null
+                newitem.product_purchase_price=product_item.product_cost
+                newitem.product_selling_price=product_item.selling_price
+                newitem.price = product_item.selling_price
+                newitem.totalPrice = Number(newitem.quantity) * Number(newitem.price)
+                newitem.warenty_duration = product_item.shop_quantity
                 this.product_lists.push(newitem)
+                initLibs()
             },
             delete_item(obj) {
                 this.product_lists.splice(this.product_lists.indexOf(obj), 1)
@@ -270,9 +270,10 @@
                     }
                 })
             },
-            shopDataFetch(shop_id) {
+            shopDataFetch(shop_id, callback = null) {
                 this.products = []
                 this.product_ids = []
+                this.product_lists = []
                 let url = `{{url('shop_stock_products')}}/${shop_id}`
                 fetch(url)
                 .then(res=>res.json())
@@ -280,6 +281,9 @@
                     if (res.status) {
                         this.products = [...res.data.products]
                         this.product_items = [...res.data.products]
+                        if (callback != null) {
+                            callback();
+                        }
                     }
                 })
             },
@@ -295,22 +299,22 @@
                 return str;
             },
             populateDraftedOrder() {
-                this.draftedOrder = {!! json_encode(!is_null($order) ? $order->toArray() : [], JSON_HEX_TAG) !!};
-                console.log(
-                    this.draftedOrder
-                );
+                let productItems = []
+                this.draftedOrder = {!! json_encode((isset($order) && !is_null($order)) ? $order->toArray() : [], JSON_HEX_TAG) !!};
                 if (typeof this.draftedOrder === "object" && ("id" in this.draftedOrder)) {
                     this.customer = this.draftedOrder.customer;
                     this.shop_id = this.draftedOrder.shop_id;
                     this.order_id = this.draftedOrder.order_number;
-                    if ("order_detail" in this.draftedOrder) {
-                        console.log();
-                        if (this.draftedOrder.order_detail.length > 0) {
-                            this.draftedOrder.order_detail.forEach(item => {
-                                this.draftedAddCart(item);
-                            });
+                    this.shopDataFetch(this.shop_id, () => {
+                        if ("order_detail" in this.draftedOrder) {
+                            if (this.draftedOrder.order_detail.length > 0) {
+                                this.draftedOrder.order_detail.forEach(item => {
+                                    this.draftedAddCart(item);
+                                });
+                            }
                         }
-                    }
+                    })
+                    
                 } else {
                     this.order_id  = this.salesIdDateFormat()
                 }

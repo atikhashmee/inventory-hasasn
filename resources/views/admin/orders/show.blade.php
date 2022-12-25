@@ -98,20 +98,24 @@
                         @endif
                     </div>
                     <div class="float-right d-flex">
-                        @if (count($wr_order_details) > 0)
-                            <a href="{{url('admin/set-warenty-serial-number/'.$order->id)}}" type="button"  class="btn bg-gradient-success mr-1">
-                                Warranty Serial
+                        @if ($order->status == "Drafted")
+                            <a class="btn bg-gradient-success mr-1"  type="button" href="{{ route('admin.orders.create') }}?order_id={{$order->id}}">Edit & Sale</a>
+                        @else
+                            @if (count($wr_order_details) > 0)
+                                <a href="{{url('admin/set-warenty-serial-number/'.$order->id)}}" type="button"  class="btn bg-gradient-success mr-1">
+                                    Warranty Serial
+                                </a>
+                                <a href="{{url('print-warenty-serials/'.$order->id)}}" target="_blank" type="button"  class="btn bg-gradient-success mr-1">
+                                    <i class="fas fa-print"></i>Print Warranty Serial
+                                </a>
+                            @endif
+                            <a href="{{url('print-invoice/'.$order->id)}}" target="_blank" type="button"  class="btn bg-gradient-success mr-1">
+                                <i class="fas fa-print"></i> Invoice/Bill
                             </a>
-                            <a href="{{url('print-warenty-serials/'.$order->id)}}" target="_blank" type="button"  class="btn bg-gradient-success mr-1">
-                                <i class="fas fa-print"></i>Print Warranty Serial
+                            <a href="{{url('print-challan/'.$order->id)}}" target="_blank" class="btn bg-gradient-warning">
+                                <i class="fas fa-print"></i> Challan
                             </a>
                         @endif
-                        <a href="{{url('print-invoice/'.$order->id)}}" target="_blank" type="button"  class="btn bg-gradient-success mr-1">
-                            <i class="fas fa-print"></i> Invoice/Bill
-                        </a>
-                        <a href="{{url('print-challan/'.$order->id)}}" target="_blank" class="btn bg-gradient-warning">
-                            <i class="fas fa-print"></i> Challan
-                        </a>
                     </div>
                 </div>
             </div>

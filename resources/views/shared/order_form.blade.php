@@ -140,7 +140,7 @@
                         
                        {{-- order item --}}
                         <div class="card">
-                            <div class="card-header">Sell Items @{{product_lists}}</div>
+                            <div class="card-header">Sell Items</div>
                             <div class="card-body">
                                 <div class="table-area">
                                     <table class="table table-bordered">
@@ -161,7 +161,7 @@
                                                     </a>
                                                 </td>
                                                 <td>
-                                                    <select name="product_id" class="form-control product_id_custom_select select2">
+                                                    <select name="product_id" class="form-control product_id_custom_select select2" v-model="pl.product_id">
                                                         <option value=""></option>
                                                         <option v-for="prod in products" :value="prod.id" :item-id="prod.item_id">@{{prod.name}}</option>
                                                     </select>
