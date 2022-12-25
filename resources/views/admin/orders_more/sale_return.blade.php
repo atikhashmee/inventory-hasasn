@@ -19,6 +19,52 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="form-group">
+                            <label for="">Order Number</label>
+                            <input type="text" class="form-control custom_order_detail" id="order_number">
+                            <button class="btn btn-success">Detail</button>
+                        </div>
+                        <div class="orderDetail">
+                            <h4>Order Detail</h4>
+                            <table border="1">
+                                <tr>
+                                    <td>Order Number</td>
+                                    <td>@{{orderObj.order_number}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Customer Name</td>
+                                    <td>@{{orderObj.customer_name}}</td>
+                                </tr>
+                            </table>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <input type="checkbox">
+                                        </th>
+                                        <th>SL</th>
+                                        <th>Product Name</th>
+                                        <th>Product Price</th>
+                                        <th>Product Quantity</th>
+                                        <th>Return Quantity</th>
+                                    </tr>
+                                </thead>
+                                <tr v-for="(detail, index) in orderObj.product_lists">
+                                    <td>
+                                        <input type="checkbox">
+                                    </td>
+                                    <td>@{{index}}}</td>
+                                    <td>@{{detail.product_name}} </td>
+                                    <td>@{{detail.product_unit_price * detail.final_quantity}}</td>
+                                    <td>@{{detail.final_quantity}}</td>
+                                    <td>
+                                        <input type="text" class="form-control">
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
                             <label for="">Select Order</label>
                             <select name="order_id" id="order_id" v-model="detailObj.order_id" class="form-control custom_order_detail select2">
                                 <option value="">Select</option>
@@ -115,9 +161,29 @@
                 errors: {},
                 error: null,
                 msg: '',
+                orderObj: {
+                    order_number: "", 
+                    customer_name: "",
+                    product_lists: []
+                },
             },
             mounted() {
                 initLibs()
+            },
+            computed: {
+                ordersData() {
+                    let orderData = [];
+                    if (this.orders.length > 0) {
+                        orderData = this.orders.map(ordr => {
+                            return {
+                                label: `${ordr.shop.name}  ${ordr.order_number} | ${ordr.customer.customer_name} | ${ordr.total_final_amount}`,
+                                value : ordr.id
+                            }
+                        });
+                    }
+                    return orderData;
+                }
+                
             },
             methods: {
                 submitReturnedOrder() {
@@ -147,5 +213,33 @@
                 }
             }
         })
+
+        $(function(){
+        $( "#order_number").autocomplete({
+            source: returnApp.ordersData,
+            minLength: 2,
+            select: function( event, ui ) {
+                console.log(ui.item, 'asdfsd');
+                //order_app.customer = {...ui.item}
+                let order_id = ui.item.value;
+                if (returnApp.orders.length > 0) {
+                    let orderObj = returnApp.orders.find(it => it.id == order_id);
+                    if (orderObj) {
+                        returnApp.orderObj = {
+                            order_number: orderObj.order_number, 
+                            customer_name: orderObj.customer.customer_name,
+                            product_lists: orderObj.order_detail
+                        }
+                    }
+                    console.log(orderObj, 'asdf');
+                }
+            }
+        })
+        .autocomplete( "instance" )._renderItem = function( ul, item ) {
+      return $( "<li>" )
+        .append( `<div>${item.label}</div>` )
+        .appendTo( ul );
+    };
+  });
     </script>
 @endpush
