@@ -25,6 +25,11 @@
         </select>
     </div>
     <div class="form-group">
+        <label for="customers">Select Invoice</label>
+        <select name="order_id" id="order_id" class="form-control">
+        </select>
+    </div>
+    <div class="form-group">
         <label for="">Total Payable</label>
         <input type="number" readonly class="form-control" id="payable">
     </div>

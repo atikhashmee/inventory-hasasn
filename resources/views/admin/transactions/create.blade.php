@@ -34,10 +34,17 @@
         let customers = {!! json_encode(count($customers) > 0 ? $customers->toArray() : [], JSON_HEX_TAG) !!}
         function changeCustomer(evt) {
             let $evt = $(evt)
+            let invoiceDom = '<option value="">Select Invoice</option>';
             if (customers.length > 0) {
                 customers.forEach(element => {
                     if (Number($evt.val()) === Number(element.id)) {
                         $("#payable").val(Number(element.total_withdraw) - Number(element.total_deposit))
+                        if (("orders" in element) && element.orders.length > 0) {
+                            element.orders.forEach(orderItem => {
+                                invoiceDom += `<option value="${orderItem.id}">${orderItem.order_number}</option>`;
+                            })
+                        }
+                        $("#order_id").append(invoiceDom);
                         return;
                     }
                 });

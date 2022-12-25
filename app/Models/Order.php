@@ -75,4 +75,8 @@ class Order extends Model
         return $this->belongsTo(Shop::class, 'shop_id');
     }
 
+    public function transactions() {
+        return $this->hasMany(Transaction::class, 'order_id', 'id');  
+    }
+
 }

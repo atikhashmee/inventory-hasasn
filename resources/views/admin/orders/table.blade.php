@@ -24,7 +24,7 @@
                     <td>{{$order->total_amount}}</td>
                     <td>{{$order->created_at}}</td>
                     <td>
-                        @if ($order->order_total_payemnt == $order->total_final_amount)
+                        @if ($order->order_total_payemnt >= $order->total_final_amount)
                             Paid
                         @else    
                             @if ($order->order_total_payemnt == 0)

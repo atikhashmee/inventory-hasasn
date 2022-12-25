@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
 use App\Models\Customer;
+use Laracasts\Flash\Flash;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Laracasts\Flash\Flash;
 
 class TransactionController extends Controller
 {
@@ -71,7 +72,7 @@ class TransactionController extends Controller
     public function create()
     {
         $user = auth()->user();
-        $customer_sql = Customer::select('customers.id', 'customers.customer_name', \DB::raw('IFNULL(TD.total_deposit, 0) as total_deposit'), \DB::raw('IFNULL(TW.total_withdraw, 0) as total_withdraw'))
+        $customer_sql = Customer::with("orders")->select('customers.id', 'customers.customer_name', \DB::raw('IFNULL(TD.total_deposit, 0) as total_deposit'), \DB::raw('IFNULL(TW.total_withdraw, 0) as total_withdraw'))
         ->leftJoin(\DB::raw('(SELECT SUM(amount) as total_deposit, customer_id FROM transactions WHERE type="in" GROUP BY customer_id) AS TD'), 'TD.customer_id', '=', 'customers.id')
         ->leftJoin(\DB::raw('(SELECT SUM(amount) as total_withdraw, customer_id FROM transactions WHERE type="out" GROUP BY customer_id) AS TW'), 'TW.customer_id', '=', 'customers.id');
         // if ($user->role != 'admin') {
@@ -98,6 +99,7 @@ class TransactionController extends Controller
                 'type' => 'required|in:in,out',
                 'flag' => 'required|in:payment,refund',
                 'amount' => 'required',
+                'order_id' => 'sometimes|nullable|exists:orders,id',
             ]);
             if ($validator->fails()) {
                 return redirect()->back()->withErrors($validator);
