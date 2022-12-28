@@ -420,7 +420,9 @@ class OrderController extends Controller
         return view('admin.orders_more.index', $data); 
     }
     public function salesReturnForm() {  
-        $data['orders'] = Order::with('shop', 'customer', 'orderDetail', 'orderDetail.product')->get();
+        $data['orders'] = Order::with(['shop', 'customer', 'orderDetail' => function($q) {
+            $q->select('order_details.*', \DB::raw("0 as input_quantity"), \DB::raw("false as is_return"));
+        }, 'orderDetail.product'])->get();
         return view('admin.orders_more.sale_return', $data); 
     }
 
@@ -430,14 +432,16 @@ class OrderController extends Controller
             $user = auth()->user();
             $validator = Validator::make($request->all(), [
                 'order_id' => ['required', 'integer', 'exists:orders,id'],
-                'detail_id' => ['required', 'integer', 'exists:order_details,id'],
-                'quantity'  => ['required'],
+                'product_lists' => ['required', 'array'],
+                'product_lists.*.input_quantity' => ['required', 'integer'],
             ]);
     
             //'returnedPrice'  => ['required'],
             if ($validator->fails()) {
                 return response()->json(['status'=> false, 'data'=> null, 'errors' => $validator->errors(), 'error' => ''], 422);
             }
+
+        
             $od_detail = OrderDetail::select('order_details.*', 'orders.customer_id')
             ->leftJoin('orders', 'orders.id', '=', 'order_details.order_id')
             ->where('order_details.id', $request->detail_id)->first();
