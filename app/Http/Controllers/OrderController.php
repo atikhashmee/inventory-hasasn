@@ -421,7 +421,7 @@ class OrderController extends Controller
     }
     public function salesReturnForm() {  
         $data['orders'] = Order::with(['shop', 'customer', 'orderDetail' => function($q) {
-            $q->select('order_details.*', \DB::raw("0 as input_quantity"), \DB::raw("false as is_return"));
+            $q->select('order_details.*', \DB::raw("0 as input_quantity"), \DB::raw("0 as input_price"), \DB::raw("false as is_return"));
         }, 'orderDetail.product'])->get();
         return view('admin.orders_more.sale_return', $data); 
     }
@@ -433,87 +433,101 @@ class OrderController extends Controller
             $validator = Validator::make($request->all(), [
                 'order_id' => ['required', 'integer', 'exists:orders,id'],
                 'product_lists' => ['required', 'array'],
-                'product_lists.*.input_quantity' => ['required', 'integer'],
+                'product_lists.*.input_quantity' => ['required', 'integer'], //, 'lte:final_quantity'
             ]);
     
             //'returnedPrice'  => ['required'],
             if ($validator->fails()) {
                 return response()->json(['status'=> false, 'data'=> null, 'errors' => $validator->errors(), 'error' => ''], 422);
             }
+            $data = $request->all();
 
+            $totalQuantity = 0;
+            $returnedQuantity = 0;
+            $totalPrice = 0;
+            if (!empty($data["product_lists"])) {
+                foreach ($data["product_lists"] as $product) {
+                    $totalQuantity += intval($product["final_amount"]);
+                    $returnedQuantity += intval($product["input_quantity"]);
+                    $totalPrice += intval($product["input_quantity"]) * floatval($product["product_unit_price"]);
+                }
+            }
+
+            if ($returnedQuantity > $totalQuantity) {
+                return response()->json(['status'=> false, 'data'=> null, 'errors' => [], 'error' => 'Returned quantity exceeds original quanitty'], 422);
+            }
+
+            //if all validation passes
+            if (!empty($data["product_lists"])) {
+                foreach ($data["product_lists"] as $orderDetail) {
+                    if (intval($orderDetail["input_quantity"]) > 0) {
+                        $od_detail = OrderDetail::select('order_details.*', 'orders.customer_id')
+                        ->leftJoin('orders', 'orders.id', '=', 'order_details.order_id')
+                        ->where('order_details.id', $orderDetail["id"])->first();
+                        if ($od_detail) {
+                            $returnPrice = intval($orderDetail["input_price"]) < 1 ? ($orderDetail["input_quantity"] * $product["product_unit_price"]) : $orderDetail["input_price"];
+                            $shopStock = ShopProductStock::create([
+                                'user_id' => $user->id,
+                                'order_detail_id' => $od_detail->id,
+                                'shop_id' => $od_detail->shop_id,
+                                'product_id' => $od_detail->product_id,
+                                'quantity' => $orderDetail["input_quantity"],
+                                'type' => 'sale_return',
+                                'price' => $returnPrice
+                            ]);
         
-            $od_detail = OrderDetail::select('order_details.*', 'orders.customer_id')
-            ->leftJoin('orders', 'orders.id', '=', 'order_details.order_id')
-            ->where('order_details.id', $request->detail_id)->first();
-            if ($od_detail) {
-                if ($od_detail->final_quantity < $request->quantity) {
-                    return response()->json(['status'=> false, 'data'=> null, 'errors' => [], 'error' => 'Returned quantity exceed original quanitty'], 422);
-                }
-
-                if ($od_detail->final_amount < $request->returnedPrice) {
-                    return response()->json(['status'=> false, 'data'=> null, 'errors' => [], 'error' => 'Returned price exceed original price'], 422);
-                }
-
-                $shopStock = ShopProductStock::create([
-                    'user_id' => $user->id,
-                    'order_detail_id' => $od_detail->id,
-                    'shop_id' => $od_detail->shop_id,
-                    'product_id' => $od_detail->product_id,
-                    'quantity' => $request->quantity,
-                    'type' => 'sale_return',
-                    'price' => $request->returnedPrice ?? 0,
-                ]);
-
-                if ($shopStock) {
-                    $customerIn = Transaction::create([
-                        'customer_id' => $od_detail->customer_id, 
-                        'order_id'    => $od_detail->order_id, 
-                        'order_detail_id' => $od_detail->id,
-                        'user_id'     => $user->id, 
-                        'status'      => 'done', 
-                        'type'        => 'in', 
-                        'flag'        => 'sell_return', 
-                        'amount'      => ($request->quantity * $od_detail->product_unit_price)
-                    ]);
-
-                    if ($customerIn && $request->cash_returned) {
-                        $customerout = Transaction::create([
-                            'customer_id' => $od_detail->customer_id, 
-                            'order_id'    => $od_detail->order_id, 
-                            'order_detail_id' => $od_detail->id,
-                            'user_id'     => $user->id, 
-                            'status'      => 'done', 
-                            'type'        => 'out', 
-                            'flag'        => 'refund', 
-                            'amount'      => $request->returnedPrice
-                        ]);
+                            if ($shopStock) {
+                                $customerIn = Transaction::create([
+                                    'customer_id' => $od_detail->customer_id, 
+                                    'order_id'    => $od_detail->order_id, 
+                                    'order_detail_id' => $od_detail->id,
+                                    'user_id'     => $user->id, 
+                                    'status'      => 'done', 
+                                    'type'        => 'in', 
+                                    'flag'        => 'sell_return', 
+                                    'amount'      => $returnPrice
+                                ]);
+            
+                                if ($customerIn && $request->cash_returned) {
+                                    $customerout = Transaction::create([
+                                        'customer_id' => $od_detail->customer_id, 
+                                        'order_id'    => $od_detail->order_id, 
+                                        'order_detail_id' => $od_detail->id,
+                                        'user_id'     => $user->id, 
+                                        'status'      => 'done', 
+                                        'type'        => 'out', 
+                                        'flag'        => 'refund', 
+                                        'amount'      => $returnPrice
+                                    ]);
+                                }
+                            }
+    
+                            $totalQty = ShopProductStock::where('order_detail_id', $od_detail->id)
+                            ->where('product_id', $od_detail->product_id)
+                            ->where('type', 'sale_return')
+                            ->sum('quantity');
+            
+                            //total returned price
+                            $totalreturnedPrice = Transaction::where('order_detail_id', $od_detail->id)
+                            ->where('flag', 'sell_return')
+                            ->sum('amount');
+    
+                            $od_detail->returned_quantity = $totalQty;
+                            $od_detail->returned_amount = $totalreturnedPrice;
+                            $od_detail->final_quantity = intval($od_detail->product_quantity) - intval($totalQty);
+                            $od_detail->final_amount = $od_detail->sub_total - $totalreturnedPrice;
+                            $od_detail->save();
+                        }
                     }
                 }
-
-                //total quantity
-                $totalQty = ShopProductStock::where('order_detail_id', $od_detail->id)
-                ->where('product_id', $od_detail->product_id)
-                ->where('type', 'sale_return')
-                ->sum('quantity');
-
-                //total returned price
-                $totalreturnedPrice = Transaction::where('order_detail_id', $od_detail->id)
-                ->where('flag', 'sell_return')
-                ->sum('amount');
-                //dd($totalQty);
-                $od_detail->returned_quantity = $totalQty;
-                $od_detail->returned_amount = $totalreturnedPrice;
-                $od_detail->final_quantity = intval($od_detail->product_quantity) - intval($totalQty);
-                $od_detail->final_amount = $od_detail->sub_total - $totalreturnedPrice;
-                $order_details_updated = $od_detail->save();
-                DB::commit();
             }
+            DB::commit();
             return response()->json(['status'=> true, 'msg'=> 'Success', 'data'=> null, 'errors' => [], 'error' => ''], 200);
         } catch (\Exception $e) {
             DB::rollback();
+            dd($e->getMessage());
             return response()->json(['status'=> false, 'data'=> null, 'errors' => [], 'error' => $e->getMessage()], 422);
         }
-   
     }
 
     public function salesReturnRollback(Request $request) {

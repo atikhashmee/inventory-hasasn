@@ -52,6 +52,7 @@
                                         <th>Product&nbsp;Unit&nbsp;Price</th>
                                         <th>Product&nbsp;Available&nbsp;Quantity</th>
                                         <th>Return&nbsp;Quantity</th>
+                                        <th>Return&nbsp;Price</th>
                                     </tr>
                                 </thead>
                                 <tr v-for="(detail, index) in orderObj.product_lists">
@@ -64,22 +65,18 @@
                                     <td>@{{detail.final_quantity}}</td>
                                     <td>
                                         {{-- :disabled="detail.final_quantity == 0" --}}
-                                        <input type="text"  @blur="modifyItem($event, detail, 'return_input')" :max="detail.final_quantity" class="form-control" v-model="detail.input_quantity">
+                                        <input type="number"  @blur="modifyItem($event, detail, 'return_input')" :max="detail.final_quantity" class="form-control" v-model="detail.input_quantity">
+                                    </td>
+                                    <td>
+                                        <input type="number" class=" form-control" v-model="detail.input_price" readonly>
                                     </td>
                                 </tr>
                             </table>
                             <div class="form-group">
                                 <p>Total Return Quantity: @{{orderObj.total_return_quantity}}</p>
                                 <p>Total Return Amount: @{{orderObj.total_return_amount}}</p>
-                                <label for="">Cash returned ?</label>
-                                <input type="checkbox" v-model="orderObj.cash_returned" name="cash_returned" id="cash_returned">
                             </div>
-                            <div class="form-group" v-if="orderObj.cash_returned">
-                                <label for="">Price</label>
-                                <input type="number" class="form-control" v-model="orderObj.returnedPrice" name="price" id="price" :max="orderObj.total_return_amount">
-                                <small>Amount Returnable @{{orderObj.total_return_amount}}</small> <br>
-                                <span v-if="errors?.returnedPrice?.length > 0" role="alert"  class="text-danger">@{{ errors.returnedPrice[0] }}</span>
-                            </div>
+                            <p style="color: red">@{{errors}}</p>
                             <button class="btn btn-success" type="button" @click="submitReturnedOrder()">Submit Return</button>
                             <a class="btn btn-default" href="{{ route('admin.order.return') }}">Back</a>
                         </div>
@@ -272,6 +269,7 @@
                     this.orderObj.product_lists = this.orderObj.product_lists.map(item => {
                         if (item.id == detail.id) {
                             item = {...detail}
+                            item.input_price = (item.product_unit_price * Number(itemValue))
                         }
                         return item;
                     })
@@ -283,7 +281,7 @@
                     if (this.orderObj.product_lists.length > 0) {
                         this.orderObj.product_lists.forEach(element => {
                             totalReturn += Number(element.input_quantity)    
-                            totalAmount += (Number(element.input_quantity) * Number(element.product_unit_price))                         
+                            totalAmount += Number(element.input_price)                          
                         });
                     }
                     this.orderObj.total_return_amount = totalAmount;
@@ -300,7 +298,6 @@
                 let order_id = ui.item.value;
                 if (returnApp.orders.length > 0) {
                     let orderObj = returnApp.orders.find(it => it.id == order_id);
-                    console.log(orderObj, 'asdf');
                     if (orderObj) {
                         returnApp.orderObj = {
                             order_id: orderObj.id, 
