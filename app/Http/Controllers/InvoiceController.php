@@ -64,7 +64,7 @@ class InvoiceController extends Controller
             })->groupBy('customer_id')->sum('amount');
             $totalWithdraw = Transaction::where("type", "out")->where('customer_id', $data['customer_id'])->where('order_id', '!=', $order_id)->groupBy('customer_id')->sum('amount');
             $qrCode = null; // $this->qrCodeGenerator();
-            $data['customer']['current_due'] = ($totalWithdraw - $totalDeposit);
+            $data['customer']['current_due'] = ($totalDeposit - $totalWithdraw);
             $orderNumber = $data['order_number'];
             list($dateStr, $randomeNumber) = explode('-', $orderNumber);
             $data['order_number'] = date("ymd", strtotime($data["created_at"]))."-".$randomeNumber; 
