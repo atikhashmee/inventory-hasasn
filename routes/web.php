@@ -231,6 +231,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin', 'as' => 'admin.'], fu
     Route::resource('brands', App\Http\Controllers\BrandController::class);
     Route::resource('products', App\Http\Controllers\ProductController::class);
     Route::resource('stocks', App\Http\Controllers\StockController::class);
+    Route::post('orders/drafts',  [App\Http\Controllers\OrderController::class, 'deleteDraftOrders'])->name('order.draft.delete');
+    Route::get('orders/drafts',  [App\Http\Controllers\OrderController::class, 'getDraftOrders'])->name('order.draft.index');
     Route::resource('orders', App\Http\Controllers\OrderController::class);
     Route::resource('customers', App\Http\Controllers\CustomerController::class);
     Route::resource('transactions', App\Http\Controllers\TransactionController::class);

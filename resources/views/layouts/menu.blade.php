@@ -87,6 +87,11 @@
         </a>
       </li>
       <li class="nav-item">
+        <a href="{{ route('admin.order.draft.index') }}" class="nav-link {{ Request::is('admin/orders') ? 'active' : '' }}">
+          <p>Drafts</p>
+        </a>
+      </li>
+      <li class="nav-item">
         <a href="{{ route('admin.orders.create') }}" class="nav-link {{ Request::is('admin/orders/create') ? 'active' : '' }}">
           <p>New Sale</p>
         </a>

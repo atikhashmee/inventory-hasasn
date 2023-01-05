@@ -42,7 +42,22 @@ class OrderController extends Controller
         return view('admin.orders.index', $data);
     }
 
-    public function orderLists(Request $request, $user) {
+    public function getDraftOrders(Request $request) {
+        $user = auth()->user();
+        $data['orders'] = $this->orderLists($request, $user, "Drafted");
+        $data['serial'] = pagiSerial($data['orders'], 100);
+        if ($user->role == 'admin') {
+            $data['shops']  = Shop::get();
+            $data['customers'] = Customer::get();
+        } else {
+            $data['customers'] = Customer::where('user_id', $user->id)->get();
+        }
+        $data['user'] = $user;
+        $data['suppliers'] = Supplier::get();
+        return view('admin.orders.draft-orders', $data);
+    }
+
+    public function orderLists(Request $request, $user, $byStatus = "Pending") {
         $order_sql =  Order::select('orders.*',
          \DB::raw("IFNULL(OD.total_warenty_items, 0) as wr_order_details"),
          \DB::raw("IFNULL(A.order_total_payemnt, 0) as order_total_payemnt"),
@@ -98,7 +113,7 @@ class OrderController extends Controller
         if ($user->role != 'admin') {
             $order_sql->where('user_id', $user->id);
         }
-        
+        $order_sql->where('status', $byStatus);
         return $order_sql->orderBy('id', 'DESC')
         ->paginate(100);
     }
@@ -319,34 +334,38 @@ class OrderController extends Controller
                     }
 
                     /* create customer transaction */
-                    Transaction::updateOrCreate([
-                        'order_id' => $order->id,
-                        'flag' => 'order_placed', 
-                    ], [
-                        'customer_id' => $customer->id, 
-                        'order_id' => $order->id, 
-                        'user_id' => auth()->user()->id, 
-                        'status' => 'done', 
-                        'type' => 'out', 
-                        'flag' => 'order_placed', 
-                        'amount' => $data['subtotal'] - $data['discount']
-                    ]);
+                    if ($data['order_status'] !=  true) {
+                        Transaction::updateOrCreate([
+                            'order_id' => $order->id,
+                            'flag' => 'order_placed', 
+                        ], [
+                            'customer_id' => $customer->id, 
+                            'order_id' => $order->id, 
+                            'user_id' => auth()->user()->id, 
+                            'status' => 'done', 
+                            'type' => 'out', 
+                            'flag' => 'order_placed', 
+                            'amount' => $data['subtotal'] - $data['discount']
+                        ]);
+                    }
 
                     /* if customer make any instant payment */
                     if (isset($data['payment_amount']) && $data['payment_amount'] > 0) {
-                        Transaction::updateOrCreate([
-                            'order_id' => $order->id,
-                            'flag'     => 'payment', 
-                        ], [
-                            'customer_id' => $customer->id, 
-                            'order_id'    => $order->id, 
-                            'user_id'     => auth()->user()->id, 
-                            'status'      => 'done', 
-                            'type'        => 'in', 
-                            'flag'        => 'payment', 
-                            'payment_type'=> $data['payment_type'], 
-                            'amount'      => $data['payment_amount']
-                        ]);
+                        if ($data['order_status'] != true) {
+                            Transaction::updateOrCreate([
+                                'order_id' => $order->id,
+                                'flag'     => 'payment', 
+                            ], [
+                                'customer_id' => $customer->id, 
+                                'order_id'    => $order->id, 
+                                'user_id'     => auth()->user()->id, 
+                                'status'      => 'done', 
+                                'type'        => 'in', 
+                                'flag'        => 'payment', 
+                                'payment_type'=> $data['payment_type'], 
+                                'amount'      => $data['payment_amount']
+                            ]);
+                        }
                     }
                 }
     
