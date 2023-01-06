@@ -42,7 +42,22 @@ class OrderController extends Controller
         return view('admin.orders.index', $data);
     }
 
-    public function orderLists(Request $request, $user) {
+    public function getDraftOrders(Request $request) {
+        $user = auth()->user();
+        $data['orders'] = $this->orderLists($request, $user, "Drafted");
+        $data['serial'] = pagiSerial($data['orders'], 100);
+        if ($user->role == 'admin') {
+            $data['shops']  = Shop::get();
+            $data['customers'] = Customer::get();
+        } else {
+            $data['customers'] = Customer::where('user_id', $user->id)->get();
+        }
+        $data['user'] = $user;
+        $data['suppliers'] = Supplier::get();
+        return view('admin.orders.draft-orders', $data);
+    }
+
+    public function orderLists(Request $request, $user, $byStatus = "Pending") {
         $order_sql =  Order::select('orders.*',
          \DB::raw("IFNULL(OD.total_warenty_items, 0) as wr_order_details"),
          \DB::raw("IFNULL(A.order_total_payemnt, 0) as order_total_payemnt"),
@@ -98,7 +113,7 @@ class OrderController extends Controller
         if ($user->role != 'admin') {
             $order_sql->where('user_id', $user->id);
         }
-        
+        $order_sql->where('status', $byStatus);
         return $order_sql->orderBy('id', 'DESC')
         ->paginate(100);
     }
@@ -319,34 +334,38 @@ class OrderController extends Controller
                     }
 
                     /* create customer transaction */
-                    Transaction::updateOrCreate([
-                        'order_id' => $order->id,
-                        'flag' => 'order_placed', 
-                    ], [
-                        'customer_id' => $customer->id, 
-                        'order_id' => $order->id, 
-                        'user_id' => auth()->user()->id, 
-                        'status' => 'done', 
-                        'type' => 'out', 
-                        'flag' => 'order_placed', 
-                        'amount' => $data['subtotal'] - $data['discount']
-                    ]);
+                    if ($data['order_status'] !=  true) {
+                        Transaction::updateOrCreate([
+                            'order_id' => $order->id,
+                            'flag' => 'order_placed', 
+                        ], [
+                            'customer_id' => $customer->id, 
+                            'order_id' => $order->id, 
+                            'user_id' => auth()->user()->id, 
+                            'status' => 'done', 
+                            'type' => 'out', 
+                            'flag' => 'order_placed', 
+                            'amount' => $data['subtotal'] - $data['discount']
+                        ]);
+                    }
 
                     /* if customer make any instant payment */
                     if (isset($data['payment_amount']) && $data['payment_amount'] > 0) {
-                        Transaction::updateOrCreate([
-                            'order_id' => $order->id,
-                            'flag'     => 'payment', 
-                        ], [
-                            'customer_id' => $customer->id, 
-                            'order_id'    => $order->id, 
-                            'user_id'     => auth()->user()->id, 
-                            'status'      => 'done', 
-                            'type'        => 'in', 
-                            'flag'        => 'payment', 
-                            'payment_type'=> $data['payment_type'], 
-                            'amount'      => $data['payment_amount']
-                        ]);
+                        if ($data['order_status'] != true) {
+                            Transaction::updateOrCreate([
+                                'order_id' => $order->id,
+                                'flag'     => 'payment', 
+                            ], [
+                                'customer_id' => $customer->id, 
+                                'order_id'    => $order->id, 
+                                'user_id'     => auth()->user()->id, 
+                                'status'      => 'done', 
+                                'type'        => 'in', 
+                                'flag'        => 'payment', 
+                                'payment_type'=> $data['payment_type'], 
+                                'amount'      => $data['payment_amount']
+                            ]);
+                        }
                     }
                 }
     
@@ -422,7 +441,7 @@ class OrderController extends Controller
     public function salesReturnForm() {  
         $data['orders'] = Order::with(['shop', 'customer', 'orderDetail' => function($q) {
             $q->select('order_details.*', \DB::raw("0 as input_quantity"), \DB::raw("0 as input_price"), \DB::raw("false as is_return"));
-        }, 'orderDetail.product'])->get();
+        }, 'orderDetail.product'])->orderBy("id", "DESC")->get();
         return view('admin.orders_more.sale_return', $data); 
     }
 
@@ -434,6 +453,8 @@ class OrderController extends Controller
                 'order_id' => ['required', 'integer', 'exists:orders,id'],
                 'product_lists' => ['required', 'array'],
                 'product_lists.*.input_quantity' => ['required', 'integer'], //, 'lte:final_quantity'
+                'return_amount' => ['nullable', 'numeric'], 
+               // 'cash_returned' => ['nullable', 'boolean'], 
             ]);
     
             //'returnedPrice'  => ['required'],
@@ -456,7 +477,7 @@ class OrderController extends Controller
             if ($returnedQuantity > $totalQuantity) {
                 return response()->json(['status'=> false, 'data'=> null, 'errors' => [], 'error' => 'Returned quantity exceeds original quanitty'], 422);
             }
-
+            
             //if all validation passes
             if (!empty($data["product_lists"])) {
                 foreach ($data["product_lists"] as $orderDetail) {
@@ -487,19 +508,6 @@ class OrderController extends Controller
                                     'flag'        => 'sell_return', 
                                     'amount'      => $returnPrice
                                 ]);
-            
-                                if ($customerIn && $request->cash_returned) {
-                                    $customerout = Transaction::create([
-                                        'customer_id' => $od_detail->customer_id, 
-                                        'order_id'    => $od_detail->order_id, 
-                                        'order_detail_id' => $od_detail->id,
-                                        'user_id'     => $user->id, 
-                                        'status'      => 'done', 
-                                        'type'        => 'out', 
-                                        'flag'        => 'refund', 
-                                        'amount'      => $returnPrice
-                                    ]);
-                                }
                             }
     
                             $totalQty = ShopProductStock::where('order_detail_id', $od_detail->id)
@@ -519,6 +527,19 @@ class OrderController extends Controller
                             $od_detail->save();
                         }
                     }
+                }
+                if ($request->cash_returned) {
+                    $customerout = Transaction::create([
+                        'customer_id' => $od_detail->customer_id, 
+                        'order_id'    => $od_detail->order_id, 
+                        'order_detail_id' => $od_detail->id,
+                        'user_id'     => $user->id, 
+                        'status'      => 'done', 
+                        'type'        => 'out', 
+                        'flag'        => 'refund', 
+                        'amount'      => $request->return_amount,
+                        'note'        => $request->note
+                    ]);
                 }
             }
             DB::commit();
