@@ -72,13 +72,15 @@ class TransactionController extends Controller
     public function create()
     {
         $user = auth()->user();
-        $customer_sql = Customer::with("orders")->select('customers.id', 'customers.customer_name', \DB::raw('IFNULL(TD.total_deposit, 0) as total_deposit'), \DB::raw('IFNULL(TW.total_withdraw, 0) as total_withdraw'))
+        $customer_sql = Customer::with(["orders" => function($q) {
+            $q->orderBy("id", 'DESC');
+        }])->select('customers.id', 'customers.customer_name', \DB::raw('IFNULL(TD.total_deposit, 0) as total_deposit'), \DB::raw('IFNULL(TW.total_withdraw, 0) as total_withdraw'))
         ->leftJoin(\DB::raw('(SELECT SUM(amount) as total_deposit, customer_id FROM transactions WHERE type="in" GROUP BY customer_id) AS TD'), 'TD.customer_id', '=', 'customers.id')
         ->leftJoin(\DB::raw('(SELECT SUM(amount) as total_withdraw, customer_id FROM transactions WHERE type="out" GROUP BY customer_id) AS TW'), 'TW.customer_id', '=', 'customers.id');
         // if ($user->role != 'admin') {
         //     $customer_sql->where("shop_id", $user->shop_id);
         // } 
-        $data['customers'] = $customer_sql->get();
+        $data['customers'] = $customer_sql->orderBy("id", "DESC")->get();
 
         
         return view('admin.transactions.create', $data);

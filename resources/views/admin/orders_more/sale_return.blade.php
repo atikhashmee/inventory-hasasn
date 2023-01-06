@@ -52,7 +52,7 @@
                                         <th>Product&nbsp;Unit&nbsp;Price</th>
                                         <th>Product&nbsp;Available&nbsp;Quantity</th>
                                         <th>Return&nbsp;Quantity</th>
-                                        <th>Return&nbsp;Price</th>
+                                        <th>Returnable&nbsp;Amount</th>
                                     </tr>
                                 </thead>
                                 <tr v-for="(detail, index) in orderObj.product_lists">
@@ -75,6 +75,20 @@
                             <div class="form-group">
                                 <p>Total Return Quantity: @{{orderObj.total_return_quantity}}</p>
                                 <p>Total Return Amount: @{{orderObj.total_return_amount}}</p>
+                            </div>
+                            <div class="form-group">
+                                <label for="">Cash returned ?</label>
+                                <input type="checkbox" v-model="orderObj.cash_returned" name="cash_returned" id="cash_returned">
+                            </div>
+                            <div class="form-group" v-if="orderObj.cash_returned">
+                                <label for="">Returened Amount</label>
+                                <input type="number" class="form-control" v-model="orderObj.return_amount" name="return_amount" id="return_amount">
+                                <span v-if="errors?.returnedPrice?.length > 0" role="alert"  class="text-danger">@{{ errors.returnedPrice[0] }}</span>
+                            </div>
+                           
+                            <div class="form-group">
+                                <label for="">Remark</label>
+                                <textarea class="form-control" v-model="orderObj.note" name="note" id="note"></textarea>
                             </div>
                             <p style="color: red">@{{errors}}</p>
                             <button class="btn btn-success" type="button" @click="submitReturnedOrder()">Submit Return</button>
@@ -188,6 +202,8 @@
                     product_lists: [],
                     cash_returned: false,
                     returnedPrice: '',
+                    return_amount: null,
+                    note: null,
                 },
                 selectAll: null,
                 detail_ids: []

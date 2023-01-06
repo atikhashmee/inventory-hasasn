@@ -441,7 +441,7 @@ class OrderController extends Controller
     public function salesReturnForm() {  
         $data['orders'] = Order::with(['shop', 'customer', 'orderDetail' => function($q) {
             $q->select('order_details.*', \DB::raw("0 as input_quantity"), \DB::raw("0 as input_price"), \DB::raw("false as is_return"));
-        }, 'orderDetail.product'])->get();
+        }, 'orderDetail.product'])->orderBy("id", "DESC")->get();
         return view('admin.orders_more.sale_return', $data); 
     }
 
@@ -453,6 +453,8 @@ class OrderController extends Controller
                 'order_id' => ['required', 'integer', 'exists:orders,id'],
                 'product_lists' => ['required', 'array'],
                 'product_lists.*.input_quantity' => ['required', 'integer'], //, 'lte:final_quantity'
+                'return_amount' => ['nullable', 'numeric'], 
+               // 'cash_returned' => ['nullable', 'boolean'], 
             ]);
     
             //'returnedPrice'  => ['required'],
@@ -475,7 +477,7 @@ class OrderController extends Controller
             if ($returnedQuantity > $totalQuantity) {
                 return response()->json(['status'=> false, 'data'=> null, 'errors' => [], 'error' => 'Returned quantity exceeds original quanitty'], 422);
             }
-
+            
             //if all validation passes
             if (!empty($data["product_lists"])) {
                 foreach ($data["product_lists"] as $orderDetail) {
@@ -506,19 +508,6 @@ class OrderController extends Controller
                                     'flag'        => 'sell_return', 
                                     'amount'      => $returnPrice
                                 ]);
-            
-                                if ($customerIn && $request->cash_returned) {
-                                    $customerout = Transaction::create([
-                                        'customer_id' => $od_detail->customer_id, 
-                                        'order_id'    => $od_detail->order_id, 
-                                        'order_detail_id' => $od_detail->id,
-                                        'user_id'     => $user->id, 
-                                        'status'      => 'done', 
-                                        'type'        => 'out', 
-                                        'flag'        => 'refund', 
-                                        'amount'      => $returnPrice
-                                    ]);
-                                }
                             }
     
                             $totalQty = ShopProductStock::where('order_detail_id', $od_detail->id)
@@ -538,6 +527,19 @@ class OrderController extends Controller
                             $od_detail->save();
                         }
                     }
+                }
+                if ($request->cash_returned) {
+                    $customerout = Transaction::create([
+                        'customer_id' => $od_detail->customer_id, 
+                        'order_id'    => $od_detail->order_id, 
+                        'order_detail_id' => $od_detail->id,
+                        'user_id'     => $user->id, 
+                        'status'      => 'done', 
+                        'type'        => 'out', 
+                        'flag'        => 'refund', 
+                        'amount'      => $request->return_amount,
+                        'note'        => $request->note
+                    ]);
                 }
             }
             DB::commit();
