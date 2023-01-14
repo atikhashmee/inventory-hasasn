@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Unit;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\ShopInventory;
 use App\Models\WarentySerial;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -57,6 +58,10 @@ class OrderDetail extends Model
     public function product()
     {
         return $this->hasOne(Product::class, 'id', 'product_id');
+    }
+    public function inventory()
+    {
+        return $this->hasOne(ShopInventory::class, 'order_detail_id', 'id');
     }
 
     /**

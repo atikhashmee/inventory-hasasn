@@ -41,7 +41,7 @@
                         $("#payable").val(Number(element.total_withdraw) - Number(element.total_deposit))
                         if (("orders" in element) && element.orders.length > 0) {
                             element.orders.forEach(orderItem => {
-                                invoiceDom += `<option value="${orderItem.id}">${orderItem.order_number}</option>`;
+                                invoiceDom += `<option value="${orderItem.id}">${orderItem.order_number} | ${orderItem.total_final_amount}</option>`;
                             })
                         }
                         $("#order_id").append(invoiceDom);
