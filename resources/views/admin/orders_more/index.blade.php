@@ -79,7 +79,7 @@
                 </table>
                 <div class="card-footer clearfix">
                     <div class="float-right">
-                        {{$orders->links()}}
+                        {{$orders->withQueryString()->links()}}
                     </div>
                 </div>
             </div>
