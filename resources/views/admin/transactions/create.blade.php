@@ -41,7 +41,11 @@
                         $("#payable").val(Number(element.total_withdraw) - Number(element.total_deposit))
                         if (("orders" in element) && element.orders.length > 0) {
                             element.orders.forEach(orderItem => {
-                                invoiceDom += `<option value="${orderItem.id}">${orderItem.order_number} | ${orderItem.total_final_amount}</option>`;
+                                let paymentStatus = "Unpaid";
+                                if (Number(orderItem.order_total_payemnt) >= Number(orderItem.total_final_amount)) {
+                                    paymentStatus = "Paid";
+                                }
+                                invoiceDom += `<option value="${orderItem.id}">${orderItem.order_number} | ${orderItem.total_final_amount} | ${paymentStatus}</option>`;
                             })
                         }
                         $("#order_id").append(invoiceDom);

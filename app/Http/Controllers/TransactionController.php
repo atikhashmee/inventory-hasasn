@@ -73,7 +73,9 @@ class TransactionController extends Controller
     {
         $user = auth()->user();
         $customer_sql = Customer::with(["orders" => function($q) {
-            $q->orderBy("id", 'DESC');
+            $q->select("orders.*", "A.order_total_payemnt");
+            $q->leftjoin(\DB::raw("(SELECT SUM(amount) AS order_total_payemnt, order_id FROM transactions WHERE flag='payment' GROUP BY order_id) AS A"), 'A.order_id', '=', 'orders.id');
+            $q->orderBy("orders.id", 'DESC');
         }])->select('customers.id', 'customers.customer_name', \DB::raw('IFNULL(TD.total_deposit, 0) as total_deposit'), \DB::raw('IFNULL(TW.total_withdraw, 0) as total_withdraw'))
         ->leftJoin(\DB::raw('(SELECT SUM(amount) as total_deposit, customer_id FROM transactions WHERE type="in" GROUP BY customer_id) AS TD'), 'TD.customer_id', '=', 'customers.id')
         ->leftJoin(\DB::raw('(SELECT SUM(amount) as total_withdraw, customer_id FROM transactions WHERE type="out" GROUP BY customer_id) AS TW'), 'TW.customer_id', '=', 'customers.id');

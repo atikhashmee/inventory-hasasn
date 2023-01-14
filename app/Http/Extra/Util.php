@@ -19,7 +19,7 @@ trait Util {
         try {
             $validator = Validator::make($request->all(), [
                 "order_ids" => "required:array",
-                "order_ids*.*" => "exists:orders,id",
+                "order_ids.*." => "exists:orders,id",
             ]); 
             
             if ($validator->fails()) {
@@ -45,7 +45,7 @@ trait Util {
             }
             Order::whereIn("id", $orderIds)->delete();
             OrderDetail::whereIn("id", array_values($orderDetailIds))->delete();
-            ShopInventory::whereIn("id", array_values($inventoryIds));
+            ShopInventory::whereIn("id", array_values($inventoryIds))->delete();
             \DB::commit();
             return response()->json([
                 "status" => 1,
