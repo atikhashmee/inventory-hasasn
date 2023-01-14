@@ -206,36 +206,40 @@ class ProductController extends AppBaseController
                             "price" => $input["purchase_price"],
                             "quantity" => $input["purchase_quantity"],
                         ]); 
-                        ShopProduct::updateOrCreate(
-                            [
-                                'product_id' => $product->id,
-                                'shop_id' => $input["shop_id"],
-                            ],
-                            [
-                            'shop_id' => $input["shop_id"],
-                            'product_id' => $product->id,
-                            'quantity' => 0,
-                            'price' => 0,
-                        ]);
-                        $stock = ShopProductStock::create([
-                            'stock_id' => $stock->id, 
-                            'warehouse_id' => $input["warehouse_id"], 
-                            'user_id' => $user->id,
-                            'supplier_id' =>  $input["supplier_id"],
-                            'shop_id' => $input["shop_id"], 
-                            'product_id' =>  $product->id,
-                            'quantity' => $input['stock_quantity'],
-                            'price' => $input['ad_selling_price'],
-                            'type' => 'warehouse_transfer',
-                        ]);
+                        if (gettype($input["shop_id"]) == "array") {
+                            foreach ($input["shop_id"] as $shop_id) {
+                                ShopProduct::updateOrCreate(
+                                    [
+                                        'product_id' => $product->id,
+                                        'shop_id' => $shop_id,
+                                    ],
+                                    [
+                                    'shop_id' => $shop_id,
+                                    'product_id' => $product->id,
+                                    'quantity' => 0,
+                                    'price' => 0,
+                                ]);
+                                $stock = ShopProductStock::create([
+                                    'stock_id' => $stock->id, 
+                                    'warehouse_id' => $input["warehouse_id"], 
+                                    'user_id' => $user->id,
+                                    'supplier_id' =>  $input["supplier_id"],
+                                    'shop_id' => $shop_id, 
+                                    'product_id' =>  $product->id,
+                                    'quantity' => $input['stock_quantity'],
+                                    'price' => $input['ad_selling_price'],
+                                    'type' => 'warehouse_transfer',
+                                ]);
+                            }
+                        }
                     } else {
                         ShopProduct::updateOrCreate(
                             [
                                 'product_id' => $product->id,
-                                'shop_id' => $input["shop_id"],
+                                'shop_id' => $user->shop_id,
                             ],
                             [
-                            'shop_id' => $input["shop_id"],
+                            'shop_id' => $user->shop_id,
                             'product_id' => $product->id,
                             'quantity' => 0,
                             'price' => 0,

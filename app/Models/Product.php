@@ -84,7 +84,8 @@ class Product extends Model
         'name' => 'required',
         'code' => 'required|unique:products,code',
         'product_cost' => 'required',
-        'selling_price' => 'required'
+        'selling_price' => 'required',
+        'category_id' => 'required'
     ];
 
     /**

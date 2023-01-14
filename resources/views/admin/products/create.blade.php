@@ -80,17 +80,19 @@
                                 </div>
                             
                                 <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="">Select a shop</label>
-                                            <select class="form-control" name="shop_id" id="shop_id">
-                                                <option value="">Select Shop</option>
-                                                @foreach ($shopItems as $shp_id => $shp_name)
-                                                    <option value="{{$shp_id}}">{{$shp_name}}</option>
-                                                @endforeach
-                                            </select>
+                                    @if (auth()->user()->role == "admin")
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="">Select a shop</label>
+                                                <select class="form-control select2" multiple name="shop_id[]" id="shop_id" style="width: 100%">
+                                                    <option value="">Select Shop</option>
+                                                    @foreach ($shopItems as $shp_id => $shp_name)
+                                                        <option value="{{$shp_id}}">{{$shp_name}}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
                                         </div>
-                                    </div>
+                                    @endif
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="">Distribute Quantity</label>

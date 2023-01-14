@@ -60,4 +60,4 @@
         @endif
     </tbody>
 </table>
-{{ $transactions->links() }}
+{{ $transactions->withQueryString()->links() }}

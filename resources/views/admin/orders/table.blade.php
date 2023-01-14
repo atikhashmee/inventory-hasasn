@@ -72,4 +72,4 @@
         @endif
     </tbody>
 </table>
-{{$orders->links()}}
+{{$orders->withQueryString()->links()}}
