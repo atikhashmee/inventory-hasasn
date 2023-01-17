@@ -477,6 +477,12 @@ class OrderController extends Controller
             if ($returnedQuantity > $totalQuantity) {
                 return response()->json(['status'=> false, 'data'=> null, 'errors' => [], 'error' => 'Returned quantity exceeds original quanitty'], 422);
             }
+            if ($request->cash_returned) {
+                $currentTotalDeposit = Transaction::where("flag", "payment")->where('order_id', $data['order_id'])->groupBy('order_id')->sum('amount');
+                if ($request->return_amount >= $currentTotalDeposit) {
+                    return response()->json(['status'=> false, 'data'=> null, 'errors' => [], 'error' => 'This invoice paid amount is less than the return amount'], 422);
+                }
+            }
             
             //if all validation passes
             if (!empty($data["product_lists"])) {

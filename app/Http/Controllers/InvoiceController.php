@@ -58,14 +58,27 @@ class InvoiceController extends Controller
         }
         if ($sqldata) {
             $data = $sqldata->toArray();
+            // $totalDeposit = Transaction::where("type", "in")->where('customer_id', $data['customer_id'])->groupBy('customer_id')->sum('amount');
+            // $totalWithdraw = Transaction::where("type", "out")->where('customer_id', $data['customer_id'])->groupBy('customer_id')->sum('amount');
             $totalDeposit = Transaction::where("type", "in")->where('customer_id', $data['customer_id'])->where(function($q) use($order_id) {
                 $q->where('order_id', '!=', $order_id);
                 $q->orWhereNull('order_id');
             })->groupBy('customer_id')->sum('amount');
             $totalWithdraw = Transaction::where("type", "out")->where('customer_id', $data['customer_id'])->where('order_id', '!=', $order_id)->groupBy('customer_id')->sum('amount');
-            $qrCode = null; // $this->qrCodeGenerator();
-            $totalCurrentDue = ($totalDeposit - $totalWithdraw); 
-            $data['customer']['current_due'] = (-1 * $totalCurrentDue);
+
+            $currentTotalDeposit = Transaction::where("type", "in")->where('order_id', $data['id'])->groupBy('order_id')->sum('amount');
+            $currentTotalWithdraw = Transaction::where("type", "out")->where('order_id', $data['id'])->groupBy('order_id')->sum('amount');
+            $currentOrderTotalAmount = ($currentTotalDeposit - $currentTotalWithdraw);
+
+            $qrCode = null;
+            $totalCurrentDue = ($totalDeposit - $totalWithdraw);
+            $finalCurrentDue = $totalCurrentDue;
+            $data['customer']['current_due'] = $finalCurrentDue;
+            $data['current_due'] = $finalCurrentDue;
+            $data['today_sales'] = $currentTotalWithdraw;
+            $data['total_collected'] = $currentTotalDeposit;
+            $data['net_outstanding'] = ($finalCurrentDue + $currentTotalWithdraw) - ;
+            dd($data);
             $orderNumber = $data['order_number'];
             list($dateStr, $randomeNumber) = explode('-', $orderNumber);
             $data['order_number'] = date("ymd", strtotime($data["created_at"]))."-".$randomeNumber; 

@@ -102,7 +102,7 @@
         @if (count($order_detail) > 0)
             @foreach ($order_detail as $key=> $detail)
             @php
-                $subtotal +=  $detail['product_unit_price'] * $detail['product_quantity'];
+                $subtotal +=  $detail['product_unit_price'] * $detail['final_quantity'];
             @endphp
                 <tr>
                     <td>{{++$key}}</td>
