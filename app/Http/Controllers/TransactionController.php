@@ -24,7 +24,6 @@ class TransactionController extends Controller
         $transSql->where(function($q) {
             if (request()->query('start')!='' && request()->query('end')!='') {
                 $q->whereBetween('transactions.created_at', [date(request()->query('start'). ' 00:00:00'),  date(request()->query('end'). ' 23:59:59')]);
-
             }
 
             if (request()->query('customer_id')!='') {
@@ -39,15 +38,15 @@ class TransactionController extends Controller
         // if ($user->role != 'admin') {
         //     $transSql->where('transactions.user_id', $user->id);
         // }
-
+        $clonedData = clone $transSql->orderBy('transactions.id', 'DESC')->get();
         $data['transactions'] = $transSql->orderBy('transactions.id', 'DESC')->paginate(100);
-        $data['totalDiposit'] = $data['transactions']->getCollection()->reduce(function($total, $item){
+        $data['totalDiposit'] = $clonedData->reduce(function($total, $item){
             if ($item->type == 'in') {
                 return $total + $item->amount;
             }
             return $total;
         }, 0);
-        $data['totalWithdraw'] = $data['transactions']->getCollection()->reduce(function($total, $item){
+        $data['totalWithdraw'] = $clonedData->reduce(function($total, $item){
             if ($item->type=='out') {
                 return $total + $item->amount;
             }
