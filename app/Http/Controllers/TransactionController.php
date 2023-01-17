@@ -101,7 +101,7 @@ class TransactionController extends Controller
                 'customer_id' => 'required|integer|exists:customers,id',
                 'type' => 'required|in:in,out',
                 'flag' => 'required|in:payment,refund',
-                'amount' => 'required',
+                'amount' => 'required|gt:0',
                 'order_id' => 'sometimes|nullable|exists:orders,id',
             ]);
             if ($validator->fails()) {

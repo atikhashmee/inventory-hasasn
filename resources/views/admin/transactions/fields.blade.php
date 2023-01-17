@@ -30,7 +30,7 @@
         </select>
     </div>
     <div class="form-group">
-        <label for="">Total Payable</label>
+        <label for="">Total Payable (+) Admin Liable (-) Customer Liable</label>
         <input type="number" readonly class="form-control" id="payable">
     </div>
     <div class="form-group">

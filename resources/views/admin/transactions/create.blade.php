@@ -38,7 +38,7 @@
             if (customers.length > 0) {
                 customers.forEach(element => {
                     if (Number($evt.val()) === Number(element.id)) {
-                        $("#payable").val(Number(element.total_withdraw) - Number(element.total_deposit))
+                        $("#payable").val(Number(element.total_deposit) - Number(element.total_withdraw))
                         if (("orders" in element) && element.orders.length > 0) {
                             element.orders.forEach(orderItem => {
                                 let paymentStatus = "Unpaid";
