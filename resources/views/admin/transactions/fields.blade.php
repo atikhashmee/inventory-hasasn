@@ -8,14 +8,14 @@
             @endforeach
         </select>
     </div>
-    <div class="form-group">
+    {{-- <div class="form-group">
         <label for="customers">Transaction Type <span class="text-danger">*</span></label>
         <select name="type" id="type" class="form-control">
             <option value="">Select Transaction Type</option>
             <option value="in">Deposit</option>
             <option value="out">Withdraw</option>
         </select>
-    </div>
+    </div> --}}
     <div class="form-group">
         <label for="customers">Flag <span class="text-danger">*</span></label>
         <select name="flag" id="flag" class="form-control">
@@ -25,7 +25,7 @@
         </select>
     </div>
     <div class="form-group">
-        <label for="customers">Select Invoice</label>
+        <label for="customers">Select Invoice <span class="text-danger">*</span></label>
         <select name="order_id" id="order_id" class="form-control">
         </select>
     </div>

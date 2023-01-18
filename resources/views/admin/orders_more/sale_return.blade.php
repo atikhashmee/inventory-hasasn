@@ -91,6 +91,7 @@
                                 <textarea class="form-control" v-model="orderObj.note" name="note" id="note"></textarea>
                             </div>
                             <p style="color: red">@{{errors}}</p>
+                            <p style="color: red">@{{error}}</p>
                             <button class="btn btn-success" type="button" @click="submitReturnedOrder()">Submit Return</button>
                             <a class="btn btn-default" href="{{ route('admin.order.return') }}">Back</a>
                         </div>

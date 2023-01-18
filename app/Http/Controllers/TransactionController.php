@@ -99,10 +99,10 @@ class TransactionController extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 'customer_id' => 'required|integer|exists:customers,id',
-                'type' => 'required|in:in,out',
+                //'type' => 'required|in:in,out',
                 'flag' => 'required|in:payment,refund',
                 'amount' => 'required|gt:0',
-                'order_id' => 'sometimes|nullable|exists:orders,id',
+                'order_id' => 'required|exists:orders,id',
             ]);
             if ($validator->fails()) {
                 return redirect()->back()->withErrors($validator);
@@ -110,7 +110,35 @@ class TransactionController extends Controller
 
             $data = $request->except('_token');
             $data['user_id'] = $user->id;
-            $tnx = Transaction::create($data);
+            $type = "";
+            if ($data["flag"] == "payment") {
+                $type = "in";
+            }
+            if ($data["flag"] == "refund") {
+                $type = "out";
+            }
+            //add some validation only
+           
+            $currentTotalDeposit = Transaction::where(["type" => "in"])->where('order_id', $data['order_id'])->groupBy('order_id')->sum('amount');
+            $currentTotalWithdraw = Transaction::where(["type" => "out"])->where('order_id', $data['order_id'])->groupBy('order_id')->sum('amount');
+            $currentTotalAmountCollected = ($currentTotalDeposit - $currentTotalWithdraw);
+            if ($data["flag"] == "payment") {
+                if ($currentTotalAmountCollected < $data["amount"]) {
+                    throw new \Exception("Invoice payment should only be ".$currentTotalAmountCollected, 1);
+                }
+            }
+
+            if ($data["flag"] == "refund") {
+                if ($data["amount"] > $currentTotalAmountCollected) {
+                    throw new \Exception("Invoice Refund should only be ".$currentTotalAmountCollected, 1);
+                }
+            }
+
+            if ($type != "") {
+                $tnx = Transaction::create($data);
+            } else {
+                throw new \Exception("Type not found", 1);
+            }
             if ($tnx) {
                 Flash::success('Transaction created');
                 return redirect()->back();
