@@ -96,14 +96,8 @@
         </tr>
     </thead>
     <tbody>
-        @php
-            $subtotal = 0;
-        @endphp
         @if (count($order_detail) > 0)
             @foreach ($order_detail as $key=> $detail)
-            @php
-                $subtotal +=  $detail['product_unit_price'] * $detail['final_quantity'];
-            @endphp
                 <tr>
                     <td>{{++$key}}</td>
                     <td>
@@ -126,10 +120,9 @@
 <br />
 <br />
 @php
-    $tnx_amount = $transaction['amount'] ?? 0;
-    $today_sales = ($subtotal - $discount_amount);
+    $tnx_amount = $total_collected ?? 0;
     $current_due = $customer['current_due'];
-    $net_outstanding = ($current_due + $today_sales) -  $tnx_amount;
+    $net_outstanding = $net_outstanding;
 @endphp
 <table class="summer-table">
     <tbody>
@@ -155,7 +148,7 @@
                 <table class="sum-total">
                     <tr>
                         <td>Subtotal(Taka)</td>
-                        <td>{{number_format($subtotal, 2, '.', ',')}}</td>
+                        <td>{{number_format($sub_total, 2, '.', ',')}}</td>
                     </tr>
                     <tr>
                         <td>Discount(Taka)</td>
@@ -163,7 +156,7 @@
                     </tr>
                     <tr>
                         <td><strong>Grand Total</strong>(Taka)</td>
-                        <td>{{number_format($subtotal - $discount_amount, 2, '.', ',') }}</td>
+                        <td>{{number_format($sub_total - $discount_amount, 2, '.', ',') }}</td>
                     </tr>
                 </table>
             </td>
@@ -172,7 +165,7 @@
 </table>
 <br />
 <br />
-<p style="text-align: center; text-transform: uppercase"> <strong>In Word(Taka):</strong> {{numberToWord(($subtotal - $discount_amount))}}</p>
+<p style="text-align: center; text-transform: uppercase"> <strong>In Word(Taka):</strong> {{numberToWord(($sub_total - $discount_amount))}}</p>
 <br />
 <br />
 <br />
