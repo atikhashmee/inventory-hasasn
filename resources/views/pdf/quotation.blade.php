@@ -103,7 +103,7 @@
 <table style="width: 100%">
     <tr>
         <td>
-            {{$terms_and_con}}
+            {!!$terms_and_con!!}
             {{-- <strong>Terms & Condition</strong>
             <p>1. Delivery: From ready stock</p>
             <p>2. Payment: By cash, cheque</p>
