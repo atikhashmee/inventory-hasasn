@@ -140,5 +140,15 @@
                 }
             }
         })
+        $(document).ready(function() {
+            let defaultText = `
+            <strong>Terms & Condition</strong>
+            <p>1. Delivery: From ready stock</p>
+            <p>2. Payment: By cash, cheque</p>
+            <p>3. Validity: Our Quotation is valid for 1 month</p>
+            <p>4. Vat & Tax: Our price <b>does not include</b> local vat or taxes</p>
+            <p>5. Warranty: 1 year free service warranty will be provided</p>`;
+            $('#summernoteq').summernote('code', defaultText);
+        });
     </script>
 @endpush

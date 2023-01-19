@@ -39,7 +39,8 @@ class Quotation extends Model
         'recipient_address',
         'date',
         'subject',
-        'notes'
+        'notes',
+        'terms_and_con'
     ];
 
     /**

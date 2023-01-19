@@ -58,6 +58,7 @@ class QuotationController extends AppBaseController
             \DB::beginTransaction();
             $input = $request->all();
             /** @var Quotation $quotation */
+            $input["terms_and_con"] = $input["t_and_c"];
             $quotation = Quotation::create($input);
             if (count($input['product_id']) > 0) {
                 for ($i=0; $i < count($input['product_id']); $i++) { 

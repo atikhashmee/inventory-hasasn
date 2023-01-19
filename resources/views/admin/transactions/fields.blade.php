@@ -32,8 +32,8 @@
     <div class="form-group">
         <label for="">Total Payable</label>
         <p>
-            (+) = admin needs to pay to customer </br>
-            (-) = customers needs to pay to customer
+            (+) = Shop Owner needs to pay to customer </br>
+            (-) = customers needs to pay to Shop Owner
         </p>
         <input type="number" readonly class="form-control" id="payable">
     </div>

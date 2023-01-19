@@ -111,3 +111,8 @@
     {!! Form::label('notes', 'Notes:') !!}
     {!! Form::textarea('notes', null, ['class' => 'form-control', 'rows' => 0]) !!}
 </div>
+
+<div class="form-group col-sm-12 col-lg-12">
+    {!! Form::label('t_and_c', 'Terms & Condition:') !!}
+    {!! Form::textarea('t_and_c', null, ['class' => 'form-control', 'id' => 'summernoteq']) !!}
+</div>

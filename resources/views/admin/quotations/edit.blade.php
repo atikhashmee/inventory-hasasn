@@ -120,5 +120,9 @@
                 }
             }
         })
+        $(document).ready(function() {
+            let defaultText = `<?=$quotation->terms_and_con?>`;
+            $('#summernoteq').summernote('code', defaultText);
+        });
     </script>
 @endpush
