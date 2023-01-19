@@ -137,6 +137,7 @@ class TransactionController extends Controller
             }
 
             if ($type != "") {
+                $data["type"] = $type;
                 $tnx = Transaction::create($data);
             } else {
                 throw new \Exception("Type not found", 1);
