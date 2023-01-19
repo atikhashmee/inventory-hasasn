@@ -58,29 +58,34 @@ class InvoiceController extends Controller
         }
         if ($sqldata) {
             $data = $sqldata->toArray();
-            $totalDeposit = Transaction::where("type", "in")->where('customer_id', $data['customer_id'])->where(function($q) use($order_id) {
-                $q->where('order_id', '!=', $order_id);
-                $q->orWhereNull('order_id');
-            })->groupBy('customer_id')->sum('amount');
-            $totalWithdraw = Transaction::where("type", "out")->where('customer_id', $data['customer_id'])->where(function($q) use($order_id) {
-                $q->where('order_id', '!=', $order_id);
-                $q->orWhereNull('order_id');
-            })->groupBy('customer_id')->sum('amount');
-
-            $currentTotalDeposit = Transaction::where(["type" => "in",  "flag" => "payment"])->where('order_id', $data['id'])->groupBy('order_id')->sum('amount');
-            $currentTotalWithdraw = Transaction::where(["type" => "out", "flag" => "refund"])->where('order_id', $data['id'])->groupBy('order_id')->sum('amount');
+            $totalDeposit = Transaction::select(\DB::raw("SUM(amount) as totalDeposit"))
+                ->where([
+                    ["type", "=", "in"],
+                    ["customer_id", "=", $data['customer_id']]
+                ])
+                ->groupBy('order_id')
+                ->orderBy("order_id", "ASC")
+                ->having("order_id", "<", $data['id'])
+                ->get()->sum("totalDeposit");
+            $totalWithdraw = Transaction::select(\DB::raw("SUM(amount) as totalDeposit"))
+                ->where([
+                    ["type", "=", "out"],
+                    ["customer_id", "=", $data['customer_id']]
+                ])
+                ->groupBy('order_id')
+                ->orderBy("order_id", "ASC")
+                ->having("order_id", "<", $data['id'])
+                ->get()->sum("totalDeposit");
+            $currentTotalDeposit = Transaction::where(["type" => "in"])->where('order_id', $data['id'])->groupBy('order_id')->sum('amount');
+            $currentTotalWithdraw = Transaction::where(["type" => "out"])->where('order_id', $data['id'])->groupBy('order_id')->sum('amount');
             $currentTotalAmountCollected = ($currentTotalDeposit - $currentTotalWithdraw);
-
-            $currentTotalSales = Transaction::where(["type" => "out",  "flag" => "order_placed"])->where('order_id', $data['id'])->groupBy('order_id')->sum('amount');
-            $currentTotalReturn = Transaction::where(["type" => "in", "flag" => "sell_return"])->where('order_id', $data['id'])->groupBy('order_id')->sum('amount');
-            $currentTotalDue = ($currentTotalSales - $currentTotalReturn);
             $qrCode = null;
             $totalCurrentDue = ($totalWithdraw - $totalDeposit);
-            $finalCurrentDue = $totalCurrentDue;
-            $data['customer']['current_due'] = $finalCurrentDue;
-            $data['today_sales'] = $currentTotalDue;
-            $data['total_collected'] = $currentTotalAmountCollected;
-            $data['net_outstanding'] = ($finalCurrentDue + $currentTotalDue) - $currentTotalAmountCollected;
+            $data['customer']['current_due'] = $totalCurrentDue;
+            $data['current_due'] = $totalCurrentDue;
+            $data['today_sales'] = $currentTotalWithdraw;
+            $data['total_collected'] = $currentTotalDeposit;
+            $data['net_outstanding'] = ($totalCurrentDue + $currentTotalWithdraw) - $currentTotalDeposit;
             $orderNumber = $data['order_number'];
             list($dateStr, $randomeNumber) = explode('-', $orderNumber);
             $data['order_number'] = date("ymd", strtotime($data["created_at"]))."-".$randomeNumber; 

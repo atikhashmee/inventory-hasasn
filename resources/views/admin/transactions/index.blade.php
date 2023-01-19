@@ -71,7 +71,7 @@
                         <td class="text-right">{{'-'.$totalWithdraw}}</td>
                     </tr>
                     <tr>
-                        <td colspan="5">Due</td>
+                        <td colspan="5">Due / Balance / Remaining (+) admin has to pay to customer (-) customer has to pay to admin</td>
                         <td class="text-right">{{$totalDiposit - $totalWithdraw}}</td>
                     </tr>
                 </table>

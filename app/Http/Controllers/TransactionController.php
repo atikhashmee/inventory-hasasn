@@ -121,7 +121,7 @@ class TransactionController extends Controller
            
             $currentTotalDeposit = Transaction::where(["type" => "in"])->where('order_id', $data['order_id'])->groupBy('order_id')->sum('amount');
             $currentTotalWithdraw = Transaction::where(["type" => "out"])->where('order_id', $data['order_id'])->groupBy('order_id')->sum('amount');
-            $currentTotalAmountCollected = ($currentTotalDeposit - $currentTotalWithdraw);
+            $currentTotalAmountCollected = ($currentTotalWithdraw - $currentTotalDeposit );
             if ($data["flag"] == "payment") {
                 if ($currentTotalAmountCollected < $data["amount"]) {
                     throw new \Exception("Invoice payment should only be ".$currentTotalAmountCollected, 1);

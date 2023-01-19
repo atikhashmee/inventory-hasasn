@@ -1,9 +1,12 @@
 <?php
 
+use App\Models\Customer;
+use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Stock;
 use App\Models\ShopInventory;
 use App\Models\ShopProductStock;
+use App\Models\Transaction;
 use Illuminate\Routing\RouteGroup;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
@@ -33,155 +36,55 @@ Route::get('/', function () {
 
 Auth::routes();
 
-function stockKahini($stock) {
-    $warehouse_id = $stock->warehouse_id;
-    $new_quantity = $stock->quantity;
-    $product_id = $stock->product_id;
-    $user_id    =$stock->user_id;
-    $shop_id  = $stock->shop_id;
-    $supplier_id = $stock->supplier_id;
-    if ($stock->type == 'warehouse_transfer') {
-        if (isset($new_quantity) && $new_quantity > 0) {
-            $settle_quantity = $new_quantity; 
-            $stocks = Stock::select('stocks.*', 'ST.total_stock_out', DB::raw('(stocks.quantity - IFNULL(ST.total_stock_out, 0)) AS stockQty'))                  
-            ->leftJoin(DB::raw("(SELECT SUM(quantity) as total_stock_out, stock_id FROM shop_product_stocks GROUP BY stock_id) as ST"), 'stocks.id', '=', 'ST.stock_id')
-            ->where('warehouse_id', $warehouse_id)
-            ->where('product_id', $product_id)
-            ->having('stockQty', '>', 0)
-            ->get();
-            foreach ($stocks as $key => $st) {
-                $checkQty = ($settle_quantity - $st->stockQty);
-                if ($checkQty > 0) {
-                    $stQty = $st->stockQty;
-                } else {
-                    $stQty = $settle_quantity;
-                }
-                $stOut = ShopProductStock::create([
-                    'stock_id' => $st->id,
-                    'warehouse_id' => $warehouse_id,
-                    'user_id' => $user_id,
-                    'shop_id' => $shop_id,
-                    'supplier_id' => $st->supplier_id,
-                    'product_id' => $product_id,
-                    'quantity' => $stQty,
-                    'type' => 'warehouse_transfer',
-                    'price' => 0,
+Route::get("transaction-kahini/{customer_id}", function ($customer_id) {
+    try {
+        \DB::beginTransaction();
+        $customer = Customer::where("id", $customer_id)->first();
+        if (!$customer) {
+           throw new \Exception("Customer not found", 1);
+        }
+        $transactions = Transaction::where('customer_id', $customer->id)->get();
+        if (!empty($transactions)) {
+            Transaction::where("customer_id", $customer->id)->delete();
+        }
+        $orders = Order::where('customer_id', $customer->id)->get();
+        if (!empty($orders)) {
+            foreach ($orders as $order) {
+                Transaction::updateOrCreate([
+                    'order_id' => $order->id,
+                    'flag' => 'order_placed', 
+                ], [
+                    'customer_id' => $customer->id, 
+                    'order_id' => $order->id, 
+                    'user_id' => $order->user_id, 
+                    'status' => 'done', 
+                    'type' => 'out', 
+                    'flag' => 'order_placed', 
+                    'amount' => ($order->sub_total - $order->discount_amount)
                 ]);
 
-                if ($stOut) {
-                    $settle_quantity = $settle_quantity-$stOut->quantity;
-                }
-
-                if ($settle_quantity == 0) {
-                    break;
-                }
-            }
-        }
-    } else if ($stock->type == 'user_transfer') {
-        $stock = ShopProductStock::create([
-            'user_id' => $user_id,
-            'shop_id' => $shop_id, 
-            'product_id' => $product_id,
-            'supplier_id' => $supplier_id,
-            'quantity' => $new_quantity,
-            'type' => 'user_transfer',
-            'price' => $stock->price
-        ]);
-    
-    } else if ($stock->type == 'sale_return') {
-  
-        $shopStock = ShopProductStock::create([
-            'user_id' => $user_id,
-            'order_detail_id' => $stock->order_detail_id,
-            'shop_id' => $shop_id,
-            'product_id' => $product_id,
-            'quantity' => $new_quantity,
-            'type' => 'sale_return',
-            'price' => $stock->price
-        ]);
-    } else if ($stock->type == 'shop_transfer') {
-
-        $settle_quantity = $new_quantity;
-        $stocks = ShopProductStock::select('shop_product_stocks.*', 'ST.total_stock_out', DB::raw('(shop_product_stocks.quantity - IFNULL(ST.total_stock_out, 0)) AS stockQty'))
-        ->leftJoin(DB::raw("(SELECT SUM(quantity) as total_stock_out, stock_id FROM shop_inventories GROUP BY stock_id) as ST"), 'shop_product_stocks.id', '=', 'ST.stock_id')
-        ->where('shop_id', $stock->shop_from)
-        ->where('product_id', $product_id)
-        ->get();
-        foreach ($stocks as $key => $st) {
-            $checkQty = ($settle_quantity - $st->stockQty);
-            if ($checkQty > 0) {
-                $stQty = $st->stockQty;
-            } else {
-                $stQty = $settle_quantity;
-            }
-
-            $shop_stock = ShopProductStock::create([
-                'user_id' => $user_id,
-                'shop_id' => $shop_id, 
-                'product_id' => $product_id,
-                'supplier_id' => $st->supplier_id,
-                'quantity' => $stQty,
-                'type' => 'shop_transfer',
-                'price' => 0,
-            ]);
-            if ($shop_stock) {
-                $stOut =  ShopInventory::create([
-                    'type' => 'shop_transfer',
-                    'transfer_id' => $shop_stock->id,
-                    'stock_id' => $st->id,
-                    'product_id' => $st->product_id,
-                    'shop_id' =>  $st->shop_id,
-                    'quantity' =>  $stQty
+                Transaction::updateOrCreate([
+                    'order_id' => $order->id,
+                    'flag'     => 'payment', 
+                ], [
+                    'customer_id' => $customer->id, 
+                    'order_id'    => $order->id, 
+                    'user_id'     => $order->user_id, 
+                    'status'      => 'done', 
+                    'type'        => 'in', 
+                    'flag'        => 'payment', 
+                    'payment_type'=> "Cash", 
+                    'amount'      => ($order->sub_total - $order->discount_amount)
                 ]);
             }
-            if ($stOut) {
-                $settle_quantity = $settle_quantity-$stOut->quantity;
-            }
-
-            if ($settle_quantity == 0) {
-                break;
-            }
         }
+        \DB::commit();
+        return "done!";
+    } catch (\Exception $e) {
+        \DB::rollBack();
+        dd($e->getMessage());
     }
-}
-
-function orderKahini($order_detail) {
-    $settle_quantity = $order_detail->final_quantity;
-    if ($order_detail) {
-        $stocks = ShopProductStock::select('shop_product_stocks.*', 'ST.total_stock_out', DB::raw('(shop_product_stocks.quantity - IFNULL(ST.total_stock_out, 0)) AS stockQty'))
-        ->leftJoin(DB::raw("(SELECT SUM(quantity) as total_stock_out, stock_id FROM shop_inventories GROUP BY stock_id) as ST"), 'shop_product_stocks.id', '=', 'ST.stock_id')
-        ->where('shop_id', $order_detail->shop_id)
-        ->where('product_id', $order_detail->product_id)
-        ->having('stockQty', '>', 0)
-        ->get();
-
-        foreach ($stocks as $key => $st) {
-            $checkQty = ($settle_quantity - $st->stockQty);
-            if ($checkQty > 0) {
-                $stQty = $st->stockQty;
-                } else {
-                    $stQty = $settle_quantity;
-                }
-                $stOut =  ShopInventory::create([
-                    'type' => 'order_placed',
-                    'order_detail_id' => $order_detail->id,
-                    'stock_id' => $st->id,
-                    'product_id' => $st->product_id,
-                    'shop_id' =>  $st->shop_id,
-                    'quantity' =>  $stQty
-                ]);
-
-                if ($stOut) {
-                    $settle_quantity = $settle_quantity-$stOut->quantity;
-                }
-
-                if ($settle_quantity == 0) {
-                    return;
-                }
-        }
-    }
-}
-
+});
 Route::get('/migrate-data-warehouse', function() {
     $stockData = \DB::table('shop_product_stocks_copy')
     ->select('shop_product_stocks_copy.*', 'shop_inventories_copy.shop_id as shop_from')

@@ -30,11 +30,15 @@
         </select>
     </div>
     <div class="form-group">
-        <label for="">Total Payable (+) Admin Liable (-) Customer Liable</label>
+        <label for="">Total Payable</label>
+        <p>
+            (+) = admin needs to pay to customer </br>
+            (-) = customers needs to pay to customer
+        </p>
         <input type="number" readonly class="form-control" id="payable">
     </div>
     <div class="form-group">
-        <label for="customers">Amount <span class="text-danger">*</span> </label>
+        <label for="customers">Amount <small>(Put only positive number)</small> <span class="text-danger">*</span> </label>
         <input type="number" class="form-control" name="amount">
     </div>
     <div class="form-group">
