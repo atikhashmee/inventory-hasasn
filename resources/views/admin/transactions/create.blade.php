@@ -34,6 +34,7 @@
         let customers = {!! json_encode(count($customers) > 0 ? $customers->toArray() : [], JSON_HEX_TAG) !!}
         function changeCustomer(evt) {
             let $evt = $(evt)
+            $("#order_id").empty();
             let invoiceDom = '<option value="">Select Invoice</option>';
             if (customers.length > 0) {
                 customers.forEach(element => {

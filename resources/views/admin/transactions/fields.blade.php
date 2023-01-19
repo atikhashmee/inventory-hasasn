@@ -21,7 +21,9 @@
         <select name="flag" id="flag" class="form-control">
             <option value="">Select Transaction Flag</option>
             <option value="payment">Payment</option>
-            <option value="refund">Refund</option>
+            @if (auth()->user()->role == "admin")
+                <option value="refund">Refund</option>
+            @endif
         </select>
     </div>
     <div class="form-group">
