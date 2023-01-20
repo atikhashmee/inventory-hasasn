@@ -36,48 +36,69 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get("transaction-kahini/{customer_id}", function ($customer_id) {
+
+Route::get("transaction-kahini", function () {
     try {
         \DB::beginTransaction();
-        $customer = Customer::where("id", $customer_id)->first();
+        $customers = Customer::get();
+        if (!empty($customers)) {
+            foreach ($customers as $customer) {
+                $transactions = Transaction::where('customer_id', $customer->id)->get();
+                if (!empty($transactions)) {
+                    Transaction::where("customer_id", $customer->id)->delete();
+                }
+                $orders = Order::with("orderDetail")->where('customer_id', $customer->id)->get();
+                if (!empty($orders)) {
+                    foreach ($orders as $order) {
+                        $totalOrderAmount = 0;
+                        $totalItemPrice = [];
+                        if (count($order->orderDetail) > 0) {
+                            foreach ($order->orderDetail as $orderDetail) {
+                                $productUnitPrice = $orderDetail->product_unit_price;
+                                $totalFinalQuantity = $orderDetail->final_quantity;
+                                $totalItemPrice[] = ($totalFinalQuantity * $productUnitPrice);  
+                            }
+                        }
+                        if (count($totalItemPrice) > 0) {
+                            $totalOrderAmount = array_sum($totalItemPrice);
+                        }
+
+                        if ($totalOrderAmount > 0) {
+                            Transaction::updateOrCreate([
+                                'order_id' => $order->id,
+                                'flag' => 'order_placed', 
+                            ], [
+                                'customer_id' => $customer->id, 
+                                'order_id' => $order->id, 
+                                'user_id' => $order->user_id, 
+                                'status' => 'done', 
+                                'type' => 'out', 
+                                'flag' => 'order_placed', 
+                                'amount' => $totalOrderAmount
+                            ]);
+
+                            Transaction::updateOrCreate([
+                                'order_id' => $order->id,
+                                'flag'     => 'payment', 
+                            ], [
+                                'customer_id' => $customer->id, 
+                                'order_id'    => $order->id, 
+                                'user_id'     => $order->user_id, 
+                                'status'      => 'done', 
+                                'type'        => 'in', 
+                                'flag'        => 'payment', 
+                                'payment_type'=> "Cash", 
+                                'amount'      => $totalOrderAmount
+                            ]);
+                        }
+                    }
+                }        
+            }
+        }
         if (!$customer) {
            throw new \Exception("Customer not found", 1);
         }
-        $transactions = Transaction::where('customer_id', $customer->id)->get();
-        if (!empty($transactions)) {
-            Transaction::where("customer_id", $customer->id)->delete();
-        }
-        $orders = Order::where('customer_id', $customer->id)->get();
-        if (!empty($orders)) {
-            foreach ($orders as $order) {
-                Transaction::updateOrCreate([
-                    'order_id' => $order->id,
-                    'flag' => 'order_placed', 
-                ], [
-                    'customer_id' => $customer->id, 
-                    'order_id' => $order->id, 
-                    'user_id' => $order->user_id, 
-                    'status' => 'done', 
-                    'type' => 'out', 
-                    'flag' => 'order_placed', 
-                    'amount' => ($order->sub_total - $order->discount_amount)
-                ]);
-
-                Transaction::updateOrCreate([
-                    'order_id' => $order->id,
-                    'flag'     => 'payment', 
-                ], [
-                    'customer_id' => $customer->id, 
-                    'order_id'    => $order->id, 
-                    'user_id'     => $order->user_id, 
-                    'status'      => 'done', 
-                    'type'        => 'in', 
-                    'flag'        => 'payment', 
-                    'payment_type'=> "Cash", 
-                    'amount'      => ($order->sub_total - $order->discount_amount)
-                ]);
-            }
-        }
+       
         \DB::commit();
         return "done!";
     } catch (\Exception $e) {
