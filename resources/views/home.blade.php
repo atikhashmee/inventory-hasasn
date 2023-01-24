@@ -232,6 +232,44 @@
                             </table>
                         </div>
                     </div>
+
+                    <div class="card">
+                        <div class="card-header ui-sortable-handle" style="cursor: move;">
+                            <h3 class="card-title">
+                                <i class="ion ion-clipboard mr-1"></i>
+                                Top 5 Customers Outstandings
+                            </h3>
+
+                            <div class="card-tools">
+                                <a href="{{ route("admin.outstandingCustomers") }}">See All</a>
+                            </div>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>SL</th>        
+                                        <th>Customer ID</th>
+                                        <th>Customer Name</th>
+                                        <th>Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (count($outstanding_dues) > 0)
+                                        @foreach ($outstanding_dues as $key => $customer)
+                                            <tr>
+                                                <td>{{ ++$key }}</td>
+                                                <td>{{ $customer->id }}</td>
+                                                <td>{{ $customer->customer_name }}</td>
+                                                <td>{{ number_format($customer->total_due, 2, ",", ".") }}</td>
+                                            </tr>
+                                        @endforeach
+                                    @endif
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                     <!-- /.card -->
                 </section>
                 <!-- right col -->

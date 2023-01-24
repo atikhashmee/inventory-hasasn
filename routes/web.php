@@ -40,7 +40,7 @@ Auth::routes();
 Route::get("transaction-kahini", function () {
     try {
         \DB::beginTransaction();
-        $customers = Customer::get();
+        $customers = Customer::whereIn('id', [175])->get();
         if (!empty($customers)) {
             foreach ($customers as $customer) {
                 $transactions = Transaction::where('customer_id', $customer->id)->get();
@@ -144,6 +144,7 @@ Route::get('get-customers', [App\Http\Controllers\CustomerController::class, 'ge
 Route::get('get-products', [App\Http\Controllers\ProductController::class, 'getAllProductsSearchJson'])->name('getProducts');
 
 Route::group(['middleware' => 'auth', 'prefix' => 'admin', 'as' => 'admin.'], function () {
+    Route::get('/all-customers-outstanding', [App\Http\Controllers\TransactionController::class, 'getCustomersOutstandingLists'])->name('outstandingCustomers');
     Route::get('/top-selling-products', [App\Http\Controllers\HomeController::class, 'getTopSellingProducts'])->name('topSellingProducts');
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::resource('users', App\Http\Controllers\UserController::class)->middleware('auth');

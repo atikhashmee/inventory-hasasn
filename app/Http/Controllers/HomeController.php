@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customer;
 use App\Models\Order;
 use App\Models\Stock;
 use App\Models\Product;
 use App\Models\Transaction;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\WarentySerial;
 use Doctrine\DBAL\Schema\View;
@@ -37,7 +39,20 @@ class HomeController extends Controller
         $last_day_this_month  = date('m-t-Y 23:59:59');
         $user = auth()->user();
         $data = [];
-        
+
+
+
+        $untilLast7days = Carbon::now()->subDays(7);
+
+        $customers = Customer::select('customers.*', \DB::raw("IFNULL(A.total_deposit, 0) as total_deposit"), \DB::raw("IFNULL(B.total_withdraw, 0) as total_withdraw"), \DB::raw("(IFNULL(A.total_deposit, 0) - IFNULL(B.total_withdraw, 0)) as total_due"))
+        ->leftJoin(\DB::raw("(SELECT SUM(amount) total_deposit, customer_id FROM transactions WHERE type = 'in' AND created_at <= '".$untilLast7days."' GROUP BY customer_id) as A"), "A.customer_id", "=", "customers.id")
+        ->leftJoin(\DB::raw("(SELECT SUM(amount) total_withdraw, customer_id FROM transactions WHERE type = 'out' AND created_at <= '".$untilLast7days."' GROUP BY customer_id) as B"), "B.customer_id", "=", "customers.id")
+        ->where(\DB::raw("(IFNULL(A.total_deposit, 0) - IFNULL(B.total_withdraw, 0))"), "<", 0)
+        ->orderBy("total_due", "ASC")
+        ->limit(5)
+        ->get();
+        $data['outstanding_dues'] = $customers;
+
         $data['total_payment_today'] = Transaction::where('type', 'in')->whereNotNull('order_id')->where('flag', 'payment')->whereBetween('created_at', [$start, $end])->sum('amount');
         $totalDeposit = Transaction::where("type", "in")->whereNotNull('order_id')->whereBetween('created_at', [$start, $end])->groupBy('customer_id')->sum('amount');
         $totalWithdraw = Transaction::where("type", "out")->whereBetween('created_at', [$start, $end])->groupBy('customer_id')->sum('amount');

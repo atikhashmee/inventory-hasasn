@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Order;
 use App\Models\Customer;
 use Laracasts\Flash\Flash;
@@ -63,6 +64,18 @@ class TransactionController extends Controller
         return view('admin.transactions.index', $data);
     }
 
+    public function getCustomersOutstandingLists() {
+        $untilLast7days = Carbon::now()->subDays(7);
+        $data = [];
+        $customers = Customer::select('customers.*', \DB::raw("IFNULL(A.total_deposit, 0) as total_deposit"), \DB::raw("IFNULL(B.total_withdraw, 0) as total_withdraw"), \DB::raw("(IFNULL(A.total_deposit, 0) - IFNULL(B.total_withdraw, 0)) as total_due"))
+        ->leftJoin(\DB::raw("(SELECT SUM(amount) total_deposit, customer_id FROM transactions WHERE type = 'in' AND created_at <= '".$untilLast7days."' GROUP BY customer_id) as A"), "A.customer_id", "=", "customers.id")
+        ->leftJoin(\DB::raw("(SELECT SUM(amount) total_withdraw, customer_id FROM transactions WHERE type = 'out' AND created_at <= '".$untilLast7days."' GROUP BY customer_id) as B"), "B.customer_id", "=", "customers.id")
+        ->where(\DB::raw("(IFNULL(A.total_deposit, 0) - IFNULL(B.total_withdraw, 0))"), "<", 0)
+        ->orderBy("total_due", "ASC")
+        ->paginate(100);
+        $data['outstanding_dues'] = $customers;
+        return view("outstanding-customers-list", $data);
+    }
     /**
      * Show the form for creating a new resource.
      *
