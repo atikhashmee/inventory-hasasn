@@ -20,7 +20,7 @@
         <div class="clearfix"></div>
 
         <div class="card">
-            <div class="card-body">
+            <div class="card-body" id="draftsOrder">
                 <form action="{{route('admin.orders.index')}}" method="GET">
                     <div class="d-flex justify-content-between align-items-center mb-2">
                         <div class="d-flex">
@@ -77,7 +77,7 @@
                         </div>
                     </div>
                 </form>
-                <div class="dropdown" style="display: none">
+                <div class="dropdown" v-if="order_ids.length > 0">
                     <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       Action
                     </button>
@@ -89,7 +89,7 @@
                     <thead>
                         <tr>
                             <th>
-                                <input type="checkbox" class="allcheck" value="all">
+                                <input type="checkbox" class="allcheck" v-model="selectAll" value="all">
                             </th>
                             <th>SL</th>
                             <th>Order&nbsp;Number</th>
@@ -100,6 +100,7 @@
                             <th>Payment&nbsp;Status</th>
                             <th>Order&nbsp;Status</th>
                             <th>Sold&nbsp;By</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -107,7 +108,7 @@
                             @foreach ($orders as $order)
                                 <tr>
                                     <td>
-                                        <input type="checkbox" class="order_id" value="{{$order->id}}">
+                                        <input type="checkbox" class="order_id" v-model="order_ids" value="{{$order->id}}">
                                     </td>
                                     <td>{{ $serial-- }}</td>
                                     <td>{{$order->order_number}}</td>
@@ -134,6 +135,20 @@
                                         @endif
                                     </td>
                                     <td>{{$order->user? $order->user->name : 'N/A'}}</td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-default btn-flat"><i class="fas fa-cogs"></i></button>
+                                            <button type="button" class="btn btn-default btn-flat dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="false">
+                                              <span class="sr-only">Toggle Dropdown</span>
+                                            </button>
+                                            <div class="dropdown-menu" role="menu" style="">
+                                                @if ($order->status == "Drafted")
+                                                    <a class="dropdown-item" href="{{ route('admin.orders.create') }}?order_id={{$order->id}}">Edit & Sale</a>
+                                                @endif
+                                                <a class="dropdown-item" href="{{route('admin.orders.show', ['order'=>$order])}}">Detail</a>
+                                            </div>
+                                        </div>
+                                    </td>
                                  
                                 </tr>
                             @endforeach
@@ -159,60 +174,44 @@
 
 @endsection
 
+@push('third_party_scripts')
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+@endpush
 
 @push('page_scripts')
     <script>
         let allOrders = [];
         let deletdUrl = `{{route("admin.order.draft.delete")}}`;
-        $(".order_id").on("change", checkSingleOrder);
-        $(".allcheck").on("change", allCheck);
-
-        function checkSingleOrder(evt) {
-            let obj = evt.currentTarget;
-            let order_id = obj.value;
-            if (obj.checked) {
-                allOrders[order_id] = order_id
-            } else {
-                allOrders.splice(order_id, 1);
-            }
-        }
-
-        function allCheck(evt) {
-            let obj = evt.currentTarget;
-            if (obj.checked) {
-                $(".order_id").each(function(index, item) {
-                    let elemId = $(this).val();
-                    allOrders[elemId] = elemId
-                })
-            } else {
-                allOrders = []
-            }
-            checkuncheck()
-            makeModify()
-        }
-        function checkuncheck() {
-            $(".order_id").each(function(index, item) {
-                let elemId = $(this).val();
-                if (allOrders[elemId] !== undefined) {
-                    $(this).attr('checked', true)
-                } else {
-                    $(this).attr('checked', false)
+    
+        let draftOrdersApp = new Vue({
+            el: '#draftsOrder', 
+            data: {
+                order_ids: [],
+                orders: {!! json_encode(count($orders->getCollection()) > 0 ? $orders->getCollection()->toArray() : [], JSON_HEX_TAG) !!},
+                selectAll: null
+            },
+            mounted(){
+            },
+            computed: {
+            
+            },
+            watch: {
+                selectAll(oldval, newval) {
+                    if (oldval) {
+                        this.order_ids = this.orders.map(item=>item.id)
+                    } else {
+                        this.order_ids = [] 
+                    }
                 }
-            })
-        }
-
-        function makeModify() {
-            if (allOrders.length > 0) {
-                $(".dropdown").css("display", "block")
-            } else {
-                $(".dropdown").css("display", "none")
+            },
+            methods: {
+               
             }
-        }
+        })
         function submitDelete() {
-            if (allOrders.length == 0) {
+            if (draftOrdersApp.order_ids.length == 0) {
                 alert("No Item found, selected")
             }
-            let orderData = allOrders.filter(item => item)
             fetch(deletdUrl, {
                 method: 'POST',
                 headers: {
@@ -220,7 +219,7 @@
                     'Content-Type': 'application/json'
                 }, 
                 body: JSON.stringify({
-                    order_ids: orderData
+                    order_ids: draftOrdersApp.order_ids
                 })
             }).then(res=>res.json())
             .then(res=>{

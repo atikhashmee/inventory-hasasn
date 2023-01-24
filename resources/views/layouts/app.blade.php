@@ -55,6 +55,9 @@
                 <a href="{{ route('admin.orders.create') }}" class="nav-link btn btn-success mr-2">New sale</a>
             </li>
             <li class="nav-item">
+                <a href="{{ route('admin.order.draft.index') }}" class="nav-link btn btn-success mr-2">Drafts</a>
+            </li>
+            <li class="nav-item">
                 <a href="{{ route('admin.challans.create') }}" class="nav-link btn btn-success mr-2">New Challan</a>
             </li>
             <li class="nav-item">
