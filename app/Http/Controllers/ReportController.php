@@ -99,11 +99,13 @@ class ReportController extends Controller
                         $sql = Stock::select(
                             \DB::raw('COUNT(id) AS countId'),
                             \DB::raw('SUM(price) AS totalPrice'),
+                            \DB::raw('SUM(quantity) AS totalquantity'),
                             \DB::raw('DATE(created_at) AS date')
                         );
                 } else {
                     $sql = ShopProductStock::select(
                         \DB::raw('COUNT(id) AS countId'),
+                        \DB::raw('SUM(quantity) AS totalquantity'),
                         \DB::raw('SUM(price) AS totalPrice'),
                         \DB::raw('DATE(created_at) AS date')
                     )
@@ -130,7 +132,7 @@ class ReportController extends Controller
                 $dateArr = explode('-', $item->date);
                 $month = date("m", strtotime($item->date));
                 $day = date("d", strtotime($item->date));
-                $data[intVal($month)][intVal($day)] = $item->totalPrice;
+                $data[intVal($month)][intVal($day)] = $item->totalPrice * $item->totalquantity;
                 // if (!$request->query('show') || $request->query('show') == 'charge') {
                     //     $data[intVal($dateArr[1])][intVal($dateArr[2])] = $item->charges;
                 // } else {
