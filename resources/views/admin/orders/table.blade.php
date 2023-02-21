@@ -18,7 +18,7 @@
             @foreach ($orders as $order)
                 <tr>
                     <td>{{ $serial-- }}</td>
-                    <td>{{$order->order_number}}</td>
+                    <td>{{$order->invoice_no}}</td>
                     <td>{{$order->shop->name ?? 'N/A'}}</td>
                     <td>{{$order->customer->customer_name ?? 'N/A'}}</td>
                     <td>{{$order->total_amount}}</td>

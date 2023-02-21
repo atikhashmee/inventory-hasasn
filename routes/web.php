@@ -36,6 +36,25 @@ Route::get('/', function () {
 
 Auth::routes();
 
+Route::get("/invoice-no", function() {
+    $orders = Order::select(\DB::raw('DATE(created_at) as created_at'))->groupBy(\DB::raw('DATE(created_at)'))->get();
+    if (count($orders) > 0) {
+        foreach ($orders as $order) {
+            $dOrders = Order::where(\DB::raw("DATE(created_at)"), date('Y-m-d', strtotime($order->created_at)))->orderBy("created_at", "ASC")->get();
+            if (count($dOrders) > 0) {
+                $counter = 0;
+                foreach ($dOrders as $key => $order) {
+                    $key++;
+                    $invoiceNo = date("ymd", strtotime($order->created_at))."-";
+                    $invoiceNo .= str_pad($key, 4, "0", STR_PAD_LEFT);
+                    $order->invoice_no = $invoiceNo; 
+                    $order->save();
+                }
+            }
+        }
+    }
+});
+
 
 Route::get("transaction-kahini", function () {
     try {

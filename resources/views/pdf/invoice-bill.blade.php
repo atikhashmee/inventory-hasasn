@@ -57,7 +57,7 @@
 <table class="invoice-info">
     <tr>
         <td width="50%">
-            <p><strong>Invoice Number:</strong> {{$order_number}}</p>
+            <p><strong>Invoice Number:</strong> {{$invoice_no}}</p>
             <p><strong>Customer Name:</strong> {{$customer['customer_name']}}</p>
             <p><strong>Phone No:</strong> {{$customer['customer_phone']}}</p>
             <p><strong>E-mail:</strong> {{$customer['customer_email']}}</p>

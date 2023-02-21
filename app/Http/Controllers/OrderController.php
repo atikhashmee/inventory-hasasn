@@ -182,6 +182,18 @@ class OrderController extends Controller
         return view('user.order_detail', $data);
     }
 
+    public function generateInvoiceNo() {
+        $order = Order::select(\DB::raw('COUNT(*) as total_item'))->where(\DB::raw("DATE(created_at)"), date('Y-m-d'))->groupBy(\DB::raw('DATE(created_at)'))->first();
+        $key = 0;
+        if ($order) {
+            $key = $order->total_item;
+        }
+        $key++;
+        $invoiceNo = date("ymd")."-";
+        $invoiceNo .= str_pad($key, 4, "0", STR_PAD_LEFT);
+        return $invoiceNo;
+    }
+
     public function getResources() {
         try {
             $data = [];
@@ -250,6 +262,7 @@ class OrderController extends Controller
                     'order_number' =>  $data['order_number'],
                 ], [
                     'order_number' =>  $data['order_number'],
+                    'invoice_no' =>  $this->generateInvoiceNo(),
                     'sub_total'    =>  $data['subtotal'],
                     'shop_id'  =>  $data['shop_id'],
                     'order_challan_type'  =>  strtolower($data['sale_type']),
@@ -273,57 +286,57 @@ class OrderController extends Controller
                             $order_detail =  OrderDetail::updateOrCreate([
                                 'order_id' => $order->id,
                                 'product_id' => $pro_item['product_id'],
-                            ], [
-                            'order_id' => $order->id,
-                            'product_id' => $pro_item['product_id'],
-                            'shop_id' =>  $order->shop_id,
-                            'quantity_unit_id' =>  $pro_item['quantity_unit_id'],
-                            'quantity_unit_value' =>  $pro_item['input_quantity'],
-                            'product_name' => $pro_item['product_name'],
-                            'product_quantity' => $pro_item['quantity'],
-                            'final_quantity' => $pro_item['quantity'],
-                            'product_original_unit_price' => $pro_item['product_purchase_price'],
-                            'product_unit_price' => $pro_item['price'],
-                            'sub_total' => $pro_item['totalPrice'],
-                            'final_amount' => $pro_item['totalPrice'],
-                            'warenty_duration' => $pro_item['warenty_duration'],
-                        ]);
-                        //update product selling price with the latest one
-                        Product::where("id", $pro_item['product_id'])->update(["selling_price" => $pro_item['price']]);
-                        $settle_quantity = $order_detail->final_quantity;
-                        if ($order_detail) {
-                            $stocks = ShopProductStock::select('shop_product_stocks.*', 'ST.total_stock_out', DB::raw('(shop_product_stocks.quantity - IFNULL(ST.total_stock_out, 0)) AS stockQty'))
-                            ->leftJoin(DB::raw("(SELECT SUM(quantity) as total_stock_out, stock_id FROM shop_inventories GROUP BY stock_id) as ST"), 'shop_product_stocks.id', '=', 'ST.stock_id')
-                            ->where('shop_id', $order_detail->shop_id)
-                            ->where('product_id', $order_detail->product_id)
-                            ->having('stockQty', '>', 0)
-                            ->get();
+                                ], [
+                                'order_id' => $order->id,
+                                'product_id' => $pro_item['product_id'],
+                                'shop_id' =>  $order->shop_id,
+                                'quantity_unit_id' =>  $pro_item['quantity_unit_id'],
+                                'quantity_unit_value' =>  $pro_item['input_quantity'],
+                                'product_name' => $pro_item['product_name'],
+                                'product_quantity' => $pro_item['quantity'],
+                                'final_quantity' => $pro_item['quantity'],
+                                'product_original_unit_price' => $pro_item['product_purchase_price'],
+                                'product_unit_price' => $pro_item['price'],
+                                'sub_total' => $pro_item['totalPrice'],
+                                'final_amount' => $pro_item['totalPrice'],
+                                'warenty_duration' => $pro_item['warenty_duration'],
+                            ]);
+                            //update product selling price with the latest one
+                            Product::where("id", $pro_item['product_id'])->update(["selling_price" => $pro_item['price']]);
+                            $settle_quantity = $order_detail->final_quantity;
+                            if ($order_detail) {
+                                $stocks = ShopProductStock::select('shop_product_stocks.*', 'ST.total_stock_out', DB::raw('(shop_product_stocks.quantity - IFNULL(ST.total_stock_out, 0)) AS stockQty'))
+                                ->leftJoin(DB::raw("(SELECT SUM(quantity) as total_stock_out, stock_id FROM shop_inventories GROUP BY stock_id) as ST"), 'shop_product_stocks.id', '=', 'ST.stock_id')
+                                ->where('shop_id', $order_detail->shop_id)
+                                ->where('product_id', $order_detail->product_id)
+                                ->having('stockQty', '>', 0)
+                                ->get();
 
-                            foreach ($stocks as $key => $st) {
-                                $checkQty = ($settle_quantity - $st->stockQty);
-                                if ($checkQty > 0) {
-                                    $stQty = $st->stockQty;
-                                    } else {
-                                        $stQty = $settle_quantity;
-                                    }
-                                    $stOut =  ShopInventory::create([
-                                        'type' => 'order_placed',
-                                        'order_detail_id' => $order_detail->id,
-                                        'stock_id' => $st->id,
-                                        'product_id' => $st->product_id,
-                                        'shop_id' =>  $st->shop_id,
-                                        'quantity' =>  $stQty
-                                    ]);
+                                foreach ($stocks as $key => $st) {
+                                    $checkQty = ($settle_quantity - $st->stockQty);
+                                    if ($checkQty > 0) {
+                                        $stQty = $st->stockQty;
+                                        } else {
+                                            $stQty = $settle_quantity;
+                                        }
+                                        $stOut =  ShopInventory::create([
+                                            'type' => 'order_placed',
+                                            'order_detail_id' => $order_detail->id,
+                                            'stock_id' => $st->id,
+                                            'product_id' => $st->product_id,
+                                            'shop_id' =>  $st->shop_id,
+                                            'quantity' =>  $stQty
+                                        ]);
 
-                                    if ($stOut) {
-                                        $settle_quantity = $settle_quantity-$stOut->quantity;
-                                    }
+                                        if ($stOut) {
+                                            $settle_quantity = $settle_quantity-$stOut->quantity;
+                                        }
 
-                                    if ($settle_quantity == 0) {
-                                        break;
-                                    }
+                                        if ($settle_quantity == 0) {
+                                            break;
+                                        }
+                                }
                             }
-                        }
 
                             if ($settle_quantity != 0) {
                                 throw new \Exception($pro_item['product_name']." Given Quantity exceeds stock", 1);
