@@ -12,6 +12,37 @@
             </div>
         </div>
     </section>
+    
+    <style>
+        .due-total p {
+            margin: 0;
+            padding: 0;
+        }
+        @media print {
+          body * {
+            visibility: hidden;
+          }
+          .section-to-print, .section-to-print * {
+            visibility: visible;
+          }
+          .section-to-print {
+            position: absolute;
+            width: 100%;
+            left: 0;
+            top: 20;
+          }
+          .print-avoid {
+              visibility: hidden;
+          }
+          .time-info p, .order-info p {
+            margin: 0;
+            padding: 0;
+            }
+            .info-section {
+                margin-bottom: 10px;
+            }
+        }
+    </style>
 
     <div class="content px-3">
 
@@ -26,8 +57,8 @@
                     <a @if($order->next_order_id!=null) href="{{route('admin.orders.show', ['order'=>$order->next_order_id])}}" @else href="javascript:void(0)"  @endif class="btn btn-default @if($order->next_order_id == null) disabled @endif">Next</a>
                 </div>
             </div>
-            <div class="card-body">
-                <div class="d-flex justify-content-between">
+            <div class="card-body section-to-print">
+                <div class="d-flex justify-content-between info-section">
                     <div class="order-info">
                         <p><strong>Invoice&nbsp;No:</strong> {{$order->order_number}}</p>
                         <p><strong>Customer&nbsp;Name:</strong> {{$order->customer->customer_name}}</p>
@@ -92,28 +123,33 @@
                     </table>
                 </div>
                 <div class="card-footer clearfix">
+                    <div class="float-left due-total">
+                        <p>Current Due: 2541522</p>
+                        <p>Sales: 565441</p>
+                        <p>Collected: 854125</p>
+                    </div>
                     <div class="float-left">
                         @if ($order->notes!=null || !is_null($order->notes))
                             <strong>Notes:</strong> {{$order->notes}}
                         @endif
                     </div>
-                    <div class="float-right d-flex">
+                    <div class="float-right d-flex print-avoid">
                         @if ($order->status == "Drafted")
-                            <a class="btn bg-gradient-success mr-1"  type="button" href="{{ route('admin.orders.create') }}?order_id={{$order->id}}">Edit & Sale</a>
+                            <a class="btn bg-gradient-success mr-1 print-avoid"  type="button" href="{{ route('admin.orders.create') }}?order_id={{$order->id}}">Edit & Sale</a>
                         @else
                             @if (count($wr_order_details) > 0)
-                                <a href="{{url('admin/set-warenty-serial-number/'.$order->id)}}" type="button"  class="btn bg-gradient-success mr-1">
+                                <a href="{{url('admin/set-warenty-serial-number/'.$order->id)}}" type="button"  class="btn bg-gradient-success mr-1 print-avoid">
                                     Warranty Serial
                                 </a>
-                                <a href="{{url('print-warenty-serials/'.$order->id)}}" target="_blank" type="button"  class="btn bg-gradient-success mr-1">
-                                    <i class="fas fa-print"></i>Print Warranty Serial
+                                <a href="{{url('print-warenty-serials/'.$order->id)}}" target="_blank" type="button"  class="btn bg-gradient-success mr-1 print-avoid">
+                                    <i class="fas fa-print print-avoid"></i>Print Warranty Serial
                                 </a>
                             @endif
-                            <a href="{{url('print-invoice/'.$order->id)}}" target="_blank" type="button"  class="btn bg-gradient-success mr-1">
-                                <i class="fas fa-print"></i> Invoice/Bill
+                            <a href="{{url('print-invoice/'.$order->id)}}" target="_blank" type="button"  class="btn bg-gradient-success mr-1 print-avoid">
+                                <i class="fas fa-print print-avoid"></i> Invoice/Bill
                             </a>
-                            <a href="{{url('print-challan/'.$order->id)}}" target="_blank" class="btn bg-gradient-warning">
-                                <i class="fas fa-print"></i> Challan
+                            <a href="{{url('print-challan/'.$order->id)}}" target="_blank" class="btn bg-gradient-warning print-avoid">
+                                <i class="fas fa-print print-avoid"></i> Challan
                             </a>
                         @endif
                     </div>
@@ -124,4 +160,3 @@
     </div>
 
 @endsection
-
