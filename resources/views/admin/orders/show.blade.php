@@ -127,6 +127,7 @@
                         <p>Current Due: {{number_format($current_due, 2, '.', ',')}}</p>
                         <p>Sales: {{number_format(($today_sales) , 2, '.', ',')}}</p>
                         <p>Collected: {{number_format(($total_collected) , 2, '.', ',')}}</p>
+                        <p> <strong>Net Outstanding: {{ number_format($net_outstanding, 2, '.', ',') }}</strong></p>
                     </div>
                     <div class="float-left">
                         @if ($order->notes!=null || !is_null($order->notes))
