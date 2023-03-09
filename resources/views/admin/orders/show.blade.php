@@ -124,9 +124,9 @@
                 </div>
                 <div class="card-footer clearfix">
                     <div class="float-left due-total">
-                        <p>Current Due: 2541522</p>
-                        <p>Sales: 565441</p>
-                        <p>Collected: 854125</p>
+                        <p>Current Due: {{number_format($current_due, 2, '.', ',')}}</p>
+                        <p>Sales: {{number_format(($today_sales) , 2, '.', ',')}}</p>
+                        <p>Collected: {{number_format(($total_collected) , 2, '.', ',')}}</p>
                     </div>
                     <div class="float-left">
                         @if ($order->notes!=null || !is_null($order->notes))
@@ -160,3 +160,4 @@
     </div>
 
 @endsection
+
