@@ -440,6 +440,34 @@ class OrderController extends Controller
         ->where('order_details.order_id', $id)
         ->whereNotNull('products.warenty_duration')
         ->get();
+        //dd($data);
+        $totalDeposit = Transaction::select(\DB::raw("SUM(amount) as totalDeposit"))
+            ->where([
+                ["type", "=", "in"],
+                ["customer_id", "=", $data['order']['customer_id']]
+            ])
+            ->groupBy('order_id')
+            ->orderBy("order_id", "ASC")
+            ->having("order_id", "<",  $data['order']['id'])
+            ->get()->sum("totalDeposit");
+        $totalWithdraw = Transaction::select(\DB::raw("SUM(amount) as totalDeposit"))
+            ->where([
+                ["type", "=", "out"],
+                ["customer_id", "=",  $data['order']['customer_id']]
+            ])
+            ->groupBy('order_id')
+            ->orderBy("order_id", "ASC")
+            ->having("order_id", "<", $data['order']['id'])
+            ->get()->sum("totalDeposit");
+        
+        $currentTotalDeposit = Transaction::where(["type" => "in"])->where('order_id', $data['order']['id'])->groupBy('order_id')->sum('amount');
+        $currentTotalWithdraw = Transaction::where(["type" => "out"])->where('order_id', $data['order']['id'])->groupBy('order_id')->sum('amount');
+        $currentTotalAmountCollected = ($currentTotalDeposit - $currentTotalWithdraw);
+        $totalCurrentDue = ($totalWithdraw - $totalDeposit);
+        $data['current_due'] = $totalCurrentDue;
+        $data['today_sales'] = $currentTotalWithdraw;
+        $data['total_collected'] = $currentTotalDeposit;
+        $data['net_outstanding'] = ($totalCurrentDue + $currentTotalWithdraw) - $currentTotalDeposit;
         return view('admin.orders.show', $data);
     }
 
