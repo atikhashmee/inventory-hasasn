@@ -144,9 +144,12 @@ class InvoiceController extends Controller
             $shop->image_link = asset('assets/img/not-found.png');
         }
         if ($sqldata) {
-            $data = $sqldata->toArray();  
+            $data = $sqldata->toArray();
+            $data["shop"] = $shop;
             $qrCode = null; // $this->qrCodeGenerator();
             $footer_precuation = true;
+            $pdf = Pdf::loadView('pdf.dom-challan-conditioned', $data);
+            return $pdf->stream();
             $snappy = \WPDF::loadView('pdf.challan-conditioned', $data);
             $headerHtml = view()->make('pdf.wkpdf-header', compact('shop', 'qrCode'))->render();
             $footerHtml = view()->make('pdf.wkpdf-footer', compact('footer_precuation'))->render();
