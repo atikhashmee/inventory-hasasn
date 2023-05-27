@@ -178,6 +178,9 @@ class InvoiceController extends Controller
             $footer_precuation = true;
             $data['amount_in_total'] = $totalSum;
             $data['amount_in_total_words'] = numberToWord($totalSum);
+            $data["shop"] = $shop;
+            $pdf = Pdf::loadView('pdf.dom-quotation', $data);
+            return $pdf->stream();
             $snappy = \WPDF::loadView('pdf.quotation', $data);
             $headerHtml = view()->make('pdf.wkpdf-header', compact('shop', 'qrCode'))->render();
             $footerHtml = view()->make('pdf.wkpdf-footer', compact('footer_precuation'))->render();
@@ -230,6 +233,8 @@ class InvoiceController extends Controller
             $data['customer']['current_due'] = $sqldata->customer->current_due;
             $data['serials'] = $serials;
             $footer_precuation = true;
+            $pdf = Pdf::loadView('pdf.dom-warenty-serial-numbers', $data);
+            return $pdf->stream();
             $snappy = \WPDF::loadView('pdf.warenty-serial-numbers', $data);
             $headerHtml = view()->make('pdf.wkpdf-header', compact('shop', 'qrCode'))->render();
             $footerHtml = view()->make('pdf.wkpdf-footer', compact('footer_precuation'))->render();
