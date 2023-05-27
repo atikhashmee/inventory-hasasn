@@ -6,22 +6,19 @@
     "license": "MIT",
     "require": {
         "php": "^7.3|^8.0",
-        "barryvdh/laravel-snappy": "^0.4.8",
+        "barryvdh/laravel-dompdf": "^2.0",
         "doctrine/dbal": "~2.3",
         "endroid/qr-code": "^4.3",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
-        "h4cc/wkhtmltoimage-amd64": "^0.12.4",
-        "h4cc/wkhtmltopdf-amd64": "^0.12.4",
         "infyomlabs/adminlte-templates": "^3.0",
         "infyomlabs/laravel-generator": "^3.0",
         "intervention/image": "^2.6",
         "laravel/framework": "^8.40",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.0",
-        "laravelcollective/html": "^6.2",
-        "wemersonjanuario/wkhtmltopdf-windows": "0.12.2.3"
+        "laravelcollective/html": "^6.2"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

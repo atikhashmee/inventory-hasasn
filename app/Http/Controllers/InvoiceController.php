@@ -9,6 +9,7 @@ use App\Models\Quotation;
 use Endroid\QrCode\QrCode;
 use App\Models\OrderDetail;
 use App\Models\Transaction;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Endroid\QrCode\Writer\PngWriter;
 use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelHigh;
 
@@ -89,14 +90,17 @@ class InvoiceController extends Controller
             $orderNumber = $data['order_number'];
             list($dateStr, $randomeNumber) = explode('-', $orderNumber);
             $data['order_number'] = date("ymd", strtotime($data["created_at"]))."-".$randomeNumber; 
-            $snappy = \WPDF::loadView('pdf.invoice-bill', $data);
-            $headerHtml = view()->make('pdf.wkpdf-header', compact('shop', 'qrCode'))->render();
-            $footerHtml = view()->make('pdf.wkpdf-footer')->render();
-            $snappy->setOption('header-html', $headerHtml);
-            if (env('DEMO_SHOW') != true) {
-                $snappy->setOption('footer-html', $footerHtml);
-            }
-            return $snappy->inline(date('Y-m-d-h:i:-a').'-invoice-bill.pdf');
+            //load view using domPdf
+            $pdf = Pdf::loadView('pdf.dom-invoice-bill', $data);
+            return $pdf->stream();
+            // $snappy = \WPDF::loadView('pdf.invoice-bill', $data);
+            // $headerHtml = view()->make('pdf.wkpdf-header', compact('shop', 'qrCode'))->render();
+            // $footerHtml = view()->make('pdf.wkpdf-footer')->render();
+            // $snappy->setOption('header-html', $headerHtml);
+            // if (env('DEMO_SHOW') != true) {
+            //     $snappy->setOption('footer-html', $footerHtml);
+            // }
+            // return $snappy->inline(date('Y-m-d-h:i:-a').'-invoice-bill.pdf');
         } else {
             return redirect()->back()->withError('Nothing found');
         }
@@ -113,6 +117,8 @@ class InvoiceController extends Controller
         if ($sqldata) {
             $data = $sqldata->toArray();
             $data['customer']['current_due'] = $sqldata->customer->current_due;
+            $pdf = Pdf::loadView("pdf.dom-challan", $data);
+            return $pdf->stream();
             $snappy = \WPDF::loadView('pdf.challan', $data);
             $qrCode = null; // $this->qrCodeGenerator();
             $footer_precuation = true;
@@ -138,9 +144,12 @@ class InvoiceController extends Controller
             $shop->image_link = asset('assets/img/not-found.png');
         }
         if ($sqldata) {
-            $data = $sqldata->toArray();  
+            $data = $sqldata->toArray();
+            $data["shop"] = $shop;
             $qrCode = null; // $this->qrCodeGenerator();
             $footer_precuation = true;
+            $pdf = Pdf::loadView('pdf.dom-challan-conditioned', $data);
+            return $pdf->stream();
             $snappy = \WPDF::loadView('pdf.challan-conditioned', $data);
             $headerHtml = view()->make('pdf.wkpdf-header', compact('shop', 'qrCode'))->render();
             $footerHtml = view()->make('pdf.wkpdf-footer', compact('footer_precuation'))->render();
@@ -169,6 +178,9 @@ class InvoiceController extends Controller
             $footer_precuation = true;
             $data['amount_in_total'] = $totalSum;
             $data['amount_in_total_words'] = numberToWord($totalSum);
+            $data["shop"] = $shop;
+            $pdf = Pdf::loadView('pdf.dom-quotation', $data);
+            return $pdf->stream();
             $snappy = \WPDF::loadView('pdf.quotation', $data);
             $headerHtml = view()->make('pdf.wkpdf-header', compact('shop', 'qrCode'))->render();
             $footerHtml = view()->make('pdf.wkpdf-footer', compact('footer_precuation'))->render();
@@ -221,6 +233,8 @@ class InvoiceController extends Controller
             $data['customer']['current_due'] = $sqldata->customer->current_due;
             $data['serials'] = $serials;
             $footer_precuation = true;
+            $pdf = Pdf::loadView('pdf.dom-warenty-serial-numbers', $data);
+            return $pdf->stream();
             $snappy = \WPDF::loadView('pdf.warenty-serial-numbers', $data);
             $headerHtml = view()->make('pdf.wkpdf-header', compact('shop', 'qrCode'))->render();
             $footerHtml = view()->make('pdf.wkpdf-footer', compact('footer_precuation'))->render();
