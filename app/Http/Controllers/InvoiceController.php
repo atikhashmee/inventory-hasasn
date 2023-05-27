@@ -9,6 +9,7 @@ use App\Models\Quotation;
 use Endroid\QrCode\QrCode;
 use App\Models\OrderDetail;
 use App\Models\Transaction;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Endroid\QrCode\Writer\PngWriter;
 use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelHigh;
 
@@ -89,14 +90,17 @@ class InvoiceController extends Controller
             $orderNumber = $data['order_number'];
             list($dateStr, $randomeNumber) = explode('-', $orderNumber);
             $data['order_number'] = date("ymd", strtotime($data["created_at"]))."-".$randomeNumber; 
-            $snappy = \WPDF::loadView('pdf.invoice-bill', $data);
-            $headerHtml = view()->make('pdf.wkpdf-header', compact('shop', 'qrCode'))->render();
-            $footerHtml = view()->make('pdf.wkpdf-footer')->render();
-            $snappy->setOption('header-html', $headerHtml);
-            if (env('DEMO_SHOW') != true) {
-                $snappy->setOption('footer-html', $footerHtml);
-            }
-            return $snappy->inline(date('Y-m-d-h:i:-a').'-invoice-bill.pdf');
+            //load view using domPdf
+            $pdf = Pdf::loadView('pdf.dom-invoice-bill', $data);
+            return $pdf->stream();
+            // $snappy = \WPDF::loadView('pdf.invoice-bill', $data);
+            // $headerHtml = view()->make('pdf.wkpdf-header', compact('shop', 'qrCode'))->render();
+            // $footerHtml = view()->make('pdf.wkpdf-footer')->render();
+            // $snappy->setOption('header-html', $headerHtml);
+            // if (env('DEMO_SHOW') != true) {
+            //     $snappy->setOption('footer-html', $footerHtml);
+            // }
+            // return $snappy->inline(date('Y-m-d-h:i:-a').'-invoice-bill.pdf');
         } else {
             return redirect()->back()->withError('Nothing found');
         }
@@ -113,6 +117,8 @@ class InvoiceController extends Controller
         if ($sqldata) {
             $data = $sqldata->toArray();
             $data['customer']['current_due'] = $sqldata->customer->current_due;
+            $pdf = Pdf::loadView("pdf.dom-challan", $data);
+            return $pdf->stream();
             $snappy = \WPDF::loadView('pdf.challan', $data);
             $qrCode = null; // $this->qrCodeGenerator();
             $footer_precuation = true;
