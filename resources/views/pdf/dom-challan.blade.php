@@ -46,7 +46,7 @@
             margin-top: 40px;
         }
         footer  img{
-            height: 35px;
+            height: 19px;
         }
         
         /* Header footer css end here */
