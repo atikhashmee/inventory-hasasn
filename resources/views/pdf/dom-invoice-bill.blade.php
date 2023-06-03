@@ -19,10 +19,10 @@
         }
         header {
             position: fixed;
-            top: -60px;
+            top: -85px;
             left: 0px;
             right: 0px;
-            height: 300px;
+            /* height: 300px; */
 
             /** Extra personal styles **/
             /* background-color: #03a9f4; */
@@ -47,6 +47,9 @@
         }
         footer  img{
             height: 19px;
+        }
+        main {
+            /* background-color: blue; */
         }
         
         /* Header footer css end here */
@@ -90,7 +93,7 @@
         }
     </style> 
         <header>
-            <div style="position: relative">
+            <div style="position: relative;">
                 <img src="{{ asset("assets/img/bar.png") }}" alt="" style="position: absolute; left: 0; top:10; width: 100%;">
                 <table style="width: 100%; position: relative; top: 0;">
                     <tr>
@@ -154,50 +157,47 @@
 
         <!-- Wrap the content of your PDF inside a main tag -->
         <main>
-            
             <div class="doc-type">
                 <h2>Invoice/Bill</h2>
             </div>
-        
             <table class="invoice-info">
                 <tr>
-                    <td width="50%" style="line-height: 10px;">
-                        <p><strong>Invoice Number:</strong> {{$invoice_no}}</p>
-                        <p><strong>Customer Name:</strong> {{$customer['customer_name']}}</p>
+                    <td width="60%" style="line-height: 5px;">
+                        <p><strong>Invoice:</strong> {{$invoice_no}}</p>
+                        <p><strong>Customer:</strong> {{$customer['customer_name']}}</p>
                         <p><strong>Phone No:</strong> {{$customer['customer_phone']}}</p>
                         <p><strong>E-mail:</strong> {{$customer['customer_email']}}</p>
                         <p><strong>Address:</strong> {{$customer['customer_address']}} </p>
                     </td>
                     <td width="20%">&nbsp;</td>
-                    <td width="30%">
+                    <td width="20%">
                         <table style="margin-left: auto; text-align: right; width: 100%">
                             <tr>
                                 <th>Date:</th>
-                                <td>{{date('d/m/Y', strtotime($created_at))}}</td>
+                                <td style="text-align: left;">{{date('d/m/Y', strtotime($created_at))}}</td>
                             </tr>
                             <tr>
                                 <th>Time:</th>
-                                <td>{{date('h:i a', strtotime($created_at))}}</td>
+                                <td style="text-align: left;">{{date('h:i a', strtotime($created_at))}}</td>
                             </tr>
                             <tr>
                                 <th>Sold By:</th>
-                                <td>{{$user['name']}}</td>
+                                <td style="text-align: left;">{{$user['name']}}</td>
                             </tr>
                         </table>
                     </td>
                 </tr>
             </table>
             <br />
-            <br />
-    
             <table class="data-table">
                 <thead>
                     <tr>
                         <th>SL</th>
-                        <th>Item Name</th>
-                        <th>Unit Price (Taka)</th>
-                        <th>Quantity</th>
-                        <th>Total Amount (Taka)</th>
+                        <th>Item</th>
+                        <th>Brand/Origin</th>
+                        <th>Unit Price</th>
+                        <th>Qty</th>
+                        <th>Total</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -207,10 +207,13 @@
                                 <td>{{++$key}}</td>
                                 <td>
                                     <span>{{$detail['product_name']}}</span> <br>
-                                    <span>
+                                    {{-- <span> --}}
                                         {{-- <span> <b>Origin</b> {{$detail['origin']}}<span>  --}}
-                                        <span> <b>Brand</b> {{$detail['brand_name']}}<span>
-                                    </span>
+                                        {{-- <span> <b>Brand</b> {{$detail['brand_name']}}<span> --}}
+                                    {{-- </span> --}}
+                                </td>
+                                <td>
+                                    <span>{{$detail['brand_name']}}</span> <br>
                                 </td>
                                 <td>{{$detail['product_unit_price']}}</td>
                                 <td>
@@ -235,10 +238,10 @@
                     <td width="40%">
                         <table class="summery-table-left">
                             <tr>
-                                <td style="line-height: 12px;">
-                                    <p>Current Due: {{number_format($current_due, 2, '.', ',')}}</p>
-                                    <p>Sales: {{number_format(($today_sales) , 2, '.', ',')}}</p>
-                                    <p>Collected: {{number_format(($tnx_amount) , 2, '.', ',')}}</p>
+                                <td style="line-height: 8px;">
+                                    <span style="display: block; padding: 5px 0px">Current Due: {{number_format($current_due, 2, '.', ',')}}</span>
+                                    <span style="display: block; padding: 5px 0px">Sales: {{number_format(($today_sales) , 2, '.', ',')}}</span>
+                                    <span style="display: block; padding: 5px 0px">Collected: {{number_format(($tnx_amount) , 2, '.', ',')}}</span>
                                 </td>
                             </tr>
                             <tr>
@@ -271,9 +274,6 @@
         <br />
         <br />
         <p style="text-align: center; text-transform: uppercase"> <strong>In Word(Taka):</strong> {{numberToWord(($sub_total - $discount_amount))}}</p>
-        <br />
-        <br />
-        <br />
         <br />
         <br />
         
