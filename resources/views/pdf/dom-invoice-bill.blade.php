@@ -100,7 +100,7 @@
                         <td style="text-align: center; width: 250px; vertical-align: top;">
                             <img src="{{$shop["image_link"]}}" style="position:relative; height: 90px; top: -20px; left: 20px">
                             <div style="width: 100%;"></div>
-                            <img src="https://chart.googleapis.com/chart?cht=qr&chs=100x100&chl=www.meditech.com.bd" style="position:relative; height: 90px; top: -20px; left: 20px">
+                            <img src="https://chart.googleapis.com/chart?cht=qr&chs=100x100&chl=www.meditech.com.bd" style="position:relative; height: 90px; top: -10px; left: 20px">
                         </td>
                         <td style="vertical-align: top;">
                             <div style="text-align: center; margin-top: 18px">
