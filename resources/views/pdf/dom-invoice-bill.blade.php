@@ -12,14 +12,14 @@
             margin: 100px 25px;
         }
         body{
-            margin-top: 3cm;
+            margin-top: 4cm;
             margin-left: 0cm;
             margin-right: 0cm;
             margin-bottom: 2cm;
         }
         header {
             position: fixed;
-            top: -85px;
+            top: -60px;
             left: 0px;
             right: 0px;
             /* height: 300px; */
