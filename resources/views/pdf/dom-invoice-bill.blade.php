@@ -97,14 +97,14 @@
                 <img src="{{ asset("assets/img/bar.png") }}" alt="" style="position: absolute; left: 0; top:10; width: 100%;">
                 <table style="width: 100%; position: relative; top: 0;">
                     <tr>
-                        <td style="text-align: center; width: 305px; vertical-align: top;">
-                            <img src="{{$shop["image_link"]}}" style="position:relative; height: 90px; top: -20px;">
-                            <div style="width: 100%; margin-bottom: 3px;"></div>
-                            <img src="https://chart.googleapis.com/chart?cht=qr&chs=100x100&chl=www.meditech.com.bd" alt="">
+                        <td style="text-align: center; width: 250px; vertical-align: top;">
+                            <img src="{{$shop["image_link"]}}" style="position:relative; height: 90px; top: -20px; left: 20px">
+                            <div style="width: 100%;"></div>
+                            <img src="https://chart.googleapis.com/chart?cht=qr&chs=100x100&chl=www.meditech.com.bd" style="position:relative; height: 90px; top: -20px; left: 20px">
                         </td>
-                        <td style="text-align: center; vertical-align: top;">
-                            <div style="width: 100%; left: 0px; top: 40px;">
-                                <h4 class="top-header">{{$shop["name"]}}</h4>
+                        <td style="vertical-align: top;">
+                            <div style="text-align: center; margin-top: 18px">
+                                <h4 style="padding: 0; margin: 0;">{{$shop["name"]}}</h4>
                                 {!! $shop["address"] !!}
                             </div>
                         </td>
@@ -173,15 +173,15 @@
                     <td width="20%">
                         <table style="margin-left: auto; text-align: right; width: 100%">
                             <tr>
-                                <th>Date:</th>
+                                <th style="text-align: left;">Date:</th>
                                 <td style="text-align: left;">{{date('d/m/Y', strtotime($created_at))}}</td>
                             </tr>
                             <tr>
-                                <th>Time:</th>
+                                <th style="text-align: left;">Time:</th>
                                 <td style="text-align: left;">{{date('h:i a', strtotime($created_at))}}</td>
                             </tr>
                             <tr>
-                                <th>Sold By:</th>
+                                <th style="text-align: left;">Sold By:</th>
                                 <td style="text-align: left;">{{$user['name']}}</td>
                             </tr>
                         </table>
@@ -207,13 +207,15 @@
                                 <td>{{++$key}}</td>
                                 <td>
                                     <span>{{$detail['product_name']}}</span> <br>
-                                    {{-- <span> --}}
-                                        {{-- <span> <b>Origin</b> {{$detail['origin']}}<span>  --}}
-                                        {{-- <span> <b>Brand</b> {{$detail['brand_name']}}<span> --}}
-                                    {{-- </span> --}}
                                 </td>
                                 <td>
-                                    <span>{{$detail['brand_name']}}</span> <br>
+                                    @if (!empty($detail['brand_name']))
+                                        <span>{{$detail['brand_name']}}</span>
+                                    @else 
+                                        @if (!empty($detail['origin']))
+                                            <span>{{$detail['origin']}}</span>
+                                        @endif
+                                    @endif
                                 </td>
                                 <td>{{$detail['product_unit_price']}}</td>
                                 <td>
