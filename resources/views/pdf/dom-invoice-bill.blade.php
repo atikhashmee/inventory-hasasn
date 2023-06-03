@@ -104,7 +104,7 @@
                         </td>
                         <td style="vertical-align: top;">
                             <div style="text-align: center; margin-top: 18px">
-                                <h4 style="padding: 0; margin: 0;">{{$shop["name"]}}</h4>
+                                <h4 style="padding: 0; margin: 0; text-transform: uppercase; font-size: 25px; color: red;">{{$shop["name"]}}</h4>
                                 {!! $shop["address"] !!}
                             </div>
                         </td>
