@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
 use App\Http\Extra\Util;
 use App\Models\Customer;
 use Laracasts\Flash\Flash;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -153,5 +155,74 @@ class CustomerController extends Controller
     {
         Flash::success('Deleted successfully.');
         return redirect()->route('admin.customers.index');
+    }
+
+    public function adjustBalance($customerId) {
+        try {
+            \DB::beginTransaction();
+            $customers = Customer::whereIn('id', [$customerId])->get();
+            if (!empty($customers)) {
+                foreach ($customers as $customer) {
+                    $transactions = Transaction::where('customer_id', $customer->id)->get();
+                    if (!empty($transactions)) {
+                        Transaction::where("customer_id", $customer->id)->delete();
+                    }
+                    $orders = Order::with("orderDetail")->where('customer_id', $customer->id)->get();
+                    if (!empty($orders)) {
+                        foreach ($orders as $order) {
+                            $totalOrderAmount = 0;
+                            $totalItemPrice = [];
+                            if (count($order->orderDetail) > 0) {
+                                foreach ($order->orderDetail as $orderDetail) {
+                                    $productUnitPrice = $orderDetail->product_unit_price;
+                                    $totalFinalQuantity = $orderDetail->final_quantity;
+                                    $totalItemPrice[] = ($totalFinalQuantity * $productUnitPrice);  
+                                }
+                            }
+                            if (count($totalItemPrice) > 0) {
+                                $totalOrderAmount = array_sum($totalItemPrice);
+                            }
+    
+                            if ($totalOrderAmount > 0) {
+                                Transaction::updateOrCreate([
+                                    'order_id' => $order->id,
+                                    'flag' => 'order_placed', 
+                                ], [
+                                    'customer_id' => $customer->id, 
+                                    'order_id' => $order->id, 
+                                    'user_id' => $order->user_id, 
+                                    'status' => 'done', 
+                                    'type' => 'out', 
+                                    'flag' => 'order_placed', 
+                                    'amount' => $totalOrderAmount
+                                ]);
+    
+                                Transaction::updateOrCreate([
+                                    'order_id' => $order->id,
+                                    'flag'     => 'payment', 
+                                ], [
+                                    'customer_id' => $customer->id, 
+                                    'order_id'    => $order->id, 
+                                    'user_id'     => $order->user_id, 
+                                    'status'      => 'done', 
+                                    'type'        => 'in', 
+                                    'flag'        => 'payment', 
+                                    'payment_type'=> "Cash", 
+                                    'amount'      => $totalOrderAmount
+                                ]);
+                            }
+                        }
+                    }        
+                }
+            }
+            if (!$customer) {
+               throw new \Exception("Customer not found", 1);
+            }
+            \DB::commit();
+            return "done!";
+        } catch (\Exception $e) {
+            \DB::rollBack();
+            return $e->getMessage(); 
+        }
     }
 }

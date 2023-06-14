@@ -106,7 +106,11 @@
                 </td>
                 <td style="vertical-align: top;">
                     <div style="text-align: center; margin-top: 18px">
-                        <h4 style="padding: 0; margin: 0; text-transform: uppercase; font-size: 25px; color: red;">{{$shop["name"]}}</h4>
+                        @if ($shop["shop_logo_img_link"] != "")
+                            <img src="{{$shop["shop_logo_img_link"]}}" alt="" srcset="">
+                        @else
+                            <h4 style="padding: 0; margin: 0; text-transform: uppercase; font-size: 25px; color: red;">{{$shop["name"]}}</h4>
+                        @endif
                         {!! $shop["address"] !!}
                     </div>
                 </td>

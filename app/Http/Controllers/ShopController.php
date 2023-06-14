@@ -67,6 +67,19 @@ class ShopController extends AppBaseController
             $input['image'] = $fileName;
             Storage::disk('public_uploads')->put('shops'.'/'.$fileName, $img);
         }
+        if ($request->hasFile('shop_name_image')) {
+            $image      = $request->file('shop_name_image');
+            $fileName   = time() . '.' . $image->getClientOriginalExtension();
+
+            $img = Image::make($image->getRealPath());
+            $img->resize(120, 120, function ($constraint) {
+                $constraint->aspectRatio();                 
+            });
+
+            $img->stream(); // <-- Key point
+            $input['shop_logo_img'] = $fileName;
+            Storage::disk('public_uploads')->put('shops'.'/'.$fileName, $img);
+        }
         $shop = Shop::create($input);
 
         Flash::success('Shop saved successfully.');
@@ -150,6 +163,23 @@ class ShopController extends AppBaseController
                 // remove the previous one
                 if (file_exists(public_path().'/uploads/shops/'.$shop->image)  && $shop->image) {
                     unlink(public_path().'/uploads/shops/'.$shop->image);
+                }
+                Storage::disk('public_uploads')->put('shops'.'/'.$fileName, $img);
+            }
+            if ($request->hasFile('shop_name_image')) {
+                $image      = $request->file('shop_name_image');
+                $fileName   = time() . '.' . $image->getClientOriginalExtension();
+
+                $img = Image::make($image->getRealPath());
+                $img->resize(120, 120, function ($constraint) {
+                    $constraint->aspectRatio();                 
+                });
+
+                $img->stream(); // <-- Key point
+                $data['shop_logo_img'] = $fileName;
+                // remove the previous one
+                if (file_exists(public_path().'/uploads/shops/'.$shop->shop_logo_img)  && $shop->shop_logo_img) {
+                    unlink(public_path().'/uploads/shops/'.$shop->shop_logo_img);
                 }
                 Storage::disk('public_uploads')->put('shops'.'/'.$fileName, $img);
             }

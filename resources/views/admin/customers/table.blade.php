@@ -35,6 +35,7 @@
                             <div class="dropdown-menu" role="menu" style="">
                                 <a class="dropdown-item" href="{{route('admin.customers.edit', ['customer'=>$customer])}}">Edit</a>
                                 <a class="dropdown-item" href="javascript:void(0)" onclick="document.getElementById('delete_form').submit()">Delete</a>
+                                <a class="dropdown-item" href="{{route('adjustBal', ['customerId'=> $customer->id])}}">Adjust Balance</a>
                                 <form action="{{route('admin.customers.destroy', ['customer'=>$customer])}}" id="delete_form" method="POST">
                                     @csrf
                                     @method('DELETE')

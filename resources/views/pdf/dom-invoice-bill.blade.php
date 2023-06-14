@@ -39,6 +39,7 @@
                 <tr>
                     <th>SL</th>
                     <th>Item</th>
+                    <th>Model</th>
                     <th>Brand/Origin</th>
                     <th>Unit Price</th>
                     <th>Qty</th>
@@ -52,6 +53,9 @@
                             <td>{{++$key}}</td>
                             <td>
                                 <span>{{$detail['product_name']}}</span> <br>
+                            </td>
+                            <td>
+                                <span>{{$detail['model']}}</span> <br>
                             </td>
                             <td>
                                 @if (!empty($detail['brand_name']))

@@ -46,16 +46,23 @@ class InvoiceController extends Controller
         
 
         $sqldata = Order::with(['customer', 'orderDetail' => function($q) {
-            $q->addSelect('order_details.*', 'countries.name as origin', 'brands.name as brand_name');
+            $q->addSelect('order_details.*', 'countries.name as origin', 'brands.name as brand_name', 'products.model');
             $q->leftJoin('products', 'products.id', '=', 'order_details.product_id');
             $q->leftJoin('countries', 'countries.id', '=', 'products.origin');
             $q->leftJoin('brands', 'brands.id', '=', 'products.brand_id');
         }, 'orderDetail.unit', 'user', 'transaction', 'shop'])->where('id', $order_id)->first();
         $shop = $sqldata->shop;
+        
         if (file_exists(public_path().'/uploads/shops/'.$shop->image)  && $shop->image) {
             $shop->image_link = asset('/uploads/shops/'.$shop->image);
         } else {
             $shop->image_link = asset('assets/img/not-found.png');
+        }
+
+        if (file_exists(public_path().'/uploads/shops/'.$shop->shop_logo_img)  && $shop->shop_logo_img) {
+            $shop->shop_logo_img_link = asset('/uploads/shops/'.$shop->shop_logo_img);
+        } else {
+            $shop->shop_logo_img_link = "";
         }
         if ($sqldata) {
             $data = $sqldata->toArray();
@@ -114,6 +121,11 @@ class InvoiceController extends Controller
         } else {
             $shop->image_link = asset('assets/img/not-found.png');
         }
+        if (file_exists(public_path().'/uploads/shops/'.$shop->shop_logo_img)  && $shop->shop_logo_img) {
+            $shop->shop_logo_img_link = asset('/uploads/shops/'.$shop->shop_logo_img);
+        } else {
+            $shop->shop_logo_img_link = "";
+        }
         if ($sqldata) {
             $data = $sqldata->toArray();
             $data['customer']['current_due'] = $sqldata->customer->current_due;
@@ -143,6 +155,11 @@ class InvoiceController extends Controller
         } else {
             $shop->image_link = asset('assets/img/not-found.png');
         }
+        if (file_exists(public_path().'/uploads/shops/'.$shop->shop_logo_img)  && $shop->shop_logo_img) {
+            $shop->shop_logo_img_link = asset('/uploads/shops/'.$shop->shop_logo_img);
+        } else {
+            $shop->shop_logo_img_link = "";
+        }
         if ($sqldata) {
             $data = $sqldata->toArray();
             $data["shop"] = $shop;
@@ -170,6 +187,11 @@ class InvoiceController extends Controller
             $shop->image_link = asset('/uploads/shops/'.$shop->image);
         } else {
             $shop->image_link = asset('assets/img/not-found.png');
+        }
+        if (file_exists(public_path().'/uploads/shops/'.$shop->shop_logo_img)  && $shop->shop_logo_img) {
+            $shop->shop_logo_img_link = asset('/uploads/shops/'.$shop->shop_logo_img);
+        } else {
+            $shop->shop_logo_img_link = "";
         }
         if ($sqldata) {
             $totalSum = $sqldata->items->sum('total_price');
@@ -203,6 +225,11 @@ class InvoiceController extends Controller
             $shop->image_link = asset('/uploads/shops/'.$shop->image);
         } else {
             $shop->image_link = asset('assets/img/not-found.png');
+        }
+        if (file_exists(public_path().'/uploads/shops/'.$shop->shop_logo_img)  && $shop->shop_logo_img) {
+            $shop->shop_logo_img_link = asset('/uploads/shops/'.$shop->shop_logo_img);
+        } else {
+            $shop->shop_logo_img_link = "";
         }
         if ($sqldata) {
             $data = $sqldata->toArray();

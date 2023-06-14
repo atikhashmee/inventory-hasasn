@@ -33,6 +33,7 @@ class Shop extends Model
         'name',
         'address',
         'status',
+        'shop_logo_img',
         'image'
     ];
 

@@ -96,4 +96,9 @@
         </div>
     </div>
 </div>
+
+<div class="form-group col-sm-6">
+    {!! Form::label('model', 'Model') !!}
+    {!! Form::text('model', null, ['class' => 'form-control']) !!}
+</div>
 <div class="clearfix"></div>

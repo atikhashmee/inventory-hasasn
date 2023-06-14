@@ -1,15 +1,16 @@
 <?php
 
-use App\Models\Customer;
 use App\Models\Order;
-use App\Models\OrderDetail;
 use App\Models\Stock;
+use App\Models\Customer;
+use App\Models\OrderDetail;
+use App\Models\Transaction;
 use App\Models\ShopInventory;
 use App\Models\ShopProductStock;
-use App\Models\Transaction;
 use Illuminate\Routing\RouteGroup;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CustomerController;
 use Illuminate\Routing\Route as RoutingRoute;
 use Symfony\Component\Routing\Route as ComponentRoutingRoute;
 
@@ -55,102 +56,8 @@ Route::get("/invoice-no", function() {
     }
 });
 
+Route::get("adjust-customer-balance/{customerId}", [CustomerController::class, 'adjustBalance'])->name("adjustBal");
 
-Route::get("transaction-kahini", function () {
-    try {
-        \DB::beginTransaction();
-        $customers = Customer::whereIn('id', [175])->get();
-        if (!empty($customers)) {
-            foreach ($customers as $customer) {
-                $transactions = Transaction::where('customer_id', $customer->id)->get();
-                if (!empty($transactions)) {
-                    Transaction::where("customer_id", $customer->id)->delete();
-                }
-                $orders = Order::with("orderDetail")->where('customer_id', $customer->id)->get();
-                if (!empty($orders)) {
-                    foreach ($orders as $order) {
-                        $totalOrderAmount = 0;
-                        $totalItemPrice = [];
-                        if (count($order->orderDetail) > 0) {
-                            foreach ($order->orderDetail as $orderDetail) {
-                                $productUnitPrice = $orderDetail->product_unit_price;
-                                $totalFinalQuantity = $orderDetail->final_quantity;
-                                $totalItemPrice[] = ($totalFinalQuantity * $productUnitPrice);  
-                            }
-                        }
-                        if (count($totalItemPrice) > 0) {
-                            $totalOrderAmount = array_sum($totalItemPrice);
-                        }
-
-                        if ($totalOrderAmount > 0) {
-                            Transaction::updateOrCreate([
-                                'order_id' => $order->id,
-                                'flag' => 'order_placed', 
-                            ], [
-                                'customer_id' => $customer->id, 
-                                'order_id' => $order->id, 
-                                'user_id' => $order->user_id, 
-                                'status' => 'done', 
-                                'type' => 'out', 
-                                'flag' => 'order_placed', 
-                                'amount' => $totalOrderAmount
-                            ]);
-
-                            Transaction::updateOrCreate([
-                                'order_id' => $order->id,
-                                'flag'     => 'payment', 
-                            ], [
-                                'customer_id' => $customer->id, 
-                                'order_id'    => $order->id, 
-                                'user_id'     => $order->user_id, 
-                                'status'      => 'done', 
-                                'type'        => 'in', 
-                                'flag'        => 'payment', 
-                                'payment_type'=> "Cash", 
-                                'amount'      => $totalOrderAmount
-                            ]);
-                        }
-                    }
-                }        
-            }
-        }
-        if (!$customer) {
-           throw new \Exception("Customer not found", 1);
-        }
-       
-        \DB::commit();
-        return "done!";
-    } catch (\Exception $e) {
-        \DB::rollBack();
-        dd($e->getMessage());
-    }
-});
-Route::get('/migrate-data-warehouse', function() {
-    $stockData = \DB::table('shop_product_stocks_copy')
-    ->select('shop_product_stocks_copy.*', 'shop_inventories_copy.shop_id as shop_from')
-    ->leftJoin('shop_inventories_copy', 'shop_inventories_copy.transfer_id', '=', 'shop_product_stocks_copy.id')
-    ->orderBy('shop_product_stocks_copy.id', 'ASC')
-    ->get();
-    $order_details = OrderDetail::where('returned_quantity', '=', 0)->get()->toArray();
-    $dataArr = [];
-    foreach ($stockData as $key => $stock) {
-        $dataArr[date('Y-m-d H:i:s', strtotime($stock->created_at))][] =  $stock;
-    }
-    foreach ($order_details as $key => $order_detail) {
-        $dataArr[date('Y-m-d H:i:s', strtotime($order_detail['created_at']))][] = (object)$order_detail;
-    }
-    foreach ($dataArr as $dateTime => $arr) {
-        foreach ($arr as $key => $value) {
-            if (isset($value->order_id)) {
-                orderKahini($value);
-            } else {
-                stockKahini($value);
-            }
-        }
-    }
-    
-    dd($stockData);
-});
 
 // universal routes
 Route::get('print-invoice/{order_id}', [App\Http\Controllers\InvoiceController::class, 'printInvoice']);
