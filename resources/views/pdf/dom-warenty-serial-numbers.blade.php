@@ -1,60 +1,12 @@
-<style>
-    *{
-        padding: 0;
-        margin: 0;
-        box-sizing: border-box;
-        font-size: 18px;
-    }
-    .doc-type{
-        background: #6d5e5e;
-        margin: 0 auto;
-        text-align: center;
-        padding: 5px 0;
-        width: 200px;
-    }
-    .doc-type h2{
-        color: #fff;
-    }
-    table.data-table, table.invoice-info, table.summer-table, table.summery-table-left, table.signature-table {
-        width: 100%;
-    }
-    table.data-table tr td, table.data-table tr th, table.summery-table-left tr td{
-        border: 1px solid #463838;
-        border-spacing: none;
-        padding: 3px;
-    }
-    table.data-table, table.summery-table-left{
-        border-collapse: collapse;
-    }
-    table.data-table tr td{
-        text-align: center;
-    }
-    table.sum-total{
-        width: 100%;
-        margin-left: auto;
-        border-collapse: collapse;
-    }
-    table.sum-total tr:last-child{
-        border-top: 3px solid #000;
-    }
-    table.sum-total tr:last-child td{
-        border-top: 3px solid #000;
-    }
-    table.sum-total tr td:last-child{
-        text-align: right;
-    }
-</style>
-<br />
-<br />
-<br />
-<br />
+@extends('pdf.app')
+@section('content')
 <div class="doc-type">
     <h2>Warranty Card</h2>
 </div>
 <br />
 <table class="invoice-info">
     <tr>
-        <td width="50%">
+        <td width="55%">
             <p><strong>Invoice Number:</strong> {{$order_number}}</p>
             <p><strong>Customer Name:</strong> {{$customer['customer_name']}}</p>
             <p><strong>Phone No:</strong> {{$customer['customer_phone']}}</p>
@@ -136,4 +88,5 @@
     1. Warranty Void : Sticker removed items, Burn case, Water case & physically damage products <br>
     2. Warranty period: One year service warranty <br>
     3. Warranty coverage: Warranty does not include the price of spare parts<br>
-</p>
+</p>  
+@endsection
