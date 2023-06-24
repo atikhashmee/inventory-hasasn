@@ -5,13 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>{{date("Y-m-d")}}-Invoice</title>
-
     <style>
         @page {
             margin: 100px 25px;
         }
         body{
-            margin-top: 4cm;
+            margin-top: 3cm;
             margin-left: 0cm;
             margin-right: 0cm;
             margin-bottom: 2cm;
@@ -91,9 +90,7 @@
             text-align: right;
         }
     </style> 
-
 </head>
-
 <header>
     <div style="position: relative;">
         <img src="{{ asset("assets/img/bar.png") }}" alt="" style="position: absolute; left: 0; top:10; width: 100%;">
@@ -106,12 +103,16 @@
                 </td>
                 <td style="vertical-align: top;">
                     <div style="text-align: center; margin-top: 18px">
-                        @if ($shop["shop_logo_img_link"] != "")
-                            <img src="{{$shop["shop_logo_img_link"]}}" alt="" srcset="">
-                        @else
-                            <h4 style="padding: 0; margin: 0; text-transform: uppercase; font-size: 25px; color: red;">{{$shop["name"]}}</h4>
-                        @endif
-                        {!! $shop["address"] !!}
+                        <div>
+                            @if ($shop["shop_logo_img_link"] != "")
+                                <img src="{{$shop["shop_logo_img_link"]}}" alt="" srcset="">
+                            @else
+                                <h4 style="padding: 0; margin: 0; text-transform: uppercase; font-size: 25px; color: red;">{{$shop["name"]}}</h4>
+                            @endif
+                        </div>
+                        <div>
+                            {!! $shop["address"] !!}
+                        </div>
                     </div>
                 </td>
             </tr>
@@ -126,7 +127,6 @@
         </div>
     @endif
     <div class="divider-footer"></div>
-
     <table>
         <tbody>
             <tr>

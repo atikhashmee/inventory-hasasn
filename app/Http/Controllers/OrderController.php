@@ -358,7 +358,7 @@ class OrderController extends Controller
                             'status' => 'done', 
                             'type' => 'out', 
                             'flag' => 'order_placed', 
-                            'amount' => $data['subtotal'] - $data['discount']
+                            'amount' => ($data['subtotal'] - $data['discount'])
                         ]);
                     }
 

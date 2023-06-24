@@ -7,14 +7,30 @@
         </div>
         <table class="invoice-info">
             <tr>
-                <td width="60%" style="line-height: 5px;">
-                    <p><strong>Invoice:</strong> {{$invoice_no}}</p>
-                    <p><strong>Customer:</strong> {{$customer['customer_name']}}</p>
-                    <p><strong>Phone No:</strong> {{$customer['customer_phone']}}</p>
-                    <p><strong>E-mail:</strong> {{$customer['customer_email']}}</p>
-                    <p><strong>Address:</strong> {{$customer['customer_address']}} </p>
+                <td width="80%">
+                    <table style="width: 100%">
+                        <tr>
+                            <td style="text-align: left; width: 12%"><strong>Invoice:</strong></td>
+                            <td style="text-align: left;">{{$invoice_no}}</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: left;"><strong>Customer:</strong></td>
+                            <td style="text-align: left;">{{$customer['customer_name']}}</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: left;"><strong>Phone No:</strong></td>
+                            <td style="text-align: left;">{{$customer['customer_phone']}}</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: left;"><strong>E-mail:</strong></td>
+                            <td style="text-align: left;">{{$customer['customer_email']}}</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: left;"><strong>Address:</strong></td>
+                            <td style="text-align: left;"> {{$customer['customer_address']}}</td>
+                        </tr>
+                    </table>
                 </td>
-                <td width="20%">&nbsp;</td>
                 <td width="20%">
                     <table style="margin-left: auto; text-align: right; width: 100%">
                         <tr>
@@ -33,7 +49,6 @@
                 </td>
             </tr>
         </table>
-        <br />
         <table class="data-table">
             <thead>
                 <tr>
@@ -76,8 +91,7 @@
                 @endif
             </tbody>
         </table>
-        <br />
-        <br />
+        <div style="height: 30px"></div>
         @php
             $tnx_amount = $total_collected ?? 0;
             $current_due = $customer['current_due'];
@@ -122,12 +136,8 @@
                 </tr>
             </tbody>
         </table>
-        <br />
-        <br />
         <p style="text-align: center; text-transform: uppercase"> <strong>In Word(Taka):</strong> {{numberToWord(($sub_total - $discount_amount))}}</p>
-        <br />
-        <br />
-        
+        <div style="height: 30px"></div>
         <table class="signature-table">
             <tbody>
                 <tr>
@@ -141,12 +151,6 @@
                 </tr>
             </tbody>
         </table>
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
         @if ($notes)
             <table style="width: 100%">
                 <tr>
