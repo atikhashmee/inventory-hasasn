@@ -227,7 +227,7 @@
                     if (this.orders.length > 0) {
                         orderData = this.orders.map(ordr => {
                             return {
-                                label: `${ordr.shop.name}  ${ordr.order_number} | ${ordr.customer.customer_name} | ${ordr.total_final_amount}`,
+                                label: `${ordr.shop?.name}  ${ordr.invoice_no} | ${ordr.customer.customer_name} | ${ordr.total_final_amount}`,
                                 value : ordr.id
                             }
                         });
